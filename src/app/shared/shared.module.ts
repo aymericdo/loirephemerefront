@@ -7,13 +7,15 @@ import { NgZorroModule } from './ngzorro.module';
 /* Components */
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { CardComponent } from './components/card/card.component';
 
 
 
 @NgModule({
   declarations: [
     NavComponent,
-    FooterComponent
+    FooterComponent,
+    CardComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,8 @@ import { FooterComponent } from './components/footer/footer.component';
   ],
   exports: [
     NavComponent,
-    FooterComponent
+    FooterComponent,
+    CardComponent
   ]
 })
 export class SharedModule { }

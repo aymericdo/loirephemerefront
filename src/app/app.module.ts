@@ -12,6 +12,7 @@ import fr from '@angular/common/locales/fr';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HomeModule } from './modules/home/home.module';
 
 registerLocaleData(fr);
 
@@ -27,6 +28,7 @@ registerLocaleData(fr);
     FormsModule,
     BrowserAnimationsModule,
     SharedModule,
+    HomeModule
   ],
   providers: [{ provide: NZ_I18N, useValue: fr_FR }],
   bootstrap: [AppComponent]

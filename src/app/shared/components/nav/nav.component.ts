@@ -8,9 +8,15 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 
+  isCollapsed = false;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  toggleCollapsed(): void {
+    this.isCollapsed = !this.isCollapsed;
   }
 
 }
