@@ -1,28 +1,11 @@
 :host {
-    display: flex;
-    
-    nz-sider {
-        height: 100vh;
-    }
+  display: flex;
 
-    nz-menu {
-        width: 240px;
-    }
+  nz-sider {
+    height: 100vh;
+  }
 
-    .logo {
-        height: 32px;
-        background: rgba(255, 255, 255, 0.2);
-        margin: 16px;
-    }
-
-    nz-header {
-        background: #fff;
-        padding: 0;
-    }
-
-    nz-content {
-        margin: 24px 16px 0;
-    }
-
-
+  .logo {
+    height: 32px;
+  }
 }

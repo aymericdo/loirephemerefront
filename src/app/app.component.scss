@@ -1,16 +1,12 @@
 :host {
-    nz-layout {
-        height: 100vh;
-    }
-    
-    .layout {
-        min-height: 100vh;
-        flex-direction: row;
-    }
+  .layout {
+    flex-direction: row;
+  }
 
-    .inner-content {
-        padding: 24px;
-        background: #fff;
-        min-height: 360px;
-    }
+  .inner-content {
+    padding: 24px;
+    background: #fff;
+    min-height: 360px;
+    height: 100%;
+  }
 }

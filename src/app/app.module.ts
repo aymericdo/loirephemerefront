@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { NgZorroModule } from './shared/ngzorro.module';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { fr_FR } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
@@ -24,11 +23,10 @@ registerLocaleData(fr);
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NgZorroModule,
+    SharedModule,
     FormsModule,
     BrowserAnimationsModule,
-    SharedModule,
-    HomeModule
+    HomeModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: fr_FR }],
   bootstrap: [AppComponent]

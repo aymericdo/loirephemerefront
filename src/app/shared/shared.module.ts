@@ -25,7 +25,8 @@ import { CardComponent } from './components/card/card.component';
   exports: [
     NavComponent,
     FooterComponent,
-    CardComponent
+    CardComponent,
+    NgZorroModule,
   ]
 })
 export class SharedModule { }
