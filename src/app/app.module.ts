@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './modules/home/home.module';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 registerLocaleData(fr);
 
@@ -29,6 +30,7 @@ registerLocaleData(fr);
     BrowserAnimationsModule,
     HomeModule,
     StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([]),
   ],
   providers: [{ provide: NZ_I18N, useValue: fr_FR }],
   bootstrap: [AppComponent]
