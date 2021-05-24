@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Command } from 'src/app/interfaces/command.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,5 +16,9 @@ export class HomeApiService {
 
   getAll(): Observable<any> {
     return this.http.get(`${this.baseUrl}/pastries`);
+  }
+
+  postCommand(command: Command): Observable<any> {
+    return this.http.post(`${this.baseUrl}/commands`, command);
   }
 }

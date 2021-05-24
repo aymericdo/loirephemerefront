@@ -13,7 +13,18 @@
         [title]="pastry.name"
         [description]="pastry.description"
         [imageUrl]="pastry.imageUrl"
+        [count]="(selectedPastries$ | async)![pastry._id]"
+        (onClickPlus)="handleClickPlus(pastry)"
+        (onClickMinus)="handleClickMinus(pastry)"
       ></app-card>
     </div>
   </div>
 </div>
+<app-order-footer
+  *ngIf="hasSelectedPastries$ | async"
+  (onClickReset)="handleClickReset()"
+  (onClickCommand)="handleClickCommand()"
+  [allPastries]="(pastries$ | async)!"
+  [selectedPastries]="(selectedPastries$ | async)!"
+  [totalPrice]="(totalPrice$ | async)!"
+></app-order-footer>
