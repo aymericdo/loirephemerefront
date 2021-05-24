@@ -62,7 +62,7 @@
 <app-order-footer
   *ngIf="hasSelectedPastries$ | async"
   (onClickReset)="handleClickReset()"
-  (onClickCommand)="handleClickCommand()"
+  (onClickCommand)="handleClickCommand($event)"
   [allPastries]="(pastries$ | async)!"
   [selectedPastries]="(selectedPastries$ | async)!"
   [totalPrice]="(totalPrice$ | async)!"

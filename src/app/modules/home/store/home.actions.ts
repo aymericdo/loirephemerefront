@@ -15,7 +15,10 @@ export const decrementPastry = createAction(
   '[Home page] Decrement pastry',
   props<{ pastry: Pastry }>()
 );
-export const sendCommand = createAction('[Home page] Send command');
+export const sendCommand = createAction(
+  '[Home page] Send command',
+  props<{ name: string; table: string }>()
+);
 export const resetCommand = createAction('[Home page] Reset command');
 export const setPersonalCommand = createAction(
   '[Home page] Set personal command',

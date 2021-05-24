@@ -4,6 +4,10 @@
     flex-direction: row;
   }
 
+  .inner-layout {
+    min-height: 100vh;
+  }
+
   .inner-content {
     padding: 24px;
     background: #fff;

@@ -1,0 +1,13 @@
+<nz-card style="width: 300px" [nzActions]="[actionDone]" [nzTitle]="'Commande'">
+  <p>Table : {{ command.table }}</p>
+  <p>Nom : {{ command.name }}</p>
+  <p>Pâtisseries :</p>
+  <ul>
+    <li *ngFor="let pastryObj of pastries">
+      {{ pastryObj[0].name + " (x" + pastryObj[1] + ")" }}
+    </li>
+  </ul>
+</nz-card>
+<ng-template #actionDone>
+  <i nz-icon nzType="check"></i>
+</ng-template>

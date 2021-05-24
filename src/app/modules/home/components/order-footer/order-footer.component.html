@@ -18,3 +18,24 @@
     <i nz-icon nzType="check"></i>Commander
   </button>
 </nz-footer>
+
+<nz-modal
+  [(nzVisible)]="isUltimateConfirmationVisible"
+  nzTitle="Veuillez indiquer votre prénom svp"
+  nzCentered
+  (nzOnCancel)="isUltimateConfirmationVisible = false"
+>
+  <ng-container *nzModalContent>
+    <input nz-input placeholder="Votre prénom" [(ngModel)]="currentFirstName" />
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="handleClickConfirm()"
+      [disabled]="!currentFirstName.length"
+    >
+      Envoyer
+    </button>
+  </ng-container>
+</nz-modal>

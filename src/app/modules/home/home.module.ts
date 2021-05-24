@@ -6,13 +6,16 @@ import { homeFeatureKey, reducer } from './store/home.reducer';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HomeEffects } from './store/home.effects';
+import { CardComponent } from './components/card/card.component';
 import { OrderFooterComponent } from './components/order-footer/order-footer.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [HomeComponent, OrderFooterComponent],
+  declarations: [HomeComponent, OrderFooterComponent, CardComponent],
   imports: [
     CommonModule,
     SharedModule,
+    FormsModule,
     EffectsModule.forFeature([HomeEffects]),
     StoreModule.forFeature(homeFeatureKey, reducer),
   ],

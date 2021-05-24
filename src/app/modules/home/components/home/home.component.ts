@@ -80,8 +80,8 @@ export class HomeComponent implements OnInit {
     this.store.dispatch(decrementPastry({ pastry }));
   }
 
-  handleClickCommand(): void {
-    this.store.dispatch(sendCommand());
+  handleClickCommand(name: string): void {
+    this.store.dispatch(sendCommand({ table: this.currentTable, name }));
   }
 
   handleClickReset(): void {

@@ -34,10 +34,10 @@ export class HomeEffects {
       ofType(sendCommand),
       withLatestFrom(this.store$.select(selectPastries)),
       withLatestFrom(this.store$.select(selectSelectedPastries)),
-      mergeMap(([[_action, allPastries], selectedPastries]) => {
+      mergeMap(([[action, allPastries], selectedPastries]) => {
         const command: Command = {
-          table: '112',
-          name: 'Marcel',
+          table: action.table,
+          name: action.name,
           pastries: Object.keys(selectedPastries).reduce(
             (prev: Pastry[], pastryId: string) => {
               const pastry = allPastries.find(

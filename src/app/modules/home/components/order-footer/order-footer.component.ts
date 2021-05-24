@@ -14,6 +14,9 @@ export class OrderFooterComponent implements OnInit {
   @Output() onClickReset = new EventEmitter<string>();
   @Output() onClickCommand = new EventEmitter<string>();
 
+  isUltimateConfirmationVisible: boolean = false;
+  currentFirstName: string = '';
+
   constructor(private modal: NzModalService) {}
 
   ngOnInit(): void {}
@@ -32,7 +35,7 @@ export class OrderFooterComponent implements OnInit {
       nzTitle: 'Confirmation',
       nzContent: content,
       nzOnOk: () => {
-        this.onClickCommand.emit();
+        this.isUltimateConfirmationVisible = true;
       },
     });
   }
@@ -49,5 +52,10 @@ export class OrderFooterComponent implements OnInit {
       },
       nzCancelText: 'Annuler',
     });
+  }
+
+  handleClickConfirm(): void {
+    this.isUltimateConfirmationVisible = false;
+    this.onClickCommand.emit(this.currentFirstName);
   }
 }

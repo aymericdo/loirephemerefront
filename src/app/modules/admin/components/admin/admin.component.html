@@ -1,0 +1,36 @@
+<nz-tabset>
+  <nz-tab nzTitle="Commandes en cours">
+    <div nz-row [nzGutter]="[0, 24]">
+      <div
+        *ngFor="let command of onGoingCommands$ | async"
+        nz-col
+        nzXs="24"
+        nzSm="24"
+        nzMd="24"
+        nzLg="12"
+        nzXl="6"
+      >
+        <div class="inner-box">
+          <app-card [command]="command"></app-card>
+        </div>
+      </div>
+    </div>
+  </nz-tab>
+  <nz-tab nzTitle="Commandes passées">
+    <div nz-row [nzGutter]="[0, 24]">
+      <div
+        *ngFor="let command of pastCommands$ | async"
+        nz-col
+        nzXs="24"
+        nzSm="24"
+        nzMd="24"
+        nzLg="12"
+        nzXl="6"
+      >
+        <div class="inner-box">
+          <app-card [command]="command"></app-card>
+        </div>
+      </div>
+    </div>
+  </nz-tab>
+</nz-tabset>
