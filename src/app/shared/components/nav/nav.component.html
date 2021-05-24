@@ -1,7 +1,7 @@
 <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
-    <li nz-menu-item [nzMatchRouter]="true" [nzMatchRouterExact]="true">
+    <li nz-menu-item [nzSelected]="isSelected('/')">
       <a [routerLink]="['/']">
         <i nz-icon nzType="heart"></i>
         <span>Pâtisseries</span>

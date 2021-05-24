@@ -2,11 +2,18 @@ import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
-import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
+import {
+  map,
+  mergeMap,
+  catchError,
+  withLatestFrom,
+  switchMap,
+} from 'rxjs/operators';
 import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
   fetchPastries,
+  resetCommand,
   sendCommand,
   setPastries,
   setPersonalCommand,
@@ -54,7 +61,10 @@ export class HomeEffects {
           ),
         };
         return this.homeApiService.postCommand(command).pipe(
-          map((command) => setPersonalCommand({ command })),
+          switchMap((command) => [
+            setPersonalCommand({ command }),
+            resetCommand(),
+          ]),
           catchError(() => EMPTY)
         );
       })

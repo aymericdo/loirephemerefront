@@ -29,27 +29,8 @@ export class HomeComponent implements OnInit {
   totalPrice$: Observable<number>;
   isOpenTableModal: boolean = false;
   currentTable: string = '';
-  tables: string[] = [
-    'Bulbizarre',
-    'Salamèche',
-    'Carapuce',
-    'Coconfort',
-    'Roucool',
-    'Nidoqueen',
-    'Mélofée',
-    'Aéromite',
-    'Arcanin',
-    'Onix',
-    'Amonita',
-    'Kabuto',
-    'Draco',
-  ];
 
-  constructor(
-    private store: Store<AppState>,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
+  constructor(private store: Store<AppState>, private route: ActivatedRoute) {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
     this.totalPrice$ = this.store.select(selectTotalPrice);
@@ -65,11 +46,6 @@ export class HomeComponent implements OnInit {
         this.isOpenTableModal = true;
       }
     });
-  }
-
-  handleOkTableModal(): void {
-    this.router.navigate(['/'], { queryParams: { table: this.currentTable } });
-    this.isOpenTableModal = false;
   }
 
   handleClickPlus(pastry: Pastry): void {

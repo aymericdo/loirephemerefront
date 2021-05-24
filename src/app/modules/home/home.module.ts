@@ -9,9 +9,15 @@ import { HomeEffects } from './store/home.effects';
 import { CardComponent } from './components/card/card.component';
 import { OrderFooterComponent } from './components/order-footer/order-footer.component';
 import { FormsModule } from '@angular/forms';
+import { TableModalComponent } from './components/table-modal/table-modal.component';
 
 @NgModule({
-  declarations: [HomeComponent, OrderFooterComponent, CardComponent],
+  declarations: [
+    HomeComponent,
+    OrderFooterComponent,
+    CardComponent,
+    TableModalComponent,
+  ],
   imports: [
     CommonModule,
     SharedModule,
