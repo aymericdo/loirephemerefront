@@ -48,7 +48,12 @@
     </nz-dropdown-menu>
   </ng-container>
   <ng-container *nzModalFooter>
-    <button nz-button nzType="primary" (click)="handleOkTableModal()">
+    <button
+      nz-button
+      nzType="primary"
+      (click)="handleOkTableModal()"
+      [disabled]="!currentTable"
+    >
       OK
     </button>
   </ng-container>
