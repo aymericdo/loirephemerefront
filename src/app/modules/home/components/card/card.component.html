@@ -3,10 +3,16 @@
   [nzCover]="coverTemplate"
   [nzActions]="[actionCount, actionMinus, actionPlus]"
 >
-  <nz-card-meta [nzTitle]="title" [nzDescription]="description"></nz-card-meta>
+  <nz-card-meta
+    [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
+    [nzDescription]="pastry.description"
+  ></nz-card-meta>
 </nz-card>
 <ng-template #coverTemplate>
-  <img [alt]="'example-' + title" [src]="'assets/photos/' + imageUrl" />
+  <img
+    [alt]="'example-' + pastry.name"
+    [src]="'assets/photos/' + pastry.imageUrl"
+  />
 </ng-template>
 <ng-template #actionCount>
   <span *ngIf="!!count">{{ count }}</span>

@@ -12,9 +12,7 @@
   >
     <div class="inner-box">
       <app-card
-        [title]="pastry.name"
-        [description]="pastry.description"
-        [imageUrl]="pastry.imageUrl"
+        [pastry]="pastry"
         [count]="(selectedPastries$ | async)![pastry._id]"
         (onClickPlus)="handleClickPlus(pastry)"
         (onClickMinus)="handleClickMinus(pastry)"
