@@ -16,6 +16,7 @@ import {
   selectSelectedPastries,
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './home.component.html',
@@ -26,8 +27,29 @@ export class HomeComponent implements OnInit {
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
   hasSelectedPastries$: Observable<Boolean>;
   totalPrice$: Observable<number>;
+  isOpenTableModal: boolean = false;
+  currentTable: string = '';
+  tables: string[] = [
+    'Bulbizarre',
+    'Salamèche',
+    'Carapuce',
+    'Coconfort',
+    'Roucool',
+    'Nidoqueen',
+    'Mélofée',
+    'Aéromite',
+    'Arcanin',
+    'Onix',
+    'Amonita',
+    'Kabuto',
+    'Draco',
+  ];
 
-  constructor(private store: Store<AppState>) {
+  constructor(
+    private store: Store<AppState>,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
     this.totalPrice$ = this.store.select(selectTotalPrice);
@@ -36,6 +58,18 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(fetchPastries());
+
+    this.route.queryParams.subscribe((params) => {
+      this.currentTable = params['table'];
+      if (!this.currentTable) {
+        this.isOpenTableModal = true;
+      }
+    });
+  }
+
+  handleOkTableModal(): void {
+    this.router.navigate(['/'], { queryParams: { table: this.currentTable } });
+    this.isOpenTableModal = false;
   }
 
   handleClickPlus(pastry: Pastry): void {

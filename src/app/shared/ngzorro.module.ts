@@ -9,6 +9,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 @NgModule({
   exports: [
@@ -20,6 +21,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzIconModule,
     NzDividerModule,
     NzButtonModule,
+    NzDropDownModule,
     NzModalModule,
   ],
   declarations: [],
