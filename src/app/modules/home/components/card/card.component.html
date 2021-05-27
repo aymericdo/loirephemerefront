@@ -3,13 +3,16 @@
   [nzCover]="coverTemplate"
   [nzActions]="[actionCount, actionMinus, actionPlus]"
 >
-  <nz-card-meta
-    [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
-    [nzDescription]="pastry.description"
-  ></nz-card-meta>
+  <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+    <nz-card-meta
+      [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
+      [nzDescription]="pastry.description"
+    ></nz-card-meta>
+  </nz-skeleton>
 </nz-card>
 <ng-template #coverTemplate>
   <img
+    *ngIf="!isLoading"
     [alt]="'example-' + pastry.name"
     [src]="'assets/photos/' + pastry.imageUrl"
   />
@@ -18,8 +21,8 @@
   <span *ngIf="!!count">{{ count }}</span>
 </ng-template>
 <ng-template #actionPlus>
-  <i nz-icon nzType="plus" (click)="onClickPlus.emit()"></i>
+  <i nz-icon nzType="plus" (click)="!isLoading && onClickPlus.emit()"></i>
 </ng-template>
 <ng-template #actionMinus>
-  <i nz-icon nzType="minus" (click)="onClickMinus.emit()"></i>
+  <i nz-icon nzType="minus" (click)="!isLoading && onClickMinus.emit()"></i>
 </ng-template>

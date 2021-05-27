@@ -13,7 +13,8 @@ export class AdminApiService {
     this.baseUrl = environment.api;
   }
 
-  getAll(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/commands`);
+  getAll(token: string): Observable<any> {
+    const headers = { password: token };
+    return this.http.get(`${this.baseUrl}/commands`, { headers });
   }
 }

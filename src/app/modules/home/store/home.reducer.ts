@@ -1,12 +1,15 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   decrementPastry,
+  fetchPastries,
   incrementPastry,
   resetCommand,
   setPastries,
   setPersonalCommand,
+  setTable,
 } from './home.actions';
 
 export const homeFeatureKey = 'home';
@@ -15,19 +18,32 @@ export interface HomeState {
   pastries: Pastry[];
   selectedPastries: { [pastryId: string]: number };
   personalCommand: Command | null;
+  loading: boolean;
+  table: string;
 }
 
 export const initialState: HomeState = {
-  pastries: [],
+  pastries: pastriesMock,
   selectedPastries: {},
   personalCommand: null,
+  loading: false,
+  table: '',
 };
 
 const homeReducer = createReducer(
   initialState,
+  on(fetchPastries, (state) => ({
+    ...state,
+    loading: true,
+  })),
   on(setPastries, (state, { pastries }) => ({
     ...state,
     pastries: [...pastries],
+    loading: false,
+  })),
+  on(setTable, (state, { table }) => ({
+    ...state,
+    table,
   })),
   on(incrementPastry, (state, { pastry }) => ({
     ...state,

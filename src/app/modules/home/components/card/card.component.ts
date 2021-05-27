@@ -17,6 +17,7 @@ import { Pastry } from 'src/app/interfaces/pastry.interface';
 export class CardComponent implements OnInit {
   @Input() pastry: Pastry = null!;
   @Input() count: number = 0;
+  @Input() isLoading: boolean = false;
 
   @Output() onClickPlus = new EventEmitter<string>();
   @Output() onClickMinus = new EventEmitter<string>();

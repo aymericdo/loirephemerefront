@@ -24,3 +24,7 @@ export const setPersonalCommand = createAction(
   '[Home page] Set personal command',
   props<{ command: Command }>()
 );
+export const setTable = createAction(
+  '[Home page] Set table',
+  props<{ table: string }>()
+);

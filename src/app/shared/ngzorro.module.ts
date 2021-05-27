@@ -12,6 +12,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 @NgModule({
   exports: [
     NzAvatarModule,
@@ -23,6 +24,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzDividerModule,
     NzButtonModule,
     NzDropDownModule,
+    NzSkeletonModule,
     NzTabsModule,
     NzInputModule,
     NzModalModule,

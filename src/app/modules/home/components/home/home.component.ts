@@ -7,16 +7,20 @@ import {
   fetchPastries,
   sendCommand,
   resetCommand,
+  setTable,
 } from 'src/app/modules/home/store/home.actions';
 import { Observable } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import {
   selectHasSelectedPastries,
+  selectIsLoading,
   selectPastries,
   selectSelectedPastries,
+  selectTable,
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 @Component({
   templateUrl: './home.component.html',
@@ -27,14 +31,22 @@ export class HomeComponent implements OnInit {
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
   hasSelectedPastries$: Observable<Boolean>;
   totalPrice$: Observable<number>;
+  table$: Observable<string>;
+  isLoading$: Observable<boolean>;
   isOpenTableModal: boolean = false;
   currentTable: string = '';
 
-  constructor(private store: Store<AppState>, private route: ActivatedRoute) {
+  constructor(
+    private store: Store<AppState>,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
     this.totalPrice$ = this.store.select(selectTotalPrice);
     this.hasSelectedPastries$ = this.store.select(selectHasSelectedPastries);
+    this.isLoading$ = this.store.select(selectIsLoading);
+    this.table$ = this.store.select(selectTable);
   }
 
   ngOnInit(): void {
@@ -43,7 +55,17 @@ export class HomeComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.currentTable = params['table'];
       if (!this.currentTable) {
-        this.isOpenTableModal = true;
+        this.table$.pipe(take(1)).subscribe((table) => {
+          if (table) {
+            this.router.navigate(['/'], {
+              queryParams: { table },
+            });
+          } else {
+            this.isOpenTableModal = true;
+          }
+        });
+      } else {
+        this.store.dispatch(setTable({ table: this.currentTable }));
       }
     });
   }

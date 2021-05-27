@@ -14,6 +14,16 @@ export const selectSelectedPastries = createSelector(
   (state: HomeState) => state.selectedPastries
 );
 
+export const selectIsLoading = createSelector(
+  selectFeature,
+  (state: HomeState) => state.loading
+);
+
+export const selectTable = createSelector(
+  selectFeature,
+  (state: HomeState) => state.table
+);
+
 export const selectHasSelectedPastries = createSelector(
   selectFeature,
   (state: HomeState) =>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
@@ -11,9 +12,14 @@ export class AdminEffects {
     this.actions$.pipe(
       ofType(fetchCommands),
       mergeMap(() => {
-        return this.adminApiService.getAll().pipe(
+        const token = localStorage.getItem('token') as string;
+        return this.adminApiService.getAll(token).pipe(
           map((commands) => setCommands({ commands })),
-          catchError(() => EMPTY)
+          catchError(() => {
+            localStorage.removeItem('token');
+            this.router.navigate(['/']);
+            return EMPTY;
+          })
         );
       })
     )
@@ -21,6 +27,7 @@ export class AdminEffects {
 
   constructor(
     private actions$: Actions,
+    public router: Router,
     private adminApiService: AdminApiService
   ) {}
 }
