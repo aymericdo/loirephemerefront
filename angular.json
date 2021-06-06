@@ -28,20 +28,17 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/_redirects",
+              "src/manifest.webmanifest",
               {
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
-              },
-              {
-                "glob": "_redirects",
-                "input": "src",
-                "output": "/"
-              },
-              "src/manifest.webmanifest"
+              }
             ],
             "styles": [
               "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
