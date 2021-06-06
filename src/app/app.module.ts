@@ -9,6 +9,7 @@ import { fr_FR } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import fr from '@angular/common/locales/fr';
 import { FormsModule } from '@angular/forms';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './modules/home/home.module';
@@ -29,6 +30,9 @@ registerLocaleData(fr);
     FormsModule,
     BrowserAnimationsModule,
     HomeModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
