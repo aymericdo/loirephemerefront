@@ -17,8 +17,11 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
 registerLocaleData(fr);
+
+const config: SocketIoConfig = { url: environment.api, options: {} };
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +33,7 @@ registerLocaleData(fr);
     FormsModule,
     BrowserAnimationsModule,
     HomeModule,
+    SocketIoModule.forRoot(config),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
