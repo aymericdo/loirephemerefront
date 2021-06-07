@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-type WebSocketDataType = 'command';
+type WebSocketDataType = 'addCommand' | 'closeCommand';
 
 type WebSocketData<T> = {
   [K in WebSocketDataType]: T;
