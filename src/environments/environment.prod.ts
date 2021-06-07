@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  api: 'https://loirephemereback.herokuapp.com',
+  protocolHttp: 'https://',
+  api: 'loirephemereback.herokuapp.com',
 };

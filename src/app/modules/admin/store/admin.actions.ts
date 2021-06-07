@@ -6,3 +6,15 @@ export const setCommands = createAction(
   '[Admin page] Set commands',
   props<{ commands: Command[] }>()
 );
+export const addCommand = createAction(
+  '[Admin page] Add command',
+  props<{ command: Command }>()
+);
+export const closeCommand = createAction(
+  '[Admin page] Close command',
+  props<{ command: Command }>()
+);
+export const editCommand = createAction(
+  '[Admin page] Edit command',
+  props<{ command: Command }>()
+);

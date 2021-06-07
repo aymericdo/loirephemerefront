@@ -4,7 +4,12 @@ import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 import { AdminApiService } from '../services/admin-api.service';
-import { fetchCommands, setCommands } from './admin.actions';
+import {
+  closeCommand,
+  editCommand,
+  fetchCommands,
+  setCommands,
+} from './admin.actions';
 
 @Injectable()
 export class AdminEffects {
@@ -21,6 +26,24 @@ export class AdminEffects {
             return EMPTY;
           })
         );
+      })
+    )
+  );
+  closeCommand$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(closeCommand),
+      mergeMap((action) => {
+        const token = localStorage.getItem('token') as string;
+        return this.adminApiService
+          .closeCommand(token, action.command._id!)
+          .pipe(
+            map((command) => editCommand({ command })),
+            catchError(() => {
+              localStorage.removeItem('token');
+              this.router.navigate(['/']);
+              return EMPTY;
+            })
+          );
       })
     )
   );

@@ -11,7 +11,10 @@
         nzXl="6"
       >
         <div class="inner-box">
-          <app-card [command]="command"></app-card>
+          <app-card
+            [command]="command"
+            (onClickDone)="handleClickDone(command)"
+          ></app-card>
         </div>
       </div>
     </div>
@@ -28,7 +31,7 @@
         nzXl="6"
       >
         <div class="inner-box">
-          <app-card [command]="command"></app-card>
+          <app-card [command]="command" [isDone]="true"></app-card>
         </div>
       </div>
     </div>

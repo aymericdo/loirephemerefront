@@ -9,16 +9,21 @@ import { Command } from 'src/app/interfaces/command.interface';
 })
 export class HomeApiService {
   private readonly baseUrl: string;
+  private readonly protocolHttp: string;
 
   constructor(private http: HttpClient) {
     this.baseUrl = environment.api;
+    this.protocolHttp = environment.protocolHttp;
   }
 
   getAll(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/pastries`);
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries`);
   }
 
   postCommand(command: Command): Observable<any> {
-    return this.http.post(`${this.baseUrl}/commands`, command);
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/commands`,
+      command
+    );
   }
 }

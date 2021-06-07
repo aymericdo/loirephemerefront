@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
-import { setCommands } from './admin.actions';
+import { addCommand, editCommand, setCommands } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
 
@@ -17,7 +17,21 @@ const adminReducer = createReducer(
   on(setCommands, (state, { commands }) => ({
     ...state,
     commands: [...commands],
-  }))
+  })),
+  on(addCommand, (state, { command }) => ({
+    ...state,
+    commands: [...state.commands, command],
+  })),
+  on(editCommand, (state, { command }) => {
+    const indexOf = state.commands.findIndex((c) => c._id === command._id);
+    const newList = [...state.commands];
+    newList.splice(indexOf, 1, command);
+
+    return {
+      ...state,
+      commands: newList,
+    };
+  })
 );
 
 export function reducer(state: AdminState | undefined, action: Action) {

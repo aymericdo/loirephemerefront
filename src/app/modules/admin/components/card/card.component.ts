@@ -17,6 +17,7 @@ import { Pastry } from 'src/app/interfaces/pastry.interface';
 })
 export class CardComponent implements OnInit {
   @Input() command: Command = null!;
+  @Input() isDone: boolean = false;
 
   @Output() onClickDone = new EventEmitter<string>();
 

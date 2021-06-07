@@ -1,4 +1,8 @@
-<nz-card style="width: 300px" [nzActions]="[actionDone]" [nzTitle]="'Commande'">
+<nz-card
+  style="width: 300px"
+  [nzActions]="isDone ? [] : [actionDone]"
+  [nzTitle]="'Commande'"
+>
   <p>Table : {{ command.table }}</p>
   <p>Nom : {{ command.name }}</p>
   <p>Pâtisseries :</p>
@@ -9,5 +13,5 @@
   </ul>
 </nz-card>
 <ng-template #actionDone>
-  <i nz-icon nzType="check"></i>
+  <i nz-icon nzType="check" (click)="onClickDone.emit()"></i>
 </ng-template>
