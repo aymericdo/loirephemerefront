@@ -36,7 +36,10 @@ export class AdminComponent implements OnInit {
     this.pastCommands$ = this.store.select(selectPastCommands);
 
     this.wsSubscription = this.wsService
-      .createObservableSocket(`ws://${environment.api}`, 'command')
+      .createObservableSocket(
+        `${environment.protocolWs}${environment.api}`,
+        'command'
+      )
       .subscribe(
         (command: Command | any) => {
           this.store.dispatch(addCommand({ command }));
