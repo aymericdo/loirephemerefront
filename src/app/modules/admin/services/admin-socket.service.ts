@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 type WebSocketDataType = 'addCommand' | 'closeCommand';
 
@@ -11,11 +12,8 @@ export class WebSocketService {
   ws!: WebSocket;
   socketIsOpen = 1;
 
-  createObservableSocket<T>(
-    url: string,
-    type: WebSocketDataType
-  ): Observable<T> {
-    this.ws = new WebSocket(url);
+  createObservableSocket<T>(type: WebSocketDataType): Observable<T> {
+    this.ws = new WebSocket(`${environment.protocolWs}${environment.api}`);
 
     return new Observable((observer) => {
       this.ws.onmessage = (event) => observer.next(event.data);

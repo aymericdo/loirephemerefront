@@ -6,6 +6,7 @@ import { AppState } from 'src/app/store/app.state';
 import {
   addCommand,
   closeCommand,
+  editCommand,
   fetchCommands,
 } from 'src/app/modules/admin/store/admin.actions';
 import {
@@ -13,7 +14,6 @@ import {
   selectPastCommands,
 } from 'src/app/modules/admin/store/admin.selectors';
 import { WebSocketService } from 'src/app/modules/admin/services/admin-socket.service';
-import { environment } from 'src/environments/environment';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -42,10 +42,7 @@ export class AdminComponent implements OnInit {
     this.store.dispatch(fetchCommands());
 
     this.wsService
-      .createObservableSocket(
-        `${environment.protocolWs}${environment.api}`,
-        'addCommand'
-      )
+      .createObservableSocket('addCommand')
       .pipe(takeUntil(this.destroyed$))
       .subscribe(
         (command: Command | any) => {
@@ -56,14 +53,11 @@ export class AdminComponent implements OnInit {
       );
 
     this.wsService
-      .createObservableSocket(
-        `${environment.protocolWs}${environment.api}`,
-        'closeCommand'
-      )
+      .createObservableSocket('closeCommand')
       .pipe(takeUntil(this.destroyed$))
       .subscribe(
         (command: Command | any) => {
-          this.store.dispatch(closeCommand({ command }));
+          this.store.dispatch(editCommand({ command }));
         },
         (err) => console.log('err'),
         () => console.log('The observable stream is complete')
