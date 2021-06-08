@@ -54,17 +54,27 @@ const homeReducer = createReducer(
         : 1,
     },
   })),
-  on(decrementPastry, (state, { pastry }) => ({
-    ...state,
-    selectedPastries: {
+  on(decrementPastry, (state, { pastry }) => {
+    const newStock = state.selectedPastries.hasOwnProperty(pastry._id)
+      ? state.selectedPastries[pastry._id] === 0
+        ? 0
+        : state.selectedPastries[pastry._id] - 1
+      : 0;
+
+    const newSelectedPastries = {
       ...state.selectedPastries,
-      [pastry._id]: state.selectedPastries.hasOwnProperty(pastry._id)
-        ? state.selectedPastries[pastry._id] === 0
-          ? 0
-          : state.selectedPastries[pastry._id] - 1
-        : 0,
-    },
-  })),
+      [pastry._id]: newStock,
+    };
+
+    if (!newStock) {
+      delete newSelectedPastries[pastry._id];
+    }
+
+    return {
+      ...state,
+      selectedPastries: newSelectedPastries,
+    };
+  }),
   on(resetCommand, (state) => ({
     ...state,
     selectedPastries: {},
