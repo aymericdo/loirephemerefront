@@ -1,0 +1,18 @@
+<nz-modal
+  [nzVisible]="true"
+  nzTitle="Récapitulatif"
+  nzCentered
+  [nzMaskClosable]="true"
+  (nzOnCancel)="onClickCancel.emit()"
+>
+  <ng-container *nzModalContent>
+    <p>Vous êtes sur le point de commander ces pâtisseries :</p>
+    <ul>
+      <li *ngFor="let pastry of pastriesStr">{{ pastry }}</li>
+    </ul>
+    <p>Pour un prix total de : {{ totalPrice }}€</p>
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <button nz-button nzType="primary" (click)="onClickOk.emit()">OK</button>
+  </ng-container>
+</nz-modal>

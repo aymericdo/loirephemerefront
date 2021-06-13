@@ -30,6 +30,12 @@
   </div>
 </div>
 
+<app-order-success-modal
+  *ngIf="isSuccessModalVisible && (personalCommand$ | async)"
+  [commandReference]="(personalCommand$ | async)?.reference!"
+  (onClickCancel)="isSuccessModalVisible = false"
+></app-order-success-modal>
+
 <app-order-footer
   *ngIf="hasSelectedPastries$ | async"
   (onClickReset)="handleClickReset()"

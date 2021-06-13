@@ -15,6 +15,7 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { NzResultModule } from 'ng-zorro-antd/result';
 
 @NgModule({
   exports: [
@@ -32,6 +33,7 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
     NzSkeletonModule,
     NzTabsModule,
     NzInputModule,
+    NzResultModule,
     NzModalModule,
   ],
   declarations: [],

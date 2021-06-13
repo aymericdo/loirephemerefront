@@ -1,0 +1,23 @@
+<nz-modal
+  [nzVisible]="true"
+  nzTitle="Confirmation"
+  nzCentered
+  [nzClosable]="false"
+  [nzMaskClosable]="true"
+>
+  <ng-container *nzModalContent>
+    <nz-result nzStatus="success" nzTitle="Commande envoyée !">
+      <div nz-result-subtitle>
+        Votre numéro de commande est le <b>{{ commandReference }}</b
+        >. Merci de le prendre en note, en cas de problème, il sera utile pour
+        retrouver votre commande rapidement.
+      </div>
+      <div nz-result-extra>
+        <button nz-button nzType="primary" (click)="onClickCancel.emit()">
+          Retour à la page principale
+        </button>
+      </div>
+    </nz-result>
+  </ng-container>
+  <ng-container *nzModalFooter> </ng-container>
+</nz-modal>

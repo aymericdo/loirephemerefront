@@ -10,6 +10,9 @@ import { CardComponent } from './components/card/card.component';
 import { OrderFooterComponent } from './components/order-footer/order-footer.component';
 import { FormsModule } from '@angular/forms';
 import { TableModalComponent } from './components/table-modal/table-modal.component';
+import { OrderModalComponent } from './components/order-modal/order-modal.component';
+import { OrderNameModalComponent } from './components/order-name-modal/order-name-modal.component';
+import { OrderSuccessModalComponent } from './order-success-modal/order-success-modal.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +20,9 @@ import { TableModalComponent } from './components/table-modal/table-modal.compon
     OrderFooterComponent,
     CardComponent,
     TableModalComponent,
+    OrderNameModalComponent,
+    OrderSuccessModalComponent,
+    OrderModalComponent,
   ],
   imports: [
     CommonModule,

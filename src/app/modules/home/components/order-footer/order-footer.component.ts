@@ -14,31 +14,12 @@ export class OrderFooterComponent implements OnInit {
   @Output() onClickReset = new EventEmitter<string>();
   @Output() onClickCommand = new EventEmitter<string>();
 
+  isOrderModalVisible: boolean = false;
   isUltimateConfirmationVisible: boolean = false;
-  currentFirstName: string = '';
 
   constructor(private modal: NzModalService) {}
 
   ngOnInit(): void {}
-
-  showConfirm(): void {
-    let content = 'Vous êtes sur le point de commander ces pâtisseries : <ul>';
-    Object.keys(this.selectedPastries).forEach((pastryId: string) => {
-      content += `<br><li>${
-        this.allPastries.find((p) => p._id === pastryId)?.name
-      } (x${this.selectedPastries[pastryId]})</li>`;
-    });
-    content += '</ul>';
-    content += `Pour un prix total de : ${this.totalPrice}€`;
-
-    this.modal.confirm({
-      nzTitle: 'Confirmation',
-      nzContent: content,
-      nzOnOk: () => {
-        this.isUltimateConfirmationVisible = true;
-      },
-    });
-  }
 
   showResetConfirm(): void {
     this.modal.confirm({
@@ -54,8 +35,8 @@ export class OrderFooterComponent implements OnInit {
     });
   }
 
-  handleClickConfirm(): void {
+  handleClickConfirm(currentFirstName: string): void {
     this.isUltimateConfirmationVisible = false;
-    this.onClickCommand.emit(this.currentFirstName);
+    this.onClickCommand.emit(currentFirstName);
   }
 }

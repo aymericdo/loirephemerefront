@@ -15,6 +15,7 @@ import {
   selectHasSelectedPastries,
   selectIsLoading,
   selectPastries,
+  selectPersonalCommand,
   selectSelectedPastries,
   selectTable,
   selectTotalPrice,
@@ -23,6 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { TABLES_POSSIBILITIES } from '../table-modal/table-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { Command } from 'src/app/interfaces/command.interface';
 
 @Component({
   templateUrl: './home.component.html',
@@ -35,7 +37,9 @@ export class HomeComponent implements OnInit {
   totalPrice$: Observable<number>;
   table$: Observable<string>;
   isLoading$: Observable<boolean>;
+  personalCommand$: Observable<Command | null>;
   currentTable: string | null = null;
+  isSuccessModalVisible = false;
 
   constructor(
     private store: Store<AppState>,
@@ -49,6 +53,7 @@ export class HomeComponent implements OnInit {
     this.hasSelectedPastries$ = this.store.select(selectHasSelectedPastries);
     this.isLoading$ = this.store.select(selectIsLoading);
     this.table$ = this.store.select(selectTable);
+    this.personalCommand$ = this.store.select(selectPersonalCommand);
   }
 
   ngOnInit(): void {
@@ -94,6 +99,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleClickCommand(name: string): void {
+    this.isSuccessModalVisible = true;
     this.store.dispatch(sendCommand({ table: this.currentTable!, name }));
   }
 
