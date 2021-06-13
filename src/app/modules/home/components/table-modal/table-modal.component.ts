@@ -1,28 +1,30 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+export const TABLES_POSSIBILITIES: string[] = [
+  'À emporter',
+  'Bulbizarre',
+  'Salamèche',
+  'Carapuce',
+  'Coconfort',
+  'Roucool',
+  'Nidoqueen',
+  'Mélofée',
+  'Aéromite',
+  'Arcanin',
+  'Onix',
+  'Amonita',
+  'Kabuto',
+  'Draco',
+];
 
 @Component({
   selector: 'app-table-modal',
   templateUrl: './table-modal.component.html',
+  styleUrls: ['./table-modal.component.scss'],
 })
 export class TableModalComponent implements OnInit {
-  @Input() isOpenTableModal: boolean = false;
-
-  tables: string[] = [
-    'Bulbizarre',
-    'Salamèche',
-    'Carapuce',
-    'Coconfort',
-    'Roucool',
-    'Nidoqueen',
-    'Mélofée',
-    'Aéromite',
-    'Arcanin',
-    'Onix',
-    'Amonita',
-    'Kabuto',
-    'Draco',
-  ];
+  tables: string[] = TABLES_POSSIBILITIES;
   currentTable = '';
 
   constructor(private router: Router) {}
@@ -30,7 +32,6 @@ export class TableModalComponent implements OnInit {
   ngOnInit(): void {}
 
   handleOkTableModal(): void {
-    this.router.navigate(['/'], { queryParams: { table: this.currentTable } });
-    this.isOpenTableModal = false;
+    this.router.navigate(['/table', this.currentTable]);
   }
 }

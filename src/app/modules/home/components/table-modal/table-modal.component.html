@@ -1,5 +1,5 @@
 <nz-modal
-  [(nzVisible)]="isOpenTableModal"
+  [nzVisible]="true"
   nzTitle="Veuillez indiquer votre table svp"
   nzCentered
   [nzClosable]="false"
@@ -8,21 +8,17 @@
 >
   <ng-container *nzModalContent>
     <p>Regardez sur votre table, sous le QR Code apparait votre nom de table</p>
-    <a nz-dropdown [nzDropdownMenu]="menu">
-      {{ currentTable ? currentTable : "Votre table" }}
-      <i nz-icon nzType="down"></i>
-    </a>
-    <nz-dropdown-menu #menu="nzDropdownMenu">
-      <ul nz-menu nzSelectable>
-        <li
-          *ngFor="let table of tables"
-          nz-menu-item
-          (click)="currentTable = table"
-        >
-          {{ table }}
-        </li>
-      </ul>
-    </nz-dropdown-menu>
+    <nz-select
+      [(ngModel)]="currentTable"
+      nzPlaceHolder="Choisissez votre table"
+      style="width: 50%"
+    >
+      <nz-option
+        *ngFor="let table of tables"
+        [nzValue]="table"
+        [nzLabel]="table"
+      ></nz-option>
+    </nz-select>
   </ng-container>
   <ng-container *nzModalFooter>
     <button

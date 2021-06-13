@@ -9,10 +9,13 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+
 @NgModule({
   exports: [
     NzAvatarModule,
@@ -23,7 +26,9 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
     NzIconModule,
     NzDividerModule,
     NzButtonModule,
-    NzDropDownModule,
+    NzSelectModule,
+    NzPageHeaderModule,
+    NzCollapseModule,
     NzSkeletonModule,
     NzTabsModule,
     NzInputModule,

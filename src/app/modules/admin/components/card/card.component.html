@@ -1,10 +1,11 @@
 <nz-card
   style="width: 300px"
   [nzActions]="isDone ? [] : [actionDone]"
-  [nzTitle]="'Commande'"
+  [nzTitle]="'Commande #' + command.num"
 >
   <p>Table : {{ command.table }}</p>
   <p>Nom : {{ command.name }}</p>
+  <p>Heure : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
   <p>Pâtisseries :</p>
   <ul>
     <li *ngFor="let pastryObj of pastries">

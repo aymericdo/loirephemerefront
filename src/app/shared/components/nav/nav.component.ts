@@ -18,7 +18,7 @@ export class NavComponent implements OnInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  isSelected(route: string): boolean {
-    return route === this.router.url.split('?')[0];
+  isHome(): boolean {
+    return this.router.url === '/' || this.router.url.startsWith('/table/');
   }
 }

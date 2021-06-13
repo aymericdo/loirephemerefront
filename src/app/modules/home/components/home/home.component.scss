@@ -1,2 +1,5 @@
 :host {
+  ::ng-deep .ant-page-header-heading-left {
+    flex-direction: column;
+  }
 }

@@ -22,7 +22,7 @@ export class AdminEffects {
           map((commands) => setCommands({ commands })),
           catchError(() => {
             localStorage.removeItem('token');
-            this.router.navigate(['/']);
+            this.router.navigate(['/table', '']);
             return EMPTY;
           })
         );
@@ -40,7 +40,7 @@ export class AdminEffects {
             map((command) => editCommand({ command })),
             catchError(() => {
               localStorage.removeItem('token');
-              this.router.navigate(['/']);
+              this.router.navigate(['/table', '']);
               return EMPTY;
             })
           );

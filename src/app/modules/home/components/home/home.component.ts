@@ -21,6 +21,8 @@ import {
 } from 'src/app/modules/home/store/home.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { TABLES_POSSIBILITIES } from '../table-modal/table-modal.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   templateUrl: './home.component.html',
@@ -33,13 +35,13 @@ export class HomeComponent implements OnInit {
   totalPrice$: Observable<number>;
   table$: Observable<string>;
   isLoading$: Observable<boolean>;
-  isOpenTableModal: boolean = false;
-  currentTable: string = '';
+  currentTable: string | null = null;
 
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modal: NzModalService
   ) {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
@@ -52,21 +54,34 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(fetchPastries());
 
-    this.route.queryParams.subscribe((params) => {
-      this.currentTable = params['table'];
-      if (!this.currentTable) {
+    this.route.paramMap.subscribe((paramMap) => {
+      this.currentTable = paramMap.get('tableName');
+      if (
+        this.currentTable &&
+        TABLES_POSSIBILITIES.includes(this.currentTable)
+      ) {
+        this.store.dispatch(setTable({ table: this.currentTable }));
+      } else {
         this.table$.pipe(take(1)).subscribe((table) => {
           if (table) {
-            this.router.navigate(['/'], {
-              queryParams: { table },
-            });
+            this.router.navigate(['/table', table]);
           } else {
-            this.isOpenTableModal = true;
+            this.router.navigate(['/']);
           }
         });
-      } else {
-        this.store.dispatch(setTable({ table: this.currentTable }));
       }
+    });
+  }
+
+  handleTableChange(): void {
+    this.modal.confirm({
+      nzTitle: 'Changer de table ?',
+      nzOkText: 'OK',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.router.navigate(['/']);
+      },
+      nzCancelText: 'Annuler',
     });
   }
 
@@ -79,7 +94,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleClickCommand(name: string): void {
-    this.store.dispatch(sendCommand({ table: this.currentTable, name }));
+    this.store.dispatch(sendCommand({ table: this.currentTable!, name }));
   }
 
   handleClickReset(): void {

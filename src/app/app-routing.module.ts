@@ -3,11 +3,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { AdminComponent } from './modules/admin/components/admin/admin.component';
 import { HomeComponent } from './modules/home/components/home/home.component';
+import { TableModalComponent } from './modules/home/components/table-modal/table-modal.component';
 import { LoginComponent } from './modules/login/components/login/login.component';
 
 const routes: Routes = [
   {
     path: '',
+    component: TableModalComponent,
+  },
+  {
+    path: 'table/:tableName',
     component: HomeComponent,
   },
   {

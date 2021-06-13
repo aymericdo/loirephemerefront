@@ -6,6 +6,7 @@ export const pastriesMock = [
     description: '2345YT',
     imageUrl: '2345YT',
     stock: 3,
+    ingredients: [''],
   },
   {
     _id: '2345YT',
@@ -14,6 +15,7 @@ export const pastriesMock = [
     description: '2345YT',
     imageUrl: '2345YT',
     stock: 3,
+    ingredients: [''],
   },
   {
     _id: '2345YT',
@@ -22,5 +24,6 @@ export const pastriesMock = [
     description: '2345YT',
     imageUrl: '2345YT',
     stock: 3,
+    ingredients: [''],
   },
 ];
