@@ -5,7 +5,7 @@ export interface Command {
   pastries: Pastry[];
   table: string;
   name: string;
-  ref?: string;
+  reference?: string;
   createdAt?: string;
   updatedAt?: string;
   isDone?: boolean;
