@@ -5,10 +5,13 @@ import {
   Input,
   Output,
   EventEmitter,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+
+const SECONDS_HIGHLIGHT = 20;
 
 @Component({
   selector: 'app-card',
@@ -23,8 +26,15 @@ export class CardComponent implements OnInit {
   @Output() onClickDone = new EventEmitter<string>();
 
   pastries: [Pastry, number][] = [];
+  totalPrice = 0;
 
-  constructor(private modal: NzModalService) {}
+  isNew = false;
+  isJustUpdated = false;
+
+  private isNewTimeout: ReturnType<typeof setTimeout> | null = null;
+  private isJustUpdatedTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  constructor(private modal: NzModalService, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const pastriesGroupedBy = this.command.pastries.reduce((prev, pastry) => {
@@ -41,6 +51,19 @@ export class CardComponent implements OnInit {
       pastriesGroupedBy[pastryId][0],
       pastriesGroupedBy[pastryId][1],
     ]);
+
+    this.totalPrice = this.pastries.reduce(
+      (prev, p) => prev + p[0].price * p[1],
+      0
+    );
+
+    this.setIsNew();
+    this.setIsJustUpdated();
+  }
+
+  ngOnDestroy(): void {
+    clearTimeout(this.isNewTimeout!);
+    clearTimeout(this.isJustUpdatedTimeout!);
   }
 
   showValidationPopup(): void {
@@ -54,5 +77,37 @@ export class CardComponent implements OnInit {
       },
       nzCancelText: 'Annuler',
     });
+  }
+
+  private setIsNew(): void {
+    const today = new Date().getTime();
+    const createdDate = new Date(this.command.createdAt!).getTime();
+
+    const secondLived = (today - createdDate) / 1000;
+
+    this.isNew = secondLived < SECONDS_HIGHLIGHT;
+
+    if (this.isNew) {
+      this.isNewTimeout = setTimeout(() => {
+        this.isNew = false;
+        this.cd.markForCheck();
+      }, (SECONDS_HIGHLIGHT - secondLived) * 1000);
+    }
+  }
+
+  private setIsJustUpdated(): void {
+    const today = new Date().getTime();
+    const createdDate = new Date(this.command.updatedAt!).getTime();
+
+    const secondLived = (today - createdDate) / 1000;
+
+    this.isJustUpdated = secondLived < SECONDS_HIGHLIGHT;
+
+    if (this.isJustUpdated) {
+      this.isJustUpdatedTimeout = setTimeout(() => {
+        this.isJustUpdated = false;
+        this.cd.markForCheck();
+      }, (SECONDS_HIGHLIGHT - secondLived) * 1000);
+    }
   }
 }

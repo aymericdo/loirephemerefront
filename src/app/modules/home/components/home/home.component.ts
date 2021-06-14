@@ -9,7 +9,7 @@ import {
   resetCommand,
   setTable,
 } from 'src/app/modules/home/store/home.actions';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import {
   selectHasSelectedPastries,
@@ -21,14 +21,19 @@ import {
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { TABLES_POSSIBILITIES } from '../table-modal/table-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command } from 'src/app/interfaces/command.interface';
+import {
+  WebSocketData,
+  WebSocketService,
+} from 'src/app/modules/home/services/home-socket.service';
 
 @Component({
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  providers: [WebSocketService],
 })
 export class HomeComponent implements OnInit {
   pastries$: Observable<Pastry[]>;
@@ -41,11 +46,14 @@ export class HomeComponent implements OnInit {
   currentTable: string | null = null;
   isSuccessModalVisible = false;
 
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
     private router: Router,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private wsService: WebSocketService
   ) {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
@@ -76,6 +84,17 @@ export class HomeComponent implements OnInit {
         });
       }
     });
+
+    this.wsService
+      .createObservableSocket()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(
+        (data: WebSocketData) => {
+          console.log(data);
+        },
+        (err) => console.log('err'),
+        () => console.log('The observable stream is complete')
+      );
   }
 
   handleTableChange(): void {
@@ -105,5 +124,14 @@ export class HomeComponent implements OnInit {
 
   handleClickReset(): void {
     this.store.dispatch(resetCommand());
+  }
+
+  closeSocket() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  ngOnDestroy() {
+    this.closeSocket();
   }
 }

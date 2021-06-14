@@ -13,7 +13,10 @@ import {
   selectOnGoingCommands,
   selectPastCommands,
 } from 'src/app/modules/admin/store/admin.selectors';
-import { WebSocketService } from 'src/app/modules/admin/services/admin-socket.service';
+import {
+  WebSocketData,
+  WebSocketService,
+} from 'src/app/modules/admin/services/admin-socket.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -24,9 +27,6 @@ import { takeUntil } from 'rxjs/operators';
 export class AdminComponent implements OnInit {
   onGoingCommands$: Observable<Command[]>;
   pastCommands$: Observable<Command[]>;
-
-  messageFromServer: string = '';
-  status = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -42,22 +42,19 @@ export class AdminComponent implements OnInit {
     this.store.dispatch(fetchCommands());
 
     this.wsService
-      .createObservableSocket('addCommand')
+      .createObservableSocket()
       .pipe(takeUntil(this.destroyed$))
       .subscribe(
-        (command: Command | any) => {
-          this.store.dispatch(addCommand({ command }));
-        },
-        (err) => console.log('err'),
-        () => console.log('The observable stream is complete')
-      );
-
-    this.wsService
-      .createObservableSocket('closeCommand')
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(
-        (command: Command | any) => {
-          this.store.dispatch(editCommand({ command }));
+        (data: WebSocketData) => {
+          if (data.hasOwnProperty('addCommand')) {
+            this.store.dispatch(
+              addCommand({ command: data.addCommand as Command })
+            );
+          } else if (data.hasOwnProperty('closeCommand')) {
+            this.store.dispatch(
+              editCommand({ command: data.closeCommand as Command })
+            );
+          }
         },
         (err) => console.log('err'),
         () => console.log('The observable stream is complete')
@@ -67,7 +64,6 @@ export class AdminComponent implements OnInit {
   closeSocket() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-    this.status = 'The socket is closed';
   }
 
   handleClickDone(command: Command): void {
