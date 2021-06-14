@@ -8,7 +8,7 @@
       [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
       [nzDescription]="pastry.description"
     ></nz-card-meta>
-    <nz-collapse nzGhost>
+    <nz-collapse *ngIf="pastry.ingredients.length" nzGhost>
       <nz-collapse-panel nzHeader="Ingrédients">
         <p style="margin: 0">{{ pastry.ingredients.join(", ") }}</p>
       </nz-collapse-panel>

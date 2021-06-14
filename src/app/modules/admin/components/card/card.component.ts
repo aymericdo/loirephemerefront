@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 
@@ -23,7 +24,7 @@ export class CardComponent implements OnInit {
 
   pastries: [Pastry, number][] = [];
 
-  constructor() {}
+  constructor(private modal: NzModalService) {}
 
   ngOnInit(): void {
     const pastriesGroupedBy = this.command.pastries.reduce((prev, pastry) => {
@@ -40,5 +41,18 @@ export class CardComponent implements OnInit {
       pastriesGroupedBy[pastryId][0],
       pastriesGroupedBy[pastryId][1],
     ]);
+  }
+
+  showValidationPopup(): void {
+    this.modal.confirm({
+      nzTitle: `Commande #${this.command.reference}`,
+      nzContent: `Cette commande à bien été payée et livrée ?`,
+      nzOkText: 'OK',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.onClickDone.emit();
+      },
+      nzCancelText: 'Annuler',
+    });
   }
 }
