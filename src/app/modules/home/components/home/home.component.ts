@@ -8,10 +8,12 @@ import {
   sendCommand,
   resetCommand,
   setTable,
+  setStock,
 } from 'src/app/modules/home/store/home.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import {
+  selectErrorCommand,
   selectHasSelectedPastries,
   selectIsLoading,
   selectPastries,
@@ -43,6 +45,7 @@ export class HomeComponent implements OnInit {
   table$: Observable<string>;
   isLoading$: Observable<boolean>;
   personalCommand$: Observable<Command | null>;
+  errorCommand$: Observable<Object | null>;
   currentTable: string | null = null;
   isSuccessModalVisible = false;
 
@@ -62,6 +65,7 @@ export class HomeComponent implements OnInit {
     this.isLoading$ = this.store.select(selectIsLoading);
     this.table$ = this.store.select(selectTable);
     this.personalCommand$ = this.store.select(selectPersonalCommand);
+    this.errorCommand$ = this.store.select(selectErrorCommand);
   }
 
   ngOnInit(): void {
@@ -90,7 +94,14 @@ export class HomeComponent implements OnInit {
       .pipe(takeUntil(this.destroyed$))
       .subscribe(
         (data: WebSocketData) => {
-          console.log(data);
+          if (data.hasOwnProperty('stockChanged')) {
+            this.store.dispatch(
+              setStock({
+                pastryId: data.stockChanged.pastryId as string,
+                newStock: data.stockChanged.newStock as number,
+              })
+            );
+          }
         },
         (err) => console.log('err'),
         () => console.log('The observable stream is complete')
@@ -133,5 +144,9 @@ export class HomeComponent implements OnInit {
 
   ngOnDestroy() {
     this.closeSocket();
+  }
+
+  tackById(_index: any, pastry: Pastry): string {
+    return pastry._id;
   }
 }

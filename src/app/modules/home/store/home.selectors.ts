@@ -29,6 +29,11 @@ export const selectPersonalCommand = createSelector(
   (state: HomeState) => state.personalCommand
 );
 
+export const selectErrorCommand = createSelector(
+  selectFeature,
+  (state: HomeState) => state.errorCommand
+);
+
 export const selectHasSelectedPastries = createSelector(
   selectFeature,
   (state: HomeState) =>

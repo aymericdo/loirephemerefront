@@ -15,6 +15,7 @@ import {
   fetchPastries,
   resetCommand,
   sendCommand,
+  setErrorCommand,
   setPastries,
   setPersonalCommand,
 } from './home.actions';
@@ -65,7 +66,7 @@ export class HomeEffects {
             setPersonalCommand({ command }),
             resetCommand(),
           ]),
-          catchError(() => EMPTY)
+          catchError((error) => [setErrorCommand({ error })])
         );
       })
     )

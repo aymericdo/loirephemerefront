@@ -7,8 +7,10 @@ import {
   fetchPastries,
   incrementPastry,
   resetCommand,
+  setErrorCommand,
   setPastries,
   setPersonalCommand,
+  setStock,
   setTable,
 } from './home.actions';
 
@@ -18,6 +20,7 @@ export interface HomeState {
   pastries: Pastry[];
   selectedPastries: { [pastryId: string]: number };
   personalCommand: Command | null;
+  errorCommand: Object | null;
   loading: boolean;
   table: string;
 }
@@ -26,6 +29,7 @@ export const initialState: HomeState = {
   pastries: pastriesMock,
   selectedPastries: {},
   personalCommand: null,
+  errorCommand: null,
   loading: false,
   table: '',
 };
@@ -41,6 +45,21 @@ const homeReducer = createReducer(
     pastries: [...pastries],
     loading: false,
   })),
+  on(setStock, (state, { pastryId, newStock }) => {
+    const indexOf = state.pastries.findIndex((p) => p._id === pastryId);
+    const newList = [...state.pastries];
+
+    const editedPastry: Pastry = {
+      ...(state.pastries.find((p) => p._id === pastryId) as Pastry),
+      stock: newStock,
+    };
+    newList.splice(indexOf, 1, editedPastry);
+
+    return {
+      ...state,
+      pastries: newList,
+    };
+  }),
   on(setTable, (state, { table }) => ({
     ...state,
     table,
@@ -82,6 +101,10 @@ const homeReducer = createReducer(
   on(setPersonalCommand, (state, { command }) => ({
     ...state,
     personalCommand: command,
+  })),
+  on(setErrorCommand, (state, { error }) => ({
+    ...state,
+    errorCommand: error.error,
   }))
 );
 

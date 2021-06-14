@@ -12,7 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { TableModalComponent } from './components/table-modal/table-modal.component';
 import { OrderModalComponent } from './components/order-modal/order-modal.component';
 import { OrderNameModalComponent } from './components/order-name-modal/order-name-modal.component';
-import { OrderSuccessModalComponent } from './order-success-modal/order-success-modal.component';
+import { OrderSuccessModalComponent } from './components/order-success-modal/order-success-modal.component';
+import { OrderErrorModalComponent } from './components/order-error-modal/order-error-modal.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { OrderSuccessModalComponent } from './order-success-modal/order-success-
     TableModalComponent,
     OrderNameModalComponent,
     OrderSuccessModalComponent,
+    OrderErrorModalComponent,
     OrderModalComponent,
   ],
   imports: [

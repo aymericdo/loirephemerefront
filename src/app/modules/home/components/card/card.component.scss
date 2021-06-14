@@ -2,6 +2,10 @@
   display: flex;
   justify-content: center;
 
+  nz-badge {
+    float: right;
+  }
+
   ::ng-deep
     .ant-collapse
     > .ant-collapse-item

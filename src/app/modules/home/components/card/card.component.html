@@ -4,6 +4,11 @@
   [nzActions]="[actionCount, actionMinus, actionPlus]"
 >
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+    <nz-badge
+      nzStandalone
+      [nzCount]="pastry.stock"
+      [nzStyle]="{ backgroundColor: '#52c41a' }"
+    ></nz-badge>
     <nz-card-meta
       [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
       [nzDescription]="pastry.description"

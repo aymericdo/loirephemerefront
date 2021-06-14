@@ -16,6 +16,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzResultModule } from 'ng-zorro-antd/result';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 @NgModule({
   exports: [
@@ -26,6 +27,7 @@ import { NzResultModule } from 'ng-zorro-antd/result';
     NzMenuModule,
     NzIconModule,
     NzDividerModule,
+    NzBadgeModule,
     NzButtonModule,
     NzSelectModule,
     NzPageHeaderModule,

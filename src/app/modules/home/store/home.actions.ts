@@ -24,7 +24,15 @@ export const setPersonalCommand = createAction(
   '[Home page] Set personal command',
   props<{ command: Command }>()
 );
+export const setErrorCommand = createAction(
+  '[Home page] Set error command',
+  props<{ error: any }>()
+);
 export const setTable = createAction(
   '[Home page] Set table',
   props<{ table: string }>()
+);
+export const setStock = createAction(
+  '[Home page] Set stock',
+  props<{ pastryId: string; newStock: number }>()
 );

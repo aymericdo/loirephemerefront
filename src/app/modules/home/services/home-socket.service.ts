@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
-import { Command } from 'src/app/interfaces/command.interface';
+import { filter, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 const webSocketDataKey = ['stockChanged'];

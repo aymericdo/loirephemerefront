@@ -1,0 +1,29 @@
+<nz-modal
+  [nzVisible]="true"
+  nzTitle="Problème"
+  nzCentered
+  [nzClosable]="false"
+  [nzMaskClosable]="true"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <nz-result
+      *ngIf="errorType === 'outOfStock'"
+      nzStatus="warning"
+      nzTitle="Problème de stock"
+    >
+      <div nz-result-subtitle>
+        Les pâtisseries suivantes ne sont plus en stock :
+        <div>
+          <b>{{ pastriesList }}</b>
+        </div>
+        Merci de votre compréhension.
+      </div>
+      <div nz-result-extra>
+        <button nz-button nzType="primary" (click)="onClickCancel.emit()">
+          Retour à la page principale
+        </button>
+      </div>
+    </nz-result>
+  </ng-container>
+</nz-modal>

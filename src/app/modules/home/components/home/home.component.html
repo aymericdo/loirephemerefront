@@ -10,7 +10,7 @@
 </nz-page-header>
 <div nz-row [nzGutter]="[0, 24]">
   <div
-    *ngFor="let pastry of pastries$ | async"
+    *ngFor="let pastry of pastries$ | async; trackBy: tackById"
     nz-col
     nzXs="24"
     nzSm="24"
@@ -35,6 +35,12 @@
   [commandReference]="(personalCommand$ | async)?.reference!"
   (onClickCancel)="isSuccessModalVisible = false"
 ></app-order-success-modal>
+
+<app-order-error-modal
+  *ngIf="isSuccessModalVisible && (errorCommand$ | async)"
+  [errors]="(errorCommand$ | async)!"
+  (onClickCancel)="isSuccessModalVisible = false"
+></app-order-error-modal>
 
 <app-order-footer
   *ngIf="hasSelectedPastries$ | async"
