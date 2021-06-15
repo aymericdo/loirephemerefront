@@ -22,7 +22,7 @@
       <app-card
         [pastry]="pastry"
         [isLoading]="(isLoading$ | async)!"
-        [count]="(selectedPastries$ | async)![pastry._id]"
+        [count]="(selectedPastries$ | async)![pastry._id] || 0"
         (onClickPlus)="handleClickPlus(pastry)"
         (onClickMinus)="handleClickMinus(pastry)"
       ></app-card>
@@ -46,6 +46,7 @@
   *ngIf="hasSelectedPastries$ | async"
   (onClickReset)="handleClickReset()"
   (onClickCommand)="handleClickCommand($event)"
+  [stockIssue]="(isStockIssue$ | async)!"
   [allPastries]="(pastries$ | async)!"
   [selectedPastries]="(selectedPastries$ | async)!"
   [totalPrice]="(totalPrice$ | async)!"

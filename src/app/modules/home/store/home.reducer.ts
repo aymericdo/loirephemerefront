@@ -7,6 +7,7 @@ import {
   fetchPastries,
   incrementPastry,
   resetCommand,
+  sendCommand,
   setErrorCommand,
   setPastries,
   setPersonalCommand,
@@ -97,6 +98,11 @@ const homeReducer = createReducer(
   on(resetCommand, (state) => ({
     ...state,
     selectedPastries: {},
+  })),
+  on(sendCommand, (state) => ({
+    ...state,
+    personalCommand: null,
+    errorCommand: null,
   })),
   on(setPersonalCommand, (state, { command }) => ({
     ...state,

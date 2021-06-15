@@ -16,6 +16,7 @@ import {
   selectErrorCommand,
   selectHasSelectedPastries,
   selectIsLoading,
+  selectIsStockIssue,
   selectPastries,
   selectPersonalCommand,
   selectSelectedPastries,
@@ -44,6 +45,7 @@ export class HomeComponent implements OnInit {
   totalPrice$: Observable<number>;
   table$: Observable<string>;
   isLoading$: Observable<boolean>;
+  isStockIssue$: Observable<boolean>;
   personalCommand$: Observable<Command | null>;
   errorCommand$: Observable<Object | null>;
   currentTable: string | null = null;
@@ -63,6 +65,7 @@ export class HomeComponent implements OnInit {
     this.totalPrice$ = this.store.select(selectTotalPrice);
     this.hasSelectedPastries$ = this.store.select(selectHasSelectedPastries);
     this.isLoading$ = this.store.select(selectIsLoading);
+    this.isStockIssue$ = this.store.select(selectIsStockIssue);
     this.table$ = this.store.select(selectTable);
     this.personalCommand$ = this.store.select(selectPersonalCommand);
     this.errorCommand$ = this.store.select(selectErrorCommand);

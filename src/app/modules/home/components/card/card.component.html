@@ -6,8 +6,9 @@
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
     <nz-badge
       nzStandalone
+      nzShowZero
       [nzCount]="pastry.stock"
-      [nzStyle]="{ backgroundColor: '#52c41a' }"
+      [nzStyle]="!isStockIssue ? { backgroundColor: '#52c41a' } : {}"
     ></nz-badge>
     <nz-card-meta
       [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
@@ -31,7 +32,11 @@
   <span *ngIf="!!count">{{ count }}</span>
 </ng-template>
 <ng-template #actionPlus>
-  <i nz-icon nzType="plus" (click)="!isLoading && onClickPlus.emit()"></i>
+  <i
+    nz-icon
+    nzType="plus"
+    (click)="!limitReached && !isLoading && onClickPlus.emit()"
+  ></i>
 </ng-template>
 <ng-template #actionMinus>
   <i nz-icon nzType="minus" (click)="!isLoading && onClickMinus.emit()"></i>

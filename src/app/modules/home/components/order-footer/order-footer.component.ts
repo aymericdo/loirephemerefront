@@ -10,6 +10,7 @@ import { Pastry } from 'src/app/interfaces/pastry.interface';
 export class OrderFooterComponent implements OnInit {
   @Input() allPastries: Pastry[] = [];
   @Input() selectedPastries: { [pastryId: string]: number } = {};
+  @Input() stockIssue: boolean = false;
   @Input() totalPrice: number = 0;
   @Output() onClickReset = new EventEmitter<string>();
   @Output() onClickCommand = new EventEmitter<string>();
