@@ -3,7 +3,44 @@
   justify-content: center;
 
   nz-badge {
-    float: right;
+    width: fit-content;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #52c41a;
+    border-radius: 10px;
+    color: white;
+    border-color: white;
+    padding: 0 8px;
+    box-shadow: 0 0 0 1px #fff;
+    display: flex;
+    align-items: center;
+  }
+
+  ::ng-deep nz-badge.-stock-issue {
+    background-color: #ff4d4f;
+  }
+
+  ::ng-deep nz-badge.-limit-reached {
+    background-color: #fadb14;
+    color: black;
+  }
+
+  ::ng-deep nz-badge.-limit-reached nz-badge-sup {
+    display: none;
+  }
+
+  nz-badge > span {
+    margin-bottom: 1px;
+  }
+
+  ::ng-deep nz-badge-sup {
+    box-shadow: none;
+    padding-right: 0;
+    transform: none;
+    background-color: transparent !important;
+    border: none;
+    margin-bottom: -1px;
   }
 
   ::ng-deep
@@ -24,5 +61,9 @@
     > .ant-collapse-content
     > .ant-collapse-content-box {
     padding-top: 0;
+  }
+
+  .ingredients::first-letter {
+    text-transform: capitalize;
   }
 }

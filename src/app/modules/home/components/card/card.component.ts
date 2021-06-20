@@ -23,9 +23,13 @@ export class CardComponent implements OnInit {
   @Output() onClickPlus = new EventEmitter<string>();
   @Output() onClickMinus = new EventEmitter<string>();
 
+  isStockAvailable = false;
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isStockAvailable = ![TIPS_ID].includes(this.pastry._id);
+  }
 
   get limitReached(): boolean {
     if (this.pastry._id === TIPS_ID) return false;

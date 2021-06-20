@@ -5,18 +5,30 @@
 >
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
     <nz-badge
+      *ngIf="isStockAvailable"
+      [class.-limit-reached]="pastry.stock === 0"
+      [class.-stock-issue]="isStockIssue"
       nzStandalone
       nzShowZero
       [nzCount]="pastry.stock"
-      [nzStyle]="!isStockIssue ? { backgroundColor: '#52c41a' } : {}"
-    ></nz-badge>
+      [nzTitle]="'stock'"
+    >
+      <ng-container *ngIf="pastry.stock === 0">
+        <span>Rupture de stock</span>
+      </ng-container>
+      <ng-container *ngIf="pastry.stock > 0">
+        <span>Stock</span>
+      </ng-container>
+    </nz-badge>
     <nz-card-meta
       [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
       [nzDescription]="pastry.description"
     ></nz-card-meta>
     <nz-collapse *ngIf="pastry.ingredients.length" nzGhost>
       <nz-collapse-panel nzHeader="Ingrédients">
-        <p style="margin: 0">{{ pastry.ingredients.join(", ") }}</p>
+        <p class="ingredients" style="margin: 0">
+          {{ pastry.ingredients.join(", ") }}
+        </p>
       </nz-collapse-panel>
     </nz-collapse>
   </nz-skeleton>
