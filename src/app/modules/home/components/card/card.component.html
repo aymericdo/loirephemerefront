@@ -24,6 +24,11 @@
       [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
       [nzDescription]="pastry.description"
     ></nz-card-meta>
+    <ng-container *ngIf="isTips">
+      <div class="learn-more">
+        <a href="https://www.instagram.com/p/CQfi_pboxwM/">En savoir plus</a>
+      </div>
+    </ng-container>
     <nz-collapse *ngIf="pastry.ingredients.length" nzGhost>
       <nz-collapse-panel nzHeader="Ingrédients">
         <p class="ingredients" style="margin: 0">
