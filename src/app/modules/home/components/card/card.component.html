@@ -29,7 +29,7 @@
         <a href="https://www.instagram.com/p/CQfi_pboxwM/">En savoir plus</a>
       </div>
     </ng-container>
-    <nz-collapse *ngIf="pastry.ingredients.length" nzGhost>
+    <nz-collapse *ngIf="pastry.ingredients?.length" nzGhost>
       <nz-collapse-panel nzHeader="Ingrédients">
         <p class="ingredients" style="margin: 0">
           {{ pastry.ingredients.join(", ") }}
@@ -42,7 +42,7 @@
   <img
     *ngIf="!isLoading"
     [alt]="'example-' + pastry.name"
-    [src]="'assets/photos/' + pastry.imageUrl"
+    [src]="'https://loirephemereback.herokuapp.com/photos/' + pastry.imageUrl"
   />
 </ng-template>
 <ng-template #actionCount>

@@ -30,16 +30,16 @@ export class CardComponent implements OnInit {
 
   ngOnInit(): void {
     this.isTips = TIPS_ID === this.pastry._id;
-    this.isStockAvailable = !this.isTips;
+    this.isStockAvailable = this.pastry.stock !== undefined;
   }
 
   get limitReached(): boolean {
-    if (this.isTips) return false;
+    if (!this.isStockAvailable) return false;
     return this.count >= this.pastry.stock;
   }
 
   get isStockIssue(): boolean {
-    if (this.isTips) return false;
+    if (!this.isStockAvailable) return false;
     return this.count > this.pastry.stock;
   }
 }
