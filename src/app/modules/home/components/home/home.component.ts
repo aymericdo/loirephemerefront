@@ -115,14 +115,13 @@ export class HomeComponent implements OnInit {
             audio.play();
             if (!this.isWizzNotificationVisible) {
               this.isWizzNotificationVisible = true;
-              this.notification.create(
-                'success',
-                'Votre commande est prête !',
-                '',
-                {
+              this.notification
+                .create('success', 'Votre commande est prête !', '', {
                   nzDuration: 0,
-                }
-              );
+                })
+                .onClose.subscribe(() => {
+                  this.isWizzNotificationVisible = false;
+                });
             }
           }
         },
