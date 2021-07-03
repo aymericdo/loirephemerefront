@@ -34,8 +34,6 @@ import {
   HomeWebSocketService,
 } from 'src/app/modules/home/services/home-socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { SwPush } from '@angular/service-worker';
-import { environment } from 'src/environments/environment';
 
 @Component({
   templateUrl: './home.component.html',
@@ -55,9 +53,6 @@ export class HomeComponent implements OnInit {
   isSuccessModalVisible = false;
   isWizzNotificationVisible = false;
 
-  readonly VAPID_PUBLIC_KEY =
-    'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -66,8 +61,7 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     private wsService: HomeWebSocketService,
-    private notification: NzNotificationService,
-    private swPush: SwPush
+    private notification: NzNotificationService
   ) {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
@@ -81,10 +75,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (environment.production) {
-      this.subscribeToNotifications();
-    }
-
     this.store.dispatch(fetchPastries());
 
     this.route.paramMap.subscribe((paramMap) => {
@@ -138,19 +128,6 @@ export class HomeComponent implements OnInit {
         },
         (err) => console.log('err'),
         () => console.log('The observable stream is complete')
-      );
-  }
-
-  subscribeToNotifications(): void {
-    this.swPush
-      .requestSubscription({
-        serverPublicKey: this.VAPID_PUBLIC_KEY,
-      })
-      .then((sub) => {
-        this.store.dispatch(sendNotificationSub({ sub }));
-      })
-      .catch((err) =>
-        console.error('Could not subscribe to notifications', err)
       );
   }
 

@@ -38,7 +38,7 @@ export const setStock = createAction(
 );
 export const sendNotificationSub = createAction(
   '[Home page] Send notification sub',
-  props<{ sub: any }>()
+  props<{ commandId: string; sub: any }>()
 );
 export const notificationSubSent = createAction(
   '[Home page] Notification sub sent'
