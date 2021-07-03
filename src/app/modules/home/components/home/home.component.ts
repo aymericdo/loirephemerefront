@@ -50,6 +50,7 @@ export class HomeComponent implements OnInit {
   errorCommand$: Observable<Object | null>;
   currentTable: string | null = null;
   isSuccessModalVisible = false;
+  isWizzNotificationVisible = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -107,14 +108,17 @@ export class HomeComponent implements OnInit {
             );
           } else if (data.hasOwnProperty('wizz')) {
             window.navigator.vibrate([2000, 10, 2000]);
-            this.notification.create(
-              'success',
-              'Votre commande est prête !',
-              '',
-              {
-                nzDuration: 0,
-              }
-            );
+            if (!this.isWizzNotificationVisible) {
+              this.isWizzNotificationVisible = true;
+              this.notification.create(
+                'success',
+                'Votre commande est prête !',
+                '',
+                {
+                  nzDuration: 0,
+                }
+              );
+            }
           }
         },
         (err) => console.log('err'),
