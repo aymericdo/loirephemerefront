@@ -26,4 +26,11 @@ export class HomeApiService {
       command
     );
   }
+
+  postSub(sub: any): Observable<any> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/pastries/notification`,
+      sub
+    );
+  }
 }

@@ -36,3 +36,10 @@ export const setStock = createAction(
   '[Home page] Set stock',
   props<{ pastryId: string; newStock: number }>()
 );
+export const sendNotificationSub = createAction(
+  '[Home page] Send notification sub',
+  props<{ sub: any }>()
+);
+export const notificationSubSent = createAction(
+  '[Home page] Notification sub sent'
+);

@@ -13,8 +13,10 @@ import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
   fetchPastries,
+  notificationSubSent,
   resetCommand,
   sendCommand,
+  sendNotificationSub,
   setErrorCommand,
   setPastries,
   setPersonalCommand,
@@ -72,7 +74,19 @@ export class HomeEffects {
             );
             return [setPersonalCommand({ command }), resetCommand()];
           }),
-          catchError((error) => [setErrorCommand({ error })])
+          catchError((error) => [fetchPastries(), setErrorCommand({ error })])
+        );
+      })
+    )
+  );
+
+  sendNotificationSub$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(sendNotificationSub),
+      mergeMap((action) => {
+        return this.homeApiService.postSub(action.sub).pipe(
+          map(() => notificationSubSent()),
+          catchError(() => EMPTY)
         );
       })
     )
