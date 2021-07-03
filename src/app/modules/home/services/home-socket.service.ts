@@ -10,9 +10,6 @@ export type WebSocketData = {
   [key: string]: { pastryId: string; newStock: number };
 };
 
-@Injectable({
-  providedIn: 'root',
-})
 export class HomeWebSocketService {
   ws!: WebSocket;
 

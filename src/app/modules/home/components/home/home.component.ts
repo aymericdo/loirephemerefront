@@ -25,7 +25,7 @@ import {
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { TABLES_POSSIBILITIES } from '../table-modal/table-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command } from 'src/app/interfaces/command.interface';
@@ -34,9 +34,12 @@ import {
   HomeWebSocketService,
 } from 'src/app/modules/home/services/home-socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { environment } from 'src/environments/environment';
+import { SwPush } from '@angular/service-worker';
 
 @Component({
   templateUrl: './home.component.html',
+  providers: [HomeWebSocketService],
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
@@ -53,6 +56,9 @@ export class HomeComponent implements OnInit {
   isSuccessModalVisible = false;
   isWizzNotificationVisible = false;
 
+  readonly VAPID_PUBLIC_KEY =
+    'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -61,7 +67,8 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     private wsService: HomeWebSocketService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private swPush: SwPush
   ) {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
@@ -76,6 +83,30 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(fetchPastries());
+
+    this.personalCommand$
+      .pipe(filter(Boolean), takeUntil(this.destroyed$))
+      .subscribe((command: Command | any) => {
+        if (environment.production) {
+          this.swPush
+            .requestSubscription({
+              serverPublicKey: this.VAPID_PUBLIC_KEY,
+            })
+            .then((sub) => {
+              sendNotificationSub({ commandId: command._id!, sub });
+            })
+            .catch((err) =>
+              console.error('Could not subscribe to notifications', err)
+            );
+        }
+
+        this.wsService.sendMessage(
+          JSON.stringify({
+            event: 'addWaitingQueue',
+            data: command,
+          })
+        );
+      });
 
     this.route.paramMap.subscribe((paramMap) => {
       this.currentTable = paramMap.get('tableName');

@@ -23,6 +23,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   templateUrl: './admin.component.html',
+  providers: [AdminWebSocketService],
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {

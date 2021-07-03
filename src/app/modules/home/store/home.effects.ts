@@ -24,15 +24,9 @@ import {
 import { selectPastries, selectSelectedPastries } from './home.selectors';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Command } from 'src/app/interfaces/command.interface';
-import { HomeWebSocketService } from '../services/home-socket.service';
-import { environment } from 'src/environments/environment';
-import { SwPush } from '@angular/service-worker';
 
 @Injectable()
 export class HomeEffects {
-  readonly VAPID_PUBLIC_KEY =
-    'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
-
   fetchPastries$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchPastries),
@@ -71,25 +65,6 @@ export class HomeEffects {
         };
         return this.homeApiService.postCommand(command).pipe(
           switchMap((command) => {
-            if (environment.production) {
-              this.swPush
-                .requestSubscription({
-                  serverPublicKey: this.VAPID_PUBLIC_KEY,
-                })
-                .then((sub) => {
-                  sendNotificationSub({ commandId: command._id, sub });
-                })
-                .catch((err) =>
-                  console.error('Could not subscribe to notifications', err)
-                );
-            }
-
-            this.wsService.sendMessage(
-              JSON.stringify({
-                event: 'addWaitingQueue',
-                data: command,
-              })
-            );
             return [setPersonalCommand({ command }), resetCommand()];
           }),
           catchError((error) => [fetchPastries(), setErrorCommand({ error })])
@@ -113,8 +88,6 @@ export class HomeEffects {
   constructor(
     private actions$: Actions,
     private store$: Store<AppState>,
-    private wsService: HomeWebSocketService,
-    private homeApiService: HomeApiService,
-    private swPush: SwPush
+    private homeApiService: HomeApiService
   ) {}
 }

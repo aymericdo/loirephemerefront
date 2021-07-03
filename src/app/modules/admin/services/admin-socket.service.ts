@@ -11,9 +11,6 @@ export type WebSocketData = {
   [key: string]: Command | 'bonjour';
 };
 
-@Injectable({
-  providedIn: 'root',
-})
 export class AdminWebSocketService {
   ws!: WebSocket;
 
