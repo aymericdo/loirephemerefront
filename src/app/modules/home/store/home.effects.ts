@@ -22,6 +22,7 @@ import {
 import { selectPastries, selectSelectedPastries } from './home.selectors';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Command } from 'src/app/interfaces/command.interface';
+import { HomeWebSocketService } from '../services/home-socket.service';
 
 @Injectable()
 export class HomeEffects {
@@ -62,10 +63,15 @@ export class HomeEffects {
           ),
         };
         return this.homeApiService.postCommand(command).pipe(
-          switchMap((command) => [
-            setPersonalCommand({ command }),
-            resetCommand(),
-          ]),
+          switchMap((command) => {
+            this.wsService.sendMessage(
+              JSON.stringify({
+                event: 'addWaitingQueue',
+                data: command,
+              })
+            );
+            return [setPersonalCommand({ command }), resetCommand()];
+          }),
           catchError((error) => [setErrorCommand({ error })])
         );
       })
@@ -75,6 +81,7 @@ export class HomeEffects {
   constructor(
     private actions$: Actions,
     private store$: Store<AppState>,
+    private wsService: HomeWebSocketService,
     private homeApiService: HomeApiService
   ) {}
 }

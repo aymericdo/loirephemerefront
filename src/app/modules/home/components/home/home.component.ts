@@ -30,13 +30,13 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command } from 'src/app/interfaces/command.interface';
 import {
   WebSocketData,
-  WebSocketService,
+  HomeWebSocketService,
 } from 'src/app/modules/home/services/home-socket.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [WebSocketService],
 })
 export class HomeComponent implements OnInit {
   pastries$: Observable<Pastry[]>;
@@ -58,7 +58,8 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modal: NzModalService,
-    private wsService: WebSocketService
+    private wsService: HomeWebSocketService,
+    private notification: NzNotificationService
   ) {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
@@ -103,6 +104,16 @@ export class HomeComponent implements OnInit {
                 pastryId: data.stockChanged.pastryId as string,
                 newStock: data.stockChanged.newStock as number,
               })
+            );
+          } else if (data.hasOwnProperty('wizz')) {
+            window.navigator.vibrate([2000, 10, 2000]);
+            this.notification.create(
+              'success',
+              'Votre commande est prête !',
+              '',
+              {
+                nzDuration: 0,
+              }
             );
           }
         },

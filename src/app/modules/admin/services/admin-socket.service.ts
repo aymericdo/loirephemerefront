@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { Command } from 'src/app/interfaces/command.interface';
@@ -10,7 +11,10 @@ export type WebSocketData = {
   [key: string]: Command | 'bonjour';
 };
 
-export class WebSocketService {
+@Injectable({
+  providedIn: 'root',
+})
+export class AdminWebSocketService {
   ws!: WebSocket;
 
   createObservableSocket(): Observable<WebSocketData> {

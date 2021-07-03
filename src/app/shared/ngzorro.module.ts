@@ -17,6 +17,7 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
 
 @NgModule({
   exports: [
@@ -30,6 +31,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzBadgeModule,
     NzButtonModule,
     NzSelectModule,
+    NzNotificationModule,
     NzPageHeaderModule,
     NzCollapseModule,
     NzSkeletonModule,

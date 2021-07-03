@@ -1,15 +1,19 @@
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-const webSocketDataKey = ['stockChanged'];
+const webSocketDataKey = ['stockChanged', 'wizz'];
 const SOCKET_IS_OPEN = 1;
 
 export type WebSocketData = {
   [key: string]: { pastryId: string; newStock: number };
 };
 
-export class WebSocketService {
+@Injectable({
+  providedIn: 'root',
+})
+export class HomeWebSocketService {
   ws!: WebSocket;
 
   createObservableSocket(): Observable<WebSocketData> {

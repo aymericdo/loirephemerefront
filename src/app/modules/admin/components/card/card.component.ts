@@ -22,8 +22,10 @@ const SECONDS_HIGHLIGHT = 20;
 export class CardComponent implements OnInit {
   @Input() command: Command = null!;
   @Input() isDone: boolean = false;
+  @Input() isLoading: boolean = false;
 
   @Output() onClickDone = new EventEmitter<string>();
+  @Output() onClickWizz = new EventEmitter<string>();
 
   pastries: [Pastry, number][] = [];
   totalPrice = 0;
@@ -77,6 +79,10 @@ export class CardComponent implements OnInit {
       },
       nzCancelText: 'Annuler',
     });
+  }
+
+  wizzClient(): void {
+    this.onClickWizz.emit();
   }
 
   private setIsNew(): void {

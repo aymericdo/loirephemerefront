@@ -30,6 +30,8 @@
   </div>
 </div>
 
+<app-footer></app-footer>
+
 <app-order-success-modal
   *ngIf="isSuccessModalVisible && (personalCommand$ | async)"
   [commandReference]="(personalCommand$ | async)?.reference!"

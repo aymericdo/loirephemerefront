@@ -13,7 +13,9 @@
         <div class="inner-box">
           <app-card
             [command]="command"
+            [isLoading]="(isLoading$ | async)!"
             (onClickDone)="handleClickDone(command)"
+            (onClickWizz)="handleClickWizz(command)"
           ></app-card>
         </div>
       </div>
@@ -37,3 +39,5 @@
     </div>
   </nz-tab>
 </nz-tabset>
+
+<app-footer></app-footer>

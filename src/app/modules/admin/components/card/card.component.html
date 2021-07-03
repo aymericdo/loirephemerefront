@@ -2,20 +2,25 @@
   style="width: 300px"
   [class.-is-new]="isNew"
   [class.-is-just-updated]="isJustUpdated"
-  [nzActions]="isDone ? [] : [actionDone]"
+  [nzActions]="isDone ? [actionWizz] : [actionWizz, actionDone]"
   [nzTitle]="'Commande #' + command.reference"
 >
-  <p>Table : {{ command.table }}</p>
-  <p>Nom : {{ command.name }}</p>
-  <p>Heure : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
-  <p>Pâtisseries :</p>
-  <ul>
-    <li *ngFor="let pastryObj of pastries">
-      {{ pastryObj[0].name + " (x" + pastryObj[1] + ")" }}
-    </li>
-  </ul>
-  <p>Prix total : {{ totalPrice }}€</p>
+  <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+    <p>Table : {{ command.table }}</p>
+    <p>Nom : {{ command.name }}</p>
+    <p>Heure : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
+    <p>Pâtisseries :</p>
+    <ul>
+      <li *ngFor="let pastryObj of pastries">
+        {{ pastryObj[0].name + " (x" + pastryObj[1] + ")" }}
+      </li>
+    </ul>
+    <p>Prix total : {{ totalPrice }}€</p>
+  </nz-skeleton>
 </nz-card>
+<ng-template #actionWizz>
+  <i nz-icon nzType="bell" (click)="!isLoading && wizzClient()"></i>
+</ng-template>
 <ng-template #actionDone>
-  <i nz-icon nzType="check" (click)="showValidationPopup()"></i>
+  <i nz-icon nzType="check" (click)="!isLoading && showValidationPopup()"></i>
 </ng-template>

@@ -20,3 +20,8 @@ export const selectPastCommands = createSelector(
         );
       })
 );
+
+export const selectIsLoading = createSelector(
+  selectFeature,
+  (state: AdminState) => state.loading
+);
