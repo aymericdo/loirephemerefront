@@ -6,12 +6,11 @@
 
   .inner-layout {
     min-height: 100vh;
+    height: 100vh;
   }
 
   .inner-content {
-    background: #fff;
-    min-height: 100vh;
-    height: 100vh;
+    height: 100%;
     overflow-y: auto;
   }
 }
