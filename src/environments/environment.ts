@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  protocolHttp: 'https://',
-  protocolWs: 'wss://',
-  api: 'loirephemereback.herokuapp.com',
+  protocolHttp: 'http://',
+  protocolWs: 'ws://',
+  api: 'localhost:3000',
 };
 
 /*
