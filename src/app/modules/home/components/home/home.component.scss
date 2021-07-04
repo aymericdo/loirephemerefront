@@ -1,7 +1,13 @@
 :host {
   display: block;
   height: 100%;
-  padding: 24px;
+  position: relative;
+
+  .scrollable-zone {
+    overflow-y: auto;
+    height: 100%;
+    padding: 24px;
+  }
 
   ::ng-deep .ant-page-header-heading-left {
     flex-direction: column;

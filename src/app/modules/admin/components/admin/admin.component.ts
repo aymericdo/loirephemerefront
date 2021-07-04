@@ -46,6 +46,28 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(fetchCommands());
 
+    this.subscribeToWS();
+  }
+
+  handleClickDone(command: Command): void {
+    this.store.dispatch(closeCommand({ command }));
+  }
+
+  handleClickWizz(command: Command): void {
+    this.wsService.sendMessage(
+      JSON.stringify({
+        event: 'wizzer',
+        data: command,
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  private subscribeToWS() {
     this.wsService
       .createObservableSocket()
       .pipe(takeUntil(this.destroyed$))
@@ -71,29 +93,10 @@ export class AdminComponent implements OnInit {
           }
         },
         (err) => console.log('err'),
-        () => console.log('The observable stream is complete')
+        () => {
+          this.subscribeToWS();
+          console.log('The observable stream is complete');
+        }
       );
-  }
-
-  closeSocket() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
-
-  handleClickDone(command: Command): void {
-    this.store.dispatch(closeCommand({ command }));
-  }
-
-  handleClickWizz(command: Command): void {
-    this.wsService.sendMessage(
-      JSON.stringify({
-        event: 'wizzer',
-        data: command,
-      })
-    );
-  }
-
-  ngOnDestroy() {
-    this.closeSocket();
   }
 }

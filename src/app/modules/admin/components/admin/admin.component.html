@@ -1,5 +1,8 @@
 <nz-tabset>
   <nz-tab nzTitle="Commandes en cours">
+    <ng-container *ngIf="(onGoingCommands$ | async)?.length === 0"
+      ><nz-empty></nz-empty
+    ></ng-container>
     <div nz-row [nzGutter]="[0, 24]">
       <div
         *ngFor="let command of onGoingCommands$ | async"
@@ -19,9 +22,13 @@
           ></app-card>
         </div>
       </div>
+      <app-footer></app-footer>
     </div>
   </nz-tab>
   <nz-tab nzTitle="Commandes passées">
+    <ng-container *ngIf="(pastCommands$ | async)?.length === 0"
+      ><nz-empty></nz-empty
+    ></ng-container>
     <div nz-row [nzGutter]="[0, 24]">
       <div
         *ngFor="let command of pastCommands$ | async"
@@ -36,8 +43,7 @@
           <app-card [command]="command" [isDone]="true"></app-card>
         </div>
       </div>
+      <app-footer></app-footer>
     </div>
   </nz-tab>
 </nz-tabset>
-
-<app-footer></app-footer>

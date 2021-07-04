@@ -52,7 +52,7 @@
   <i
     nz-icon
     nzType="plus"
-    (click)="!limitReached && !isLoading && onClickPlus.emit()"
+    (click)="!limitReached && !isLoading && onClickPlus.emit(count)"
   ></i>
 </ng-template>
 <ng-template #actionMinus>

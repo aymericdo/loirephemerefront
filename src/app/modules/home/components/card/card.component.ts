@@ -5,6 +5,7 @@ import {
   Input,
   Output,
   EventEmitter,
+  ElementRef,
 } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { TIPS_ID } from 'src/app/modules/home/store/home.selectors';
@@ -20,13 +21,13 @@ export class CardComponent implements OnInit {
   @Input() count: number = 0;
   @Input() isLoading: boolean = false;
 
-  @Output() onClickPlus = new EventEmitter<string>();
+  @Output() onClickPlus = new EventEmitter<number>();
   @Output() onClickMinus = new EventEmitter<string>();
 
   isStockAvailable = false;
   isTips = false;
 
-  constructor() {}
+  constructor(public elem: ElementRef) {}
 
   ngOnInit(): void {
     this.isTips = TIPS_ID === this.pastry._id;

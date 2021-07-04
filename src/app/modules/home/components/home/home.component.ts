@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import {
@@ -43,6 +50,9 @@ import { SwPush } from '@angular/service-worker';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  @ViewChild('scrollframe', { static: false }) scrollFrame!: ElementRef;
+  @ViewChildren('item') itemElements!: QueryList<any>;
+
   pastries$: Observable<Pastry[]>;
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
   hasSelectedPastries$: Observable<Boolean>;
@@ -60,6 +70,7 @@ export class HomeComponent implements OnInit {
     'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private scrollContainer: any;
 
   constructor(
     private store: Store<AppState>,
@@ -128,6 +139,68 @@ export class HomeComponent implements OnInit {
       }
     });
 
+    this.subscribeToWS();
+  }
+
+  ngAfterViewInit() {
+    this.scrollContainer = this.scrollFrame.nativeElement;
+  }
+
+  handleTableChange(): void {
+    this.modal.confirm({
+      nzTitle: 'Changer de table ?',
+      nzOkText: 'OK',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.router.navigate(['/']);
+      },
+      nzCancelText: 'Annuler',
+    });
+  }
+
+  handleClickPlus(pastry: Pastry, count: number): void {
+    if (count === 0) {
+      const cardToScroll = this.itemElements.find(
+        (item) => item.pastry._id === pastry._id
+      );
+
+      if (cardToScroll) {
+        this.scrollContainer.scroll({
+          top:
+            this.scrollContainer.scrollTop +
+            cardToScroll.elem.nativeElement.getBoundingClientRect().top -
+            50,
+          left: 0,
+          behavior: 'smooth',
+        });
+      }
+    }
+    this.store.dispatch(incrementPastry({ pastry }));
+  }
+
+  handleClickMinus(pastry: Pastry): void {
+    this.store.dispatch(decrementPastry({ pastry }));
+  }
+
+  handleClickCommand(name: string): void {
+    this.isSuccessModalVisible = true;
+    this.store.dispatch(sendCommand({ table: this.currentTable!, name }));
+  }
+
+  handleClickReset(): void {
+    this.store.dispatch(resetCommand());
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  tackById(_index: any, pastry: Pastry): string {
+    return pastry._id;
+  }
+
+  private subscribeToWS() {
     this.wsService
       .createObservableSocket()
       .pipe(takeUntil(this.destroyed$))
@@ -159,49 +232,10 @@ export class HomeComponent implements OnInit {
           }
         },
         (err) => console.log('err'),
-        () => console.log('The observable stream is complete')
+        () => {
+          this.subscribeToWS();
+          console.log('The observable stream is complete');
+        }
       );
-  }
-
-  handleTableChange(): void {
-    this.modal.confirm({
-      nzTitle: 'Changer de table ?',
-      nzOkText: 'OK',
-      nzOkType: 'primary',
-      nzOnOk: () => {
-        this.router.navigate(['/']);
-      },
-      nzCancelText: 'Annuler',
-    });
-  }
-
-  handleClickPlus(pastry: Pastry): void {
-    this.store.dispatch(incrementPastry({ pastry }));
-  }
-
-  handleClickMinus(pastry: Pastry): void {
-    this.store.dispatch(decrementPastry({ pastry }));
-  }
-
-  handleClickCommand(name: string): void {
-    this.isSuccessModalVisible = true;
-    this.store.dispatch(sendCommand({ table: this.currentTable!, name }));
-  }
-
-  handleClickReset(): void {
-    this.store.dispatch(resetCommand());
-  }
-
-  closeSocket() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
-
-  ngOnDestroy() {
-    this.closeSocket();
-  }
-
-  tackById(_index: any, pastry: Pastry): string {
-    return pastry._id;
   }
 }
