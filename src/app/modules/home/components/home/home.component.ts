@@ -233,7 +233,6 @@ export class HomeComponent implements OnInit {
         },
         (err) => console.log('err'),
         () => {
-          this.subscribeToWS();
           console.log('The observable stream is complete');
         }
       );
