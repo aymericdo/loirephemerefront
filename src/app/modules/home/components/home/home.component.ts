@@ -205,6 +205,10 @@ export class HomeComponent implements OnInit {
   }
 
   private subscribeToWS() {
+    setInterval(() => {
+      this.wsService.sendMessage('ping');
+    }, 5000);
+
     this.wsService
       .createObservableSocket()
       .pipe(takeUntil(this.destroyed$))
@@ -237,6 +241,9 @@ export class HomeComponent implements OnInit {
         },
         (err) => console.log('err'),
         () => {
+          setTimeout(() => {
+            this.subscribeToWS();
+          }, 1000);
           console.log('The observable stream is complete');
         }
       );

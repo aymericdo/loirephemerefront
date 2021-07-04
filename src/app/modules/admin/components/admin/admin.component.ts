@@ -68,6 +68,10 @@ export class AdminComponent implements OnInit {
   }
 
   private subscribeToWS() {
+    setInterval(() => {
+      this.wsService.sendMessage('ping');
+    }, 5000);
+
     this.wsService
       .createObservableSocket()
       .pipe(takeUntil(this.destroyed$))
