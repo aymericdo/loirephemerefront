@@ -111,6 +111,10 @@ export class HomeComponent implements OnInit {
             .catch((err) =>
               console.error('Could not subscribe to notifications', err)
             );
+
+          this.swPush.notificationClicks.subscribe((event) => {
+            this.router.navigate(['/']);
+          });
         }
 
         this.wsService.sendMessage(
@@ -216,7 +220,7 @@ export class HomeComponent implements OnInit {
           } else if (data.hasOwnProperty('wizz')) {
             window.navigator.vibrate([2000, 10, 2000]);
             const audio = new Audio();
-            audio.src = 'assets/sounds/nokia.mp3';
+            audio.src = 'assets/sounds/anglish.mp3';
             audio.load();
             audio.play();
             if (!this.isWizzNotificationVisible) {
