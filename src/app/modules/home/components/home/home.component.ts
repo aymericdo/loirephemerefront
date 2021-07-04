@@ -93,7 +93,9 @@ export class HomeComponent implements OnInit {
               serverPublicKey: this.VAPID_PUBLIC_KEY,
             })
             .then((sub) => {
-              sendNotificationSub({ commandId: command._id!, sub });
+              this.store.dispatch(
+                sendNotificationSub({ commandId: command._id!, sub })
+              );
             })
             .catch((err) =>
               console.error('Could not subscribe to notifications', err)
