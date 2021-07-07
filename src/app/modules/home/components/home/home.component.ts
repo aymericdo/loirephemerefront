@@ -66,6 +66,8 @@ export class HomeComponent implements OnInit {
   isSuccessModalVisible = false;
   isWizzNotificationVisible = false;
 
+  private audio!: HTMLAudioElement;
+
   readonly VAPID_PUBLIC_KEY =
     'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
 
@@ -189,6 +191,12 @@ export class HomeComponent implements OnInit {
   handleClickCommand(name: string): void {
     this.isSuccessModalVisible = true;
     this.store.dispatch(sendCommand({ table: this.currentTable!, name }));
+
+    // Hack for safari
+    this.audio = new Audio('assets/sounds/anglish.mp3');
+    this.audio.play();
+    this.audio.pause();
+    this.audio.currentTime = 0;
   }
 
   handleClickReset(): void {
@@ -223,10 +231,9 @@ export class HomeComponent implements OnInit {
             );
           } else if (data.hasOwnProperty('wizz')) {
             window.navigator.vibrate([2000, 10, 2000]);
-            const audio = new Audio();
-            audio.src = 'assets/sounds/anglish.mp3';
-            audio.load();
-            audio.play();
+            const canVibrate = window.navigator.vibrate;
+            if (canVibrate!) window.navigator.vibrate([2000, 10, 2000]);
+
             if (!this.isWizzNotificationVisible) {
               this.isWizzNotificationVisible = true;
               this.notification
@@ -237,6 +244,8 @@ export class HomeComponent implements OnInit {
                   this.isWizzNotificationVisible = false;
                 });
             }
+
+            this.audio.play();
           }
         },
         (err) => console.log('err'),
