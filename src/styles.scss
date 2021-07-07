@@ -1,4 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
+html {
+  height: -webkit-fill-available;
+}
+
 img::selection {
   background: transparent;
 }
