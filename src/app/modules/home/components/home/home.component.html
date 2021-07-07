@@ -1,4 +1,8 @@
-<div class="scrollable-zone" #scrollframe>
+<div
+  class="scrollable-zone"
+  #scrollframe
+  [class.-has-order-footer]="hasSelectedPastries$ | async"
+>
   <nz-page-header>
     <nz-page-header-title>Loirephemere</nz-page-header-title>
     <nz-page-header-subtitle
