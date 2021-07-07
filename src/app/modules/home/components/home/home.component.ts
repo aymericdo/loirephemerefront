@@ -230,10 +230,6 @@ export class HomeComponent implements OnInit {
               })
             );
           } else if (data.hasOwnProperty('wizz')) {
-            window.navigator.vibrate([2000, 10, 2000]);
-            const canVibrate = window.navigator.vibrate;
-            if (canVibrate!) window.navigator.vibrate([2000, 10, 2000]);
-
             if (!this.isWizzNotificationVisible) {
               this.isWizzNotificationVisible = true;
               this.notification
@@ -244,6 +240,9 @@ export class HomeComponent implements OnInit {
                   this.isWizzNotificationVisible = false;
                 });
             }
+
+            const canVibrate = window.navigator.vibrate;
+            if (canVibrate!) window.navigator.vibrate([2000, 10, 2000]);
 
             this.audio.play();
           }
