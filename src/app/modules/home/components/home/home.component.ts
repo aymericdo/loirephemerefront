@@ -153,35 +153,51 @@ export class HomeComponent implements OnInit {
   }
 
   handleTableChange(): void {
-    this.modal.confirm({
-      nzTitle: 'Changer de table ?',
-      nzOkText: 'OK',
-      nzOkType: 'primary',
-      nzOnOk: () => {
-        this.router.navigate(['/']);
-      },
-      nzCancelText: 'Annuler',
-    });
+    if (this.currentTable) {
+      this.modal.confirm({
+        nzTitle: 'Changer de table ?',
+        nzOkText: 'OK',
+        nzOkType: 'primary',
+        nzOnOk: () => {
+          this.router.navigate(['/', 'table']);
+        },
+        nzCancelText: 'Annuler',
+      });
+    } else {
+      this.router.navigate(['/', 'table']);
+    }
   }
 
   handleClickPlus(pastry: Pastry, count: number): void {
-    if (count === 0) {
-      const cardToScroll = this.itemElements.find(
-        (item) => item.pastry._id === pastry._id
-      );
+    if (this.currentTable) {
+      if (count === 0) {
+        const cardToScroll = this.itemElements.find(
+          (item) => item.pastry._id === pastry._id
+        );
 
-      if (cardToScroll) {
-        this.scrollContainer.scroll({
-          top:
-            this.scrollContainer.scrollTop +
-            cardToScroll.elem.nativeElement.getBoundingClientRect().top -
-            50,
-          left: 0,
-          behavior: 'smooth',
-        });
+        if (cardToScroll) {
+          this.scrollContainer.scroll({
+            top:
+              this.scrollContainer.scrollTop +
+              cardToScroll.elem.nativeElement.getBoundingClientRect().top -
+              50,
+            left: 0,
+            behavior: 'smooth',
+          });
+        }
       }
+      this.store.dispatch(incrementPastry({ pastry }));
+    } else {
+      this.modal.confirm({
+        nzTitle: 'Pour commander, il faut choisir une table',
+        nzOkText: 'OK',
+        nzOkType: 'primary',
+        nzOnOk: () => {
+          this.router.navigate(['/', 'table']);
+        },
+        nzCancelText: 'Annuler',
+      });
     }
-    this.store.dispatch(incrementPastry({ pastry }));
   }
 
   handleClickMinus(pastry: Pastry): void {

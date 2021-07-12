@@ -8,14 +8,14 @@ export const TABLES_POSSIBILITIES: string[] = [
   'Carapuce',
   'Coconfort',
   'Roucool',
-  'Nidoqueen',
-  'Mélofée',
-  'Aéromite',
-  'Arcanin',
-  'Onix',
-  'Amonita',
-  'Kabuto',
-  'Draco',
+  // 'Nidoqueen',
+  // 'Mélofée',
+  // 'Aéromite',
+  // 'Arcanin',
+  // 'Onix',
+  // 'Amonita',
+  // 'Kabuto',
+  // 'Draco',
 ];
 
 @Component({
@@ -33,5 +33,9 @@ export class TableModalComponent implements OnInit {
 
   handleOkTableModal(): void {
     this.router.navigate(['/table', this.currentTable]);
+  }
+
+  handleCancelTableModal(): void {
+    this.router.navigate(['/']);
   }
 }

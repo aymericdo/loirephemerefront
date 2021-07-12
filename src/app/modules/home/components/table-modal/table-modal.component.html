@@ -2,8 +2,8 @@
   [nzVisible]="true"
   nzTitle="Veuillez indiquer votre table svp"
   nzCentered
-  [nzClosable]="false"
-  [nzMaskClosable]="true"
+  [nzMaskClosable]="false"
+  (nzOnCancel)="handleCancelTableModal()"
   (nzOnOk)="handleOkTableModal()"
 >
   <ng-container *nzModalContent>

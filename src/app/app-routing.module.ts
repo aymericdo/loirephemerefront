@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { AboutComponent } from './modules/about/components/about/about.component';
 import { AdminComponent } from './modules/admin/components/admin/admin.component';
 import { HomeComponent } from './modules/home/components/home/home.component';
 import { TableModalComponent } from './modules/home/components/table-modal/table-modal.component';
@@ -9,11 +10,21 @@ import { LoginComponent } from './modules/login/components/login/login.component
 const routes: Routes = [
   {
     path: '',
+    component: HomeComponent,
+  },
+  {
+    path: 'table',
     component: TableModalComponent,
   },
   {
     path: 'table/:tableName',
     component: HomeComponent,
+  },
+  {
+    path: 'about',
+    component: AboutComponent,
+    loadChildren: () =>
+      import('./modules/about/about.module').then((m) => m.AboutModule),
   },
   {
     path: 'admin',

@@ -8,6 +8,12 @@
       </a>
     </li>
     <li nz-menu-item [nzMatchRouter]="true">
+      <a [routerLink]="['/about']">
+        <i nz-icon nzType="question"></i>
+        <span>À propos</span>
+      </a>
+    </li>
+    <li nz-menu-item [nzMatchRouter]="true">
       <a [routerLink]="['/', 'admin']">
         <i nz-icon nzType="lock"></i>
         <span>Admin</span>
