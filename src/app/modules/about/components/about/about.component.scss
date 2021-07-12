@@ -9,6 +9,17 @@
   }
 
   .img {
-    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    img {
+      width: 50%;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .img img {
+      width: 90%;
+    }
   }
 }
