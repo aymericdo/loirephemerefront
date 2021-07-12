@@ -1,6 +1,14 @@
 :host {
+  display: block;
+  overflow: auto;
+  height: 100%;
+
   .content {
     padding: 5rem 2rem 2rem;
     text-align: justify;
+  }
+
+  .img {
+    width: 100%;
   }
 }
