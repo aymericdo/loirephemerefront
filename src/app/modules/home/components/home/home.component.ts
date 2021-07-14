@@ -209,7 +209,7 @@ export class HomeComponent implements OnInit {
     this.store.dispatch(sendCommand({ table: this.currentTable!, name }));
 
     // Hack for safari
-    this.audio = new Audio('assets/sounds/anglish.mp3');
+    this.audio = new Audio('assets/sounds/french.mp3');
     this.audio.play();
     this.audio.pause();
     this.audio.currentTime = 0;
