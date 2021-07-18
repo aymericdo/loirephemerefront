@@ -2,19 +2,43 @@
   display: block;
   overflow: auto;
   height: 100%;
+  min-width: 200px;
 
   .content {
-    padding: 5rem 2rem 2rem;
+    padding: 2rem 3rem 2rem;
     text-align: justify;
   }
 
   .img {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 1rem;
 
     img {
-      width: 50%;
+      width: 40%;
+      max-width: 355px;
     }
+
+    img.half {
+      width: 60%;
+    }
+
+    .legend {
+      font-size: 0.875rem;
+      font-style: italic;
+      max-width: 355px;
+    }
+  }
+
+  .thanksto {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: white;
+    padding: 2rem 3rem 2rem;
   }
 
   @media screen and (max-width: 800px) {

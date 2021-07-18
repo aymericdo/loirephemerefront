@@ -35,6 +35,10 @@ export class TableModalComponent implements OnInit {
     this.router.navigate(['/table', this.currentTable]);
   }
 
+  handleTakeAway(): void {
+    this.router.navigate(['/table', 'À emporter']);
+  }
+
   handleCancelTableModal(): void {
     this.router.navigate(['/']);
   }
