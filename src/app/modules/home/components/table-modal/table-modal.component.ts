@@ -8,7 +8,7 @@ export const TABLES_POSSIBILITIES: string[] = [
   'Carapuce',
   'Coconfort',
   'Roucool',
-  // 'Nidoqueen',
+  'Nidoqueen',
   // 'Mélofée',
   // 'Aéromite',
   // 'Arcanin',
