@@ -193,6 +193,7 @@ export class HomeComponent implements OnInit {
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {
+          this.store.dispatch(incrementPastry({ pastry }));
           this.router.navigate(['/', 'table']);
         },
         nzCancelText: 'Annuler',
