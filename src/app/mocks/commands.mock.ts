@@ -13,6 +13,7 @@ export const commandsMock = [
     ],
     table: 'table1',
     name: 'name1',
+    totalPrice: 3,
     reference: 'XXX',
   },
   {
@@ -29,6 +30,7 @@ export const commandsMock = [
     ],
     table: 'table2',
     name: 'name2',
+    totalPrice: 3,
     reference: 'XXX',
   },
   {
@@ -45,6 +47,7 @@ export const commandsMock = [
     ],
     table: 'table3',
     name: 'name3',
+    totalPrice: 3,
     reference: 'XXX',
   },
 ];

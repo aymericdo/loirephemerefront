@@ -48,6 +48,13 @@ export class HomeEffects {
         const command: Command = {
           table: action.table,
           name: action.name,
+          totalPrice: Object.keys(selectedPastries).reduce((prev, pastryId) => {
+            const pastry = allPastries.find(
+              (p: Pastry) => p._id === pastryId
+            ) as Pastry;
+
+            return prev + pastry.price;
+          }, 0),
           pastries: Object.keys(selectedPastries).reduce(
             (prev: Pastry[], pastryId: string) => {
               const pastry = allPastries.find(

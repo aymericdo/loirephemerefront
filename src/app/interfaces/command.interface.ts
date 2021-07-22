@@ -5,6 +5,7 @@ export interface Command {
   pastries: Pastry[];
   table: string;
   name: string;
+  totalPrice: number;
   reference?: string;
   createdAt?: string;
   updatedAt?: string;
