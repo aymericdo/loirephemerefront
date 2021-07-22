@@ -74,7 +74,7 @@ export class CardComponent implements OnInit {
     if (type === 'toDone') {
       this.modal.confirm({
         nzTitle: `Commande #${this.command.reference}`,
-        nzContent: `Cette commande à bien été payée et livrée ?`,
+        nzContent: `Cette commande à bien été livrée ?`,
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {
@@ -85,7 +85,7 @@ export class CardComponent implements OnInit {
     } else if (type === 'toPayed') {
       this.modal.confirm({
         nzTitle: `Commande #${this.command.reference}`,
-        nzContent: `Cette commande à bien été payée et payée ?`,
+        nzContent: `Cette commande à bien été payée ?`,
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {

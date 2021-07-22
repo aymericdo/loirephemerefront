@@ -48,7 +48,7 @@
           <app-card
             [command]="command"
             [isDone]="true"
-            [isPayed]="command.isPayed"
+            [isPayed]="!!command.isPayed"
             (onClickPayed)="handleClickPayed(command)"
             (onClickWizz)="handleClickWizz(command)"
           ></app-card>

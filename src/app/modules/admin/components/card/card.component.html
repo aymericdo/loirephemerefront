@@ -6,6 +6,9 @@
   [nzTitle]="'Commande #' + command.reference"
 >
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+    <nz-badge [nzCount]="isPayed ? iconTemplateGreen : iconTemplateRed">
+      <a class="head-example"></a>
+    </nz-badge>
     <p>Table : {{ command.table }}</p>
     <p>Nom : {{ command.name }}</p>
     <p>Heure : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
@@ -21,6 +24,22 @@
 <ng-template #actionWizz>
   <i nz-icon nzType="bell" (click)="!isLoading && wizzClient()"></i>
 </ng-template>
+<ng-template #iconTemplateGreen>
+  <i
+    nz-icon
+    nzType="euro-circle"
+    class="ant-scroll-number-custom-component"
+    style="color: #52c41a"
+  ></i>
+</ng-template>
+<ng-template #iconTemplateRed>
+  <i
+    nz-icon
+    nzType="euro-circle"
+    class="ant-scroll-number-custom-component"
+    style="color: #ff4d4f"
+  ></i>
+</ng-template>
 <ng-template #actionDone>
   <ng-container *ngIf="!isDone">
     <i
@@ -32,7 +51,7 @@
   <ng-container *ngIf="isDone">
     <i
       nz-icon
-      nzType="bills"
+      nzType="euro-circle"
       (click)="!isLoading && showValidationPopup('toPayed')"
     ></i>
   </ng-container>
