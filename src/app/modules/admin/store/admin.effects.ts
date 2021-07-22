@@ -9,6 +9,8 @@ import {
   editCommand,
   fetchCommands,
   setCommands,
+  notificationSubSent,
+  sendNotificationSub,
 } from './admin.actions';
 
 @Injectable()
@@ -44,6 +46,18 @@ export class AdminEffects {
               return EMPTY;
             })
           );
+      })
+    )
+  );
+
+  sendNotificationSub$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(sendNotificationSub),
+      mergeMap((action) => {
+        return this.adminApiService.postSub(action.sub).pipe(
+          map(() => notificationSubSent()),
+          catchError(() => EMPTY)
+        );
       })
     )
   );

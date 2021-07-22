@@ -18,3 +18,10 @@ export const editCommand = createAction(
   '[Admin page] Edit command',
   props<{ command: Command }>()
 );
+export const sendNotificationSub = createAction(
+  '[Admin page] Send notification sub',
+  props<{ sub: any }>()
+);
+export const notificationSubSent = createAction(
+  '[Admin page] Notification sub sent'
+);

@@ -31,4 +31,11 @@ export class AdminApiService {
       }
     );
   }
+
+  postSub(sub: any): Observable<any> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/admin/notification`,
+      { sub }
+    );
+  }
 }

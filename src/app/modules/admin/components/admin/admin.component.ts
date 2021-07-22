@@ -8,6 +8,7 @@ import {
   closeCommand,
   editCommand,
   fetchCommands,
+  sendNotificationSub,
 } from 'src/app/modules/admin/store/admin.actions';
 import {
   selectIsLoading,
@@ -20,6 +21,9 @@ import {
 } from 'src/app/modules/admin/services/admin-socket.service';
 import { takeUntil } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { environment } from 'src/environments/environment';
+import { SwPush } from '@angular/service-worker';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -33,10 +37,15 @@ export class AdminComponent implements OnInit {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+  readonly VAPID_PUBLIC_KEY =
+    'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
+
   constructor(
     private store: Store<AppState>,
     private wsService: AdminWebSocketService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private swPush: SwPush,
+    private router: Router
   ) {
     this.onGoingCommands$ = this.store.select(selectOnGoingCommands);
     this.pastCommands$ = this.store.select(selectPastCommands);
@@ -47,6 +56,23 @@ export class AdminComponent implements OnInit {
     this.store.dispatch(fetchCommands());
 
     this.subscribeToWS();
+
+    if (environment.production) {
+      this.swPush
+        .requestSubscription({
+          serverPublicKey: this.VAPID_PUBLIC_KEY,
+        })
+        .then((sub) => {
+          this.store.dispatch(sendNotificationSub({ sub }));
+        })
+        .catch((err) =>
+          console.error('Could not subscribe to notifications', err)
+        );
+
+      this.swPush.notificationClicks.subscribe((event) => {
+        this.router.navigate(['/']);
+      });
+    }
   }
 
   handleClickDone(command: Command): void {
