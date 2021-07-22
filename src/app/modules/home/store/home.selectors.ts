@@ -8,7 +8,7 @@ export const TIPS_ID = '60aebea4bec7f2f43b69744a';
 
 export const selectPastries = createSelector(
   selectFeature,
-  (state: HomeState) => state.pastries
+  (state: HomeState) => state.pastries.filter((p) => !p.hidden)
 );
 
 export const selectSelectedPastries = createSelector(
