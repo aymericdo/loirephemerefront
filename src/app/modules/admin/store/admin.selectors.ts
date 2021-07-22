@@ -33,6 +33,14 @@ export const selectPayedCommands = createSelector(
       })
 );
 
+export const selectTotalPayedCommands = createSelector(
+  selectFeature,
+  (state: AdminState) =>
+    state.commands
+      .filter((c) => c.isPayed)
+      .reduce((prev, c) => c.totalPrice + prev, 0)
+);
+
 export const selectIsLoading = createSelector(
   selectFeature,
   (state: AdminState) => state.loading

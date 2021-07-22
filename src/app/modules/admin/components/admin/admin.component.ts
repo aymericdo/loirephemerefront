@@ -16,6 +16,7 @@ import {
   selectOnGoingCommands,
   selectPastCommands,
   selectPayedCommands,
+  selectTotalPayedCommands,
 } from 'src/app/modules/admin/store/admin.selectors';
 import {
   WebSocketData,
@@ -36,6 +37,7 @@ export class AdminComponent implements OnInit {
   onGoingCommands$: Observable<Command[]>;
   pastCommands$: Observable<Command[]>;
   payedCommands$: Observable<Command[]>;
+  totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -53,6 +55,7 @@ export class AdminComponent implements OnInit {
     this.onGoingCommands$ = this.store.select(selectOnGoingCommands);
     this.pastCommands$ = this.store.select(selectPastCommands);
     this.payedCommands$ = this.store.select(selectPayedCommands);
+    this.totalPayedCommands$ = this.store.select(selectTotalPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
   }
 
