@@ -29,6 +29,11 @@
     <ng-container *ngIf="(pastCommands$ | async)?.length === 0"
       ><nz-empty></nz-empty
     ></ng-container>
+    <nz-page-header>
+      <nz-page-header-title
+        >Total : {{ totalPayedCommands$ | async }}€</nz-page-header-title
+      >
+    </nz-page-header>
     <div nz-row [nzGutter]="[0, 24]">
       <div
         *ngFor="let command of pastCommands$ | async"
@@ -43,37 +48,8 @@
           <app-card
             [command]="command"
             [isDone]="true"
+            [isPayed]="command.isPayed"
             (onClickPayed)="handleClickPayed(command)"
-            (onClickWizz)="handleClickWizz(command)"
-          ></app-card>
-        </div>
-      </div>
-      <app-footer></app-footer>
-    </div>
-  </nz-tab>
-  <nz-tab nzTitle="Commandes payées">
-    <ng-container *ngIf="(payedCommands$ | async)?.length === 0"
-      ><nz-empty></nz-empty
-    ></ng-container>
-    <nz-page-header>
-      <nz-page-header-title
-        >Total : {{ totalPayedCommands$ | async }}€</nz-page-header-title
-      >
-    </nz-page-header>
-    <div nz-row [nzGutter]="[0, 24]">
-      <div
-        *ngFor="let command of payedCommands$ | async"
-        nz-col
-        nzXs="24"
-        nzSm="24"
-        nzMd="18"
-        nzLg="12"
-        nzXl="8"
-      >
-        <div class="inner-box">
-          <app-card
-            [command]="command"
-            [isPayed]="true"
             (onClickWizz)="handleClickWizz(command)"
           ></app-card>
         </div>
