@@ -32,6 +32,16 @@ export class AdminApiService {
     );
   }
 
+  payedCommand(token: string, commandId: string): Observable<any> {
+    const headers = { password: token };
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/commands/payed/${commandId}`,
+      {
+        headers,
+      }
+    );
+  }
+
   postSub(sub: any): Observable<any> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/admin/notification`,

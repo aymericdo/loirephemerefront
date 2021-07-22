@@ -2,7 +2,7 @@
   style="width: 300px"
   [class.-is-new]="isNew"
   [class.-is-just-updated]="isJustUpdated"
-  [nzActions]="isDone ? [actionWizz] : [actionWizz, actionDone]"
+  [nzActions]="isPayed ? [actionWizz] : [actionWizz, actionDone]"
   [nzTitle]="'Commande #' + command.reference"
 >
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
@@ -22,5 +22,18 @@
   <i nz-icon nzType="bell" (click)="!isLoading && wizzClient()"></i>
 </ng-template>
 <ng-template #actionDone>
-  <i nz-icon nzType="check" (click)="!isLoading && showValidationPopup()"></i>
+  <ng-container *ngIf="!isDone">
+    <i
+      nz-icon
+      nzType="check"
+      (click)="!isLoading && showValidationPopup('toDone')"
+    ></i>
+  </ng-container>
+  <ng-container *ngIf="isDone">
+    <i
+      nz-icon
+      nzType="bills"
+      (click)="!isLoading && showValidationPopup('toPayed')"
+    ></i>
+  </ng-container>
 </ng-template>

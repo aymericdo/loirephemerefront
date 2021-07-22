@@ -14,6 +14,10 @@ export const closeCommand = createAction(
   '[Admin page] Close command',
   props<{ command: Command }>()
 );
+export const payedCommand = createAction(
+  '[Admin page] Payed command',
+  props<{ command: Command }>()
+);
 export const editCommand = createAction(
   '[Admin page] Edit command',
   props<{ command: Command }>()

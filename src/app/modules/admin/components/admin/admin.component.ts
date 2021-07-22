@@ -8,12 +8,14 @@ import {
   closeCommand,
   editCommand,
   fetchCommands,
+  payedCommand,
   sendNotificationSub,
 } from 'src/app/modules/admin/store/admin.actions';
 import {
   selectIsLoading,
   selectOnGoingCommands,
   selectPastCommands,
+  selectPayedCommands,
 } from 'src/app/modules/admin/store/admin.selectors';
 import {
   WebSocketData,
@@ -33,6 +35,7 @@ import { Router } from '@angular/router';
 export class AdminComponent implements OnInit {
   onGoingCommands$: Observable<Command[]>;
   pastCommands$: Observable<Command[]>;
+  payedCommands$: Observable<Command[]>;
   isLoading$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -49,6 +52,7 @@ export class AdminComponent implements OnInit {
   ) {
     this.onGoingCommands$ = this.store.select(selectOnGoingCommands);
     this.pastCommands$ = this.store.select(selectPastCommands);
+    this.payedCommands$ = this.store.select(selectPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
   }
 
@@ -77,6 +81,10 @@ export class AdminComponent implements OnInit {
 
   handleClickDone(command: Command): void {
     this.store.dispatch(closeCommand({ command }));
+  }
+
+  handleClickPayed(command: Command): void {
+    this.store.dispatch(payedCommand({ command }));
   }
 
   handleClickWizz(command: Command): void {

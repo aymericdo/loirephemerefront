@@ -13,7 +13,19 @@ export const selectPastCommands = createSelector(
   selectFeature,
   (state: AdminState) =>
     state.commands
-      .filter((c) => c.isDone)
+      .filter((c) => c.isDone && !c.isPayed)
+      .sort((a, b) => {
+        return (
+          new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime()
+        );
+      })
+);
+
+export const selectPayedCommands = createSelector(
+  selectFeature,
+  (state: AdminState) =>
+    state.commands
+      .filter((c) => c.isPayed)
       .sort((a, b) => {
         return (
           new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime()

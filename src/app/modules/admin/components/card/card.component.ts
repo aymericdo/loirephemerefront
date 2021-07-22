@@ -22,9 +22,11 @@ const SECONDS_HIGHLIGHT = 20;
 export class CardComponent implements OnInit {
   @Input() command: Command = null!;
   @Input() isDone: boolean = false;
+  @Input() isPayed: boolean = false;
   @Input() isLoading: boolean = false;
 
   @Output() onClickDone = new EventEmitter<string>();
+  @Output() onClickPayed = new EventEmitter<string>();
   @Output() onClickWizz = new EventEmitter<string>();
 
   pastries: [Pastry, number][] = [];
@@ -68,17 +70,30 @@ export class CardComponent implements OnInit {
     clearTimeout(this.isJustUpdatedTimeout!);
   }
 
-  showValidationPopup(): void {
-    this.modal.confirm({
-      nzTitle: `Commande #${this.command.reference}`,
-      nzContent: `Cette commande à bien été payée et livrée ?`,
-      nzOkText: 'OK',
-      nzOkType: 'primary',
-      nzOnOk: () => {
-        this.onClickDone.emit();
-      },
-      nzCancelText: 'Annuler',
-    });
+  showValidationPopup(type: 'toDone' | 'toPayed'): void {
+    if (type === 'toDone') {
+      this.modal.confirm({
+        nzTitle: `Commande #${this.command.reference}`,
+        nzContent: `Cette commande à bien été payée et livrée ?`,
+        nzOkText: 'OK',
+        nzOkType: 'primary',
+        nzOnOk: () => {
+          this.onClickDone.emit();
+        },
+        nzCancelText: 'Annuler',
+      });
+    } else if (type === 'toPayed') {
+      this.modal.confirm({
+        nzTitle: `Commande #${this.command.reference}`,
+        nzContent: `Cette commande à bien été payée et payée ?`,
+        nzOkText: 'OK',
+        nzOkType: 'primary',
+        nzOnOk: () => {
+          this.onClickPayed.emit();
+        },
+        nzCancelText: 'Annuler',
+      });
+    }
   }
 
   wizzClient(): void {

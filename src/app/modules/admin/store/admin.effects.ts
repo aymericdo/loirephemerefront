@@ -11,6 +11,7 @@ import {
   setCommands,
   notificationSubSent,
   sendNotificationSub,
+  payedCommand,
 } from './admin.actions';
 
 @Injectable()
@@ -31,6 +32,7 @@ export class AdminEffects {
       })
     )
   );
+
   closeCommand$ = createEffect(() =>
     this.actions$.pipe(
       ofType(closeCommand),
@@ -38,6 +40,25 @@ export class AdminEffects {
         const token = localStorage.getItem('token') as string;
         return this.adminApiService
           .closeCommand(token, action.command._id!)
+          .pipe(
+            map((command) => editCommand({ command })),
+            catchError(() => {
+              localStorage.removeItem('token');
+              this.router.navigate(['/table', '']);
+              return EMPTY;
+            })
+          );
+      })
+    )
+  );
+
+  payedCommand$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(payedCommand),
+      mergeMap((action) => {
+        const token = localStorage.getItem('token') as string;
+        return this.adminApiService
+          .payedCommand(token, action.command._id!)
           .pipe(
             map((command) => editCommand({ command })),
             catchError(() => {
