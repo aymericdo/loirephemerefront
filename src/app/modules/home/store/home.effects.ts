@@ -53,7 +53,7 @@ export class HomeEffects {
               (p: Pastry) => p._id === pastryId
             ) as Pastry;
 
-            return prev + pastry.price;
+            return prev + pastry.price * selectedPastries[pastryId];
           }, 0),
           pastries: Object.keys(selectedPastries).reduce(
             (prev: Pastry[], pastryId: string) => {
