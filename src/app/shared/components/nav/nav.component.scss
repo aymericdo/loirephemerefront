@@ -10,8 +10,19 @@
     height: 32px;
   }
 
+  ul {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 32px);
+  }
+
   .version {
     display: flex;
     justify-content: center;
+    padding: 24px;
+  }
+
+  .block {
+    flex: 1;
   }
 }
