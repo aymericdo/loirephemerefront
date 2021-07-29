@@ -13,11 +13,21 @@
         <span>À propos</span>
       </a>
     </li>
-    <li nz-menu-item [nzMatchRouter]="true">
-      <a [routerLink]="['/', 'admin']">
-        <i nz-icon nzType="lock"></i>
-        <span>Admin</span>
-      </a>
+    <li nz-submenu nzTitle="Admin" nzIcon="lock">
+      <ul>
+        <li nz-menu-item [nzMatchRouter]="true">
+          <a [routerLink]="['/', 'admin', 'commands']">
+            <i nz-icon nzType="shopping-cart"></i>
+            <span>Commandes</span>
+          </a>
+        </li>
+        <li nz-menu-item [nzMatchRouter]="true">
+          <a [routerLink]="['/', 'admin', 'stats']">
+            <i nz-icon nzType="pie-chart"></i>
+            <span>Stats</span>
+          </a>
+        </li>
+      </ul>
     </li>
     <div class="block"></div>
     <li>

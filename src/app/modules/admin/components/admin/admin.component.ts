@@ -26,7 +26,7 @@ import { takeUntil } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from 'src/environments/environment';
 import { SwPush } from '@angular/service-worker';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -50,7 +50,8 @@ export class AdminComponent implements OnInit {
     private wsService: AdminWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.onGoingCommands$ = this.store.select(selectOnGoingCommands);
     this.pastCommands$ = this.store.select(selectPastCommands);
@@ -61,6 +62,12 @@ export class AdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(fetchCommands());
+
+    this.route.queryParams.subscribe((params) => {
+      if (!params['tab']) {
+        this.router.navigate(['admin'], { queryParams: { tab: 'ongoing' } });
+      }
+    });
 
     this.subscribeToWS();
 

@@ -1,5 +1,14 @@
-<nz-tabset>
-  <nz-tab nzTitle="Commandes en cours">
+<nz-tabset nzLinkRouter>
+  <nz-tab>
+    <a
+      *nzTabLink
+      nz-tab-link
+      [routerLink]="['.']"
+      [queryParams]="{ tab: 'ongoing' }"
+      queryParamsHandling="merge"
+    >
+      Commandes en cours
+    </a>
     <ng-container *ngIf="(onGoingCommands$ | async)?.length === 0"
       ><nz-empty></nz-empty
     ></ng-container>
@@ -25,12 +34,21 @@
       <app-footer></app-footer>
     </div>
   </nz-tab>
-  <nz-tab nzTitle="Commandes passées">
+  <nz-tab>
+    <a
+      *nzTabLink
+      nz-tab-link
+      [routerLink]="['.']"
+      [queryParams]="{ tab: 'past' }"
+      queryParamsHandling="merge"
+    >
+      Commandes passées
+    </a>
     <ng-container *ngIf="(pastCommands$ | async)?.length === 0"
       ><nz-empty></nz-empty
     ></ng-container>
     <nz-page-header>
-      <nz-page-header-title
+      <nz-page-header-title *ngIf="(pastCommands$ | async)?.length"
         >Total : {{ totalPayedCommands$ | async }}€</nz-page-header-title
       >
     </nz-page-header>

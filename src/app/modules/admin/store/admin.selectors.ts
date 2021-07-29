@@ -11,14 +11,7 @@ export const selectOnGoingCommands = createSelector(
 
 export const selectPastCommands = createSelector(
   selectFeature,
-  (state: AdminState) =>
-    state.commands
-      .filter((c) => c.isDone)
-      .sort((a, b) => {
-        return (
-          new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime()
-        );
-      })
+  (state: AdminState) => state.commands.filter((c) => c.isDone)
 );
 
 export const selectPayedCommands = createSelector(

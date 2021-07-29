@@ -9,7 +9,7 @@ export const pastriesMock = [
     ingredients: [''],
   },
   {
-    _id: '2345YT',
+    _id: '2349YT',
     name: '2345YT',
     price: 24,
     description: '2345YT',
@@ -18,7 +18,7 @@ export const pastriesMock = [
     ingredients: [''],
   },
   {
-    _id: '2345YT',
+    _id: '2348YT',
     name: '2345YT',
     price: 24,
     description: '2345YT',
