@@ -23,9 +23,11 @@ export class StatsComponent implements OnInit {
   isLoading$: Observable<boolean>;
 
   countByPastry: { [pastryId: string]: number } = {};
+  total: number = 0;
 
   pieChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
   };
   pieChartLabels: Label[] = [];
   pieChartData: SingleDataSet = [];
@@ -60,6 +62,10 @@ export class StatsComponent implements OnInit {
 
         this.pieChartLabels = Object.keys(this.countByPastry);
         this.pieChartData = Object.values(this.countByPastry);
+        this.total = Object.values(this.countByPastry).reduce(
+          (prev, v) => prev + v,
+          0
+        );
       });
   }
 

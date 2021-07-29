@@ -1,11 +1,14 @@
-<canvas
-  *ngIf="pieChartLabels.length && pieChartData.length"
-  baseChart
-  [data]="pieChartData"
-  [labels]="pieChartLabels"
-  [chartType]="pieChartType"
-  [options]="pieChartOptions"
-  [plugins]="pieChartPlugins"
-  [legend]="pieChartLegend"
->
-</canvas>
+<div class="pie">
+  <canvas
+    *ngIf="pieChartLabels.length && pieChartData.length"
+    baseChart
+    [data]="pieChartData"
+    [labels]="pieChartLabels"
+    [chartType]="pieChartType"
+    [options]="pieChartOptions"
+    [plugins]="pieChartPlugins"
+    [legend]="pieChartLegend"
+  >
+  </canvas>
+  <span *ngIf="total" class="total">Total : {{ total }}</span>
+</div>

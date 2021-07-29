@@ -1,4 +1,26 @@
 :host {
-  display: block;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
   height: 100%;
+
+  .pie {
+    position: relative;
+    height: 50%;
+    display: flex;
+    flex: 1;
+  }
+
+  .total {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  @media screen and (max-width: 800px) {
+    .pie {
+      height: 100%;
+    }
+  }
 }
