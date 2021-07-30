@@ -22,15 +22,15 @@ export class StatsComponent implements OnInit {
   totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
 
-  countByPastry: { [pastryId: string]: number } = {};
-  total: number = 0;
+  pastryTotal: number = 0;
+  drinkTotal: number = 0;
 
   pieChartOptions: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
   };
-  pieChartLabels: Label[] = [];
-  pieChartData: SingleDataSet = [];
+  pieChartLabels: Label[][] = [];
+  pieChartData: SingleDataSet[] = [];
   pieChartType: ChartType = 'pie';
   pieChartLegend = true;
   pieChartPlugins = [];
@@ -49,20 +49,40 @@ export class StatsComponent implements OnInit {
     this.payedCommands$
       .pipe(takeUntil(this.destroyed$))
       .subscribe((commands) => {
-        this.countByPastry = commands.reduce((prev, c) => {
+        let countByPastry: { [pastryName: string]: number } = {};
+        let countByDrink: { [pastryName: string]: number } = {};
+        commands.forEach((c) => {
           c.pastries.forEach((p) => {
-            if (prev.hasOwnProperty(p.name)) {
-              prev[p.name] += 1;
-            } else {
-              prev[p.name] = 1;
+            if (p.type === 'pastry') {
+              if (countByPastry.hasOwnProperty(p.name)) {
+                countByPastry[p.name] += 1;
+              } else {
+                countByPastry[p.name] = 1;
+              }
+            } else if (p.type === 'drink') {
+              if (countByDrink.hasOwnProperty(p.name)) {
+                countByDrink[p.name] += 1;
+              } else {
+                countByDrink[p.name] = 1;
+              }
             }
           });
-          return prev;
-        }, {} as { [pastryId: string]: number });
+        });
 
-        this.pieChartLabels = Object.keys(this.countByPastry);
-        this.pieChartData = Object.values(this.countByPastry);
-        this.total = Object.values(this.countByPastry).reduce(
+        this.pieChartLabels = [
+          Object.keys(countByPastry),
+          Object.keys(countByDrink),
+        ];
+        this.pieChartData = [
+          Object.values(countByPastry),
+          Object.values(countByDrink),
+        ];
+
+        this.pastryTotal = Object.values(countByPastry).reduce(
+          (prev, v) => prev + v,
+          0
+        );
+        this.drinkTotal = Object.values(countByDrink).reduce(
           (prev, v) => prev + v,
           0
         );
