@@ -10,9 +10,10 @@ import { adminFeatureKey, reducer } from './store/admin.reducer';
 import { StatsComponent } from './components/stats/stats.component';
 import { ChartsModule } from 'ng2-charts';
 import { RouterModule } from '@angular/router';
+import { ChartComponent } from './components/chart/chart.component';
 
 @NgModule({
-  declarations: [AdminComponent, StatsComponent, CardComponent],
+  declarations: [AdminComponent, StatsComponent, CardComponent, ChartComponent],
   imports: [
     CommonModule,
     SharedModule,

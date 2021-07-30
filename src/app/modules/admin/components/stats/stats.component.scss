@@ -1,27 +1,50 @@
 :host {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
+  display: block;
   height: 100%;
-  flex-direction: column;
+  overflow-y: auto;
 
-  .pie {
-    position: relative;
-    height: 50%;
+  .content {
+    min-height: 100%;
     display: flex;
     flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .chart {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .chart.bar {
+    width: 100%;
   }
 
   .total {
     position: absolute;
-    bottom: 1rem;
+    bottom: 0;
     right: 1rem;
+    font-weight: 500;
   }
 
   @media screen and (max-width: 800px) {
-    .pie {
-      height: 100%;
+    .row {
+      flex-direction: column;
+    }
+
+    .chart {
+      min-height: 100vh;
     }
   }
 }

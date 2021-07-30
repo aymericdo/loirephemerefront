@@ -1,0 +1,11 @@
+<canvas
+  *ngIf="pieChartLabels.length && pieChartData.length"
+  baseChart
+  [data]="pieChartData"
+  [labels]="pieChartLabels"
+  [chartType]="pieChartType"
+  [options]="pieChartOptions"
+  [plugins]="pieChartPlugins"
+  [legend]="pieChartLegend"
+>
+</canvas>

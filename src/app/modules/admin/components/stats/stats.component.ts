@@ -9,8 +9,8 @@ import {
   selectPayedCommands,
   selectTotalPayedCommands,
 } from '../../store/admin.selectors';
-import { ChartType, ChartOptions } from 'chart.js';
 import { SingleDataSet, Label } from 'ng2-charts';
+import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -25,15 +25,26 @@ export class StatsComponent implements OnInit {
   pastryTotal: number = 0;
   drinkTotal: number = 0;
 
-  pieChartOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-  };
   pieChartLabels: Label[][] = [];
   pieChartData: SingleDataSet[] = [];
-  pieChartType: ChartType = 'pie';
-  pieChartLegend = true;
-  pieChartPlugins = [];
+
+  barChartOptions: ChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    // We use these empty structures as placeholders for dynamic theming.
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      },
+    },
+  };
+  barChartLabels: Label[] = [];
+  barChartType: ChartType = 'bar';
+  barChartLegend = true;
+
+  barChartData: ChartDataSets[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -51,8 +62,26 @@ export class StatsComponent implements OnInit {
       .subscribe((commands) => {
         let countByPastry: { [pastryName: string]: number } = {};
         let countByDrink: { [pastryName: string]: number } = {};
+        let pastriesByDate: {
+          [date: string]: { [pastryName: string]: number };
+        } = {};
+
         commands.forEach((c) => {
+          const day = this.getFormattedDate(new Date(c.createdAt as string));
           c.pastries.forEach((p) => {
+            if (p.type === 'pastry') {
+              if (pastriesByDate.hasOwnProperty(day)) {
+                if (pastriesByDate[day].hasOwnProperty(p.name)) {
+                  pastriesByDate[day][p.name] += 1;
+                } else {
+                  pastriesByDate[day][p.name] = 1;
+                }
+              } else {
+                pastriesByDate[day] = {};
+                pastriesByDate[day][p.name] = 1;
+              }
+            }
+
             if (p.type === 'pastry') {
               if (countByPastry.hasOwnProperty(p.name)) {
                 countByPastry[p.name] += 1;
@@ -68,6 +97,24 @@ export class StatsComponent implements OnInit {
             }
           });
         });
+
+        this.barChartLabels = Object.keys(pastriesByDate).reverse();
+
+        Object.values(pastriesByDate)
+          .reverse()
+          .forEach((pastryByName) => {
+            Object.keys(pastryByName).forEach((pastryName) => {
+              const currentData: ChartDataSets | undefined =
+                this.barChartData.find((data) => data.label === pastryName);
+
+              if (currentData) {
+                currentData.data!.push(pastryByName[pastryName]);
+              } else {
+                const countList = [pastryByName[pastryName]];
+                this.barChartData.push({ label: pastryName, data: countList });
+              }
+            });
+          });
 
         this.pieChartLabels = [
           Object.keys(countByPastry),
@@ -92,5 +139,17 @@ export class StatsComponent implements OnInit {
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private getFormattedDate(date: Date): string {
+    var year = date.getFullYear();
+
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+
+    return year + '/' + month + '/' + day;
   }
 }

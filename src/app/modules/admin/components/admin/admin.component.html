@@ -65,6 +65,7 @@
         <div class="inner-box">
           <app-card
             [command]="command"
+            [isLoading]="(isLoading$ | async)!"
             [isDone]="true"
             [isPayed]="!!command.isPayed"
             (onClickPayed)="handleClickPayed(command)"

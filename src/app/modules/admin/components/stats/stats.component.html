@@ -1,32 +1,35 @@
-<div class="pie">
-  <canvas
-    *ngIf="pieChartLabels[0].length && pieChartData[0].length"
-    baseChart
-    [data]="pieChartData[0]"
-    [labels]="pieChartLabels[0]"
-    [chartType]="pieChartType"
-    [options]="pieChartOptions"
-    [plugins]="pieChartPlugins"
-    [legend]="pieChartLegend"
-  >
-  </canvas>
-  <span *ngIf="pastryTotal" class="total"
-    ><div>Total de pâtisseries : {{ pastryTotal }}</div></span
-  >
-</div>
-<div class="pie">
-  <canvas
-    *ngIf="pieChartLabels[1].length && pieChartData[1].length"
-    baseChart
-    [data]="pieChartData[1]"
-    [labels]="pieChartLabels[1]"
-    [chartType]="pieChartType"
-    [options]="pieChartOptions"
-    [plugins]="pieChartPlugins"
-    [legend]="pieChartLegend"
-  >
-  </canvas>
-  <span *ngIf="drinkTotal" class="total">
-    <div>Total de boissons : {{ drinkTotal }}</div></span
-  >
+<div class="content">
+  <div class="row">
+    <div class="chart">
+      <app-chart
+        [pieChartLabels]="pieChartLabels[0]"
+        [pieChartData]="pieChartData[0]"
+      ></app-chart>
+      <span *ngIf="pastryTotal" class="total"
+        ><div>Total de pâtisseries : {{ pastryTotal }}</div></span
+      >
+    </div>
+    <div class="chart">
+      <app-chart
+        [pieChartLabels]="pieChartLabels[1]"
+        [pieChartData]="pieChartData[1]"
+      ></app-chart>
+      <span *ngIf="drinkTotal" class="total">
+        <div>Total de boissons : {{ drinkTotal }}</div></span
+      >
+    </div>
+  </div>
+
+  <div class="chart bar">
+    <canvas
+      *ngIf="barChartData.length && barChartLabels.length"
+      baseChart
+      [datasets]="barChartData"
+      [labels]="barChartLabels"
+      [options]="barChartOptions"
+      [legend]="barChartLegend"
+      [chartType]="barChartType"
+    >
+    </canvas>
+  </div>
 </div>
