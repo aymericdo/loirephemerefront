@@ -21,15 +21,17 @@
   </div>
 
   <div class="chart bar">
-    <canvas
-      *ngIf="barChartData.length && barChartLabels.length"
-      baseChart
-      [datasets]="barChartData"
-      [labels]="barChartLabels"
-      [options]="barChartOptions"
-      [legend]="barChartLegend"
-      [chartType]="barChartType"
-    >
-    </canvas>
+    <div>
+      <canvas
+        *ngIf="barChartData.length && barChartLabels.length"
+        baseChart
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [legend]="barChartLegend"
+        [chartType]="barChartType"
+      >
+      </canvas>
+    </div>
   </div>
 </div>

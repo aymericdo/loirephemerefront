@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
 import { fetchCommands } from '../../store/admin.actions';
@@ -12,6 +12,10 @@ import {
 import { SingleDataSet, Label } from 'ng2-charts';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { takeUntil } from 'rxjs/operators';
+import * as moment from 'moment';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { selectPastries } from 'src/app/modules/home/store/home.selectors';
+import { fetchPastries } from 'src/app/modules/home/store/home.actions';
 
 @Component({
   templateUrl: './stats.component.html',
@@ -21,6 +25,7 @@ export class StatsComponent implements OnInit {
   payedCommands$: Observable<Command[]>;
   totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
+  pastries$: Observable<Pastry[]>;
 
   pastryTotal: number = 0;
   drinkTotal: number = 0;
@@ -52,14 +57,16 @@ export class StatsComponent implements OnInit {
     this.payedCommands$ = this.store.select(selectPayedCommands);
     this.totalPayedCommands$ = this.store.select(selectTotalPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
+    this.pastries$ = this.store.select(selectPastries);
   }
 
   ngOnInit(): void {
     this.store.dispatch(fetchCommands());
+    this.store.dispatch(fetchPastries());
 
-    this.payedCommands$
+    combineLatest([this.payedCommands$, this.pastries$])
       .pipe(takeUntil(this.destroyed$))
-      .subscribe((commands) => {
+      .subscribe(([commands, pastries]) => {
         let countByPastry: { [pastryName: string]: number } = {};
         let countByDrink: { [pastryName: string]: number } = {};
         let pastriesByDate: {
@@ -98,22 +105,17 @@ export class StatsComponent implements OnInit {
           });
         });
 
-        this.barChartLabels = Object.keys(pastriesByDate).reverse();
-
-        Object.values(pastriesByDate)
+        this.barChartLabels = Object.keys(pastriesByDate)
           .reverse()
-          .forEach((pastryByName) => {
-            Object.keys(pastryByName).forEach((pastryName) => {
-              const currentData: ChartDataSets | undefined =
-                this.barChartData.find((data) => data.label === pastryName);
+          .map((dateStr) => moment(dateStr).locale('fr').format('dddd DD/MM'));
 
-              if (currentData) {
-                currentData.data!.push(pastryByName[pastryName]);
-              } else {
-                const countList = [pastryByName[pastryName]];
-                this.barChartData.push({ label: pastryName, data: countList });
-              }
+        this.barChartData = pastries
+          .filter((p) => p.type === 'pastry')
+          .map((p) => {
+            const countList = Object.keys(pastriesByDate).map((date) => {
+              return pastriesByDate[date][p.name] || 0;
             });
+            return { label: p.name, data: countList };
           });
 
         this.pieChartLabels = [
