@@ -36,4 +36,19 @@
       </canvas>
     </div>
   </div>
+
+  <div class="chart bar">
+    <div>
+      <canvas
+        *ngIf="barChartData2.length && barChartLabels.length"
+        baseChart
+        [datasets]="barChartData2"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [legend]="barChartLegend"
+        [chartType]="barChartType"
+      >
+      </canvas>
+    </div>
+  </div>
 </div>

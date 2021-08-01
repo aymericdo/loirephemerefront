@@ -60,6 +60,7 @@ export class StatsComponent implements OnInit {
   colors: any = [];
 
   barChartData: ChartDataSets[] = [];
+  barChartData2: ChartDataSets[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -135,6 +136,22 @@ export class StatsComponent implements OnInit {
               });
             return { label: p.name, data: countList };
           });
+
+        this.barChartData2 = [
+          {
+            label: 'total',
+            data: Object.keys(pastriesByDate)
+              .reverse()
+              .map((date) => {
+                return Object.values(pastriesByDate[date]).reduce(
+                  (prev, value) => prev + value,
+                  0
+                );
+              }),
+          },
+        ];
+
+        console.log(this.barChartData2);
 
         this.barChartData = this.barChartData.map((data) => {
           if (data.label === 'Tarte chocolat quinoa') {
