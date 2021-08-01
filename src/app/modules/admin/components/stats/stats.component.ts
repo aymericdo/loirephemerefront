@@ -112,9 +112,11 @@ export class StatsComponent implements OnInit {
         this.barChartData = pastries
           .filter((p) => p.type === 'pastry')
           .map((p) => {
-            const countList = Object.keys(pastriesByDate).map((date) => {
-              return pastriesByDate[date][p.name] || 0;
-            });
+            const countList = Object.keys(pastriesByDate)
+              .reverse()
+              .map((date) => {
+                return pastriesByDate[date][p.name] || 0;
+              });
             return { label: p.name, data: countList };
           });
 
