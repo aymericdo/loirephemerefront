@@ -15,6 +15,15 @@ export const selectPastries = createSelector(
     ].filter(Boolean)
 );
 
+export const selectAllPastries = createSelector(
+  selectFeature,
+  (state: HomeState) =>
+    [
+      ...state.pastries.filter((p) => p._id !== TIPS_ID),
+      state.pastries.find((p) => p._id === TIPS_ID)!,
+    ].filter(Boolean)
+);
+
 export const selectSelectedPastries = createSelector(
   selectFeature,
   (state: HomeState) => state.selectedPastries

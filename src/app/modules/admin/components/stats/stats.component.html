@@ -2,6 +2,7 @@
   <div class="row">
     <div class="chart">
       <app-chart
+        *ngIf="pieChartLabels.length && pieChartData.length"
         [pieChartLabels]="pieChartLabels[0]"
         [pieChartData]="pieChartData[0]"
       ></app-chart>
@@ -11,6 +12,7 @@
     </div>
     <div class="chart">
       <app-chart
+        *ngIf="pieChartLabels.length && pieChartData.length"
         [pieChartLabels]="pieChartLabels[1]"
         [pieChartData]="pieChartData[1]"
       ></app-chart>

@@ -10,11 +10,20 @@ import {
   selectTotalPayedCommands,
 } from '../../store/admin.selectors';
 import { SingleDataSet, Label } from 'ng2-charts';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { takeUntil } from 'rxjs/operators';
+import {
+  ChartColor,
+  ChartDataSets,
+  ChartOptions,
+  ChartTooltipLabelColor,
+  ChartType,
+} from 'chart.js';
+import { filter, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { selectPastries } from 'src/app/modules/home/store/home.selectors';
+import {
+  selectAllPastries,
+  selectPastries,
+} from 'src/app/modules/home/store/home.selectors';
 import { fetchPastries } from 'src/app/modules/home/store/home.actions';
 
 @Component({
@@ -48,6 +57,7 @@ export class StatsComponent implements OnInit {
   barChartLabels: Label[] = [];
   barChartType: ChartType = 'bar';
   barChartLegend = true;
+  colors: any = [];
 
   barChartData: ChartDataSets[] = [];
 
@@ -57,7 +67,7 @@ export class StatsComponent implements OnInit {
     this.payedCommands$ = this.store.select(selectPayedCommands);
     this.totalPayedCommands$ = this.store.select(selectTotalPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
-    this.pastries$ = this.store.select(selectPastries);
+    this.pastries$ = this.store.select(selectAllPastries);
   }
 
   ngOnInit(): void {
@@ -65,10 +75,24 @@ export class StatsComponent implements OnInit {
     this.store.dispatch(fetchPastries());
 
     combineLatest([this.payedCommands$, this.pastries$])
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(
+        filter(([commands, _pastries]) => !!commands?.length),
+        takeUntil(this.destroyed$)
+      )
       .subscribe(([commands, pastries]) => {
-        let countByPastry: { [pastryName: string]: number } = {};
-        let countByDrink: { [pastryName: string]: number } = {};
+        let countByPastry: { [pastryName: string]: number } = pastries
+          .filter((p) => p.type === 'pastry')
+          .reduce((prev, p) => {
+            prev[p.name] = 0;
+            return prev;
+          }, {} as { [pastryName: string]: number });
+        let countByDrink: { [pastryName: string]: number } = pastries
+          .filter((p) => p.type === 'drink')
+          .reduce((prev, p) => {
+            prev[p.name] = 0;
+            return prev;
+          }, {} as { [pastryName: string]: number });
+
         let pastriesByDate: {
           [date: string]: { [pastryName: string]: number };
         } = {};
@@ -90,17 +114,9 @@ export class StatsComponent implements OnInit {
             }
 
             if (p.type === 'pastry') {
-              if (countByPastry.hasOwnProperty(p.name)) {
-                countByPastry[p.name] += 1;
-              } else {
-                countByPastry[p.name] = 1;
-              }
+              countByPastry[p.name] += 1;
             } else if (p.type === 'drink') {
-              if (countByDrink.hasOwnProperty(p.name)) {
-                countByDrink[p.name] += 1;
-              } else {
-                countByDrink[p.name] = 1;
-              }
+              countByDrink[p.name] += 1;
             }
           });
         });
@@ -120,10 +136,25 @@ export class StatsComponent implements OnInit {
             return { label: p.name, data: countList };
           });
 
+        this.barChartData = this.barChartData.map((data) => {
+          if (data.label === 'Tarte chocolat quinoa') {
+            return {
+              ...data,
+              backgroundColor: 'rgba(127, 0, 255, 0.4)',
+              hoverBackgroundColor: 'rgba(127, 0, 255, 0.8)',
+            };
+          } else {
+            return {
+              ...data,
+            };
+          }
+        });
+
         this.pieChartLabels = [
           Object.keys(countByPastry),
           Object.keys(countByDrink),
         ];
+
         this.pieChartData = [
           Object.values(countByPastry),
           Object.values(countByDrink),
@@ -133,6 +164,7 @@ export class StatsComponent implements OnInit {
           (prev, v) => prev + v,
           0
         );
+
         this.drinkTotal = Object.values(countByDrink).reduce(
           (prev, v) => prev + v,
           0
