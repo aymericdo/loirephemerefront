@@ -1,6 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { AdminState } from './admin.reducer';
+import { commandsMock } from 'src/app/mocks/commands.mock';
 
 export const selectFeature = (state: AppState) => state.admin;
 
@@ -11,14 +12,22 @@ export const selectOnGoingCommands = createSelector(
 
 export const selectPastCommands = createSelector(
   selectFeature,
-  (state: AdminState) =>
-    state.commands
-      .filter((c) => c.isDone)
+  (state: AdminState) => [
+    ...state.commands
+      .filter((c) => c.isDone && !c.isPayed)
       .sort((a, b) => {
         return (
           new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
         );
-      })
+      }),
+    ...state.commands
+      .filter((c) => c.isDone && c.isPayed)
+      .sort((a, b) => {
+        return (
+          new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+        );
+      }),
+  ]
 );
 
 export const selectPayedCommands = createSelector(
