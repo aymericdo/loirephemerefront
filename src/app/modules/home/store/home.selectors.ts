@@ -41,15 +41,10 @@ export const selectIsStockIssue = createSelector(
       if (pastryId === TIPS_ID) return false;
       return (
         state.pastries.find((p) => p._id === pastryId)!.stock -
-          state.selectedPastries[pastryId] <
+        state.selectedPastries[pastryId] <
         0
       );
     })
-);
-
-export const selectTable = createSelector(
-  selectFeature,
-  (state: HomeState) => state.table
 );
 
 export const selectPersonalCommand = createSelector(
@@ -77,7 +72,7 @@ export const selectTotalPrice = createSelector(
       (prev, pastryId) =>
         prev +
         (state.pastries.find((p) => p._id === pastryId)?.price || 0) *
-          state.selectedPastries[pastryId],
+        state.selectedPastries[pastryId],
       0
     )
 );

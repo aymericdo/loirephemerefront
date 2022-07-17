@@ -14,7 +14,6 @@ import {
   fetchPastries,
   sendCommand,
   resetCommand,
-  setTable,
   setStock,
   sendNotificationSub,
 } from 'src/app/modules/home/store/home.actions';
@@ -28,12 +27,10 @@ import {
   selectPastries,
   selectPersonalCommand,
   selectSelectedPastries,
-  selectTable,
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, take, takeUntil } from 'rxjs/operators';
-import { TABLES_POSSIBILITIES } from '../table-modal/table-modal.component';
+import { filter, takeUntil } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command } from 'src/app/interfaces/command.interface';
 import {
@@ -57,12 +54,10 @@ export class HomeComponent implements OnInit {
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
   hasSelectedPastries$: Observable<Boolean>;
   totalPrice$: Observable<number>;
-  table$: Observable<string>;
   isLoading$: Observable<boolean>;
   isStockIssue$: Observable<boolean>;
   personalCommand$: Observable<Command | null>;
   errorCommand$: Observable<Object | null>;
-  currentTable: string | null = null;
   isSuccessModalVisible = false;
   isWizzNotificationVisible = false;
 
@@ -89,7 +84,6 @@ export class HomeComponent implements OnInit {
     this.hasSelectedPastries$ = this.store.select(selectHasSelectedPastries);
     this.isLoading$ = this.store.select(selectIsLoading);
     this.isStockIssue$ = this.store.select(selectIsStockIssue);
-    this.table$ = this.store.select(selectTable);
     this.personalCommand$ = this.store.select(selectPersonalCommand);
     this.errorCommand$ = this.store.select(selectErrorCommand);
   }
@@ -127,24 +121,6 @@ export class HomeComponent implements OnInit {
         );
       });
 
-    this.route.paramMap.subscribe((paramMap) => {
-      this.currentTable = paramMap.get('tableName');
-      if (
-        this.currentTable &&
-        TABLES_POSSIBILITIES.includes(this.currentTable)
-      ) {
-        this.store.dispatch(setTable({ table: this.currentTable }));
-      } else {
-        this.table$.pipe(take(1)).subscribe((table) => {
-          if (table) {
-            this.router.navigate(['/table', table]);
-          } else {
-            this.router.navigate(['/']);
-          }
-        });
-      }
-    });
-
     this.subscribeToWS();
   }
 
@@ -152,53 +128,24 @@ export class HomeComponent implements OnInit {
     this.scrollContainer = this.scrollFrame.nativeElement;
   }
 
-  handleTableChange(): void {
-    if (this.currentTable) {
-      this.modal.confirm({
-        nzTitle: 'Changer de table ?',
-        nzOkText: 'OK',
-        nzOkType: 'primary',
-        nzOnOk: () => {
-          this.router.navigate(['/', 'table']);
-        },
-        nzCancelText: 'Annuler',
-      });
-    } else {
-      this.router.navigate(['/', 'table']);
-    }
-  }
-
   handleClickPlus(pastry: Pastry, count: number): void {
-    if (this.currentTable) {
-      if (count === 0) {
-        const cardToScroll = this.itemElements.find(
-          (item) => item.pastry._id === pastry._id
-        );
+    if (count === 0) {
+      const cardToScroll = this.itemElements.find(
+        (item) => item.pastry._id === pastry._id
+      );
 
-        if (cardToScroll) {
-          this.scrollContainer.scroll({
-            top:
-              this.scrollContainer.scrollTop +
-              cardToScroll.elem.nativeElement.getBoundingClientRect().top -
-              50,
-            left: 0,
-            behavior: 'smooth',
-          });
-        }
+      if (cardToScroll) {
+        this.scrollContainer.scroll({
+          top:
+            this.scrollContainer.scrollTop +
+            cardToScroll.elem.nativeElement.getBoundingClientRect().top -
+            50,
+          left: 0,
+          behavior: 'smooth',
+        });
       }
-      this.store.dispatch(incrementPastry({ pastry }));
-    } else {
-      this.modal.confirm({
-        nzTitle: 'Pour commander, il faut choisir une table',
-        nzOkText: 'OK',
-        nzOkType: 'primary',
-        nzOnOk: () => {
-          this.store.dispatch(incrementPastry({ pastry }));
-          this.router.navigate(['/', 'table']);
-        },
-        nzCancelText: 'Annuler',
-      });
     }
+    this.store.dispatch(incrementPastry({ pastry }));
   }
 
   handleClickMinus(pastry: Pastry): void {
@@ -207,7 +154,7 @@ export class HomeComponent implements OnInit {
 
   handleClickCommand(name: string): void {
     this.isSuccessModalVisible = true;
-    this.store.dispatch(sendCommand({ table: this.currentTable!, name }));
+    this.store.dispatch(sendCommand({ name }));
 
     // Hack for safari
     this.audio = new Audio('assets/sounds/french.mp3');

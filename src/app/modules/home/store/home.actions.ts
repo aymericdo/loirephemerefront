@@ -17,7 +17,7 @@ export const decrementPastry = createAction(
 );
 export const sendCommand = createAction(
   '[Home page] Send command',
-  props<{ name: string; table: string }>()
+  props<{ name: string }>()
 );
 export const resetCommand = createAction('[Home page] Reset command');
 export const setPersonalCommand = createAction(
@@ -27,10 +27,6 @@ export const setPersonalCommand = createAction(
 export const setErrorCommand = createAction(
   '[Home page] Set error command',
   props<{ error: any }>()
-);
-export const setTable = createAction(
-  '[Home page] Set table',
-  props<{ table: string }>()
 );
 export const setStock = createAction(
   '[Home page] Set stock',

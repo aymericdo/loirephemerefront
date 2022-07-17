@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   }
 
   handleCancel(): void {
-    this.router.navigate(['/table', '']);
+    this.router.navigate(['/']);
   }
 
   handleClickConfirm(): void {

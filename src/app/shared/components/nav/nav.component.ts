@@ -10,15 +10,15 @@ import { Router } from '@angular/router';
 export class NavComponent implements OnInit {
   isCollapsed = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   toggleCollapsed(): void {
     this.isCollapsed = !this.isCollapsed;
   }
 
   isHome(): boolean {
-    return this.router.url === '/' || this.router.url.startsWith('/table/');
+    return this.router.url === '/'
   }
 }

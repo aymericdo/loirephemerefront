@@ -12,7 +12,6 @@ import {
   setPastries,
   setPersonalCommand,
   setStock,
-  setTable,
 } from './home.actions';
 
 export const homeFeatureKey = 'home';
@@ -23,7 +22,6 @@ export interface HomeState {
   personalCommand: Command | null;
   errorCommand: Object | null;
   loading: boolean;
-  table: string;
 }
 
 export const initialState: HomeState = {
@@ -32,7 +30,6 @@ export const initialState: HomeState = {
   personalCommand: null,
   errorCommand: null,
   loading: false,
-  table: '',
 };
 
 const homeReducer = createReducer(
@@ -61,10 +58,6 @@ const homeReducer = createReducer(
       pastries: newList,
     };
   }),
-  on(setTable, (state, { table }) => ({
-    ...state,
-    table,
-  })),
   on(incrementPastry, (state, { pastry }) => ({
     ...state,
     selectedPastries: {

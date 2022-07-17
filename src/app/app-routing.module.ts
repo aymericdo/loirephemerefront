@@ -5,20 +5,11 @@ import { AboutComponent } from './modules/about/components/about/about.component
 import { AdminComponent } from './modules/admin/components/admin/admin.component';
 import { StatsComponent } from './modules/admin/components/stats/stats.component';
 import { HomeComponent } from './modules/home/components/home/home.component';
-import { TableModalComponent } from './modules/home/components/table-modal/table-modal.component';
 import { LoginComponent } from './modules/login/components/login/login.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-  },
-  {
-    path: 'table',
-    component: TableModalComponent,
-  },
-  {
-    path: 'table/:tableName',
     component: HomeComponent,
   },
   {
@@ -56,4 +47,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

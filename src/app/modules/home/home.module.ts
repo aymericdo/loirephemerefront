@@ -9,7 +9,6 @@ import { HomeEffects } from './store/home.effects';
 import { CardComponent } from './components/card/card.component';
 import { OrderFooterComponent } from './components/order-footer/order-footer.component';
 import { FormsModule } from '@angular/forms';
-import { TableModalComponent } from './components/table-modal/table-modal.component';
 import { OrderModalComponent } from './components/order-modal/order-modal.component';
 import { OrderNameModalComponent } from './components/order-name-modal/order-name-modal.component';
 import { OrderSuccessModalComponent } from './components/order-success-modal/order-success-modal.component';
@@ -20,7 +19,6 @@ import { OrderErrorModalComponent } from './components/order-error-modal/order-e
     HomeComponent,
     OrderFooterComponent,
     CardComponent,
-    TableModalComponent,
     OrderNameModalComponent,
     OrderSuccessModalComponent,
     OrderErrorModalComponent,
@@ -34,4 +32,4 @@ import { OrderErrorModalComponent } from './components/order-error-modal/order-e
     StoreModule.forFeature(homeFeatureKey, reducer),
   ],
 })
-export class HomeModule {}
+export class HomeModule { }

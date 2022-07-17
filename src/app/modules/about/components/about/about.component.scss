@@ -5,8 +5,14 @@
   min-width: 200px;
 
   .content {
-    padding: 2rem 3rem 2rem;
+    padding: 2rem 3rem;
     text-align: justify;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sub-content {
+    width: 50%;
   }
 
   .img {

@@ -46,7 +46,6 @@ export class HomeEffects {
       withLatestFrom(this.store$.select(selectSelectedPastries)),
       mergeMap(([[action, allPastries], selectedPastries]) => {
         const command: Command = {
-          table: action.table,
           name: action.name,
           totalPrice: Object.keys(selectedPastries).reduce((prev, pastryId) => {
             const pastry = allPastries.find(
@@ -96,5 +95,5 @@ export class HomeEffects {
     private actions$: Actions,
     private store$: Store<AppState>,
     private homeApiService: HomeApiService
-  ) {}
+  ) { }
 }

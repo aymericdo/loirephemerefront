@@ -25,7 +25,7 @@ export class AdminEffects {
           map((commands) => setCommands({ commands })),
           catchError(() => {
             localStorage.removeItem('token');
-            this.router.navigate(['/table', '']);
+            this.router.navigate(['/']);
             return EMPTY;
           })
         );
@@ -44,7 +44,7 @@ export class AdminEffects {
             map((command) => editCommand({ command })),
             catchError(() => {
               localStorage.removeItem('token');
-              this.router.navigate(['/table', '']);
+              this.router.navigate(['/']);
               return EMPTY;
             })
           );
@@ -63,7 +63,7 @@ export class AdminEffects {
             map((command) => editCommand({ command })),
             catchError(() => {
               localStorage.removeItem('token');
-              this.router.navigate(['/table', '']);
+              this.router.navigate(['/']);
               return EMPTY;
             })
           );
@@ -87,5 +87,5 @@ export class AdminEffects {
     private actions$: Actions,
     public router: Router,
     private adminApiService: AdminApiService
-  ) {}
+  ) { }
 }
