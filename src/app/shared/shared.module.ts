@@ -13,4 +13,4 @@ import { FooterComponent } from './components/footer/footer.component';
   imports: [CommonModule, NgZorroModule, RouterModule],
   exports: [NavComponent, FooterComponent, NgZorroModule],
 })
-export class SharedModule {}
+export class SharedModule { }

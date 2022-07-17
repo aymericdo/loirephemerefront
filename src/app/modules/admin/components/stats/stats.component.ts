@@ -11,18 +11,15 @@ import {
 } from '../../store/admin.selectors';
 import { SingleDataSet, Label } from 'ng2-charts';
 import {
-  ChartColor,
   ChartDataSets,
   ChartOptions,
-  ChartTooltipLabelColor,
   ChartType,
 } from 'chart.js';
-import { filter, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import {
   selectAllPastries,
-  selectPastries,
 } from 'src/app/modules/home/store/home.selectors';
 import { fetchPastries } from 'src/app/modules/home/store/home.actions';
 
@@ -62,6 +59,9 @@ export class StatsComponent implements OnInit {
   barChartData: ChartDataSets[] = [];
   barChartData2: ChartDataSets[] = [];
 
+  years: string[] = [];
+  currentYear: string = new Date().getFullYear().toString();
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {
@@ -72,12 +72,15 @@ export class StatsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(fetchCommands());
+    this.years = Array.from({
+      length: +this.currentYear - 2021 + 1
+    }, (v, k) => k + 2021).map((year) => year.toString());
+
+    this.store.dispatch(fetchCommands({ year: this.currentYear }));
     this.store.dispatch(fetchPastries());
 
     combineLatest([this.payedCommands$, this.pastries$])
       .pipe(
-        filter(([commands, _pastries]) => !!commands?.length),
         takeUntil(this.destroyed$)
       )
       .subscribe(([commands, pastries]) => {
@@ -127,7 +130,7 @@ export class StatsComponent implements OnInit {
           .map((dateStr) => moment(dateStr).locale('fr').format('dddd DD/MM'));
 
         this.barChartData = pastries
-          .filter((p) => p.type === 'pastry')
+          .filter((p) => p.type === 'pastry' && countByPastry[p.name] > 0)
           .map((p) => {
             const countList = Object.keys(pastriesByDate)
               .reverse()
@@ -151,8 +154,6 @@ export class StatsComponent implements OnInit {
           },
         ];
 
-        console.log(this.barChartData2);
-
         this.barChartData = this.barChartData.map((data) => {
           if (data.label === 'Tarte chocolat quinoa') {
             return {
@@ -168,13 +169,13 @@ export class StatsComponent implements OnInit {
         });
 
         this.pieChartLabels = [
-          Object.keys(countByPastry),
-          Object.keys(countByDrink),
+          Object.keys(countByPastry).filter((k) => countByPastry[k] > 0),
+          Object.keys(countByDrink).filter((k) => countByDrink[k] > 0),
         ];
 
         this.pieChartData = [
-          Object.values(countByPastry),
-          Object.values(countByDrink),
+          Object.values(countByPastry).filter((v) => v > 0),
+          Object.values(countByDrink).filter((v) => v > 0),
         ];
 
         this.pastryTotal = Object.values(countByPastry).reduce(
@@ -187,6 +188,10 @@ export class StatsComponent implements OnInit {
           0
         );
       });
+  }
+
+  currentYearChange() {
+    this.store.dispatch(fetchCommands({ year: this.currentYear }));
   }
 
   ngOnDestroy() {

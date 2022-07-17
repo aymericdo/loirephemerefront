@@ -61,7 +61,7 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(fetchCommands());
+    this.store.dispatch(fetchCommands({ year: new Date().getFullYear().toString() }));
 
     this.route.queryParams.subscribe((params) => {
       if (!params['tab']) {

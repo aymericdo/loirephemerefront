@@ -1,4 +1,19 @@
 <div class="content">
+  <div class="year-selector">
+    <nz-select
+      [(ngModel)]="currentYear"
+      (ngModelChange)="currentYearChange()"
+      nzPlaceHolder="Choisissez l'année"
+      style="width: 50%"
+      >
+      <nz-option
+      *ngFor="let year of years"
+      [nzValue]="year"
+      [nzLabel]="year"
+      ></nz-option>
+    </nz-select>
+  </div>
+
   <div class="row">
     <div class="chart">
       <app-chart

@@ -11,6 +11,7 @@ import { StatsComponent } from './components/stats/stats.component';
 import { ChartsModule } from 'ng2-charts';
 import { RouterModule } from '@angular/router';
 import { ChartComponent } from './components/chart/chart.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AdminComponent, StatsComponent, CardComponent, ChartComponent],
@@ -18,9 +19,10 @@ import { ChartComponent } from './components/chart/chart.component';
     CommonModule,
     SharedModule,
     ChartsModule,
+    FormsModule,
     RouterModule,
     EffectsModule.forFeature([AdminEffects]),
     StoreModule.forFeature(adminFeatureKey, reducer),
   ],
 })
-export class AdminModule {}
+export class AdminModule { }

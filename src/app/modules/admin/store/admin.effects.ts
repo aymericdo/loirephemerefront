@@ -19,9 +19,9 @@ export class AdminEffects {
   fetchCommands$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchCommands),
-      mergeMap(() => {
+      mergeMap((action) => {
         const token = localStorage.getItem('token') as string;
-        return this.adminApiService.getAll(token).pipe(
+        return this.adminApiService.getAll(token, action.year).pipe(
           map((commands) => setCommands({ commands })),
           catchError(() => {
             localStorage.removeItem('token');
