@@ -43,7 +43,14 @@ export class StatsComponent implements OnInit {
     responsive: true,
     maintainAspectRatio: false,
     // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], yAxes: [{}] },
+    scales: {
+      xAxes: [{}], yAxes: [{
+        display: true,
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    },
     plugins: {
       datalabels: {
         anchor: 'end',
