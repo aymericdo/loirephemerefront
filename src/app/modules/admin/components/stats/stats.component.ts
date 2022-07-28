@@ -225,13 +225,13 @@ export class StatsComponent implements OnInit {
             data: Object.keys(pastriesByDate)
               .reverse()
               .map((date) => {
-                return Object.values(pastriesByDate[date]).reduce(
+                return (pastriesByDate.hasOwnProperty(date) ? Object.values(pastriesByDate[date]).reduce(
                   (prev, value) => prev + value,
                   0
-                ) + Object.values(drinksByDate[date]).reduce(
+                ) : 0) + (drinksByDate.hasOwnProperty(date) ? Object.values(drinksByDate[date]).reduce(
                   (prev, value) => prev + value,
                   0
-                );
+                ) : 0);
               }),
           }, {
             label: 'cash',
