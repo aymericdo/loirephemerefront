@@ -104,7 +104,7 @@ export class StatsComponent implements OnInit {
     datasets: [{ data: [] }]
   };
 
-  barChartData2: ChartConfiguration<'bar'>['data'] = {
+  barChartData2: ChartConfiguration['data'] = {
     datasets: [{ data: [] }]
   };
 
@@ -240,7 +240,19 @@ export class StatsComponent implements OnInit {
               .map((date) => {
                 return Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
               })
-          }],
+          }, {
+            type: 'line',
+            label: 'Cash cumulé',
+            data: Object.keys(cashByDate)
+              .reverse()
+              .reduce((prev: number[], date) => {
+                const dayTotal: number = Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
+                const last: number = prev.length ? +prev[prev.length - 1] : 0;
+                prev.push(last + dayTotal);
+
+                return prev;
+              }, [])
+          }]
         };
 
         this.pieChartLabels = [
