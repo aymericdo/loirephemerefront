@@ -48,12 +48,23 @@ export class StatsComponent implements OnInit {
         formatter: (value: string, ctx: any) => {
           if (ctx.chart.data.labels) {
             if (window.matchMedia("(max-width: 800px)").matches && +value > 15) {
-              return `${ctx.chart.data.labels[ctx.dataIndex]} (${value})`;
+              return `${ctx.chart.data.labels[ctx.dataIndex]}\n(${value})`;
             } else {
               return value;
             }
           }
         },
+        textAlign: 'center',
+        labels: {
+          title: {
+            font: {
+              weight: 'bold'
+            }
+          },
+        },
+        align: 'end',
+        anchor: 'center',
+        clamp: true
       },
     }
   };
