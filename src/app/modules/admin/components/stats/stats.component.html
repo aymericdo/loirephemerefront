@@ -16,21 +16,32 @@
 
   <div class="row">
     <div class="chart">
-      <app-chart
-        *ngIf="pieChartLabels.length && pieChartData.length"
-        [pieChartLabels]="pieChartLabels[0]"
-        [pieChartData]="pieChartData[0]"
-      ></app-chart>
+      <div>
+        <canvas baseChart
+          [type]="'pie'"
+          [datasets]="pieChartDatasetsPastries"
+          [labels]="pieChartLabels[0]"
+          [options]="pieChartOptions"
+          [plugins]="pieChartPlugins"
+          [legend]="pieChartLegend">
+        </canvas>
+      </div>
       <span *ngIf="pastryTotal" class="total"
         ><div>Total de pâtisseries : {{ pastryTotal }}</div></span
       >
     </div>
     <div class="chart">
-      <app-chart
-        *ngIf="pieChartLabels.length && pieChartData.length"
-        [pieChartLabels]="pieChartLabels[1]"
-        [pieChartData]="pieChartData[1]"
-      ></app-chart>
+      <div>
+        <canvas baseChart
+          [type]="'pie'"
+          [datasets]="pieChartDatasetsDrinks"
+          [labels]="pieChartLabels[1]"
+          [options]="pieChartOptions"
+          [plugins]="pieChartPlugins"
+          [legend]="pieChartLegend">
+        </canvas>
+      </div>
+
       <span *ngIf="drinkTotal" class="total">
         <div>Total de boissons : {{ drinkTotal }}</div></span
       >
@@ -40,13 +51,12 @@
   <div class="chart bar">
     <div>
       <canvas
-        *ngIf="barChartData.length && barChartLabels.length"
+        *ngIf="barChartData.datasets.length"
         baseChart
-        [datasets]="barChartData"
-        [labels]="barChartLabels"
+        [data]="barChartData"
         [options]="barChartOptions"
         [legend]="barChartLegend"
-        [chartType]="barChartType"
+        [type]="barChartType"
       >
       </canvas>
     </div>
@@ -55,13 +65,12 @@
   <div class="chart bar">
     <div>
       <canvas
-        *ngIf="barChartData2.length && barChartLabels.length"
+        *ngIf="barChartData2.datasets.length"
         baseChart
-        [datasets]="barChartData2"
-        [labels]="barChartLabels"
+        [data]="barChartData2"
         [options]="barChartOptions"
         [legend]="barChartLegend"
-        [chartType]="barChartType"
+        [type]="barChartType"
       >
       </canvas>
     </div>

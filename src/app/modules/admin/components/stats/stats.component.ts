@@ -9,9 +9,7 @@ import {
   selectPayedCommands,
   selectTotalPayedCommands,
 } from '../../store/admin.selectors';
-import { SingleDataSet, Label } from 'ng2-charts';
 import {
-  ChartDataSets,
   ChartOptions,
   ChartType,
 } from 'chart.js';
@@ -22,6 +20,8 @@ import {
   selectAllPastries,
 } from 'src/app/modules/home/store/home.selectors';
 import { fetchPastries } from 'src/app/modules/home/store/home.actions';
+import DatalabelsPlugin from 'chartjs-plugin-datalabels';
+import { ChartConfiguration } from 'chart.js';
 
 @Component({
   templateUrl: './stats.component.html',
@@ -36,20 +36,46 @@ export class StatsComponent implements OnInit {
   pastryTotal: number = 0;
   drinkTotal: number = 0;
 
-  pieChartLabels: Label[][] = [];
-  pieChartData: SingleDataSet[] = [];
+  pieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+      },
+      datalabels: {
+        formatter: (value: string, ctx: any) => {
+          if (ctx.chart.data.labels) {
+            if (window.matchMedia("(max-width: 800px)").matches) {
+              return `${ctx.chart.data.labels[ctx.dataIndex]} (${value})`;
+            } else {
+              return value;
+            }
+          }
+        },
+      },
+    }
+  };
+  pieChartLabels: string[][] = [];
+  pieChartDatasetsPastries = [{
+    data: [] as number[]
+  }];
+  pieChartDatasetsDrinks = [{
+    data: [] as number[]
+  }];
+  pieChartLegend = true;
+  pieChartPlugins = [DatalabelsPlugin];
 
   barChartOptions: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
-      xAxes: [{}], yAxes: [{
+      x: {},
+      y: {
         display: true,
-        ticks: {
-          beginAtZero: true
-        }
-      }]
+      }
     },
     plugins: {
       datalabels: {
@@ -58,13 +84,17 @@ export class StatsComponent implements OnInit {
       },
     },
   };
-  barChartLabels: Label[] = [];
   barChartType: ChartType = 'bar';
   barChartLegend = true;
   colors: any = [];
 
-  barChartData: ChartDataSets[] = [];
-  barChartData2: ChartDataSets[] = [];
+  barChartData: ChartConfiguration<'bar'>['data'] = {
+    datasets: [{ data: [] }]
+  };
+
+  barChartData2: ChartConfiguration<'bar'>['data'] = {
+    datasets: [{ data: [] }]
+  };
 
   years: string[] = [];
   currentYear: string = new Date().getFullYear().toString();
@@ -108,6 +138,14 @@ export class StatsComponent implements OnInit {
           [date: string]: { [pastryName: string]: number };
         } = {};
 
+        let drinksByDate: {
+          [date: string]: { [pastryName: string]: number };
+        } = {};
+
+        let cashByDate: {
+          [date: string]: { [pastryName: string]: number };
+        } = {};
+
         commands.forEach((c) => {
           const day = this.getFormattedDate(new Date(c.createdAt as string));
           c.pastries.forEach((p) => {
@@ -122,33 +160,56 @@ export class StatsComponent implements OnInit {
                 pastriesByDate[day] = {};
                 pastriesByDate[day][p.name] = 1;
               }
-            }
-
-            if (p.type === 'pastry') {
               countByPastry[p.name] += 1;
             } else if (p.type === 'drink') {
+              if (drinksByDate.hasOwnProperty(day)) {
+                if (drinksByDate[day].hasOwnProperty(p.name)) {
+                  drinksByDate[day][p.name] += 1;
+                } else {
+                  drinksByDate[day][p.name] = 1;
+                }
+              } else {
+                drinksByDate[day] = {};
+                drinksByDate[day][p.name] = 1;
+              }
               countByDrink[p.name] += 1;
+            }
+
+            if (cashByDate.hasOwnProperty(day)) {
+              if (cashByDate[day].hasOwnProperty(p.name)) {
+                cashByDate[day][p.name] += +p.price;
+              } else {
+                cashByDate[day][p.name] = +p.price;
+              }
+            } else {
+              cashByDate[day] = {};
+              cashByDate[day][p.name] = +p.price;
             }
           });
         });
 
-        this.barChartLabels = Object.keys(pastriesByDate)
+        console.log(cashByDate);
+        const barChartLabels: string[] = Object.keys(pastriesByDate)
           .reverse()
           .map((dateStr) => moment(dateStr).locale('fr').format('dddd DD/MM'));
 
-        this.barChartData = pastries
-          .filter((p) => p.type === 'pastry' && countByPastry[p.name] > 0)
-          .map((p) => {
-            const countList = Object.keys(pastriesByDate)
-              .reverse()
-              .map((date) => {
-                return pastriesByDate[date][p.name] || 0;
-              });
-            return { label: p.name, data: countList };
-          });
+        this.barChartData = {
+          labels: barChartLabels,
+          datasets: pastries
+            .filter((p) => p.type === 'pastry' && countByPastry[p.name] > 0)
+            .map((p) => {
+              const countList = Object.keys(pastriesByDate)
+                .reverse()
+                .map((date) => {
+                  return pastriesByDate[date][p.name] || 0;
+                });
+              return { label: p.name, data: countList };
+            }),
+        };
 
-        this.barChartData2 = [
-          {
+        this.barChartData2 = {
+          labels: barChartLabels,
+          datasets: [{
             label: 'total',
             data: Object.keys(pastriesByDate)
               .reverse()
@@ -156,34 +217,33 @@ export class StatsComponent implements OnInit {
                 return Object.values(pastriesByDate[date]).reduce(
                   (prev, value) => prev + value,
                   0
+                ) + Object.values(drinksByDate[date]).reduce(
+                  (prev, value) => prev + value,
+                  0
                 );
               }),
-          },
-        ];
-
-        this.barChartData = this.barChartData.map((data) => {
-          if (data.label === 'Tarte chocolat quinoa') {
-            return {
-              ...data,
-              backgroundColor: 'rgba(127, 0, 255, 0.4)',
-              hoverBackgroundColor: 'rgba(127, 0, 255, 0.8)',
-            };
-          } else {
-            return {
-              ...data,
-            };
-          }
-        });
+          }, {
+            label: 'cash',
+            data: Object.keys(cashByDate)
+              .reverse()
+              .map((date) => {
+                return Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
+              })
+          }],
+        };
 
         this.pieChartLabels = [
           Object.keys(countByPastry).filter((k) => countByPastry[k] > 0),
           Object.keys(countByDrink).filter((k) => countByDrink[k] > 0),
-        ];
+        ] as string[][];
 
-        this.pieChartData = [
-          Object.values(countByPastry).filter((v) => v > 0),
-          Object.values(countByDrink).filter((v) => v > 0),
-        ];
+        this.pieChartDatasetsPastries = [{
+          data: Object.values(countByPastry).filter((v) => v > 0),
+        }];
+
+        this.pieChartDatasetsDrinks = [{
+          data: Object.values(countByDrink).filter((v) => v > 0),
+        }];
 
         this.pastryTotal = Object.values(countByPastry).reduce(
           (prev, v) => prev + v,
