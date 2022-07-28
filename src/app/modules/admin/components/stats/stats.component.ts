@@ -47,7 +47,7 @@ export class StatsComponent implements OnInit {
       datalabels: {
         formatter: (value: string, ctx: any) => {
           if (ctx.chart.data.labels) {
-            if (window.matchMedia("(max-width: 800px)").matches) {
+            if (window.matchMedia("(max-width: 800px)").matches && +value > 15) {
               return `${ctx.chart.data.labels[ctx.dataIndex]} (${value})`;
             } else {
               return value;
@@ -66,6 +66,7 @@ export class StatsComponent implements OnInit {
   }];
   pieChartLegend = true;
   pieChartPlugins = [DatalabelsPlugin];
+  pieChartType: ChartType = 'pie';
 
   barChartOptions: ChartOptions = {
     responsive: true,
@@ -188,7 +189,6 @@ export class StatsComponent implements OnInit {
           });
         });
 
-        console.log(cashByDate);
         const barChartLabels: string[] = Object.keys(pastriesByDate)
           .reverse()
           .map((dateStr) => moment(dateStr).locale('fr').format('dddd DD/MM'));
