@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { TIPS_ID } from 'src/app/modules/home/store/home.selectors';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-card',
@@ -26,12 +27,14 @@ export class CardComponent implements OnInit {
 
   isStockAvailable = false;
   isTips = false;
+  imageUrl: string = null!;
 
-  constructor(public elem: ElementRef) {}
+  constructor(public elem: ElementRef) { }
 
   ngOnInit(): void {
     this.isTips = TIPS_ID === this.pastry._id;
     this.isStockAvailable = this.pastry.stock !== undefined;
+    this.imageUrl = environment.protocolHttp + environment.api + '/photos/' + this.pastry.imageUrl;
   }
 
   get limitReached(): boolean {

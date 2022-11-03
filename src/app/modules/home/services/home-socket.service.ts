@@ -13,7 +13,7 @@ export class HomeWebSocketService {
   ws!: WebSocket;
 
   createObservableSocket(): Observable<WebSocketData> {
-    this.ws = new WebSocket(`${environment.protocolWs}${environment.api}`);
+    this.ws = new WebSocket(`${environment.protocolWs}${environment.apiWs}/`);
 
     return new Observable((observer) => {
       this.ws.onmessage = (event) => observer.next(event.data);

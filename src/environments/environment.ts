@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   protocolHttp: 'http://',
   protocolWs: 'ws://',
+  apiWs: 'localhost:3000',
   api: 'localhost:3000',
 };
 

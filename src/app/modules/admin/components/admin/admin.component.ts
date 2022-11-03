@@ -140,7 +140,7 @@ export class AdminComponent implements OnInit {
             );
           }
         },
-        (err) => console.log('err'),
+        (err) => console.error(err),
         () => {
           console.log('The observable stream is complete');
         }

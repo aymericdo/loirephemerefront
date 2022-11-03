@@ -211,7 +211,7 @@ export class HomeComponent implements OnInit {
             this.audio.play();
           }
         },
-        (err) => console.log('err'),
+        (err) => console.error(err),
         () => {
           setTimeout(() => {
             this.subscribeToWS();
