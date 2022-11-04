@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 
 export const fetchPastries = createAction('[Home page] Fetch pastries');
@@ -17,7 +17,7 @@ export const decrementPastry = createAction(
 );
 export const sendCommand = createAction(
   '[Home page] Send command',
-  props<{ name: string }>()
+  props<CoreCommand>()
 );
 export const resetCommand = createAction('[Home page] Reset command');
 export const setPersonalCommand = createAction(

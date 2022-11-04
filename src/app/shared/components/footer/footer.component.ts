@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-footer',
@@ -8,15 +7,11 @@ import * as moment from 'moment';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FooterComponent implements OnInit {
-
-  public today: String;
+  today: string;
 
   constructor() {
-    this.today = moment().format('yyyy');
+    this.today = new Date().getFullYear().toString();
   }
 
-  ngOnInit(): void {
-    
-  }
-
+  ngOnInit(): void { }
 }

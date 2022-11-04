@@ -23,7 +23,7 @@ import {
 } from './home.actions';
 import { selectPastries, selectSelectedPastries } from './home.selectors';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 
 @Injectable()
 export class HomeEffects {
@@ -45,8 +45,12 @@ export class HomeEffects {
       withLatestFrom(this.store$.select(selectPastries)),
       withLatestFrom(this.store$.select(selectSelectedPastries)),
       mergeMap(([[action, allPastries], selectedPastries]) => {
+        const { name, takeAway, pickUpTime }: CoreCommand = action;
+
         const command: Command = {
-          name: action.name,
+          name,
+          takeAway,
+          pickUpTime,
           totalPrice: Object.keys(selectedPastries).reduce((prev, pastryId) => {
             const pastry = allPastries.find(
               (p: Pastry) => p._id === pastryId

@@ -1,13 +1,18 @@
 import { Pastry } from './pastry.interface';
 
-export interface Command {
+export interface Command extends CoreCommand {
   _id?: string;
   pastries: Pastry[];
-  name: string;
   totalPrice: number;
   reference?: string;
   createdAt?: string;
   updatedAt?: string;
   isDone?: boolean;
   isPayed?: boolean;
+}
+
+export interface CoreCommand {
+  name: string;
+  takeAway: boolean;
+  pickUpTime?: Date | null;
 }

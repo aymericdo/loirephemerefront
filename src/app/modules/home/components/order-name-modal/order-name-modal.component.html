@@ -1,19 +1,27 @@
-<nz-modal
-  [nzVisible]="true"
-  nzTitle="Veuillez indiquer votre prénom svp"
-  nzCentered
-  (nzOnCancel)="onClickCancel.emit()"
->
+<nz-modal [nzVisible]="true" nzTitle="Information de votre commande svp" nzCentered (nzOnCancel)="onClickCancel.emit()">
   <ng-container *nzModalContent>
-    <input nz-input placeholder="Votre prénom" [(ngModel)]="currentFirstName" />
+    <nz-space nzDirection="vertical">
+      <input *nzSpaceItem nz-input placeholder="Votre prénom" [(ngModel)]="currentFirstName" />
+      <nz-radio-group *nzSpaceItem [(ngModel)]="takeAwayValue">
+        <label nz-radio-button [nzValue]="true">À emporter</label>
+        <label nz-radio-button [nzValue]="false">Sur place</label>
+      </nz-radio-group>
+      <nz-space *nzSpaceItem nzAlign="center">
+        <span *nzSpaceItem>Heure de retrait</span>
+        <nz-switch *nzSpaceItem [(ngModel)]="needPickUpTimeValue" [nzCheckedChildren]="checkedTemplate"
+          [nzUnCheckedChildren]="unCheckedTemplate">
+        </nz-switch>
+        <ng-template #checkedTemplate><span nz-icon nzType="check"></span></ng-template>
+        <ng-template #unCheckedTemplate><span nz-icon nzType="close"></span></ng-template>
+        <nz-time-picker *nzSpaceItem [nzAllowEmpty]="false" [nzDisabled]="!needPickUpTimeValue" [nzMinuteStep]="10"
+          [nzHideDisabledOptions]="true" [nzSecondStep]="60" [(ngModel)]="pickUpTimeValue"
+          [nzDisabledHours]="disabledHours" nzFormat="HH:mm">
+        </nz-time-picker>
+      </nz-space>
+    </nz-space>
   </ng-container>
   <ng-container *nzModalFooter>
-    <button
-      nz-button
-      nzType="primary"
-      (click)="onClickOk.emit(currentFirstName)"
-      [disabled]="!currentFirstName.length"
-    >
+    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="!currentFirstName.length">
       Envoyer
     </button>
   </ng-container>

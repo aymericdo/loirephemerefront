@@ -32,7 +32,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import {
   WebSocketData,
   HomeWebSocketService,
@@ -152,9 +152,9 @@ export class HomeComponent implements OnInit {
     this.store.dispatch(decrementPastry({ pastry }));
   }
 
-  handleClickCommand(name: string): void {
+  handleClickCommand({ name, takeAway, pickUpTime }: CoreCommand): void {
     this.isSuccessModalVisible = true;
-    this.store.dispatch(sendCommand({ name }));
+    this.store.dispatch(sendCommand({ name, takeAway, pickUpTime }));
 
     // Hack for safari
     this.audio = new Audio('assets/sounds/french.mp3');

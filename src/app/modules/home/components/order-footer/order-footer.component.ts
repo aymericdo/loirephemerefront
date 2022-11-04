@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { CoreCommand } from 'src/app/interfaces/command.interface';
 
 @Component({
   selector: 'app-order-footer',
@@ -13,14 +14,14 @@ export class OrderFooterComponent implements OnInit {
   @Input() stockIssue: boolean = false;
   @Input() totalPrice: number = 0;
   @Output() onClickReset = new EventEmitter<string>();
-  @Output() onClickCommand = new EventEmitter<string>();
+  @Output() onClickCommand = new EventEmitter<CoreCommand>();
 
   isOrderModalVisible: boolean = false;
   isUltimateConfirmationVisible: boolean = false;
 
-  constructor(private modal: NzModalService) {}
+  constructor(private modal: NzModalService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   showResetConfirm(): void {
     this.modal.confirm({
@@ -36,8 +37,8 @@ export class OrderFooterComponent implements OnInit {
     });
   }
 
-  handleClickConfirm(currentFirstName: string): void {
+  handleClickConfirm({ name, takeAway, pickUpTime }: CoreCommand): void {
     this.isUltimateConfirmationVisible = false;
-    this.onClickCommand.emit(currentFirstName);
+    this.onClickCommand.emit({ name, takeAway, pickUpTime });
   }
 }

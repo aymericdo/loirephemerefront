@@ -17,8 +17,13 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+
 
 @NgModule({
   exports: [
@@ -41,7 +46,11 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
     NzInputModule,
     NzResultModule,
     NzModalModule,
+    NzRadioModule,
+    NzSpaceModule,
+    NzTimePickerModule,
+    NzSwitchModule,
   ],
   declarations: [],
 })
-export class NgZorroModule {}
+export class NgZorroModule { }
