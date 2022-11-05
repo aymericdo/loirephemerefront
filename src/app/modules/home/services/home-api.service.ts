@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Command } from 'src/app/interfaces/command.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,15 +17,15 @@ export class HomeApiService {
     this.protocolHttp = environment.protocolHttp;
   }
 
-  getAll(): Observable<any> {
-    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries`);
+  getAll(): Observable<Pastry[]> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/displayable`) as Observable<Pastry[]>;
   }
 
-  postCommand(command: Command): Observable<any> {
+  postCommand(command: Command): Observable<Command> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/commands`,
       command
-    );
+    ) as Observable<Command>;
   }
 
   postSub(commandId: string, sub: any): Observable<any> {

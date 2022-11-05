@@ -17,11 +17,13 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { NewRestaurantComponentComponent } from './new-restaurant-component/new-restaurant-component.component';
+import { NewRestaurantComponent } from './new-restaurant/new-restaurant.component';
 
 registerLocaleData(fr, 'fr');
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, NewRestaurantComponentComponent, NewRestaurantComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
