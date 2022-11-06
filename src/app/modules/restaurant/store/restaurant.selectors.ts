@@ -13,3 +13,8 @@ export const selectIsLoading = createSelector(
   selectFeature,
   (state: RestaurantState) => state.loading
 );
+
+export const selectNameError = createSelector(
+  selectFeature,
+  (state: RestaurantState) => state.nameError
+);

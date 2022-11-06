@@ -4,14 +4,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './restaurant.component.html',
   styleUrls: ['./restaurant.component.scss'],
 })
-export class RestaurantComponent implements OnInit {
-
+export class RestaurantComponent {
   constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
   }
 }

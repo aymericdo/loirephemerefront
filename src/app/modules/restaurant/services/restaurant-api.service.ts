@@ -26,4 +26,10 @@ export class RestaurantApiService {
       restaurant
     ) as Observable<Restaurant>;
   }
+
+  validateRestaurantName(name: string): Observable<boolean> {
+    return this.http.get(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/validate?name=${name}`,
+    ) as Observable<boolean>;
+  }
 }

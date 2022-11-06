@@ -1,21 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { Observable, Observer } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { debounceTime, distinctUntilChanged, filter, Observable, ReplaySubject, take, tap } from 'rxjs';
+import { AppState } from 'src/app/store/app.state';
+import { validateNameRestaurant } from '../../store/restaurant.actions';
+import { selectNameError } from '../../store/restaurant.selectors';
 
 @Component({
   selector: 'app-new-restaurant',
   templateUrl: './new-restaurant.component.html',
   styleUrls: ['./new-restaurant.component.scss']
 })
-export class NewRestaurantComponent implements OnInit {
-  validateForm: UntypedFormGroup;
+export class NewRestaurantComponent implements OnInit, OnDestroy {
+  validateForm!: UntypedFormGroup;
+  nameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
 
-  constructor(private fb: UntypedFormBuilder) { }
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
+    this.nameError$ = this.store.select(selectNameError);
+
     this.validateForm = this.fb.group({
       name: ['', [Validators.required], [this.restaurantNameAsyncValidator]],
     });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   submitForm(): void {
@@ -34,15 +48,8 @@ export class NewRestaurantComponent implements OnInit {
   }
 
   restaurantNameAsyncValidator = (control: UntypedFormControl) => {
-    return new Observable((observer: Observer<ValidationErrors | null>) => {
-      setTimeout(() => {
-        if (control.value === 'JasonWood') {
-          observer.next({ error: true, duplicated: true });
-        } else {
-          observer.next(null);
-        }
-        observer.complete();
-      }, 1000);
-    });
-  }
+    this.store.dispatch(validateNameRestaurant({ name: control.value }));
+
+    return this.nameError$.pipe(take(2));
+  };
 }

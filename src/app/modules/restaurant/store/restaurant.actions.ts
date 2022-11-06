@@ -14,3 +14,14 @@ export const createRestaurant = createAction(
   '[Restaurant page] Create restaurant',
   props<{ name: string }>()
 );
+export const validateNameRestaurant = createAction(
+  '[Restaurant page] Validate name restaurant',
+  props<{ name: string }>()
+);
+export const setNameError = createAction(
+  '[Restaurant page] Set name error',
+  props<{ error: boolean, duplicated: boolean }>()
+);
+export const setNoNameError = createAction(
+  '[Restaurant page] Set no name error',
+);

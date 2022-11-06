@@ -6,8 +6,6 @@ import { AdminComponent } from './modules/admin/components/admin/admin.component
 import { StatsComponent } from './modules/admin/components/stats/stats.component';
 import { HomeComponent } from './modules/home/components/home/home.component';
 import { LoginComponent } from './modules/login/components/login/login.component';
-import { NewRestaurantComponent } from './modules/restaurant/components/new-restaurant/new-restaurant.component';
-import { RestaurantComponent } from './modules/restaurant/components/restaurant.component';
 
 const routes: Routes = [
   {
@@ -44,15 +42,8 @@ const routes: Routes = [
   },
   {
     path: 'restaurant',
-    component: RestaurantComponent,
     loadChildren: () =>
       import('./modules/restaurant/restaurant.module').then((m) => m.RestaurantModule),
-    children: [
-      {
-        path: '/new',
-        component: NewRestaurantComponent,
-      }
-    ]
   },
   { path: '**', redirectTo: '' },
 ];
