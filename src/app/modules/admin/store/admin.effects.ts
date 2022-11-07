@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
 import { map, mergeMap, catchError, switchMap } from 'rxjs/operators';
-import { RESTO_TEST } from 'src/app/app-routing.module';
+import { HomeApiService } from '../../home/services/home-api.service';
+import { setRestaurant } from '../../home/store/home.actions';
 import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
 import { AdminApiService } from '../services/admin-api.service';
 import {
@@ -14,8 +15,9 @@ import {
   sendNotificationSub,
   payedCommand,
   fetchRestaurant,
-  setRestaurant,
   fetchRestaurantCommands,
+  fetchAllRestaurantPastries,
+  setAllPastries,
 } from './admin.actions';
 
 @Injectable()
@@ -97,7 +99,7 @@ export class AdminEffects {
           }),
           catchError((error) => {
             if (error.status === 404) {
-              this.router.navigate(['/', RESTO_TEST, 'admin']);
+              this.router.navigate(['page', '404']);
             }
 
             return EMPTY;
@@ -107,9 +109,22 @@ export class AdminEffects {
     )
   );
 
+  fetchAllRestaurantPastries$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchAllRestaurantPastries),
+      mergeMap((action) => {
+        return this.homeApiService.getAllPastries(action.code).pipe(
+          map((pastries) => setAllPastries({ pastries })),
+          catchError(() => EMPTY)
+        );
+      })
+    )
+  );
+
   constructor(
     private actions$: Actions,
     private router: Router,
+    private homeApiService: HomeApiService,
     private adminApiService: AdminApiService,
     private restaurantApiService: RestaurantApiService,
   ) { }

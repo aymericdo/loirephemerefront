@@ -1,36 +1,43 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { commandsMock } from 'src/app/mocks/commands.mock';
+import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   addCommand,
   editCommand,
   setCommands,
-  fetchCommands,
-  setRestaurant,
   fetchRestaurantCommands,
   fetchRestaurant,
+  setAllPastries,
+  fetchAllRestaurantPastries,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
 
 export interface AdminState {
+  allPastries: Pastry[];
   commands: Command[];
   loading: boolean;
-  restaurant: Restaurant | null;
 }
 
 export const initialState: AdminState = {
+  allPastries: pastriesMock,
   commands: commandsMock,
   loading: false,
-  restaurant: null,
 };
 
 const adminReducer = createReducer(
   initialState,
-  on(fetchRestaurant, fetchCommands, fetchRestaurantCommands, (state) => ({
+  on(fetchAllRestaurantPastries, fetchRestaurant, fetchRestaurantCommands, (state) => ({
     ...state,
     loading: true,
+  })),
+  on(setAllPastries, (state, { pastries }) => ({
+    ...state,
+    allPastries: [...pastries],
+    loading: false,
   })),
   on(setCommands, (state, { commands }) => ({
     ...state,
@@ -51,10 +58,6 @@ const adminReducer = createReducer(
       commands: newList,
     };
   }),
-  on(setRestaurant, (state, { restaurant }) => ({
-    ...state,
-    restaurant: { ...restaurant },
-  }))
 );
 
 export function reducer(state: AdminState | undefined, action: Action) {

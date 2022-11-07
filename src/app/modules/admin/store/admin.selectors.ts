@@ -55,7 +55,7 @@ export const selectIsLoading = createSelector(
   (state: AdminState) => state.loading
 );
 
-export const selectRestaurant = createSelector(
+export const selectAllPastries = createSelector(
   selectFeature,
-  (state: AdminState) => state.restaurant
+  (state: AdminState) => state.allPastries
 );

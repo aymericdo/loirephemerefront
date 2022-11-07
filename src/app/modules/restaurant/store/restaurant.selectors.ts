@@ -9,11 +9,6 @@ export const selectRestaurants = createSelector(
   (state: RestaurantState) => state.restaurants
 );
 
-export const selectRestaurant = createSelector(
-  selectFeature,
-  (state: RestaurantState) => state.restaurant
-);
-
 export const selectIsLoading = createSelector(
   selectFeature,
   (state: RestaurantState) => state.loading

@@ -15,14 +15,12 @@ export const restaurantFeatureKey = 'restaurant';
 
 export interface RestaurantState {
   restaurants: Restaurant[];
-  restaurant: Restaurant | null;
   nameError: { error: boolean, duplicated: boolean } | null | undefined;
   loading: boolean;
 }
 
 export const initialState: RestaurantState = {
   restaurants: restaurantsMock,
-  restaurant: null,
   nameError: undefined,
   loading: false,
 };

@@ -1,37 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
-import { fetchCommands } from '../../store/admin.actions';
+import { fetchAllRestaurantPastries, fetchRestaurantCommands } from '../../store/admin.actions';
 import {
   selectIsLoading,
   selectPayedCommands,
   selectTotalPayedCommands,
+  selectAllPastries,
 } from '../../store/admin.selectors';
 import {
   ChartOptions,
   ChartType,
 } from 'chart.js';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import {
-  selectAllPastries,
-} from 'src/app/modules/home/store/home.selectors';
-import { fetchPastries } from 'src/app/modules/home/store/home.actions';
+import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import DatalabelsPlugin from 'chartjs-plugin-datalabels';
 import { ChartConfiguration } from 'chart.js';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.scss'],
 })
-export class StatsComponent implements OnInit {
+export class StatsComponent implements OnInit, OnDestroy {
   payedCommands$: Observable<Command[]>;
   totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
   pastries$: Observable<Pastry[]>;
+  restaurant$: Observable<Restaurant | null>;
 
   pastryTotal: number = 0;
   drinkTotal: number = 0;
@@ -110,6 +110,7 @@ export class StatsComponent implements OnInit {
 
   years: string[] = [];
   currentYear: string = new Date().getFullYear().toString();
+  currentRestaurant: Restaurant | null = null;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -118,6 +119,7 @@ export class StatsComponent implements OnInit {
     this.totalPayedCommands$ = this.store.select(selectTotalPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
     this.pastries$ = this.store.select(selectAllPastries);
+    this.restaurant$ = this.store.select(selectRestaurant);
   }
 
   ngOnInit(): void {
@@ -125,8 +127,14 @@ export class StatsComponent implements OnInit {
       length: +this.currentYear - 2021 + 1
     }, (v, k) => k + 2021).map((year) => year.toString());
 
-    this.store.dispatch(fetchCommands({ year: this.currentYear }));
-    this.store.dispatch(fetchPastries());
+    this.restaurant$.pipe(
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe((restaurant) => {
+      this.currentRestaurant = restaurant;
+      this.store.dispatch(fetchRestaurantCommands({ code: restaurant.code, year: this.currentYear }));
+      this.store.dispatch(fetchAllRestaurantPastries({ code: restaurant.code }));
+    })
 
     combineLatest([this.payedCommands$, this.pastries$])
       .pipe(
@@ -281,7 +289,7 @@ export class StatsComponent implements OnInit {
   }
 
   currentYearChange() {
-    this.store.dispatch(fetchCommands({ year: this.currentYear }));
+    this.store.dispatch(fetchRestaurantCommands({ code: this.currentRestaurant?.code!, year: this.currentYear }));
   }
 
   ngOnDestroy() {

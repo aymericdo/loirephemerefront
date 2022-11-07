@@ -3,7 +3,6 @@ import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
-export const fetchPastries = createAction('[Home page] Fetch pastries');
 export const fetchRestaurantPastries = createAction(
   '[Home page] Fetch pastries for a restaurant',
   props<{ code: string }>()

@@ -1,28 +1,35 @@
 <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
-    <li nz-menu-item [nzSelected]="isHome()">
-      <a [routerLink]="['/']">
+    <li nz-menu-item [nzSelected]="routeName === 'home'">
+      <a [routerLink]="[restaurantCode]">
         <i nz-icon nzType="heart"></i>
         <span>Pâtisseries</span>
       </a>
     </li>
     <li nz-menu-item [nzMatchRouter]="true">
-      <a [routerLink]="['/about']">
+      <a [routerLink]="['page', 'about']">
         <i nz-icon nzType="question"></i>
         <span>À propos</span>
       </a>
     </li>
-    <li *ngIf="restaurantCode" nz-submenu nzTitle="Admin" nzIcon="lock">
+    <li nz-menu-item [nzMatchRouter]="true">
+      <a [routerLink]="['page', 'restaurant', 'new']">
+        <i nz-icon nzType="coffee"></i>
+        <span>Restaurant</span>
+      </a>
+    </li>
+    <li *ngIf="restaurantCode" nz-submenu [nzOpen]="!isCollapsed"
+    (nzOpenChange)="toggleCollapsed()" nzTitle="Admin" nzIcon="lock">
       <ul>
-        <li nz-menu-item [nzMatchRouter]="true">
-          <a [routerLink]="['/', restaurantCode, 'admin', 'commands']">
+        <li nz-menu-item [nzSelected]="routeName === 'commands'">
+          <a [routerLink]="[restaurantCode, 'admin', 'commands']">
             <i nz-icon nzType="shopping-cart"></i>
             <span>Commandes</span>
           </a>
         </li>
-        <li nz-menu-item [nzMatchRouter]="true">
-          <a [routerLink]="['/', restaurantCode, 'admin', 'stats']">
+        <li nz-menu-item [nzSelected]="routeName === 'stats'">
+          <a [routerLink]="[restaurantCode, 'admin', 'stats']">
             <i nz-icon nzType="pie-chart"></i>
             <span>Stats</span>
           </a>

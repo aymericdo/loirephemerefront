@@ -1,18 +1,22 @@
 import { createAction, props } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
 
+export const fetchAllRestaurantPastries = createAction(
+  '[Admin page] Fetch all pastries for a restaurant',
+  props<{ code: string }>()
+);
 export const fetchRestaurantCommands = createAction(
   '[Admin page] Fetch commands for a restaurant',
   props<{ code: string, year: string }>()
 );
-export const fetchCommands = createAction(
-  '[Admin page] Fetch commands',
-  props<{ year: string }>()
-);
 export const setCommands = createAction(
   '[Admin page] Set commands',
   props<{ commands: Command[] }>()
+);
+export const setAllPastries = createAction(
+  '[Admin page] Set all pastries',
+  props<{ pastries: Pastry[] }>()
 );
 export const addCommand = createAction(
   '[Admin page] Add command',
@@ -39,8 +43,4 @@ export const notificationSubSent = createAction(
 );
 export const fetchRestaurant = createAction('[Admin page] Fetch restaurant',
   props<{ code: string }>()
-);
-export const setRestaurant = createAction(
-  '[Admin page] Set restaurant',
-  props<{ restaurant: Restaurant }>()
 );

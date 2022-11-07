@@ -8,12 +8,10 @@ import {
   catchError,
   withLatestFrom,
   switchMap,
-  filter,
 } from 'rxjs/operators';
 import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
-  fetchPastries,
   fetchRestaurant,
   fetchRestaurantPastries,
   notificationSubSent,
@@ -29,7 +27,6 @@ import { selectPastries, selectRestaurant, selectSelectedPastries } from './home
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
-import { RESTO_TEST } from 'src/app/app-routing.module';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -38,7 +35,7 @@ export class HomeEffects {
     this.actions$.pipe(
       ofType(fetchRestaurantPastries),
       mergeMap((action) => {
-        return this.homeApiService.getAll(action.code).pipe(
+        return this.homeApiService.getPastries(action.code).pipe(
           map((pastries) => setPastries({ pastries })),
           catchError(() => EMPTY)
         );
@@ -51,7 +48,8 @@ export class HomeEffects {
       ofType(sendCommand),
       withLatestFrom(this.store$.select(selectPastries)),
       withLatestFrom(this.store$.select(selectSelectedPastries)),
-      mergeMap(([[action, allPastries], selectedPastries]) => {
+      withLatestFrom(this.store$.select(selectRestaurant)),
+      mergeMap(([[[action, allPastries], selectedPastries], restaurant]) => {
         const { name, takeAway, pickUpTime }: CoreCommand = action;
 
         const command: Command = {
@@ -84,7 +82,7 @@ export class HomeEffects {
           switchMap((command) => {
             return [setPersonalCommand({ command }), resetCommand()];
           }),
-          catchError((error) => [fetchPastries(), setErrorCommand({ error })])
+          catchError((error) => [fetchRestaurantPastries({ code: restaurant?.code! }), setErrorCommand({ error })])
         );
       })
     )
@@ -100,7 +98,7 @@ export class HomeEffects {
           }),
           catchError((error) => {
             if (error.status === 404) {
-              this.router.navigate(['/', RESTO_TEST]);
+              this.router.navigate(['page', '404']);
             }
 
             return EMPTY;

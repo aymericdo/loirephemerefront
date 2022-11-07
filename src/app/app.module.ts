@@ -18,11 +18,12 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { RouterModule } from '@angular/router';
+import { FourOhFourComponent } from './shared/components/four-oh-four/four-oh-four.component';
 
 registerLocaleData(fr, 'fr');
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, FourOhFourComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

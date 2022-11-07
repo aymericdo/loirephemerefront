@@ -7,8 +7,6 @@ import {
   addCommand,
   closeCommand,
   editCommand,
-  fetchCommands,
-  fetchRestaurant,
   payedCommand,
   sendNotificationSub,
 } from 'src/app/modules/admin/store/admin.actions';
@@ -62,12 +60,6 @@ export class CommandsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      if (params.get('code')) {
-        this.store.dispatch(fetchRestaurant({ code: params.get('code')! }));
-      }
-    })
-
     this.route.queryParams.subscribe((params) => {
       if (!params['tab']) {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'ongoing' } });

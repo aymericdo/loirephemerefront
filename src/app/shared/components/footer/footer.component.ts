@@ -6,12 +6,10 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   today: string;
 
   constructor() {
     this.today = new Date().getFullYear().toString();
   }
-
-  ngOnInit(): void { }
 }
