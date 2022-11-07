@@ -29,11 +29,7 @@ export const initialState: RestaurantState = {
 
 const restaurantReducer = createReducer(
   initialState,
-  on(createRestaurant, (state) => ({
-    ...state,
-    loading: true,
-  })),
-  on(fetchRestaurants, (state) => ({
+  on(createRestaurant, fetchRestaurants, validateNameRestaurant, (state) => ({
     ...state,
     loading: true,
   })),
@@ -54,10 +50,12 @@ const restaurantReducer = createReducer(
   on(setNameError, (state, { error, duplicated  }) => ({
     ...state,
     nameError: { error, duplicated  },
+    loading: false,
   })),
   on(setNoNameError, (state) => ({
     ...state,
     nameError: null,
+    loading: false,
   })),
 );
 

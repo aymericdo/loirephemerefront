@@ -8,6 +8,7 @@ import {
   closeCommand,
   editCommand,
   fetchCommands,
+  fetchRestaurant,
   payedCommand,
   sendNotificationSub,
 } from 'src/app/modules/admin/store/admin.actions';
@@ -29,11 +30,11 @@ import { SwPush } from '@angular/service-worker';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  templateUrl: './admin.component.html',
+  templateUrl: './commands.component.html',
+  styleUrls: ['./commands.component.scss'],
   providers: [AdminWebSocketService],
-  styleUrls: ['./admin.component.scss'],
 })
-export class AdminComponent implements OnInit {
+export class CommandsComponent implements OnInit {
   onGoingCommands$: Observable<Command[]>;
   pastCommands$: Observable<Command[]>;
   payedCommands$: Observable<Command[]>;
@@ -61,11 +62,15 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(fetchCommands({ year: new Date().getFullYear().toString() }));
+    this.route.paramMap.subscribe(params => {
+      if (params.get('code')) {
+        this.store.dispatch(fetchRestaurant({ code: params.get('code')! }));
+      }
+    })
 
     this.route.queryParams.subscribe((params) => {
       if (!params['tab']) {
-        this.router.navigate(['admin'], { queryParams: { tab: 'ongoing' } });
+        this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'ongoing' } });
       }
     });
 

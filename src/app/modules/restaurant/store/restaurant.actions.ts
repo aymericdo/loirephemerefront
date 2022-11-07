@@ -6,8 +6,15 @@ export const setRestaurants = createAction(
   '[Restaurant page] Set restaurants',
   props<{ restaurants: Restaurant[] }>()
 );
+export const fetchRestaurant = createAction('[Restaurant page] Fetch restaurant',
+  props<{ code: string }>()
+);
 export const setNewRestaurant = createAction(
   '[Restaurant page] Set new restaurant',
+  props<{ restaurant: Restaurant }>()
+);
+export const setRestaurant = createAction(
+  '[Restaurant page] Set restaurant',
   props<{ restaurant: Restaurant }>()
 );
 export const createRestaurant = createAction(

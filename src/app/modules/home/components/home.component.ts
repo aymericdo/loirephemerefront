@@ -13,11 +13,11 @@ import { AppState } from 'src/app/store/app.state';
 import {
   incrementPastry,
   decrementPastry,
-  fetchPastries,
   sendCommand,
   resetCommand,
   setStock,
   sendNotificationSub,
+  fetchRestaurant,
 } from 'src/app/modules/home/store/home.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
@@ -28,10 +28,11 @@ import {
   selectIsStockIssue,
   selectPastries,
   selectPersonalCommand,
+  selectRestaurant,
   selectSelectedPastries,
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import {
@@ -41,16 +42,18 @@ import {
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from 'src/environments/environment';
 import { SwPush } from '@angular/service-worker';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
   templateUrl: './home.component.html',
-  providers: [HomeWebSocketService],
   styleUrls: ['./home.component.scss'],
+  providers: [HomeWebSocketService],
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('scrollframe', { static: false }) scrollFrame!: ElementRef;
   @ViewChildren('item') itemElements!: QueryList<any>;
 
+  restaurant$: Observable<Restaurant | null>;
   pastries$: Observable<Pastry[]>;
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
   hasSelectedPastries$: Observable<boolean>;
@@ -72,11 +75,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private store: Store<AppState>,
+    private route: ActivatedRoute,
     private router: Router,
     private wsService: HomeWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush
   ) {
+    this.restaurant$ = this.store.select(selectRestaurant);
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
     this.totalPrice$ = this.store.select(selectTotalPrice);
@@ -88,7 +93,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(fetchPastries());
+    this.route.paramMap.subscribe(params => {
+      this.store.dispatch(fetchRestaurant({ code: params.get('code')! }));
+    })
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))

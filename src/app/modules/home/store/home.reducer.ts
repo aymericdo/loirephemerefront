@@ -1,16 +1,20 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   decrementPastry,
   fetchPastries,
+  fetchRestaurant,
+  fetchRestaurantPastries,
   incrementPastry,
   resetCommand,
   sendCommand,
   setErrorCommand,
   setPastries,
   setPersonalCommand,
+  setRestaurant,
   setStock,
 } from './home.actions';
 
@@ -22,6 +26,7 @@ export interface HomeState {
   personalCommand: Command | null;
   errorCommand: Object | null;
   loading: boolean;
+  restaurant: Restaurant | null;
 }
 
 export const initialState: HomeState = {
@@ -30,11 +35,12 @@ export const initialState: HomeState = {
   personalCommand: null,
   errorCommand: null,
   loading: false,
+  restaurant: null,
 };
 
 const homeReducer = createReducer(
   initialState,
-  on(fetchPastries, (state) => ({
+  on(fetchRestaurant, fetchPastries, fetchRestaurantPastries, (state) => ({
     ...state,
     loading: true,
   })),
@@ -45,7 +51,7 @@ const homeReducer = createReducer(
   })),
   on(setStock, (state, { pastryId, newStock }) => {
     const indexOf = state.pastries.findIndex((p) => p._id === pastryId);
-    const newList = [...state.pastries];
+    const newList: Pastry[] = [...state.pastries];
 
     const editedPastry: Pastry = {
       ...(state.pastries.find((p) => p._id === pastryId) as Pastry),
@@ -104,6 +110,10 @@ const homeReducer = createReducer(
   on(setErrorCommand, (state, { error }) => ({
     ...state,
     errorCommand: error.error,
+  })),
+  on(setRestaurant, (state, { restaurant }) => ({
+    ...state,
+    restaurant: { ...restaurant },
   }))
 );
 

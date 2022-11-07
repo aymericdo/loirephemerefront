@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CoreRestaurant, Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,8 @@ export class RestaurantApiService {
     this.protocolHttp = environment.protocolHttp;
   }
 
-  getAll(): Observable<any> {
-    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/displayable`);
+  getAll(): Observable<Restaurant> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/displayable`) as Observable<Restaurant>;
   }
 
   postRestaurant(restaurant: CoreRestaurant): Observable<Restaurant> {
@@ -31,5 +32,11 @@ export class RestaurantApiService {
     return this.http.get(
       `${this.protocolHttp}${this.baseUrl}/restaurants/validate?name=${name}`,
     ) as Observable<boolean>;
+  }
+
+  getRestaurant(code: string): Observable<Restaurant> {
+    return this.http.get(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}`,
+    ) as Observable<Restaurant>;
   }
 }

@@ -1,18 +1,30 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavComponent implements OnInit {
   isCollapsed = false;
+  restaurantCode: string | null = null;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+  ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.router.events
+      .pipe(
+        filter(e => (e instanceof ActivationEnd) && (Object.keys(e.snapshot.params).length > 0)),
+        map(e => e instanceof ActivationEnd ? e.snapshot.params : {})
+      )
+      .subscribe(params => {
+        this.restaurantCode = params.code;
+      });
+  }
 
   toggleCollapsed(): void {
     this.isCollapsed = !this.isCollapsed;

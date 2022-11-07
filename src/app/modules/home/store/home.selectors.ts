@@ -76,3 +76,8 @@ export const selectTotalPrice = createSelector(
       0
     )
 );
+
+export const selectRestaurant = createSelector(
+  selectFeature,
+  (state: HomeState) => state.restaurant
+);

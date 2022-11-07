@@ -15,9 +15,9 @@ export class AdminApiService {
     this.protocolHttp = environment.protocolHttp;
   }
 
-  getAll(token: string, year = new Date().getFullYear().toString()): Observable<any> {
+  getCommandsByCode(token: string, code: string, year = new Date().getFullYear().toString()): Observable<any> {
     const headers = { password: token };
-    return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands?year=${year}`, {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}?year=${year}`, {
       headers,
     });
   }

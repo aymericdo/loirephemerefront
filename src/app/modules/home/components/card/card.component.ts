@@ -22,22 +22,24 @@ export class CardComponent implements OnInit {
   @Input() count: number = 0;
   @Input() isLoading: boolean = false;
 
-  @Output() onClickPlus = new EventEmitter<number>();
-  @Output() onClickMinus = new EventEmitter<string>();
+  @Output() clickPlus = new EventEmitter<number>();
+  @Output() clickMinus = new EventEmitter<string>();
 
   isStockAvailable = false;
   isTips = false;
-  imageUrl: string = null!;
+  imageUrl: string | null = null;
 
   constructor(public elem: ElementRef) { }
 
   ngOnInit(): void {
     this.isTips = TIPS_ID === this.pastry._id;
     this.isStockAvailable = this.pastry.stock !== undefined;
-    this.imageUrl = environment.protocolHttp + environment.api + '/photos/' + this.pastry.imageUrl;
+    this.imageUrl = this.pastry.imageUrl ?
+      environment.protocolHttp + environment.api + '/photos/' + this.pastry.imageUrl :
+      null;
   }
 
-  get limitReached(): boolean {
+  get maxLimitReached(): boolean {
     if (!this.isStockAvailable) return false;
     return this.count >= this.pastry.stock;
   }

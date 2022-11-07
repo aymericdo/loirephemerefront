@@ -17,8 +17,8 @@ export class HomeApiService {
     this.protocolHttp = environment.protocolHttp;
   }
 
-  getAll(): Observable<Pastry[]> {
-    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/displayable`) as Observable<Pastry[]>;
+  getAll(restaurantCode: string): Observable<Pastry[]> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/by-code/${restaurantCode}`) as Observable<Pastry[]>;
   }
 
   postCommand(command: Command): Observable<Command> {

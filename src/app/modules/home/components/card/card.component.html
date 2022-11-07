@@ -26,14 +26,14 @@
   </nz-skeleton>
 </nz-card>
 <ng-template #coverTemplate>
-  <img *ngIf="!isLoading" [alt]="'example-' + pastry.name" [src]="imageUrl" />
+  <img *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl" />
 </ng-template>
 <ng-template #actionCount>
   <span *ngIf=" !!count">{{ count }}</span>
 </ng-template>
 <ng-template #actionPlus>
-  <i nz-icon nzType="plus" (click)="!limitReached && !isLoading && onClickPlus.emit(count)"></i>
+  <i nz-icon nzType="plus" (click)="!maxLimitReached && !isLoading && clickPlus.emit(count)"></i>
 </ng-template>
 <ng-template #actionMinus>
-  <i nz-icon nzType="minus" (click)="!isLoading && onClickMinus.emit()"></i>
+  <i nz-icon nzType="minus" (click)="count > 0 && !isLoading && clickMinus.emit()"></i>
 </ng-template>

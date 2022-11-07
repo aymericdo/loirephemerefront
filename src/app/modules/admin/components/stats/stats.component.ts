@@ -202,7 +202,7 @@ export class StatsComponent implements OnInit {
 
         const barChartLabels: string[] = Object.keys(pastriesByDate)
           .reverse()
-          .map((dateStr) => moment(dateStr).locale('fr').format('dddd DD/MM'));
+          .map((dateStr) => moment(dateStr, 'YYYY/MM/DD').locale('fr').format('dddd DD/MM'));
 
         this.barChartData = {
           labels: barChartLabels,

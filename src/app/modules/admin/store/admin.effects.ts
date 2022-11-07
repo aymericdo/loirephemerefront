@@ -2,26 +2,30 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { map, mergeMap, catchError, switchMap } from 'rxjs/operators';
+import { RESTO_TEST } from 'src/app/app-routing.module';
+import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
 import { AdminApiService } from '../services/admin-api.service';
 import {
   closeCommand,
   editCommand,
-  fetchCommands,
   setCommands,
   notificationSubSent,
   sendNotificationSub,
   payedCommand,
+  fetchRestaurant,
+  setRestaurant,
+  fetchRestaurantCommands,
 } from './admin.actions';
 
 @Injectable()
 export class AdminEffects {
-  fetchCommands$ = createEffect(() =>
+  fetchRestaurantCommands$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchCommands),
+      ofType(fetchRestaurantCommands),
       mergeMap((action) => {
         const token = localStorage.getItem('token') as string;
-        return this.adminApiService.getAll(token, action.year).pipe(
+        return this.adminApiService.getCommandsByCode(token, action.code, action.year).pipe(
           map((commands) => setCommands({ commands })),
           catchError(() => {
             localStorage.removeItem('token');
@@ -83,9 +87,30 @@ export class AdminEffects {
     )
   );
 
+  fetchRestaurant$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchRestaurant),
+      mergeMap((action: { code: string }) => {
+        return this.restaurantApiService.getRestaurant(action.code).pipe(
+          switchMap((restaurant) => {
+            return [setRestaurant({ restaurant }), fetchRestaurantCommands({ code: restaurant.code, year: new Date().getFullYear().toString() })];
+          }),
+          catchError((error) => {
+            if (error.status === 404) {
+              this.router.navigate(['/', RESTO_TEST, 'admin']);
+            }
+
+            return EMPTY;
+          })
+        );
+      })
+    )
+  );
+
   constructor(
     private actions$: Actions,
     private router: Router,
-    private adminApiService: AdminApiService
+    private adminApiService: AdminApiService,
+    private restaurantApiService: RestaurantApiService,
   ) { }
 }

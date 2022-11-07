@@ -1,11 +1,15 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { commandsMock } from 'src/app/mocks/commands.mock';
 import {
   addCommand,
   editCommand,
   setCommands,
   fetchCommands,
+  setRestaurant,
+  fetchRestaurantCommands,
+  fetchRestaurant,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -13,16 +17,18 @@ export const adminFeatureKey = 'admin';
 export interface AdminState {
   commands: Command[];
   loading: boolean;
+  restaurant: Restaurant | null;
 }
 
 export const initialState: AdminState = {
   commands: commandsMock,
   loading: false,
+  restaurant: null,
 };
 
 const adminReducer = createReducer(
   initialState,
-  on(fetchCommands, (state) => ({
+  on(fetchRestaurant, fetchCommands, fetchRestaurantCommands, (state) => ({
     ...state,
     loading: true,
   })),
@@ -44,7 +50,11 @@ const adminReducer = createReducer(
       ...state,
       commands: newList,
     };
-  })
+  }),
+  on(setRestaurant, (state, { restaurant }) => ({
+    ...state,
+    restaurant: { ...restaurant },
+  }))
 );
 
 export function reducer(state: AdminState | undefined, action: Action) {

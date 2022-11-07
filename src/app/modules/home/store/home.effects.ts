@@ -8,11 +8,14 @@ import {
   catchError,
   withLatestFrom,
   switchMap,
+  filter,
 } from 'rxjs/operators';
 import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
   fetchPastries,
+  fetchRestaurant,
+  fetchRestaurantPastries,
   notificationSubSent,
   resetCommand,
   sendCommand,
@@ -20,18 +23,22 @@ import {
   setErrorCommand,
   setPastries,
   setPersonalCommand,
+  setRestaurant,
 } from './home.actions';
-import { selectPastries, selectSelectedPastries } from './home.selectors';
+import { selectPastries, selectRestaurant, selectSelectedPastries } from './home.selectors';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
+import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
+import { RESTO_TEST } from 'src/app/app-routing.module';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class HomeEffects {
-  fetchPastries$ = createEffect(() =>
+  fetchRestaurantPastries$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchPastries),
-      mergeMap(() => {
-        return this.homeApiService.getAll().pipe(
+      ofType(fetchRestaurantPastries),
+      mergeMap((action) => {
+        return this.homeApiService.getAll(action.code).pipe(
           map((pastries) => setPastries({ pastries })),
           catchError(() => EMPTY)
         );
@@ -83,6 +90,26 @@ export class HomeEffects {
     )
   );
 
+  fetchRestaurant$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchRestaurant),
+      mergeMap((action: { code: string }) => {
+        return this.restaurantApiService.getRestaurant(action.code).pipe(
+          switchMap((restaurant) => {
+            return [setRestaurant({ restaurant }), fetchRestaurantPastries({ code: restaurant.code })];
+          }),
+          catchError((error) => {
+            if (error.status === 404) {
+              this.router.navigate(['/', RESTO_TEST]);
+            }
+
+            return EMPTY;
+          })
+        );
+      })
+    )
+  );
+
   sendNotificationSub$ = createEffect(() =>
     this.actions$.pipe(
       ofType(sendNotificationSub),
@@ -98,6 +125,8 @@ export class HomeEffects {
   constructor(
     private actions$: Actions,
     private store$: Store<AppState>,
-    private homeApiService: HomeApiService
+    private homeApiService: HomeApiService,
+    private restaurantApiService: RestaurantApiService,
+    private router: Router,
   ) { }
 }

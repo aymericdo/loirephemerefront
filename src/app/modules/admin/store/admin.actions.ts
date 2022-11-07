@@ -1,6 +1,11 @@
 import { createAction, props } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
+export const fetchRestaurantCommands = createAction(
+  '[Admin page] Fetch commands for a restaurant',
+  props<{ code: string, year: string }>()
+);
 export const fetchCommands = createAction(
   '[Admin page] Fetch commands',
   props<{ year: string }>()
@@ -31,4 +36,11 @@ export const sendNotificationSub = createAction(
 );
 export const notificationSubSent = createAction(
   '[Admin page] Notification sub sent'
+);
+export const fetchRestaurant = createAction('[Admin page] Fetch restaurant',
+  props<{ code: string }>()
+);
+export const setRestaurant = createAction(
+  '[Admin page] Set restaurant',
+  props<{ restaurant: Restaurant }>()
 );

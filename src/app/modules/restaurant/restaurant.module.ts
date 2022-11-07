@@ -9,13 +9,11 @@ import { reducer } from '../restaurant/store/restaurant.reducer';
 import { RestaurantEffects } from './store/restaurant.effects';
 import { restaurantFeatureKey } from './store/restaurant.reducer';
 import { NewRestaurantComponent } from './components/new-restaurant/new-restaurant.component';
-import { RouterModule } from '@angular/router';
 import { RestaurantRoutingModule } from './restaurant-routing.module';
 
 @NgModule({
   declarations: [RestaurantComponent, NewRestaurantComponent],
   imports: [
-    RouterModule,
     CommonModule,
     SharedModule,
     FormsModule,

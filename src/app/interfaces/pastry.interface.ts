@@ -3,7 +3,7 @@ export interface Pastry {
   name: string;
   price: number;
   description: string;
-  imageUrl: string;
+  imageUrl: string | null;
   stock: number;
   ingredients: string[];
   type: string;
