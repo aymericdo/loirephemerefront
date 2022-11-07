@@ -7,6 +7,8 @@
           <input nz-input formControlName="name" placeholder="Gaufres et compagnie" />
           <ng-template #nameErrorTpl let-control>
             <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
+            <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de 3 caractères</ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de 100 caractères</ng-container>
             <ng-container *ngIf="control.hasError('duplicated')">Le nom est déjà pris</ng-container>
           </ng-template>
         </nz-form-control>
@@ -15,7 +17,7 @@
         <nz-form-control [nzOffset]="7" [nzSpan]="12">
           <div nzFlex nz-row nzJustify="end">
             <nz-space>
-              <button *nzSpaceItem nz-button nzType="primary" [disabled]="!validateForm.valid">Suivant</button>
+              <button *nzSpaceItem nz-button nzType="primary" [disabled]="!validateForm.valid">Enregistrer</button>
               <button *nzSpaceItem nz-button (click)="resetForm($event)">Effacer</button>
             </nz-space>
           </div>

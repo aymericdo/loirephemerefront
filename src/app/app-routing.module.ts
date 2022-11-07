@@ -4,7 +4,7 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { AboutComponent } from './modules/about/components/about/about.component';
 import { AdminComponent } from './modules/admin/components/admin/admin.component';
 import { StatsComponent } from './modules/admin/components/stats/stats.component';
-import { HomeComponent } from './modules/home/components/home/home.component';
+import { HomeComponent } from './modules/home/components/home.component';
 import { LoginComponent } from './modules/login/components/login/login.component';
 
 const routes: Routes = [

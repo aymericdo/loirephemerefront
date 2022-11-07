@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { debounceTime, distinctUntilChanged, filter, Observable, ReplaySubject, take, tap } from 'rxjs';
+import { filter, Observable, ReplaySubject, take } from 'rxjs';
 import { AppState } from 'src/app/store/app.state';
-import { validateNameRestaurant } from '../../store/restaurant.actions';
+import { createRestaurant, validateNameRestaurant } from '../../store/restaurant.actions';
 import { selectNameError } from '../../store/restaurant.selectors';
 
 @Component({
@@ -11,11 +11,9 @@ import { selectNameError } from '../../store/restaurant.selectors';
   templateUrl: './new-restaurant.component.html',
   styleUrls: ['./new-restaurant.component.scss']
 })
-export class NewRestaurantComponent implements OnInit, OnDestroy {
+export class NewRestaurantComponent implements OnInit {
   validateForm!: UntypedFormGroup;
   nameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
-
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
@@ -23,17 +21,12 @@ export class NewRestaurantComponent implements OnInit, OnDestroy {
     this.nameError$ = this.store.select(selectNameError);
 
     this.validateForm = this.fb.group({
-      name: ['', [Validators.required], [this.restaurantNameAsyncValidator]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)], [this.restaurantNameAsyncValidator]],
     });
   }
 
-  ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
-
   submitForm(): void {
-    console.log('submit', this.validateForm.value);
+    this.store.dispatch(createRestaurant({ name: this.validateForm.value.name }));
   }
 
   resetForm(e: MouseEvent): void {
@@ -50,6 +43,9 @@ export class NewRestaurantComponent implements OnInit, OnDestroy {
   restaurantNameAsyncValidator = (control: UntypedFormControl) => {
     this.store.dispatch(validateNameRestaurant({ name: control.value }));
 
-    return this.nameError$.pipe(take(2));
+    return this.nameError$.pipe(
+      filter((value) => value !== undefined),
+      take(1),
+    );
   };
 }

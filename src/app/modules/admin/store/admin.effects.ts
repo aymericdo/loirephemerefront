@@ -85,7 +85,7 @@ export class AdminEffects {
 
   constructor(
     private actions$: Actions,
-    public router: Router,
+    private router: Router,
     private adminApiService: AdminApiService
   ) { }
 }

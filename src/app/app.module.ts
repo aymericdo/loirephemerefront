@@ -43,4 +43,4 @@ registerLocaleData(fr, 'fr');
   providers: [{ provide: NZ_I18N, useValue: fr_FR }, DatePipe],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

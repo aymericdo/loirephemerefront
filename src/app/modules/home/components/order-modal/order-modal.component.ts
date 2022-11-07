@@ -10,12 +10,12 @@ export class OrderModalComponent implements OnInit {
   @Input() allPastries: Pastry[] = [];
   @Input() selectedPastries: { [pastryId: string]: number } = {};
   @Input() totalPrice: number = 0;
-  @Output() onClickOk = new EventEmitter<string>();
-  @Output() onClickCancel = new EventEmitter<string>();
+  @Output() clickOk = new EventEmitter<string>();
+  @Output() clickCancel = new EventEmitter<string>();
 
   pastriesStr: string[] = [];
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.pastriesStr = Object.keys(this.selectedPastries).reduce(

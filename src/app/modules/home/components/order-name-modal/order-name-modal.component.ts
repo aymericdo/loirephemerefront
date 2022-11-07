@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CoreCommand } from 'src/app/interfaces/command.interface';
 
 @Component({
@@ -6,9 +6,9 @@ import { CoreCommand } from 'src/app/interfaces/command.interface';
   templateUrl: './order-name-modal.component.html',
   styleUrls: ['./order-name-modal.component.scss'],
 })
-export class OrderNameModalComponent implements OnInit {
-  @Output() onClickOk = new EventEmitter<CoreCommand>();
-  @Output() onClickCancel = new EventEmitter<string>();
+export class OrderNameModalComponent {
+  @Output() clickOk = new EventEmitter<CoreCommand>();
+  @Output() clickCancel = new EventEmitter<string>();
 
   currentFirstName = '';
   takeAwayValue = false;
@@ -16,8 +16,6 @@ export class OrderNameModalComponent implements OnInit {
   pickUpTimeValue = new Date();
 
   constructor() { }
-
-  ngOnInit(): void { }
 
   disabledHours(): number[] {
     const openingHour = 6
@@ -27,8 +25,8 @@ export class OrderNameModalComponent implements OnInit {
   }
 
   handleOnOk(): void {
-    this.onClickOk.emit({
-      name: this.currentFirstName.trim(),
+    this.clickOk.emit({
+      name: this.currentFirstName,
       takeAway: this.takeAwayValue,
       pickUpTime: this.needPickUpTimeValue ? this.pickUpTimeValue : null
     })

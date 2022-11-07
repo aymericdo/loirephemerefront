@@ -7,24 +7,32 @@ import {
   setNameError,
   setNoNameError,
   validateNameRestaurant,
+  setNewRestaurant,
+  createRestaurant,
 } from './restaurant.actions';
 
 export const restaurantFeatureKey = 'restaurant';
 
 export interface RestaurantState {
   restaurants: Restaurant[];
+  restaurant: Restaurant | null;
   nameError: { error: boolean, duplicated: boolean } | null | undefined;
   loading: boolean;
 }
 
 export const initialState: RestaurantState = {
   restaurants: restaurantsMock,
+  restaurant: null,
   nameError: undefined,
   loading: false,
 };
 
 const restaurantReducer = createReducer(
   initialState,
+  on(createRestaurant, (state) => ({
+    ...state,
+    loading: true,
+  })),
   on(fetchRestaurants, (state) => ({
     ...state,
     loading: true,
@@ -32,6 +40,11 @@ const restaurantReducer = createReducer(
   on(setRestaurants, (state, { restaurants }) => ({
     ...state,
     restaurants: [...restaurants],
+    loading: false,
+  })),
+  on(setNewRestaurant, (state, { restaurant }) => ({
+    ...state,
+    restaurant: { ...restaurant },
     loading: false,
   })),
   on(validateNameRestaurant, (state) => ({

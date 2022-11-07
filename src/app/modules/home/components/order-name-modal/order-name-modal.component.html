@@ -1,4 +1,4 @@
-<nz-modal [nzVisible]="true" nzTitle="Information de votre commande svp" nzCentered (nzOnCancel)="onClickCancel.emit()">
+<nz-modal [nzVisible]="true" nzTitle="Information de votre commande svp" nzCentered (nzOnCancel)="clickCancel.emit()">
   <ng-container *nzModalContent>
     <nz-space nzDirection="vertical">
       <input *nzSpaceItem nz-input placeholder="Votre prénom" [(ngModel)]="currentFirstName" />

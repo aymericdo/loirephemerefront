@@ -1,6 +1,8 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
@@ -29,9 +31,8 @@ import {
   selectSelectedPastries,
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { filter, takeUntil } from 'rxjs/operators';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import {
   WebSocketData,
@@ -46,13 +47,13 @@ import { SwPush } from '@angular/service-worker';
   providers: [HomeWebSocketService],
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('scrollframe', { static: false }) scrollFrame!: ElementRef;
   @ViewChildren('item') itemElements!: QueryList<any>;
 
   pastries$: Observable<Pastry[]>;
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
-  hasSelectedPastries$: Observable<Boolean>;
+  hasSelectedPastries$: Observable<boolean>;
   totalPrice$: Observable<number>;
   isLoading$: Observable<boolean>;
   isStockIssue$: Observable<boolean>;
@@ -71,9 +72,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private route: ActivatedRoute,
     private router: Router,
-    private modal: NzModalService,
     private wsService: HomeWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush

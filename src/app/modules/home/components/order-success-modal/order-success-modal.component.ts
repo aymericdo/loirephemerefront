@@ -7,9 +7,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class OrderSuccessModalComponent implements OnInit {
   @Input() commandReference: string = '';
-  @Output() onClickCancel = new EventEmitter<string>();
+  @Output() clickCancel = new EventEmitter<string>();
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }
