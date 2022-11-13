@@ -59,3 +59,14 @@ export const selectAllPastries = createSelector(
   selectFeature,
   (state: AdminState) => state.allPastries
 );
+
+export const selectIsNameValidating = createSelector(
+  selectFeature,
+  (state: AdminState) => state.isNameValidating
+);
+
+export const selectNameError = createSelector(
+  selectFeature,
+  (state: AdminState) => state.nameError
+);
+

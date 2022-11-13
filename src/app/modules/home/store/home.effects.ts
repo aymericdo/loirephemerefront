@@ -52,7 +52,7 @@ export class HomeEffects {
       mergeMap(([[[action, allPastries], selectedPastries], restaurant]) => {
         const { name, takeAway, pickUpTime }: CoreCommand = action;
 
-        const command: Command = {
+        const command: CoreCommand = {
           name,
           takeAway,
           pickUpTime,
@@ -78,7 +78,7 @@ export class HomeEffects {
             []
           ),
         };
-        return this.homeApiService.postCommand(command).pipe(
+        return this.homeApiService.postCommand(restaurant?.code!, command).pipe(
           switchMap((command) => {
             return [setPersonalCommand({ command }), resetCommand()];
           }),

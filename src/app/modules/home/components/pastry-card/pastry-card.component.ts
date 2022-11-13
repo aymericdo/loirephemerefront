@@ -12,18 +12,18 @@ import { TIPS_ID } from 'src/app/modules/home/store/home.selectors';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-card',
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss'],
+  selector: 'app-pastry-card',
+  templateUrl: './pastry-card.component.html',
+  styleUrls: ['./pastry-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardComponent implements OnInit {
+export class PastryCardComponent implements OnInit {
   @Input() pastry: Pastry = null!;
   @Input() count: number = 0;
   @Input() isLoading: boolean = false;
 
-  @Output() clickPlus = new EventEmitter<number>();
-  @Output() clickMinus = new EventEmitter<string>();
+  @Output() clickPlus = new EventEmitter<null>();
+  @Output() clickMinus = new EventEmitter<null>();
 
   isStockAvailable = false;
   isTips = false;
@@ -33,7 +33,7 @@ export class CardComponent implements OnInit {
 
   ngOnInit(): void {
     this.isTips = TIPS_ID === this.pastry._id;
-    this.isStockAvailable = this.pastry.stock !== undefined;
+    this.isStockAvailable = !!this.pastry.stock || this.pastry.stock === 0;
     this.imageUrl = this.pastry.imageUrl ?
       environment.protocolHttp + environment.api + '/photos/' + this.pastry.imageUrl :
       null;

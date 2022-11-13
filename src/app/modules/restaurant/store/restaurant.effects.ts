@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { debounceTime, mergeMap, switchMap } from 'rxjs/operators';
-import { validateNameRestaurant, setNewRestaurant, setNameError, setNoNameError } from '../../restaurant/store/restaurant.actions';
+import { validateRestaurantName, setNewRestaurant, setNameError, setNoNameError } from '../../restaurant/store/restaurant.actions';
 import { RestaurantApiService } from '../services/restaurant-api.service';
 import { createRestaurant } from './restaurant.actions';
 
@@ -22,9 +22,9 @@ export class RestaurantEffects {
     )
   );
 
-  validateNameRestaurant$ = createEffect(() =>
+  validateRestaurantName$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(validateNameRestaurant),
+      ofType(validateRestaurantName),
       debounceTime(500),
       mergeMap((action: { name: string }) => {
         return this.restaurantApiService.validateRestaurantName(action.name).pipe(

@@ -24,7 +24,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzFormModule } from 'ng-zorro-antd/form';
-
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @NgModule({
   exports: [
@@ -51,7 +52,9 @@ import { NzFormModule } from 'ng-zorro-antd/form';
     NzSpaceModule,
     NzTimePickerModule,
     NzSwitchModule,
+    NzInputNumberModule,
     NzFormModule,
+    NzTagModule,
   ],
   declarations: [],
 })

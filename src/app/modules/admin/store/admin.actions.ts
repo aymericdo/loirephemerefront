@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
-import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 
 export const fetchAllRestaurantPastries = createAction(
   '[Admin page] Fetch all pastries for a restaurant',
@@ -43,4 +43,22 @@ export const notificationSubSent = createAction(
 );
 export const fetchRestaurant = createAction('[Admin page] Fetch restaurant',
   props<{ code: string }>()
+);
+export const validatePastryName = createAction('[Admin page] Validate pastry name',
+  props<{ pastryName: string }>()
+);
+export const setNameError = createAction(
+  '[Admin page] Set name error',
+  props<{ error: boolean, duplicated: boolean }>()
+);
+export const setNoNameError = createAction(
+  '[Admin page] Set no name error',
+);
+export const createPastry = createAction(
+  '[Admin page] Create pastry',
+  props<{ pastry: CorePastry }>()
+);
+export const addPastry = createAction(
+  '[Admin page] Add pastry',
+  props<{ pastry: Pastry }>()
 );

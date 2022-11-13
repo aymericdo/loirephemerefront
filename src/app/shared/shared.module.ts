@@ -7,10 +7,11 @@ import { NgZorroModule } from './ngzorro.module';
 /* Components */
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { PastryCardComponent } from '../modules/home/components/pastry-card/pastry-card.component';
 
 @NgModule({
-  declarations: [NavComponent, FooterComponent],
+  declarations: [NavComponent, FooterComponent, PastryCardComponent],
   imports: [CommonModule, NgZorroModule, RouterModule],
-  exports: [NavComponent, FooterComponent, NgZorroModule],
+  exports: [NavComponent, FooterComponent, PastryCardComponent, NgZorroModule],
 })
 export class SharedModule { }

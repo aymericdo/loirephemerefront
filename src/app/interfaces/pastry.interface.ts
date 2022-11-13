@@ -1,5 +1,11 @@
-export interface Pastry {
+import { Restaurant } from "./restaurant.interface";
+
+export interface Pastry extends CorePastry {
   _id: string;
+  restaurant: Restaurant;
+}
+
+export interface CorePastry {
   name: string;
   price: number;
   description: string;

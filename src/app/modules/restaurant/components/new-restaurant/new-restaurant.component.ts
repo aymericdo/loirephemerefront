@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { Store } from '@ngrx/store';
 import { filter, Observable, ReplaySubject, take } from 'rxjs';
 import { AppState } from 'src/app/store/app.state';
-import { createRestaurant, validateNameRestaurant } from '../../store/restaurant.actions';
+import { createRestaurant, validateRestaurantName } from '../../store/restaurant.actions';
 import { selectNameError } from '../../store/restaurant.selectors';
 
 @Component({
@@ -41,7 +41,7 @@ export class NewRestaurantComponent implements OnInit {
   }
 
   restaurantNameAsyncValidator = (control: UntypedFormControl) => {
-    this.store.dispatch(validateNameRestaurant({ name: control.value }));
+    this.store.dispatch(validateRestaurantName({ name: control.value }));
 
     return this.nameError$.pipe(
       filter((value) => value !== undefined),

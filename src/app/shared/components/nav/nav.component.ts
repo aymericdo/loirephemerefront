@@ -13,7 +13,7 @@ import { AppState } from 'src/app/store/app.state';
 })
 export class NavComponent implements OnInit, OnDestroy {
   restaurant$: Observable<Restaurant | null>;
-  isCollapsed = false;
+  isCollapsed = true;
   restaurantCode: string | null = null;
   routeName: string | null = null;
 
@@ -38,7 +38,7 @@ export class NavComponent implements OnInit, OnDestroy {
         filter(e => (e instanceof ActivationEnd)),
       )
       .subscribe(() => {
-        this.setRouteName(this.router.url)
+        this.routeName = this.getRouteName(this.router.url);
       });
   }
 
@@ -51,17 +51,19 @@ export class NavComponent implements OnInit, OnDestroy {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  setRouteName(url: string): void {
+  getRouteName(url: string): string | null {
     const urlArray = url.split('/')
     if (urlArray.length > 1 && urlArray[2] === 'admin') {
       this.isCollapsed = false;
       if (urlArray.length > 2 && urlArray[3].includes('commands')) {
-        this.routeName = 'commands';
+        return 'commands';
       } else if (urlArray.length > 2 && urlArray[3].includes('stats')) {
-        this.routeName = 'stats';
+        return 'stats';
       }
-    } else if (urlArray.length === 1) {
-      this.routeName = 'home';
+    } else if (urlArray.length === 2) {
+      return 'home';
     }
+
+    return null;
   }
 }

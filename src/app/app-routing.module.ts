@@ -6,7 +6,7 @@ import { HomeComponent } from './modules/home/components/home.component';
 import { LoginComponent } from './modules/login/components/login/login.component';
 import { FourOhFourComponent } from './shared/components/four-oh-four/four-oh-four.component';
 
-export const RESTO_TEST: string = 'resto-test';
+export const DEMO_RESTO: string = 'demo-resto';
 
 const routes: Routes = [
   {
@@ -33,7 +33,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: `/${RESTO_TEST}`,
+    redirectTo: `/${DEMO_RESTO}`,
   },
   {
     path: ':code',

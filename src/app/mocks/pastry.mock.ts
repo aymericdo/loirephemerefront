@@ -1,3 +1,5 @@
+import { restaurantsMock } from "./restaurants.mock";
+
 export const pastriesMock = [
   {
     _id: '2345YT',
@@ -8,6 +10,9 @@ export const pastriesMock = [
     type: 'pastry',
     stock: 3,
     ingredients: [''],
+    restaurant: restaurantsMock[0],
+    createdAt: '2021-07-22T09:49:07.324+00:00',
+    updatedAt: '2021-07-22T09:49:07.324+00:00',
   },
   {
     _id: '2349YT',
@@ -18,6 +23,9 @@ export const pastriesMock = [
     type: 'pastry',
     stock: 3,
     ingredients: [''],
+    restaurant: restaurantsMock[0],
+    createdAt: '2021-07-22T09:49:07.324+00:00',
+    updatedAt: '2021-07-22T09:49:07.324+00:00',
   },
   {
     _id: '2348YT',
@@ -28,5 +36,8 @@ export const pastriesMock = [
     type: 'pastry',
     stock: 3,
     ingredients: [''],
+    restaurant: restaurantsMock[0],
+    createdAt: '2021-07-22T09:49:07.324+00:00',
+    updatedAt: '2021-07-22T09:49:07.324+00:00',
   },
 ];

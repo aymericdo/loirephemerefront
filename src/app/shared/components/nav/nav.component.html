@@ -8,12 +8,6 @@
       </a>
     </li>
     <li nz-menu-item [nzMatchRouter]="true">
-      <a [routerLink]="['page', 'about']">
-        <i nz-icon nzType="question"></i>
-        <span>À propos</span>
-      </a>
-    </li>
-    <li nz-menu-item [nzMatchRouter]="true">
       <a [routerLink]="['page', 'restaurant', 'new']">
         <i nz-icon nzType="coffee"></i>
         <span>Restaurant</span>
@@ -22,9 +16,15 @@
     <li *ngIf="restaurantCode" nz-submenu [nzOpen]="!isCollapsed"
     (nzOpenChange)="toggleCollapsed()" nzTitle="Admin" nzIcon="lock">
       <ul>
+        <li nz-menu-item [nzSelected]="routeName === 'menu'">
+          <a [routerLink]="[restaurantCode, 'admin', 'menu']">
+            <i nz-icon nzType="shopping-cart"></i>
+            <span>Menu</span>
+          </a>
+        </li>
         <li nz-menu-item [nzSelected]="routeName === 'commands'">
           <a [routerLink]="[restaurantCode, 'admin', 'commands']">
-            <i nz-icon nzType="shopping-cart"></i>
+            <i nz-icon nzType="alert"></i>
             <span>Commandes</span>
           </a>
         </li>
@@ -35,6 +35,12 @@
           </a>
         </li>
       </ul>
+    </li>
+    <li nz-menu-item [nzMatchRouter]="true">
+      <a [routerLink]="['page', 'about']">
+        <i nz-icon nzType="question"></i>
+        <span>À propos</span>
+      </a>
     </li>
     <div class="block"></div>
     <li>

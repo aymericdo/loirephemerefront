@@ -14,7 +14,7 @@ export const createRestaurant = createAction(
   '[Restaurant page] Create restaurant',
   props<{ name: string }>()
 );
-export const validateNameRestaurant = createAction(
+export const validateRestaurantName = createAction(
   '[Restaurant page] Validate name restaurant',
   props<{ name: string }>()
 );

@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
-import { map, mergeMap, catchError, switchMap } from 'rxjs/operators';
+import { map, mergeMap, catchError, switchMap, debounceTime, withLatestFrom, filter } from 'rxjs/operators';
+import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
+import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../../home/services/home-api.service';
 import { setRestaurant } from '../../home/store/home.actions';
 import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
@@ -18,6 +22,11 @@ import {
   fetchRestaurantCommands,
   fetchAllRestaurantPastries,
   setAllPastries,
+  setNoNameError,
+  setNameError,
+  validatePastryName,
+  createPastry,
+  addPastry,
 } from './admin.actions';
 
 @Injectable()
@@ -95,7 +104,7 @@ export class AdminEffects {
       mergeMap((action: { code: string }) => {
         return this.restaurantApiService.getRestaurant(action.code).pipe(
           switchMap((restaurant) => {
-            return [setRestaurant({ restaurant }), fetchRestaurantCommands({ code: restaurant.code, year: new Date().getFullYear().toString() })];
+            return [setRestaurant({ restaurant }), fetchAllRestaurantPastries({ code: restaurant.code }), fetchRestaurantCommands({ code: restaurant.code, year: new Date().getFullYear().toString() })];
           }),
           catchError((error) => {
             if (error.status === 404) {
@@ -113,7 +122,7 @@ export class AdminEffects {
     this.actions$.pipe(
       ofType(fetchAllRestaurantPastries),
       mergeMap((action) => {
-        return this.homeApiService.getAllPastries(action.code).pipe(
+        return this.adminApiService.getAllPastries(action.code).pipe(
           map((pastries) => setAllPastries({ pastries })),
           catchError(() => EMPTY)
         );
@@ -121,10 +130,52 @@ export class AdminEffects {
     )
   );
 
+  validatePastryName$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(validatePastryName),
+      debounceTime(500),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.validatePastryName(restaurant.code, action.pastryName).pipe(
+          switchMap((isValid: boolean) => {
+            if (isValid) {
+              return [setNoNameError()];
+            } else {
+              return [setNameError({ error: true, duplicated: true })];
+            }
+          })
+        );
+      })
+    )
+  );
+
+  createPastry$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(createPastry),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.createPastry(restaurant.code, action.pastry).pipe(
+          switchMap((pastry: Pastry) => {
+            return [addPastry({ pastry })];
+          }),
+          catchError((error) => {
+            console.error(error);
+
+            return EMPTY;
+          })
+        );
+      })
+    )
+  );
+
   constructor(
     private actions$: Actions,
+    private store$: Store<AppState>,
     private router: Router,
-    private homeApiService: HomeApiService,
     private adminApiService: AdminApiService,
     private restaurantApiService: RestaurantApiService,
   ) { }

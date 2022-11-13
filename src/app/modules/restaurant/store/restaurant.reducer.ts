@@ -6,7 +6,7 @@ import {
   setRestaurants,
   setNameError,
   setNoNameError,
-  validateNameRestaurant,
+  validateRestaurantName,
   setNewRestaurant,
   createRestaurant,
 } from './restaurant.actions';
@@ -27,7 +27,7 @@ export const initialState: RestaurantState = {
 
 const restaurantReducer = createReducer(
   initialState,
-  on(createRestaurant, fetchRestaurants, validateNameRestaurant, (state) => ({
+  on(createRestaurant, fetchRestaurants, validateRestaurantName, (state) => ({
     ...state,
     loading: true,
   })),
@@ -41,13 +41,13 @@ const restaurantReducer = createReducer(
     restaurant: { ...restaurant },
     loading: false,
   })),
-  on(validateNameRestaurant, (state) => ({
+  on(validateRestaurantName, (state) => ({
     ...state,
     nameError: undefined,
   })),
-  on(setNameError, (state, { error, duplicated  }) => ({
+  on(setNameError, (state, { error, duplicated }) => ({
     ...state,
-    nameError: { error, duplicated  },
+    nameError: { error, duplicated },
     loading: false,
   })),
   on(setNoNameError, (state) => ({

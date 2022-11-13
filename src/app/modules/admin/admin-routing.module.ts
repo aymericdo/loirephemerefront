@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from 'src/app/auth/auth-guard.service';
 import { CommandsComponent } from './components/commands/commands.component';
+import { MenuComponent } from './components/menu/menu.component';
 import { StatsComponent } from './components/stats/stats.component';
 
 const routes: Routes = [
@@ -12,6 +13,10 @@ const routes: Routes = [
       path: '',
       pathMatch: 'full',
       redirectTo: 'commands',
+    },
+    {
+      path: 'menu',
+      component: MenuComponent,
     },
     {
       path: 'commands',

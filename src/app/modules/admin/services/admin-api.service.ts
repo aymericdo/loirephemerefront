@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,23 @@ export class AdminApiService {
   constructor(private http: HttpClient) {
     this.baseUrl = environment.api;
     this.protocolHttp = environment.protocolHttp;
+  }
+
+  validatePastryName(code: string, pastryName: string): Observable<boolean> {
+    return this.http.get(
+      `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/validate?name=${pastryName}`,
+    ) as Observable<boolean>;
+  }
+
+  createPastry(code: string, pastry: CorePastry): Observable<Pastry> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}`,
+      pastry
+    ) as Observable<Pastry>;
+  }
+
+  getAllPastries(restaurantCode: string): Observable<Pastry[]> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/by-code/${restaurantCode}/all`) as Observable<Pastry[]>;
   }
 
   getCommandsByCode(token: string, code: string, year = new Date().getFullYear().toString()): Observable<any> {

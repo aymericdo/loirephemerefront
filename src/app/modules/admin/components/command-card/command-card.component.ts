@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
   ChangeDetectorRef,
+  OnDestroy,
 } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command } from 'src/app/interfaces/command.interface';
@@ -14,20 +15,20 @@ import { Pastry } from 'src/app/interfaces/pastry.interface';
 const SECONDS_HIGHLIGHT = 20;
 
 @Component({
-  selector: 'app-card',
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss'],
+  selector: 'app-command-card',
+  templateUrl: './command-card.component.html',
+  styleUrls: ['./command-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardComponent implements OnInit {
+export class CommandCardComponent implements OnInit, OnDestroy {
   @Input() command: Command = null!;
   @Input() isDone: boolean = false;
   @Input() isPayed: boolean = false;
   @Input() isLoading: boolean = false;
 
-  @Output() onClickDone = new EventEmitter<string>();
-  @Output() onClickPayed = new EventEmitter<string>();
-  @Output() onClickWizz = new EventEmitter<string>();
+  @Output() clickDone = new EventEmitter<string>();
+  @Output() clickPayed = new EventEmitter<string>();
+  @Output() clickWizz = new EventEmitter<string>();
 
   pastries: [Pastry, number][] = [];
   totalPrice = 0;
@@ -78,7 +79,7 @@ export class CardComponent implements OnInit {
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {
-          this.onClickDone.emit();
+          this.clickDone.emit();
         },
         nzCancelText: 'Annuler',
       });
@@ -89,7 +90,7 @@ export class CardComponent implements OnInit {
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {
-          this.onClickPayed.emit();
+          this.clickPayed.emit();
         },
         nzCancelText: 'Annuler',
       });
@@ -97,7 +98,7 @@ export class CardComponent implements OnInit {
   }
 
   wizzClient(): void {
-    this.onClickWizz.emit();
+    this.clickWizz.emit();
   }
 
   private setIsNew(): void {

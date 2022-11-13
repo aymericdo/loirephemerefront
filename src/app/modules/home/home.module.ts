@@ -6,7 +6,6 @@ import { homeFeatureKey, reducer } from './store/home.reducer';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HomeEffects } from './store/home.effects';
-import { CardComponent } from './components/card/card.component';
 import { OrderFooterComponent } from './components/order-footer/order-footer.component';
 import { FormsModule } from '@angular/forms';
 import { OrderModalComponent } from './components/order-modal/order-modal.component';
@@ -18,7 +17,6 @@ import { OrderErrorModalComponent } from './components/order-error-modal/order-e
   declarations: [
     HomeComponent,
     OrderFooterComponent,
-    CardComponent,
     OrderNameModalComponent,
     OrderSuccessModalComponent,
     OrderErrorModalComponent,

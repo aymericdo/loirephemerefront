@@ -12,6 +12,10 @@ import {
   fetchRestaurant,
   setAllPastries,
   fetchAllRestaurantPastries,
+  validatePastryName,
+  setNameError,
+  setNoNameError,
+  addPastry,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -20,12 +24,16 @@ export interface AdminState {
   allPastries: Pastry[];
   commands: Command[];
   loading: boolean;
+  nameError: { error: boolean, duplicated: boolean } | null | undefined;
+  isNameValidating: boolean;
 }
 
 export const initialState: AdminState = {
   allPastries: pastriesMock,
   commands: commandsMock,
   loading: false,
+  nameError: undefined,
+  isNameValidating: false,
 };
 
 const adminReducer = createReducer(
@@ -38,6 +46,10 @@ const adminReducer = createReducer(
     ...state,
     allPastries: [...pastries],
     loading: false,
+  })),
+  on(addPastry, (state, { pastry }) => ({
+    ...state,
+    allPastries: [...state.allPastries, pastry],
   })),
   on(setCommands, (state, { commands }) => ({
     ...state,
@@ -58,6 +70,21 @@ const adminReducer = createReducer(
       commands: newList,
     };
   }),
+  on(validatePastryName, (state) => ({
+    ...state,
+    nameError: undefined,
+    isNameValidating: true,
+  })),
+  on(setNameError, (state, { error, duplicated }) => ({
+    ...state,
+    nameError: { error, duplicated },
+    isNameValidating: false,
+  })),
+  on(setNoNameError, (state) => ({
+    ...state,
+    nameError: null,
+    isNameValidating: false,
+  })),
 );
 
 export function reducer(state: AdminState | undefined, action: Action) {

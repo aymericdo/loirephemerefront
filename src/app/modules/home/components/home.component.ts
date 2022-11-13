@@ -32,8 +32,8 @@ import {
   selectSelectedPastries,
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import {
   WebSocketData,
@@ -95,6 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.store.dispatch(fetchRestaurant({ code: params.get('code')! }));
+      this.subscribeToWS(params.get('code')!);
     })
 
     this.personalCommand$
@@ -126,15 +127,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           })
         );
       });
-
-    this.subscribeToWS();
   }
 
   ngAfterViewInit() {
     this.scrollContainer = this.scrollFrame.nativeElement;
   }
 
-  handleClickPlus(pastry: Pastry, count: number): void {
+  handleClickPlus(pastry: Pastry): void {
+    let count: number = 0;
+    this.selectedPastries$.pipe(take(1)).subscribe((selectedPastries: { [pastryId: string]: number }) => {
+      count = selectedPastries[pastry._id] || 0
+    })
+
     if (count === 0) {
       const cardToScroll = this.itemElements.find(
         (item) => item.pastry._id === pastry._id
@@ -182,16 +186,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     return pastry._id;
   }
 
-  private subscribeToWS() {
+  private subscribeToWS(code: string) {
     setInterval(() => {
       this.wsService.sendMessage('ping');
     }, 5000);
 
     this.wsService
-      .createObservableSocket()
+      .createObservableSocket(code)
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(
-        (data: WebSocketData) => {
+      .subscribe({
+        next: (data: WebSocketData) => {
           if (data.hasOwnProperty('stockChanged')) {
             this.store.dispatch(
               setStock({
@@ -217,13 +221,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.audio.play();
           }
         },
-        (err) => console.error(err),
-        () => {
-          setTimeout(() => {
-            this.subscribeToWS();
-          }, 1000);
+        error: (err) => {
+          console.error(err);
+        },
+        complete: () => {
+          if (!this.destroyed$.observed) {
+            setTimeout(() => {
+              this.subscribeToWS(code);
+            }, 1000);
+          }
           console.log('The observable stream is complete');
         }
-      );
+     });
   }
 }

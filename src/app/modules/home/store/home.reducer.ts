@@ -113,7 +113,7 @@ const homeReducer = createReducer(
   on(setRestaurant, (state, { restaurant }) => ({
     ...state,
     restaurant: { ...restaurant },
-  }))
+  })),
 );
 
 export function reducer(state: HomeState | undefined, action: Action) {

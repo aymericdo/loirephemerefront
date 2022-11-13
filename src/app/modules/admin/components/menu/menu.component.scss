@@ -6,10 +6,14 @@
   .scrollable-zone {
     overflow-y: auto;
     height: 100%;
-    padding: 24px;
+    padding: 1.625rem;
   }
 
   .scrollable-zone.-has-order-footer {
     height: calc(100% - 80px);
+  }
+
+  .actions-btn {
+    padding: 1.625rem;
   }
 }
