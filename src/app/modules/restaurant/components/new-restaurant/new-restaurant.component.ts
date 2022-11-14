@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { filter, Observable, ReplaySubject, take } from 'rxjs';
 import { AppState } from 'src/app/store/app.state';
 import { createRestaurant, validateRestaurantName } from '../../store/restaurant.actions';
-import { selectNameError } from '../../store/restaurant.selectors';
+import { selectRestaurantNameError } from '../../store/restaurant.selectors';
 
 @Component({
   selector: 'app-new-restaurant',
@@ -13,12 +13,12 @@ import { selectNameError } from '../../store/restaurant.selectors';
 })
 export class NewRestaurantComponent implements OnInit {
   validateForm!: UntypedFormGroup;
-  nameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
+  restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
 
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
-    this.nameError$ = this.store.select(selectNameError);
+    this.restaurantNameError$ = this.store.select(selectRestaurantNameError);
 
     this.validateForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)], [this.restaurantNameAsyncValidator]],
@@ -43,7 +43,7 @@ export class NewRestaurantComponent implements OnInit {
   restaurantNameAsyncValidator = (control: UntypedFormControl) => {
     this.store.dispatch(validateRestaurantName({ name: control.value }));
 
-    return this.nameError$.pipe(
+    return this.restaurantNameError$.pipe(
       filter((value) => value !== undefined),
       take(1),
     );

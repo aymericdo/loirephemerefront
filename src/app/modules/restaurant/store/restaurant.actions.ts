@@ -18,10 +18,10 @@ export const validateRestaurantName = createAction(
   '[Restaurant page] Validate name restaurant',
   props<{ name: string }>()
 );
-export const setNameError = createAction(
+export const setRestaurantNameError = createAction(
   '[Restaurant page] Set name error',
   props<{ error: boolean, duplicated: boolean }>()
 );
-export const setNoNameError = createAction(
+export const setRestaurantNoNameError = createAction(
   '[Restaurant page] Set no name error',
 );

@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { createPastry, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
-import { selectNameError } from 'src/app/modules/admin/store/admin.selectors';
+import { creatingPastry, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
+import { selectIsCreatingPastry, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -18,12 +18,14 @@ export class NewPastryModalComponent implements OnInit {
   @Output() clickCancel = new EventEmitter<string>();
 
   validateForm!: UntypedFormGroup;
-  nameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
+  restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
+  isLoading$!: Observable<boolean>;
 
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
-    this.nameError$ = this.store.select(selectNameError);
+    this.restaurantNameError$ = this.store.select(selectPastryNameError);
+    this.isLoading$ = this.store.select(selectIsCreatingPastry);
 
     this.validateForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.pastryNameAsyncValidator]],
@@ -39,7 +41,7 @@ export class NewPastryModalComponent implements OnInit {
   }
 
   submitForm(): void {
-    this.store.dispatch(createPastry({ pastry: {
+    this.store.dispatch(creatingPastry({ pastry: {
       name: this.validateForm.value.name,
       description: this.validateForm.value.description,
       price: this.validateForm.value.price,
@@ -56,7 +58,7 @@ export class NewPastryModalComponent implements OnInit {
   pastryNameAsyncValidator = (control: UntypedFormControl) => {
     this.store.dispatch(validatePastryName({ pastryName: control.value }));
 
-    return this.nameError$.pipe(
+    return this.restaurantNameError$.pipe(
       filter((value) => value !== undefined),
       take(1),
     );

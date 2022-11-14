@@ -14,7 +14,7 @@ export const selectIsLoading = createSelector(
   (state: RestaurantState) => state.loading
 );
 
-export const selectNameError = createSelector(
+export const selectRestaurantNameError = createSelector(
   selectFeature,
-  (state: RestaurantState) => state.nameError
+  (state: RestaurantState) => state.restaurantNameError
 );

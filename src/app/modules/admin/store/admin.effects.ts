@@ -22,11 +22,13 @@ import {
   fetchRestaurantCommands,
   fetchAllRestaurantPastries,
   setAllPastries,
-  setNoNameError,
-  setNameError,
+  setPastryNoNameError,
+  setPastryNameError,
   validatePastryName,
-  createPastry,
+  creatingPastry,
   addPastry,
+  pastryCreated,
+  closeMenuModal,
 } from './admin.actions';
 
 @Injectable()
@@ -141,9 +143,9 @@ export class AdminEffects {
         return this.adminApiService.validatePastryName(restaurant.code, action.pastryName).pipe(
           switchMap((isValid: boolean) => {
             if (isValid) {
-              return [setNoNameError()];
+              return [setPastryNoNameError()];
             } else {
-              return [setNameError({ error: true, duplicated: true })];
+              return [setPastryNameError({ error: true, duplicated: true })];
             }
           })
         );
@@ -151,16 +153,16 @@ export class AdminEffects {
     )
   );
 
-  createPastry$ = createEffect(() =>
+  creatingPastry$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(createPastry),
+      ofType(creatingPastry),
       withLatestFrom(
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
-        return this.adminApiService.createPastry(restaurant.code, action.pastry).pipe(
+        return this.adminApiService.postPastry(restaurant.code, action.pastry).pipe(
           switchMap((pastry: Pastry) => {
-            return [addPastry({ pastry })];
+            return [addPastry({ pastry }), pastryCreated({ pastry }), closeMenuModal()];
           }),
           catchError((error) => {
             console.error(error);

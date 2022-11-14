@@ -55,6 +55,11 @@ export const selectIsLoading = createSelector(
   (state: AdminState) => state.loading
 );
 
+export const selectIsCreatingPastry = createSelector(
+  selectFeature,
+  (state: AdminState) => state.isCreatingPastry
+);
+
 export const selectAllPastries = createSelector(
   selectFeature,
   (state: AdminState) => state.allPastries
@@ -65,8 +70,13 @@ export const selectIsNameValidating = createSelector(
   (state: AdminState) => state.isNameValidating
 );
 
-export const selectNameError = createSelector(
+export const selectPastryNameError = createSelector(
   selectFeature,
-  (state: AdminState) => state.nameError
+  (state: AdminState) => state.pastryNameError
+);
+
+export const selectMenuModalOpened = createSelector(
+  selectFeature,
+  (state: AdminState) => state.menuModalOpened
 );
 

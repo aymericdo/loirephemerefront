@@ -1,7 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { commandsMock } from 'src/app/mocks/commands.mock';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
@@ -13,9 +12,13 @@ import {
   setAllPastries,
   fetchAllRestaurantPastries,
   validatePastryName,
-  setNameError,
-  setNoNameError,
+  setPastryNameError,
+  setPastryNoNameError,
   addPastry,
+  creatingPastry,
+  pastryCreated,
+  openMenuModal,
+  closeMenuModal,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -24,16 +27,20 @@ export interface AdminState {
   allPastries: Pastry[];
   commands: Command[];
   loading: boolean;
-  nameError: { error: boolean, duplicated: boolean } | null | undefined;
+  pastryNameError: { error: boolean, duplicated: boolean } | null | undefined;
   isNameValidating: boolean;
+  isCreatingPastry: boolean;
+  menuModalOpened: 'new' | 'edit' | null,
 }
 
 export const initialState: AdminState = {
   allPastries: pastriesMock,
   commands: commandsMock,
   loading: false,
-  nameError: undefined,
+  pastryNameError: undefined,
   isNameValidating: false,
+  isCreatingPastry: false,
+  menuModalOpened: null,
 };
 
 const adminReducer = createReducer(
@@ -46,10 +53,6 @@ const adminReducer = createReducer(
     ...state,
     allPastries: [...pastries],
     loading: false,
-  })),
-  on(addPastry, (state, { pastry }) => ({
-    ...state,
-    allPastries: [...state.allPastries, pastry],
   })),
   on(setCommands, (state, { commands }) => ({
     ...state,
@@ -70,20 +73,40 @@ const adminReducer = createReducer(
       commands: newList,
     };
   }),
+  on(addPastry, (state, { pastry }) => ({
+    ...state,
+    allPastries: [...state.allPastries, pastry],
+  })),
   on(validatePastryName, (state) => ({
     ...state,
-    nameError: undefined,
+    pastryNameError: undefined,
     isNameValidating: true,
   })),
-  on(setNameError, (state, { error, duplicated }) => ({
+  on(creatingPastry, (state) => ({
     ...state,
-    nameError: { error, duplicated },
+    isCreatingPastry: true,
+  })),
+  on(pastryCreated, (state) => ({
+    ...state,
+    isCreatingPastry: false,
+  })),
+  on(setPastryNameError, (state, { error, duplicated }) => ({
+    ...state,
+    pastryNameError: { error, duplicated },
     isNameValidating: false,
   })),
-  on(setNoNameError, (state) => ({
+  on(setPastryNoNameError, (state) => ({
     ...state,
-    nameError: null,
+    pastryNameError: null,
     isNameValidating: false,
+  })),
+  on(openMenuModal, (state, { modal }) => ({
+    ...state,
+    menuModalOpened: modal,
+  })),
+  on(closeMenuModal, (state) => ({
+    ...state,
+    menuModalOpened: null,
   })),
 );
 

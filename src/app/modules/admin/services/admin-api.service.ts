@@ -30,7 +30,7 @@ export class AdminApiService {
     ) as Observable<boolean>;
   }
 
-  createPastry(code: string, pastry: CorePastry): Observable<Pastry> {
+  postPastry(code: string, pastry: CorePastry): Observable<Pastry> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}`,
       pastry

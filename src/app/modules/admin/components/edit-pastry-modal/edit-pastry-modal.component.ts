@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, take } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { validatePastryName } from 'src/app/modules/admin/store/admin.actions';
-import { selectNameError } from 'src/app/modules/admin/store/admin.selectors';
+import { selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -17,12 +17,12 @@ export class EditPastryModalComponent implements OnInit {
   @Output() clickCancel = new EventEmitter<string>();
 
   validateForm!: UntypedFormGroup;
-  nameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
+  restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
 
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
-    this.nameError$ = this.store.select(selectNameError);
+    this.restaurantNameError$ = this.store.select(selectPastryNameError);
 
     this.validateForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)], [this.pastryNameAsyncValidator]],
@@ -43,7 +43,7 @@ export class EditPastryModalComponent implements OnInit {
   pastryNameAsyncValidator = (control: UntypedFormControl) => {
     this.store.dispatch(validatePastryName({ pastryName: control.value }));
 
-    return this.nameError$.pipe(
+    return this.restaurantNameError$.pipe(
       filter((value) => value !== undefined),
       take(1),
     );

@@ -8,7 +8,7 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { validatePastryName } from 'src/app/modules/admin/store/admin.actions';
-import { selectNameError } from 'src/app/modules/admin/store/admin.selectors';
+import { selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -20,7 +20,7 @@ export class PastryFormComponent implements OnInit {
   @Input() restaurant: Restaurant = null!;
   @Input() validateForm: UntypedFormGroup = null!;
 
-  nameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
+  restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   ingredientsInputVisible = false;
   ingredientsInputValue = '';
 
@@ -40,7 +40,7 @@ export class PastryFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.nameError$ = this.store.select(selectNameError);
+    this.restaurantNameError$ = this.store.select(selectPastryNameError);
     this.uploadUrl = this.adminApiService.getUploadImageUrl(this.restaurant.code);
 
     if (this.validateForm.controls['imageUrl'].value) {
@@ -57,7 +57,7 @@ export class PastryFormComponent implements OnInit {
   pastryNameAsyncValidator = (control: UntypedFormControl) => {
     this.store.dispatch(validatePastryName({ pastryName: control.value }));
 
-    return this.nameError$.pipe(
+    return this.restaurantNameError$.pipe(
       filter((value) => value !== undefined),
       take(1),
     );

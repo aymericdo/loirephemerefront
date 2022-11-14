@@ -47,18 +47,29 @@ export const fetchRestaurant = createAction('[Admin page] Fetch restaurant',
 export const validatePastryName = createAction('[Admin page] Validate pastry name',
   props<{ pastryName: string }>()
 );
-export const setNameError = createAction(
+export const setPastryNameError = createAction(
   '[Admin page] Set name error',
   props<{ error: boolean, duplicated: boolean }>()
 );
-export const setNoNameError = createAction(
+export const setPastryNoNameError = createAction(
   '[Admin page] Set no name error',
 );
-export const createPastry = createAction(
+export const creatingPastry = createAction(
   '[Admin page] Create pastry',
+  props<{ pastry: CorePastry }>()
+);
+export const pastryCreated = createAction(
+  '[Admin page] Pastry created',
   props<{ pastry: CorePastry }>()
 );
 export const addPastry = createAction(
   '[Admin page] Add pastry',
   props<{ pastry: Pastry }>()
+);
+export const openMenuModal = createAction(
+  '[Admin page] Open menu modal',
+  props<{ modal: 'new' | 'edit' }>()
+);
+export const closeMenuModal = createAction(
+  '[Admin page] Close menu modal',
 );

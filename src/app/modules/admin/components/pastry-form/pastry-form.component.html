@@ -1,12 +1,15 @@
 <form nz-form [formGroup]="validateForm">
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Nom</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..." [nzErrorTip]="nameErrorTpl">
+    <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
+      [nzErrorTip]="restaurantNameErrorTpl">
       <input nz-input formControlName="name" placeholder="Gaufre choco fraise" />
-      <ng-template #nameErrorTpl let-control>
+      <ng-template #restaurantNameErrorTpl let-control>
         <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
-        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }} caractères</ng-container>
-        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de {{ SIZE.SMALL }} caractères</ng-container>
+        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }} caractères
+        </ng-container>
+        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de {{ SIZE.SMALL }}
+          caractères</ng-container>
         <ng-container *ngIf="control.hasError('duplicated')">Le nom est déjà pris</ng-container>
       </ng-template>
     </nz-form-control>
@@ -15,12 +18,15 @@
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Description</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="descriptionErrorTpl">
       <nz-textarea-count [nzMaxCharacterCount]="SIZE.LARGE">
-        <textarea rows="4" nz-input formControlName="description" placeholder="Le goût puissant d'une pâte à tartiner maison + coulis de fraise"></textarea>
+        <textarea rows="4" nz-input formControlName="description"
+          placeholder="Le goût puissant d'une pâte à tartiner maison + coulis de fraise"></textarea>
       </nz-textarea-count>
       <ng-template #descriptionErrorTpl let-control>
         <ng-container *ngIf="control.hasError('required')">Merci d'entrer une description</ng-container>
-        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer une description de plus de {{ SIZE.MIN }} caractères</ng-container>
-        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer une description de moins de {{ SIZE.LARGE }} caractères</ng-container>
+        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer une description de plus de {{ SIZE.MIN }}
+          caractères</ng-container>
+        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer une description de moins de {{ SIZE.LARGE }}
+          caractères</ng-container>
       </ng-template>
     </nz-form-control>
   </nz-form-item>
@@ -38,30 +44,17 @@
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Ingrédients</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24">
-      <nz-tag
-        *ngFor="let ingredient of validateForm.controls['ingredients'].value; let i = index"
-        [nzMode]="'closeable'"
-        (nzOnClose)="handleClose(ingredient)"
-      >
+      <nz-tag *ngFor="let ingredient of validateForm.controls['ingredients'].value; let i = index"
+        [nzMode]="'closeable'" (nzOnClose)="handleClose(ingredient)">
         {{ (ingredient.length > 20) ? (ingredient | slice:0:20) + '…' : ingredient }}
       </nz-tag>
       <nz-tag *ngIf="!ingredientsInputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
         <span nz-icon nzType="plus"></span>
         Ajouter
       </nz-tag>
-      <input
-        #inputElement
-        nz-input
-        nzSize="small"
-        *ngIf="ingredientsInputVisible"
-        type="text"
-        [attr.maxlength]="SIZE.SMALL"
-        [value]="ingredientsInputValue"
-        (input)="handleChanges($event)"
-        style="width: 78px;"
-        (blur)="handleInputConfirm(false)"
-        (keydown.enter)="handleInputConfirm()"
-      />
+      <input #inputElement nz-input nzSize="small" *ngIf="ingredientsInputVisible" type="text"
+        [attr.maxlength]="SIZE.SMALL" [value]="ingredientsInputValue" (input)="handleChanges($event)"
+        style="width: 78px;" (blur)="handleInputConfirm(false)" (keydown.enter)="handleInputConfirm()" />
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
@@ -100,25 +93,15 @@
     <nz-form-label [nzSm]="8" [nzXs]="24">Photo</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24">
       <div class="clearfix">
-        <nz-upload
-          [nzAction]="uploadUrl"
-          nzListType="picture-card"
-          [(nzFileList)]="fileList"
-          (nzChange)="handleUpload($event)"
-          [nzShowButton]="fileList.length === 0"
-          [nzPreview]="handlePreview"
-        >
+        <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [(nzFileList)]="fileList"
+          (nzChange)="handleUpload($event)" [nzShowButton]="fileList.length === 0" [nzPreview]="handlePreview">
           <div>
             <span nz-icon nzType="plus"></span>
             <div style="margin-top: 8px">Upload</div>
           </div>
         </nz-upload>
-        <nz-modal
-          [nzVisible]="previewVisible"
-          [nzContent]="modalContent"
-          [nzFooter]="null"
-          (nzOnCancel)="previewVisible = false"
-        >
+        <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+          (nzOnCancel)="previewVisible = false">
           <ng-template #modalContent>
             <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
           </ng-template>

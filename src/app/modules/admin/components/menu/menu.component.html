@@ -1,13 +1,15 @@
 <div class="scrollable-zone" #scrollframe>
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
+    <nz-page-header-extra>
+      <div class="actions-btn">
+        <button class="add-pastry-btn" nz-button nzType="primary" nzBlock (click)="openNewPastryModal()">
+          <span nz-icon nzType="plus"></span>
+          Ajouter une pâtisserie
+        </button>
+      </div>
+    </nz-page-header-extra>
   </nz-page-header>
-  <div class="actions-btn">
-    <button class="add-pastry-btn" nz-button nzType="primary" nzBlock (click)="isNewPastryModalVisible = true">
-      <span nz-icon nzType="plus"></span>
-      Ajouter une pâtisserie
-    </button>
-  </div>
   <ng-container *ngIf="(pastries$ | async)?.length === 0"
       ><nz-empty></nz-empty
   ></ng-container>
@@ -23,4 +25,4 @@
   </div>
 </div>
 
-<app-new-pastry-modal *ngIf="isNewPastryModalVisible" [restaurant]="(restaurant$ | async)!" (clickCancel)="isNewPastryModalVisible = false"></app-new-pastry-modal>
+<app-new-pastry-modal *ngIf="(menuModalOpened$ | async) === 'new'" [restaurant]="(restaurant$ | async)!" (clickCancel)="closeMenuModal()"></app-new-pastry-modal>

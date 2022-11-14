@@ -4,8 +4,8 @@ import { restaurantsMock } from 'src/app/mocks/restaurants.mock';
 import {
   fetchRestaurants,
   setRestaurants,
-  setNameError,
-  setNoNameError,
+  setRestaurantNameError,
+  setRestaurantNoNameError,
   validateRestaurantName,
   setNewRestaurant,
   createRestaurant,
@@ -15,13 +15,13 @@ export const restaurantFeatureKey = 'restaurant';
 
 export interface RestaurantState {
   restaurants: Restaurant[];
-  nameError: { error: boolean, duplicated: boolean } | null | undefined;
+  restaurantNameError: { error: boolean, duplicated: boolean } | null | undefined;
   loading: boolean;
 }
 
 export const initialState: RestaurantState = {
   restaurants: restaurantsMock,
-  nameError: undefined,
+  restaurantNameError: undefined,
   loading: false,
 };
 
@@ -43,16 +43,16 @@ const restaurantReducer = createReducer(
   })),
   on(validateRestaurantName, (state) => ({
     ...state,
-    nameError: undefined,
+    restaurantNameError: undefined,
   })),
-  on(setNameError, (state, { error, duplicated }) => ({
+  on(setRestaurantNameError, (state, { error, duplicated }) => ({
     ...state,
-    nameError: { error, duplicated },
+    restaurantNameError: { error, duplicated },
     loading: false,
   })),
-  on(setNoNameError, (state) => ({
+  on(setRestaurantNoNameError, (state) => ({
     ...state,
-    nameError: null,
+    restaurantNameError: null,
     loading: false,
   })),
 );

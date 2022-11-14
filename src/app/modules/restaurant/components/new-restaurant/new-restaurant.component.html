@@ -3,12 +3,15 @@
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Nom du restaurant</nz-form-label>
-        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="En cours de validation..." [nzErrorTip]="nameErrorTpl">
+        <nz-form-control [nzSpan]="12" nzHasFeedback nzValidatingTip="En cours de validation..."
+          [nzErrorTip]="restaurantNameErrorTpl">
           <input nz-input formControlName="name" placeholder="Gaufres et compagnie" />
-          <ng-template #nameErrorTpl let-control>
+          <ng-template #restaurantNameErrorTpl let-control>
             <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
-            <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de 3 caractères</ng-container>
-            <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de 100 caractères</ng-container>
+            <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de 3 caractères
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de 100 caractères
+            </ng-container>
             <ng-container *ngIf="control.hasError('duplicated')">Le nom est déjà pris</ng-container>
           </ng-template>
         </nz-form-control>
