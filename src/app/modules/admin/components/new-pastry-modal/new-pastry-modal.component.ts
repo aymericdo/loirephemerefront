@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl, FormArray, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, filter, take } from 'rxjs';
+import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { createPastry, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
 import { selectNameError } from 'src/app/modules/admin/store/admin.selectors';
@@ -25,14 +26,14 @@ export class NewPastryModalComponent implements OnInit {
     this.nameError$ = this.store.select(selectNameError);
 
     this.validateForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)], [this.pastryNameAsyncValidator]],
-      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      name: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.pastryNameAsyncValidator]],
+      description: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.LARGE)]],
       price: [0, [Validators.required, Validators.minLength(0)]],
-      ingredients: [[], [Validators.maxLength(100)]],
+      ingredients: [[], [Validators.maxLength(SIZE.MEDIUM)]],
       stock: [null, [Validators.minLength(0)]],
       hidden: [false, [Validators.required]],
       displaySequence: [null, [Validators.minLength(0)]],
-      imageUrl: [null, [Validators.required]],
+      imageUrl: [null, [Validators.minLength(SIZE.MIN)]],
       type: ['pastry', [Validators.required]],
     });
   }

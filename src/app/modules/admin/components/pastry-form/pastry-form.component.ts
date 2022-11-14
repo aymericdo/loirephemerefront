@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, filter, take } from 'rxjs';
+import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { validatePastryName } from 'src/app/modules/admin/store/admin.actions';
@@ -27,6 +28,8 @@ export class PastryFormComponent implements OnInit {
   fileList: NzUploadFile[] = [];
   previewImage: string | undefined = '';
   previewVisible = false;
+
+  SIZE = SIZE;
 
   @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
 

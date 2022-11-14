@@ -5,8 +5,8 @@
       <input nz-input formControlName="name" placeholder="Gaufre choco fraise" />
       <ng-template #nameErrorTpl let-control>
         <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
-        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de 3 caractères</ng-container>
-        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de 100 caractères</ng-container>
+        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }} caractères</ng-container>
+        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de {{ SIZE.SMALL }} caractères</ng-container>
         <ng-container *ngIf="control.hasError('duplicated')">Le nom est déjà pris</ng-container>
       </ng-template>
     </nz-form-control>
@@ -14,13 +14,13 @@
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Description</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="descriptionErrorTpl">
-      <nz-textarea-count [nzMaxCharacterCount]="500">
+      <nz-textarea-count [nzMaxCharacterCount]="SIZE.LARGE">
         <textarea rows="4" nz-input formControlName="description" placeholder="Le goût puissant d'une pâte à tartiner maison + coulis de fraise"></textarea>
       </nz-textarea-count>
       <ng-template #descriptionErrorTpl let-control>
         <ng-container *ngIf="control.hasError('required')">Merci d'entrer une description</ng-container>
-        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer une description de plus de 10 caractères</ng-container>
-        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer une description de moins de 500 caractères</ng-container>
+        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer une description de plus de {{ SIZE.MIN }} caractères</ng-container>
+        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer une description de moins de {{ SIZE.LARGE }} caractères</ng-container>
       </ng-template>
     </nz-form-control>
   </nz-form-item>
@@ -55,6 +55,7 @@
         nzSize="small"
         *ngIf="ingredientsInputVisible"
         type="text"
+        [attr.maxlength]="SIZE.SMALL"
         [value]="ingredientsInputValue"
         (input)="handleChanges($event)"
         style="width: 78px;"
@@ -66,7 +67,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Stock</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24">
-      <nz-input-number formControlName="stock" [nzStep]="1" [nzMin]="0" placeholder="50"></nz-input-number>
+      <nz-input-number formControlName="stock" [nzStep]="1" [nzMin]="0" nzPlaceHolder="50"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
