@@ -3,7 +3,7 @@ import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } 
 import { Store } from '@ngrx/store';
 import { Observable, filter, take } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { validatePastryName } from 'src/app/modules/admin/store/admin.actions';
+import { createPastry, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
 import { selectNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -32,23 +32,24 @@ export class NewPastryModalComponent implements OnInit {
       stock: [null, [Validators.minLength(0)]],
       hidden: [false, [Validators.required]],
       displaySequence: [null, [Validators.minLength(0)]],
+      imageUrl: [null, [Validators.required]],
+      type: ['pastry', [Validators.required]],
     });
   }
 
   submitForm(): void {
-    console.log(this.validateForm.value);
-    // this.store.dispatch(createPastry({ name: this.validateForm.value.name }));
-  }
-
-  resetForm(e: MouseEvent): void {
-    e.preventDefault();
-    this.validateForm.reset();
-    for (const key in this.validateForm.controls) {
-      if (this.validateForm.controls.hasOwnProperty(key)) {
-        this.validateForm.controls[key].markAsPristine();
-        this.validateForm.controls[key].updateValueAndValidity();
-      }
-    }
+    this.store.dispatch(createPastry({ pastry: {
+      name: this.validateForm.value.name,
+      description: this.validateForm.value.description,
+      price: this.validateForm.value.price,
+      ingredients: this.validateForm.value.ingredients,
+      stock: this.validateForm.value.stock,
+      hidden: this.validateForm.value.hidden,
+      displaySequence: this.validateForm.value.displaySequence,
+      imageUrl: this.validateForm.value.imageUrl,
+      type: this.validateForm.value.type,
+    }}));
+    this.clickCancel.emit();
   }
 
   pastryNameAsyncValidator = (control: UntypedFormControl) => {

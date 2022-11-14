@@ -1,8 +1,7 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, take } from 'rxjs';
-import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
+import { filter, Observable, take } from 'rxjs';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { selectAllPastries, selectIsLoading } from 'src/app/modules/admin/store/admin.selectors';
 import { incrementPastry, decrementPastry } from 'src/app/modules/home/store/home.actions';
@@ -13,7 +12,7 @@ import { AppState } from 'src/app/store/app.state';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent {
   @ViewChild('scrollframe', { static: false }) scrollFrame!: ElementRef;
   @ViewChildren('item') itemElements!: QueryList<any>;
   restaurant$: Observable<Restaurant | null>;
@@ -27,18 +26,11 @@ export class MenuComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private route: ActivatedRoute,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.pastries$ = this.store.select(selectAllPastries);
     this.isLoading$ = this.store.select(selectIsLoading);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
-  }
-
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      // this.subscribeToWS(params.get('code')!);
-    })
   }
 
   handleClickPlus(pastry: Pastry): void {

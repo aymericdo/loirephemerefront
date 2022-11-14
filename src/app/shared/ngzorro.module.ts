@@ -26,6 +26,8 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 
 @NgModule({
   exports: [
@@ -55,6 +57,8 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     NzInputNumberModule,
     NzFormModule,
     NzTagModule,
+    NzUploadModule,
+    NzMessageModule,
   ],
   declarations: [],
 })

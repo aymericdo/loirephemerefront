@@ -26,7 +26,7 @@
   </nz-skeleton>
 </nz-card>
 <ng-template #coverTemplate>
-  <img *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl" />
+  <img *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl" (error)="onImgError($event)" />
 </ng-template>
 <ng-template #actionCount>
   <span *ngIf=" !!count">{{ count }}</span>

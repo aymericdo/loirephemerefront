@@ -7,7 +7,7 @@ import { NgZorroModule } from './ngzorro.module';
 /* Components */
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { PastryCardComponent } from '../modules/home/components/pastry-card/pastry-card.component';
+import { PastryCardComponent } from './components/pastry-card/pastry-card.component';
 
 @NgModule({
   declarations: [NavComponent, FooterComponent, PastryCardComponent],

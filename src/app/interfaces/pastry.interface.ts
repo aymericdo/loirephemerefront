@@ -11,6 +11,7 @@ export interface CorePastry {
   description: string;
   imageUrl: string | null;
   stock: number;
+  displaySequence?: number;
   ingredients: string[];
   type: string;
   hidden?: boolean;

@@ -16,6 +16,14 @@ export class AdminApiService {
     this.protocolHttp = environment.protocolHttp;
   }
 
+  getImageUrl(imageName: string): string {
+    return `${this.protocolHttp}${this.baseUrl}/photos/${imageName}`;
+  }
+
+  getUploadImageUrl(code: string): string {
+    return `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/upload-image`;
+  }
+
   validatePastryName(code: string, pastryName: string): Observable<boolean> {
     return this.http.get(
       `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/validate?name=${pastryName}`,

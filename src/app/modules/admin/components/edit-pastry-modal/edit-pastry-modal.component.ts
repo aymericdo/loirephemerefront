@@ -29,10 +29,6 @@ export class EditPastryModalComponent implements OnInit {
     });
   }
 
-  submitForm(): void {
-    // this.store.dispatch(createPastry({ name: this.validateForm.value.name }));
-  }
-
   resetForm(e: MouseEvent): void {
     e.preventDefault();
     this.validateForm.reset();

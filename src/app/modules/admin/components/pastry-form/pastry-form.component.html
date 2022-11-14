@@ -1,4 +1,4 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+<form nz-form [formGroup]="validateForm">
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Nom</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..." [nzErrorTip]="nameErrorTpl">
@@ -70,7 +70,7 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24">Caché</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24">Visibilité</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24">
       <nz-radio-group formControlName="hidden">
         <label nz-radio-button [nzValue]="true">Caché</label>
@@ -79,9 +79,50 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
+    <nz-form-label [nzSm]="8" [nzXs]="24">Type</nz-form-label>
+    <nz-form-control [nzSm]="12" [nzXs]="24">
+      <nz-radio-group formControlName="type">
+        <label nz-radio [nzValue]="'pastry'">Pâtisserie</label>
+        <label nz-radio [nzValue]="'drink'">Boisson</label>
+        <label nz-radio [nzValue]="'tip'">Pourboire</label>
+        <label nz-radio [nzValue]="'other'">Autre</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Séquence</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24">
       <nz-input-number formControlName="displaySequence" [nzStep]="1" [nzMin]="0"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="8" [nzXs]="24">Photo</nz-form-label>
+    <nz-form-control [nzSm]="12" [nzXs]="24">
+      <div class="clearfix">
+        <nz-upload
+          [nzAction]="uploadUrl"
+          nzListType="picture-card"
+          [(nzFileList)]="fileList"
+          (nzChange)="handleUpload($event)"
+          [nzShowButton]="fileList.length === 0"
+          [nzPreview]="handlePreview"
+        >
+          <div>
+            <span nz-icon nzType="plus"></span>
+            <div style="margin-top: 8px">Upload</div>
+          </div>
+        </nz-upload>
+        <nz-modal
+          [nzVisible]="previewVisible"
+          [nzContent]="modalContent"
+          [nzFooter]="null"
+          (nzOnCancel)="previewVisible = false"
+        >
+          <ng-template #modalContent>
+            <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+          </ng-template>
+        </nz-modal>
+      </div>
     </nz-form-control>
   </nz-form-item>
 </form>

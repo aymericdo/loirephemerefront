@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { TIPS_ID } from 'src/app/modules/home/store/home.selectors';
-import { environment } from 'src/environments/environment';
+import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
   selector: 'app-pastry-card',
@@ -18,7 +19,7 @@ import { environment } from 'src/environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PastryCardComponent implements OnInit {
-  @Input() pastry: Pastry = null!;
+  @Input() pastry!: Pastry;
   @Input() count: number = 0;
   @Input() isLoading: boolean = false;
 
@@ -29,14 +30,20 @@ export class PastryCardComponent implements OnInit {
   isTips = false;
   imageUrl: string | null = null;
 
-  constructor(public elem: ElementRef) { }
+  constructor(
+    public elem: ElementRef,
+    private adminApiService: AdminApiService,
+  ) { }
 
   ngOnInit(): void {
     this.isTips = TIPS_ID === this.pastry._id;
     this.isStockAvailable = !!this.pastry.stock || this.pastry.stock === 0;
-    this.imageUrl = this.pastry.imageUrl ?
-      environment.protocolHttp + environment.api + '/photos/' + this.pastry.imageUrl :
-      null;
+    const hasImageUrl = !!this.pastry.imageUrl
+    this.imageUrl = this.adminApiService.getImageUrl(this.pastry.imageUrl! ?? 'default.jpeg');
+  }
+
+  onImgError(event: Event) {
+    (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.jpeg');
   }
 
   get maxLimitReached(): boolean {
