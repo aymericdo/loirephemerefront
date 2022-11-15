@@ -52,7 +52,6 @@ export class NewPastryModalComponent implements OnInit {
       imageUrl: this.validateForm.value.imageUrl,
       type: this.validateForm.value.type,
     }}));
-    this.clickCancel.emit();
   }
 
   pastryNameAsyncValidator = (control: UntypedFormControl) => {

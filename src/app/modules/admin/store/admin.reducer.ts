@@ -45,6 +45,8 @@ export const initialState: AdminState = {
 
 const adminReducer = createReducer(
   initialState,
+
+  // Common
   on(fetchAllRestaurantPastries, fetchRestaurant, fetchRestaurantCommands, (state) => ({
     ...state,
     loading: true,
@@ -59,6 +61,8 @@ const adminReducer = createReducer(
     commands: [...commands],
     loading: false,
   })),
+
+  // Command
   on(addCommand, (state, { command }) => ({
     ...state,
     commands: [...state.commands, command],
@@ -73,6 +77,8 @@ const adminReducer = createReducer(
       commands: newList,
     };
   }),
+
+  // Menu
   on(addPastry, (state, { pastry }) => ({
     ...state,
     allPastries: [...state.allPastries, pastry],
