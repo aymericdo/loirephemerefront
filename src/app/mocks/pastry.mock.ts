@@ -1,6 +1,7 @@
+import { Pastry } from "src/app/interfaces/pastry.interface";
 import { restaurantsMock } from "./restaurants.mock";
 
-export const pastriesMock = [
+export const pastriesMock: Pastry[] = [
   {
     _id: '2345YT',
     name: '2345YT',
@@ -10,6 +11,7 @@ export const pastriesMock = [
     type: 'pastry',
     stock: 3,
     displaySequence: 3,
+    hidden: false,
     ingredients: [''],
     restaurant: restaurantsMock[0],
     createdAt: '2021-07-22T09:49:07.324+00:00',
@@ -24,6 +26,7 @@ export const pastriesMock = [
     type: 'pastry',
     stock: 3,
     displaySequence: 4,
+    hidden: false,
     ingredients: [''],
     restaurant: restaurantsMock[0],
     createdAt: '2021-07-22T09:49:07.324+00:00',
@@ -38,6 +41,7 @@ export const pastriesMock = [
     type: 'pastry',
     stock: 3,
     displaySequence: 5,
+    hidden: false,
     ingredients: [''],
     restaurant: restaurantsMock[0],
     createdAt: '2021-07-22T09:49:07.324+00:00',

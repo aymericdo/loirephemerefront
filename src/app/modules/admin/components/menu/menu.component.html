@@ -13,16 +13,20 @@
   <ng-container *ngIf="(pastries$ | async)?.length === 0"
       ><nz-empty></nz-empty
   ></ng-container>
-  <div nz-row [nzGutter]="[0, 24]">
-    <div *ngFor="let pastry of pastries$ | async; trackBy: tackById" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12"
-      nzXl="8">
+  <div class="pastry-list" nz-row [nzGutter]="[0, 24]" cdkDropList (cdkDropListDropped)="drop($event)">
+    <div *ngFor="let pastry of pastries$ | async; trackBy: tackById" class="pastry-section" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12"
+      nzXl="8" cdkDrag [cdkDragData]="pastry">
       <div class="inner-box">
-        <app-pastry-card #item [pastry]="pastry" [isLoading]="(isLoading$ | async)!"
-          [count]="(selectedPastries$ | async)![pastry._id] || 0" (clickPlus)="handleClickPlus(pastry)"
-          (clickMinus)="handleClickMinus(pastry)"></app-pastry-card>
+        <div class="pastry-card-placeholder" *cdkDragPlaceholder>
+          <app-pastry-card #item [isAdmin]="true" [pastry]="pastry" [isLoading]="true"></app-pastry-card>
+        </div>
+        <app-pastry-card #item [isAdmin]="true" [pastry]="pastry" [isLoading]="(isLoading$ | async)!"
+          (clickPlus)="handleClickPlus(pastry)"
+          (clickMinus)="handleClickMinus(pastry)" (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)" (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
       </div>
     </div>
   </div>
 </div>
 
 <app-new-pastry-modal *ngIf="(menuModalOpened$ | async) === 'new'" [restaurant]="(restaurant$ | async)!" (clickCancel)="closeMenuModal()"></app-new-pastry-modal>
+<app-edit-pastry-modal *ngIf="(menuModalOpened$ | async) === 'edit'" [pastry]="(selectEditingPastry$ | async)!" [restaurant]="(restaurant$ | async)!" (clickCancel)="closeMenuModal()"></app-edit-pastry-modal>

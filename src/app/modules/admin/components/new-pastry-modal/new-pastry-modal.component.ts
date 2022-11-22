@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { creatingPastry, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
-import { selectIsCreatingPastry, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
+import { postingPastry, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
+import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -25,7 +25,7 @@ export class NewPastryModalComponent implements OnInit {
 
   ngOnInit() {
     this.restaurantNameError$ = this.store.select(selectPastryNameError);
-    this.isLoading$ = this.store.select(selectIsCreatingPastry);
+    this.isLoading$ = this.store.select(selectIsSavingPastry);
 
     this.validateForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.pastryNameAsyncValidator]],
@@ -41,7 +41,7 @@ export class NewPastryModalComponent implements OnInit {
   }
 
   submitForm(): void {
-    this.store.dispatch(creatingPastry({ pastry: {
+    this.store.dispatch(postingPastry({ pastry: {
       name: this.validateForm.value.name,
       description: this.validateForm.value.description,
       price: this.validateForm.value.price,

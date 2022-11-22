@@ -2,7 +2,10 @@ import { Restaurant } from "./restaurant.interface";
 
 export interface Pastry extends CorePastry {
   _id: string;
-  restaurant: Restaurant;
+  restaurant?: Restaurant;
+  displaySequence: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CorePastry {
@@ -13,6 +16,6 @@ export interface CorePastry {
   stock: number;
   displaySequence?: number;
   ingredients: string[];
-  type: string;
-  hidden?: boolean;
+  type: 'pastry' | 'drink' | 'tips' | 'other';
+  hidden: boolean;
 }

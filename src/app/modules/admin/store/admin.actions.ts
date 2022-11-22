@@ -54,21 +54,47 @@ export const setPastryNameError = createAction(
 export const setPastryNoNameError = createAction(
   '[Admin page] Set no name error',
 );
-export const creatingPastry = createAction(
-  '[Admin page] Create pastry',
+export const postingPastry = createAction(
+  '[Admin page] Posting pastry',
   props<{ pastry: CorePastry }>()
+);
+export const editingPastry = createAction(
+  '[Admin page] Editing pastry',
+  props<{ pastry: Pastry }>()
+);
+export const activatingPastry = createAction(
+  '[Admin page] Activating pastry',
+  props<{ pastry: Pastry }>()
+);
+export const deactivatingPastry = createAction(
+  '[Admin page] Deactivating pastry',
+  props<{ pastry: Pastry }>()
+);
+export const movingPastry = createAction(
+  '[Admin page] Moving pastry',
+  props<{ pastry: Pastry }>()
 );
 export const pastryCreated = createAction(
   '[Admin page] Pastry created',
-  props<{ pastry: CorePastry }>()
+);
+export const pastryEdited = createAction(
+  '[Admin page] Pastry edited',
 );
 export const addPastry = createAction(
   '[Admin page] Add pastry',
   props<{ pastry: Pastry }>()
 );
+export const editPastry = createAction(
+  '[Admin page] Edit pastry',
+  props<{ pastry: Pastry }>()
+);
+export const reorderPastries = createAction(
+  '[Admin page] Reorder pastries',
+  props<{ sequence: { [pastryId: string]: number } }>()
+);
 export const openMenuModal = createAction(
   '[Admin page] Open menu modal',
-  props<{ modal: 'new' | 'edit' }>()
+  props<{ modal: 'new' | 'edit', pastry?: Pastry }>()
 );
 export const closeMenuModal = createAction(
   '[Admin page] Close menu modal',

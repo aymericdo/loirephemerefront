@@ -1,4 +1,6 @@
-export const restaurantsMock = [
+import { Restaurant } from "src/app/interfaces/restaurant.interface";
+
+export const restaurantsMock: Restaurant[] = [
   {
     _id: '148ef10f-1e6e-4df9-a9ae-17713abc3c20',
     name: 'Loirephemere',

@@ -1,6 +1,6 @@
 <nz-card style="width: 300px" [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]">
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
-    <nz-badge *ngIf="isStockAvailable" [class.-limit-reached]="pastry.stock === 0" [class.-stock-issue]="isStockIssue"
+    <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock === 0" [class.-stock-issue]="isStockIssue"
       nzStandalone nzShowZero [nzCount]="pastry.stock" [nzTitle]="'stock'">
       <ng-container *ngIf="pastry.stock === 0">
         <span>Rupture de stock</span>
@@ -9,6 +9,9 @@
         <span>Stock</span>
       </ng-container>
     </nz-badge>
+
+    <nz-badge *ngIf="isAdmin" class="display-sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence" [nzTitle]="'displaySequence'"></nz-badge>
+
     <nz-card-meta [nzTitle]="pastry.name + ' (' + pastry.price + '€)'" [nzDescription]="pastry.description">
     </nz-card-meta>
     <ng-container *ngIf="isTips">
@@ -27,6 +30,19 @@
 </nz-card>
 <ng-template #coverTemplate>
   <img *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl" (error)="onImgError($event)" />
+  <div *ngIf="isAdmin && !isLoading && imageUrl" class="card-actions-btn">
+    <div class="block-btn">
+      <button nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickEdit.emit()"><span nz-icon nzType="edit"></span></button>
+    </div>
+    <div class="block-btn">
+      <button *ngIf="!pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickDelete.emit()">
+        <span nz-icon nzType="eye-invisible"></span>
+      </button>
+      <button *ngIf="pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickActive.emit()">
+        <span nz-icon nzType="eye"></span>
+      </button>
+    </div>
+  </div>
 </ng-template>
 <ng-template #actionCount>
   <span *ngIf=" !!count">{{ count }}</span>

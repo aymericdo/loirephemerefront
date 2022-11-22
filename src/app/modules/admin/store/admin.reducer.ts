@@ -15,10 +15,14 @@ import {
   setPastryNameError,
   setPastryNoNameError,
   addPastry,
-  creatingPastry,
+  postingPastry,
   pastryCreated,
   openMenuModal,
   closeMenuModal,
+  editingPastry,
+  pastryEdited,
+  editPastry,
+  reorderPastries,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -29,7 +33,8 @@ export interface AdminState {
   loading: boolean;
   pastryNameError: { error: boolean, duplicated: boolean } | null | undefined;
   isNameValidating: boolean;
-  isCreatingPastry: boolean;
+  isSavingPastry: boolean;
+  editingPastry: Pastry | null;
   menuModalOpened: 'new' | 'edit' | null,
 }
 
@@ -39,7 +44,8 @@ export const initialState: AdminState = {
   loading: false,
   pastryNameError: undefined,
   isNameValidating: false,
-  isCreatingPastry: false,
+  isSavingPastry: false,
+  editingPastry: null,
   menuModalOpened: null,
 };
 
@@ -69,7 +75,7 @@ const adminReducer = createReducer(
   })),
   on(editCommand, (state, { command }) => {
     const indexOf = state.commands.findIndex((c) => c._id === command._id);
-    const newList = [...state.commands];
+    const newList: Command[] = [...state.commands];
     newList.splice(indexOf, 1, command);
 
     return {
@@ -83,18 +89,49 @@ const adminReducer = createReducer(
     ...state,
     allPastries: [...state.allPastries, pastry],
   })),
+  on(editPastry, (state, { pastry }) => {
+    const indexOf = state.allPastries.findIndex((c) => c._id === pastry._id);
+    const newList: Pastry[] = [...state.allPastries];
+    newList.splice(indexOf, 1, pastry);
+
+    return {
+      ...state,
+      allPastries: newList,
+    };
+  }),
+  on(reorderPastries, (state, { sequence }) => {
+    const newList: Pastry[] = state.allPastries.map((pastry) => ({
+      ...pastry,
+      displaySequence: sequence[pastry._id],
+    })).sort((a, b) => {
+      return a.displaySequence - b.displaySequence;
+    });
+
+    return {
+      ...state,
+      allPastries: newList,
+    };
+  }),
   on(validatePastryName, (state) => ({
     ...state,
     pastryNameError: undefined,
     isNameValidating: true,
   })),
-  on(creatingPastry, (state) => ({
+  on(postingPastry, (state) => ({
     ...state,
-    isCreatingPastry: true,
+    isSavingPastry: true,
   })),
   on(pastryCreated, (state) => ({
     ...state,
-    isCreatingPastry: false,
+    isSavingPastry: false,
+  })),
+  on(editingPastry, (state) => ({
+    ...state,
+    isSavingPastry: true,
+  })),
+  on(pastryEdited, (state) => ({
+    ...state,
+    isSavingPastry: false,
   })),
   on(setPastryNameError, (state, { error, duplicated }) => ({
     ...state,
@@ -106,13 +143,15 @@ const adminReducer = createReducer(
     pastryNameError: null,
     isNameValidating: false,
   })),
-  on(openMenuModal, (state, { modal }) => ({
+  on(openMenuModal, (state, { modal, pastry }) => ({
     ...state,
     menuModalOpened: modal,
+    editingPastry: pastry ?? null,
   })),
   on(closeMenuModal, (state) => ({
     ...state,
     menuModalOpened: null,
+    editingPastry: null,
   })),
 );
 

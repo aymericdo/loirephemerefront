@@ -1,7 +1,8 @@
+import { Command } from "src/app/interfaces/command.interface";
 import { pastriesMock } from "src/app/mocks/pastry.mock";
 import { restaurantsMock } from "./restaurants.mock";
 
-export const commandsMock = [
+export const commandsMock: Command[] = [
   {
     _id: '06ca4ae0-62a3-11ed-9b6a-0242ac120002',
     pastries: [pastriesMock[0]],

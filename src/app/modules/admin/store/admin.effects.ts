@@ -25,10 +25,17 @@ import {
   setPastryNoNameError,
   setPastryNameError,
   validatePastryName,
-  creatingPastry,
+  postingPastry,
   addPastry,
   pastryCreated,
   closeMenuModal,
+  editingPastry,
+  editPastry,
+  pastryEdited,
+  activatingPastry,
+  deactivatingPastry,
+  movingPastry,
+  reorderPastries,
 } from './admin.actions';
 
 @Injectable()
@@ -153,21 +160,88 @@ export class AdminEffects {
     )
   );
 
-  creatingPastry$ = createEffect(() =>
+  postingPastry$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(creatingPastry),
+      ofType(postingPastry),
       withLatestFrom(
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.postPastry(restaurant.code, action.pastry).pipe(
           switchMap((pastry: Pastry) => {
-            return [addPastry({ pastry }), pastryCreated({ pastry }), closeMenuModal()];
+            return [addPastry({ pastry }), pastryCreated(), closeMenuModal()];
           }),
           catchError((error) => {
             console.error(error);
+            return [pastryCreated()];
+          })
+        );
+      })
+    )
+  );
 
-            return EMPTY;
+  editingPastry$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(editingPastry),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
+          switchMap((data: { pastry: Pastry, displaySequenceById?: { [pastryId: string]: number } }) => {
+            if (data.displaySequenceById) {
+              return [editPastry({ pastry: data.pastry }), pastryEdited(), closeMenuModal(), reorderPastries({ sequence: data.displaySequenceById })];
+            } else {
+              return [editPastry({ pastry: data.pastry }), pastryEdited(), closeMenuModal()];
+            }
+          }),
+          catchError((error) => {
+            console.error(error);
+            return [pastryEdited()];
+          })
+        );
+      })
+    )
+  );
+
+  movingPastry$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(movingPastry),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
+          switchMap((data: { pastry: Pastry, displaySequenceById?: { [pastryId: string]: number } }) => {
+            if (data.displaySequenceById) {
+              return [editPastry({ pastry: data.pastry }), reorderPastries({ sequence: data.displaySequenceById })];
+            } else {
+              return [editPastry({ pastry: data.pastry })];
+            }
+          }),
+          catchError((error) => {
+            console.error(error);
+            return [pastryEdited()];
+          })
+        );
+      })
+    )
+  );
+
+  activatingPastry$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(activatingPastry, deactivatingPastry),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
+          switchMap(({ pastry }) => {
+            return [editPastry({ pastry: pastry })];
+          }),
+          catchError((error) => {
+            console.error(error);
+            return [pastryEdited()];
           })
         );
       })

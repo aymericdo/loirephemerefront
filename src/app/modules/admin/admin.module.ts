@@ -16,6 +16,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { NewPastryModalComponent } from 'src/app/modules/admin/components/new-pastry-modal/new-pastry-modal.component';
 import { EditPastryModalComponent } from 'src/app/modules/admin/components/edit-pastry-modal/edit-pastry-modal.component';
 import { PastryFormComponent } from 'src/app/modules/admin/components/pastry-form/pastry-form.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +28,7 @@ import { PastryFormComponent } from 'src/app/modules/admin/components/pastry-for
     MenuComponent,
     NewPastryModalComponent,
     EditPastryModalComponent,
-    PastryFormComponent
+    PastryFormComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +37,7 @@ import { PastryFormComponent } from 'src/app/modules/admin/components/pastry-for
     FormsModule,
     ReactiveFormsModule,
     AdminRoutingModule,
+    DragDropModule,
     EffectsModule.forFeature([AdminEffects]),
     StoreModule.forFeature(adminFeatureKey, reducer),
   ],

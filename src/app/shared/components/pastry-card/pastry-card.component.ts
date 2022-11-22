@@ -8,9 +8,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { TIPS_ID } from 'src/app/modules/home/store/home.selectors';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
   selector: 'app-pastry-card',
@@ -22,9 +20,13 @@ export class PastryCardComponent implements OnInit {
   @Input() pastry!: Pastry;
   @Input() count: number = 0;
   @Input() isLoading: boolean = false;
+  @Input() isAdmin: boolean = false;
 
   @Output() clickPlus = new EventEmitter<null>();
   @Output() clickMinus = new EventEmitter<null>();
+  @Output() clickEdit = new EventEmitter<null>();
+  @Output() clickActive = new EventEmitter<null>();
+  @Output() clickDelete = new EventEmitter<null>();
 
   isStockAvailable = false;
   isTips = false;
@@ -36,9 +38,8 @@ export class PastryCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isTips = TIPS_ID === this.pastry._id;
+    this.isTips = this.pastry.type === 'tips';
     this.isStockAvailable = !!this.pastry.stock || this.pastry.stock === 0;
-    const hasImageUrl = !!this.pastry.imageUrl
     this.imageUrl = this.adminApiService.getImageUrl(this.pastry.imageUrl! ?? 'default.jpeg');
   }
 

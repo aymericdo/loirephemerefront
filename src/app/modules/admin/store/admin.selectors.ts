@@ -1,7 +1,6 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { AdminState } from './admin.reducer';
-import { commandsMock } from 'src/app/mocks/commands.mock';
 
 export const selectFeature = (state: AppState) => state.admin;
 
@@ -55,9 +54,9 @@ export const selectIsLoading = createSelector(
   (state: AdminState) => state.loading
 );
 
-export const selectIsCreatingPastry = createSelector(
+export const selectIsSavingPastry = createSelector(
   selectFeature,
-  (state: AdminState) => state.isCreatingPastry
+  (state: AdminState) => state.isSavingPastry
 );
 
 export const selectAllPastries = createSelector(
@@ -78,5 +77,10 @@ export const selectPastryNameError = createSelector(
 export const selectMenuModalOpened = createSelector(
   selectFeature,
   (state: AdminState) => state.menuModalOpened
+);
+
+export const selectEditingPastry = createSelector(
+  selectFeature,
+  (state: AdminState) => state.editingPastry
 );
 

@@ -4,8 +4,6 @@ import { HomeState } from './home.reducer';
 
 export const selectFeature = (state: AppState) => state.home;
 
-export const TIPS_ID = '60aebea4bec7f2f43b69744a';
-
 export const selectPastries = createSelector(
   selectFeature,
   (state: HomeState) => state.pastries
@@ -25,11 +23,9 @@ export const selectIsStockIssue = createSelector(
   selectFeature,
   (state: HomeState) =>
     Object.keys(state.selectedPastries).some((pastryId) => {
-      if (pastryId === TIPS_ID) return false;
       return (
         state.pastries.find((p) => p._id === pastryId)!.stock -
-        state.selectedPastries[pastryId] <
-        0
+        state.selectedPastries[pastryId] < 0
       );
     })
 );

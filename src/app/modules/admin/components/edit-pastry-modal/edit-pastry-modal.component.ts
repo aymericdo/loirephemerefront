@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, filter, take } from 'rxjs';
+import { Observable, filter, take, of } from 'rxjs';
+import { SIZE } from 'src/app/helpers/sizes';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { validatePastryName } from 'src/app/modules/admin/store/admin.actions';
-import { selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
+import { editingPastry, setPastryNoNameError, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
+import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -14,34 +16,60 @@ import { AppState } from 'src/app/store/app.state';
 })
 export class EditPastryModalComponent implements OnInit {
   @Input() restaurant: Restaurant = null!;
+  @Input() pastry: Pastry = null!;
   @Output() clickCancel = new EventEmitter<string>();
 
   validateForm!: UntypedFormGroup;
   restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
+  isLoading$!: Observable<boolean>;
+
+  private prevPastryName: string = '';
 
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.restaurantNameError$ = this.store.select(selectPastryNameError);
+    this.isLoading$ = this.store.select(selectIsSavingPastry);
+    this.prevPastryName = this.pastry.name;
 
     this.validateForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)], [this.pastryNameAsyncValidator]],
+      name: [this.pastry.name, [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.pastryNameAsyncValidator]],
+      description: [this.pastry.description, [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.LARGE)]],
+      price: [this.pastry.price, [Validators.required, Validators.minLength(0)]],
+      ingredients: [this.pastry.ingredients, [Validators.maxLength(SIZE.MEDIUM)]],
+      stock: [this.pastry.stock, [Validators.minLength(0)]],
+      hidden: [this.pastry.hidden, [Validators.required]],
+      displaySequence: [this.pastry.displaySequence, [Validators.minLength(0)]],
+      imageUrl: [this.pastry.imageUrl, [Validators.minLength(SIZE.MIN)]],
+      type: [this.pastry.type, [Validators.required]],
     });
   }
 
-  resetForm(e: MouseEvent): void {
-    e.preventDefault();
-    this.validateForm.reset();
-    for (const key in this.validateForm.controls) {
-      if (this.validateForm.controls.hasOwnProperty(key)) {
-        this.validateForm.controls[key].markAsPristine();
-        this.validateForm.controls[key].updateValueAndValidity();
+  submitForm(): void {
+    const currentPastry = { ...this.pastry };
+    delete currentPastry.restaurant;
+    this.store.dispatch(editingPastry({
+      pastry: {
+        ...currentPastry,
+        name: this.validateForm.value.name,
+        description: this.validateForm.value.description,
+        price: this.validateForm.value.price,
+        ingredients: this.validateForm.value.ingredients,
+        stock: this.validateForm.value.stock,
+        hidden: this.validateForm.value.hidden,
+        displaySequence: this.validateForm.value.displaySequence,
+        imageUrl: this.validateForm.value.imageUrl,
+        type: this.validateForm.value.type,
       }
-    }
+    }));
   }
 
   pastryNameAsyncValidator = (control: UntypedFormControl) => {
-    this.store.dispatch(validatePastryName({ pastryName: control.value }));
+    if (this.prevPastryName === control.value) {
+      this.store.dispatch(setPastryNoNameError());
+    } else {
+      this.store.dispatch(validatePastryName({ pastryName: control.value }));
+    }
 
     return this.restaurantNameError$.pipe(
       filter((value) => value !== undefined),
