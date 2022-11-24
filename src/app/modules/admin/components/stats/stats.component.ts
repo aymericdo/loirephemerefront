@@ -127,6 +127,13 @@ export class StatsComponent implements OnInit, OnDestroy {
       length: +this.currentYear - 2021 + 1
     }, (v, k) => k + 2021).map((year) => year.toString());
 
+    this.restaurant$.pipe(
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe((restaurant) => {
+      this.currentRestaurant = restaurant;
+    })
+
     combineLatest([this.payedCommands$, this.pastries$])
       .pipe(
         takeUntil(this.destroyed$)
