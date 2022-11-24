@@ -35,11 +35,11 @@
       <button nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickEdit.emit()"><span nz-icon nzType="edit"></span></button>
     </div>
     <div class="block-btn">
-      <button *ngIf="!pastry.hidden" nzDanger nz-button nzType="primary" nzShape="circle" nzSize="large" (click)="clickDelete.emit()">
-        <span nz-icon nzType="eye-invisible"></span>
-      </button>
-      <button *ngIf="pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickActive.emit()">
+      <button *ngIf="!pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickDelete.emit()">
         <span nz-icon nzType="eye"></span>
+      </button>
+      <button *ngIf="pastry.hidden" nzDanger nz-button nzType="primary" nzShape="circle" nzSize="large" (click)="clickActive.emit()">
+        <span nz-icon nzType="eye-invisible"></span>
       </button>
     </div>
   </div>
