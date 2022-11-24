@@ -23,6 +23,8 @@ import {
   pastryEdited,
   editPastry,
   reorderPastries,
+  movingPastry,
+  pastryMoved,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -34,6 +36,7 @@ export interface AdminState {
   pastryNameError: { error: boolean, duplicated: boolean } | null | undefined;
   isNameValidating: boolean;
   isSavingPastry: boolean;
+  isMovingPastry: boolean;
   editingPastry: Pastry | null;
   menuModalOpened: 'new' | 'edit' | null,
 }
@@ -45,6 +48,7 @@ export const initialState: AdminState = {
   pastryNameError: undefined,
   isNameValidating: false,
   isSavingPastry: false,
+  isMovingPastry: false,
   editingPastry: null,
   menuModalOpened: null,
 };
@@ -125,6 +129,10 @@ const adminReducer = createReducer(
     ...state,
     isSavingPastry: false,
   })),
+  on(movingPastry, (state) => ({
+    ...state,
+    isMovingPastry: true,
+  })),
   on(editingPastry, (state) => ({
     ...state,
     isSavingPastry: true,
@@ -132,6 +140,10 @@ const adminReducer = createReducer(
   on(pastryEdited, (state) => ({
     ...state,
     isSavingPastry: false,
+  })),
+  on(pastryMoved, (state) => ({
+    ...state,
+    isMovingPastry: false,
   })),
   on(setPastryNameError, (state, { error, duplicated }) => ({
     ...state,

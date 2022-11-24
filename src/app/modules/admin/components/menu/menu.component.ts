@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { activatingPastry, closeMenuModal, deactivatingPastry, movingPastry, openMenuModal } from 'src/app/modules/admin/store/admin.actions';
-import { selectAllPastries, selectEditingPastry, selectIsLoading, selectMenuModalOpened } from 'src/app/modules/admin/store/admin.selectors';
+import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/store/admin.selectors';
 import { incrementPastry, decrementPastry } from 'src/app/modules/home/store/home.actions';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -20,10 +20,11 @@ export class MenuComponent {
   restaurant$: Observable<Restaurant | null>;
   pastries$: Observable<Pastry[]>;
   isLoading$: Observable<boolean>;
+  isMoving$: Observable<boolean>;
   menuModalOpened$: Observable<'new' | 'edit' | null>;
   selectEditingPastry$: Observable<Pastry | null>;
 
-  isNewPastryModalVisible: boolean = false;
+  isInSequenceMode: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -31,6 +32,7 @@ export class MenuComponent {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.pastries$ = this.store.select(selectAllPastries);
     this.isLoading$ = this.store.select(selectIsLoading);
+    this.isMoving$ = this.store.select(selectIsMovingPastry);
     this.menuModalOpened$ = this.store.select(selectMenuModalOpened);
     this.selectEditingPastry$ = this.store.select(selectEditingPastry);
   }
@@ -74,6 +76,7 @@ export class MenuComponent {
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    if (event.currentIndex === event.previousIndex) return;
     const currentPastry: Pastry = { ...event.item.data };
     delete currentPastry.restaurant;
     this.store.dispatch(movingPastry({ pastry: {

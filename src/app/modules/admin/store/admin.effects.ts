@@ -36,6 +36,7 @@ import {
   deactivatingPastry,
   movingPastry,
   reorderPastries,
+  pastryMoved,
 } from './admin.actions';
 
 @Injectable()
@@ -214,7 +215,11 @@ export class AdminEffects {
         return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
           switchMap((data: { pastry: Pastry, displaySequenceById?: { [pastryId: string]: number } }) => {
             if (data.displaySequenceById) {
-              return [editPastry({ pastry: data.pastry }), reorderPastries({ sequence: data.displaySequenceById })];
+              return [
+                editPastry({ pastry: data.pastry }),
+                reorderPastries({ sequence: data.displaySequenceById }),
+                pastryMoved({ pastry: data.pastry })
+              ];
             } else {
               return [editPastry({ pastry: data.pastry })];
             }

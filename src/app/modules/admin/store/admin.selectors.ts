@@ -59,6 +59,11 @@ export const selectIsSavingPastry = createSelector(
   (state: AdminState) => state.isSavingPastry
 );
 
+export const selectIsMovingPastry = createSelector(
+  selectFeature,
+  (state: AdminState) => state.isMovingPastry
+);
+
 export const selectAllPastries = createSelector(
   selectFeature,
   (state: AdminState) => state.allPastries

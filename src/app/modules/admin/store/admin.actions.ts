@@ -88,6 +88,10 @@ export const editPastry = createAction(
   '[Admin page] Edit pastry',
   props<{ pastry: Pastry }>()
 );
+export const pastryMoved = createAction(
+  '[Admin page] Pastry moved',
+  props<{ pastry: Pastry }>()
+);
 export const reorderPastries = createAction(
   '[Admin page] Reorder pastries',
   props<{ sequence: { [pastryId: string]: number } }>()

@@ -3,7 +3,10 @@
   z-index: 1;
 
   nz-sider {
+    overflow: auto;
     height: 100%;
+    position: fixed;
+    left: 0;
   }
 
   .logo {
@@ -24,5 +27,11 @@
 
   .block {
     flex: 1;
+  }
+
+  @media screen and (max-width: 800px) {
+    nz-sider {
+      overflow: inherit;
+    }
   }
 }
