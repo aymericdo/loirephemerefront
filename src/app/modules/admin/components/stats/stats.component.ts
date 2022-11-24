@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
-import { fetchAllRestaurantPastries, fetchRestaurantCommands } from '../../store/admin.actions';
+import { fetchRestaurantCommands } from '../../store/admin.actions';
 import {
   selectIsLoading,
   selectPayedCommands,
@@ -126,15 +126,6 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.years = Array.from({
       length: +this.currentYear - 2021 + 1
     }, (v, k) => k + 2021).map((year) => year.toString());
-
-    this.restaurant$.pipe(
-      filter(Boolean),
-      takeUntil(this.destroyed$),
-    ).subscribe((restaurant) => {
-      this.currentRestaurant = restaurant;
-      this.store.dispatch(fetchRestaurantCommands({ code: restaurant.code, year: this.currentYear }));
-      this.store.dispatch(fetchAllRestaurantPastries({ code: restaurant.code }));
-    })
 
     combineLatest([this.payedCommands$, this.pastries$])
       .pipe(
