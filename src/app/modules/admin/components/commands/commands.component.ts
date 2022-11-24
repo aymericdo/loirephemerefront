@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
@@ -7,6 +7,7 @@ import {
   addCommand,
   closeCommand,
   editCommand,
+  fetchRestaurant,
   payedCommand,
   sendNotificationSub,
 } from 'src/app/modules/admin/store/admin.actions';
@@ -32,7 +33,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./commands.component.scss'],
   providers: [AdminWebSocketService],
 })
-export class CommandsComponent implements OnInit {
+export class CommandsComponent implements OnInit, OnDestroy {
   onGoingCommands$: Observable<Command[]>;
   pastCommands$: Observable<Command[]>;
   payedCommands$: Observable<Command[]>;
@@ -60,13 +61,16 @@ export class CommandsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.store.dispatch(fetchRestaurant({ code: params.get('code')! }));
+      this.subscribeToWS(params.get('code')!);
+    })
+
     this.route.queryParams.subscribe((params) => {
       if (!params['tab']) {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'ongoing' } });
       }
     });
-
-    this.subscribeToWS();
 
     if (environment.production) {
       this.swPush
@@ -108,16 +112,16 @@ export class CommandsComponent implements OnInit {
     this.destroyed$.complete();
   }
 
-  private subscribeToWS() {
+  private subscribeToWS(code: string) {
     setInterval(() => {
       this.wsService.sendMessage('ping');
     }, 5000);
 
     this.wsService
-      .createObservableSocket()
+      .createObservableSocket(code)
       .pipe(takeUntil(this.destroyed$))
-      .subscribe(
-        (data: WebSocketData) => {
+      .subscribe({
+        next: (data: WebSocketData) => {
           if (data.hasOwnProperty('addCommand')) {
             this.store.dispatch(
               addCommand({ command: data.addCommand as Command })
@@ -137,10 +141,17 @@ export class CommandsComponent implements OnInit {
             );
           }
         },
-        (err) => console.error(err),
-        () => {
+        error: (err) => {
+          console.error(err);
+        },
+        complete: () => {
+          if (!this.destroyed$.observed) {
+            setTimeout(() => {
+              this.subscribeToWS(code);
+            }, 1000);
+          }
           console.log('The observable stream is complete');
         }
-      );
+     });
   }
 }

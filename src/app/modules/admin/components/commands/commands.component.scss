@@ -8,6 +8,10 @@
     padding-top: 0.875em;
   }
 
+  ::ng-deep .ant-tabs-tabpane {
+    overflow-y: hidden;
+  }
+
   nz-tabset {
     padding-bottom: 6px;
     height: 100%;

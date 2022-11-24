@@ -13,8 +13,8 @@ export type WebSocketData = {
 export class AdminWebSocketService {
   ws!: WebSocket;
 
-  createObservableSocket(): Observable<WebSocketData> {
-    this.ws = new WebSocket(`${environment.protocolWs}${environment.apiWs}/`);
+  createObservableSocket(code: string): Observable<WebSocketData> {
+    this.ws = new WebSocket(`${environment.protocolWs}${environment.apiWs}/?code=${code}`);
 
     return new Observable((observer) => {
       this.ws.onmessage = (event) => observer.next(event.data);

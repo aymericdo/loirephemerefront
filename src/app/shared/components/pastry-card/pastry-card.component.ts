@@ -40,11 +40,11 @@ export class PastryCardComponent implements OnInit {
   ngOnInit(): void {
     this.isTips = this.pastry.type === 'tips';
     this.isStockAvailable = !!this.pastry.stock || this.pastry.stock === 0;
-    this.imageUrl = this.adminApiService.getImageUrl(this.pastry.imageUrl! ?? 'default.jpeg');
+    this.imageUrl = this.adminApiService.getImageUrl(this.pastry.imageUrl! ?? 'default.webp');
   }
 
   onImgError(event: Event) {
-    (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.jpeg');
+    (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.webp');
   }
 
   get maxLimitReached(): boolean {
