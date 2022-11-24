@@ -48,7 +48,7 @@ export class PastryCardComponent implements OnInit {
   }
 
   get maxLimitReached(): boolean {
-    if (!this.isStockAvailable) return false;
+    if (this.isAdmin || !this.isStockAvailable) return false;
     return this.count >= this.pastry.stock;
   }
 

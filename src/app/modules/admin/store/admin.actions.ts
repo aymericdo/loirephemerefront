@@ -64,11 +64,11 @@ export const editingPastry = createAction(
 );
 export const activatingPastry = createAction(
   '[Admin page] Activating pastry',
-  props<{ pastry: Pastry }>()
+  props<{ pastry: CorePastry }>()
 );
 export const deactivatingPastry = createAction(
   '[Admin page] Deactivating pastry',
-  props<{ pastry: Pastry }>()
+  props<{ pastry: CorePastry }>()
 );
 export const movingPastry = createAction(
   '[Admin page] Moving pastry',
@@ -87,6 +87,14 @@ export const addPastry = createAction(
 export const editPastry = createAction(
   '[Admin page] Edit pastry',
   props<{ pastry: Pastry }>()
+);
+export const incrementPastry = createAction(
+  '[Admin page] Increment pastry',
+  props<{ pastry: CorePastry }>()
+);
+export const decrementPastry = createAction(
+  '[Admin page] Decrement pastry',
+  props<{ pastry: CorePastry }>()
 );
 export const pastryMoved = createAction(
   '[Admin page] Pastry moved',

@@ -25,12 +25,20 @@
       ><nz-empty></nz-empty
   ></ng-container>
 
-  <div *ngIf="isInSequenceMode" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-    <div class="example-box" [class.-loading]="isMoving$ | async" *ngFor="let pastry of pastries$ | async; trackBy: tackById" cdkDrag [cdkDragData]="pastry">
-      <div class="example-custom-placeholder" *cdkDragPlaceholder>
-        {{ pastry.name }}
+  <div *ngIf="isInSequenceMode" cdkDropList class="pastry-sequence-list" (cdkDropListDropped)="drop($event)">
+    <div class="pastry-sequence-box" [class.-loading]="isMoving$ | async" *ngFor="let pastry of pastries$ | async; trackBy: tackById" cdkDrag [cdkDragData]="pastry">
+      <div class="pastry-sequence-custom-placeholder" *cdkDragPlaceholder>
+        <span>{{ pastry.name }}</span>
       </div>
-      <span>[{{ pastry.displaySequence }}] - {{ pastry.name }}</span>
+      <div *cdkDragPreview></div>
+      <span>{{ pastry.name }}</span>
+      <nz-space class="badges-section" nzAlign="center">
+        <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
+        <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence" [nzTitle]="'displaySequence'"></nz-badge>
+      </nz-space>
+        <ng-template #iconHidden>
+        <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
+      </ng-template>
     </div>
   </div>
   <div *ngIf="!isInSequenceMode" class="pastry-list" nz-row [nzGutter]="[0, 24]">
@@ -38,6 +46,7 @@
       nzXl="8">
       <div class="inner-box">
         <app-pastry-card #item [isAdmin]="true" [pastry]="pastry" [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!"
+          [count]="pastry.stock"
           (clickPlus)="handleClickPlus(pastry)"
           (clickMinus)="handleClickMinus(pastry)" (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)" (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
       </div>

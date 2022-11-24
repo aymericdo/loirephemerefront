@@ -12,7 +12,11 @@
     height: calc(100% - 80px);
   }
 
-  .example-list {
+  .pastry-list {
+    margin-top: 2rem;
+  }
+
+  .pastry-sequence-list {
     max-width: 100%;
     border: solid 1px #ccc;
     min-height: 60px;
@@ -22,8 +26,10 @@
     overflow: hidden;
   }
 
-  .example-box {
-    padding: 20px 10px;
+  .pastry-sequence-box,
+  .pastry-sequence-custom-placeholder {
+    position: relative;
+    padding: 1rem 0.875rem;
     border-bottom: solid 1px #ccc;
     color: rgba(0, 0, 0, 0.87);
     display: flex;
@@ -52,18 +58,33 @@
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 
-  .example-box:last-child {
+  .pastry-sequence-box:last-child {
     border: none;
   }
 
-  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  .pastry-sequence-list.cdk-drop-list-dragging .pastry-sequence-box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
 
-  .example-custom-placeholder {
+  .pastry-sequence-custom-placeholder {
+    display: flex;
+    align-items: center;
     background: #ccc;
     border: dotted 3px #999;
     min-height: 60px;
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .pastry-sequence-list {
+    nz-badge.sequence-badge {
+      width: 3rem;
+      box-shadow: 0 0 0 2px #000;
+      border-radius: 10px;
+    }
+
+    ::ng-deep nz-badge nz-badge-sup {
+      background-color: #fff;
+      color: #000;
+    }
   }
 }

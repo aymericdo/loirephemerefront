@@ -1,7 +1,7 @@
 <nz-card style="width: 300px" [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]">
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
     <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock === 0" [class.-stock-issue]="isStockIssue"
-      nzStandalone nzShowZero [nzCount]="pastry.stock" [nzTitle]="'stock'">
+      nzStandalone nzShowZero [nzCount]="pastry.stock" [nzOverflowCount]="99" [nzTitle]="'stock'">
       <ng-container *ngIf="pastry.stock === 0">
         <span>Rupture de stock</span>
       </ng-container>
@@ -35,7 +35,7 @@
       <button nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickEdit.emit()"><span nz-icon nzType="edit"></span></button>
     </div>
     <div class="block-btn">
-      <button *ngIf="!pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickDelete.emit()">
+      <button *ngIf="!pastry.hidden" nzDanger nz-button nzType="primary" nzShape="circle" nzSize="large" (click)="clickDelete.emit()">
         <span nz-icon nzType="eye-invisible"></span>
       </button>
       <button *ngIf="pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickActive.emit()">
@@ -45,7 +45,7 @@
   </div>
 </ng-template>
 <ng-template #actionCount>
-  <span *ngIf=" !!count">{{ count }}</span>
+  <span *ngIf="!!count">{{ count }}</span>
 </ng-template>
 <ng-template #actionPlus>
   <i nz-icon nzType="plus" (click)="!maxLimitReached && !isLoading && clickPlus.emit()"></i>

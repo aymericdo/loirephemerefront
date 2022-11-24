@@ -37,6 +37,8 @@ import {
   movingPastry,
   reorderPastries,
   pastryMoved,
+  incrementPastry,
+  decrementPastry,
 } from './admin.actions';
 
 @Injectable()
@@ -233,16 +235,16 @@ export class AdminEffects {
     )
   );
 
-  activatingPastry$ = createEffect(() =>
+  patchingPastry$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(activatingPastry, deactivatingPastry),
+      ofType(activatingPastry, deactivatingPastry, incrementPastry, decrementPastry),
       withLatestFrom(
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
           switchMap(({ pastry }) => {
-            return [editPastry({ pastry: pastry })];
+            return [editPastry({ pastry })];
           }),
           catchError((error) => {
             console.error(error);
