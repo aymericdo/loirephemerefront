@@ -29,7 +29,7 @@
   </nz-skeleton>
 </nz-card>
 <ng-template #coverTemplate>
-  <img *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl" (error)="onImgError($event)" />
+  <img class="card-image" *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl" (error)="onImgError($event)" />
   <div *ngIf="isAdmin && !isLoading && imageUrl" class="card-actions-btn">
     <div class="block-btn">
       <button nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickEdit.emit()"><span nz-icon nzType="edit"></span></button>
