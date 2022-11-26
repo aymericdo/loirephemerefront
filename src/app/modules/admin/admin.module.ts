@@ -9,7 +9,6 @@ import { AdminEffects } from './store/admin.effects';
 import { adminFeatureKey, reducer } from './store/admin.reducer';
 import { StatsComponent } from './components/stats/stats.component';
 import { NgChartsModule } from 'ng2-charts';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminRoutingModule } from './admin-routing.module';
 import { CommandsComponent } from './components/commands/commands.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -34,8 +33,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     CommonModule,
     SharedModule,
     NgChartsModule,
-    FormsModule,
-    ReactiveFormsModule,
     AdminRoutingModule,
     DragDropModule,
     EffectsModule.forFeature([AdminEffects]),

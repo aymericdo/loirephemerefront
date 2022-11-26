@@ -5,6 +5,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./restaurant.component.scss'],
 })
 export class RestaurantComponent {
+  subtitle = "Création d'un nouveau restaurant";
+
   constructor() {
   }
 }

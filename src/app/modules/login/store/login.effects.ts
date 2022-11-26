@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { map } from 'rxjs/operators';
-import { postPassword, setToken } from './login.actions';
+import { debounceTime, map, mergeMap, switchMap } from 'rxjs/operators';
+import { CoreUser } from 'src/app/interfaces/user.interface';
+import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
+import { createUser, postPassword, setNewUser, setToken, setUserEmailError, setUserNoEmailError, validateUserEmail } from './login.actions';
 
 @Injectable()
 export class LoginEffects {
@@ -16,5 +17,39 @@ export class LoginEffects {
     )
   );
 
-  constructor(private actions$: Actions, public router: Router) {}
+  postUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(createUser),
+      mergeMap((action: { user: CoreUser }) => {
+        return this.loginApiService.postUser(action.user).pipe(
+          switchMap((user) => {
+            return [setNewUser({ user })];
+          })
+        );
+      })
+    )
+  );
+
+  validateUserEmail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(validateUserEmail),
+      debounceTime(500),
+      mergeMap((action: { email: string }) => {
+        return this.loginApiService.validateUserEmail(action.email).pipe(
+          switchMap((isValid: boolean) => {
+            if (isValid) {
+              return [setUserNoEmailError()];
+            } else {
+              return [setUserEmailError({ error: true, duplicated: true })];
+            }
+          })
+        );
+      })
+    )
+  );
+
+  constructor(
+    private actions$: Actions,
+    private loginApiService: LoginApiService,
+  ) {}
 }

@@ -54,15 +54,6 @@ export class PastryFormComponent implements OnInit {
     }
   }
 
-  pastryNameAsyncValidator = (control: UntypedFormControl) => {
-    this.store.dispatch(validatePastryName({ pastryName: control.value }));
-
-    return this.restaurantNameError$.pipe(
-      filter((value) => value !== undefined),
-      take(1),
-    );
-  };
-
   handleClose(removedTag: string): void {
     const ingredients = this.validateForm.controls['ingredients'].value;
     this.validateForm.controls['ingredients'].setValue(ingredients.filter((tag: string) => tag !== removedTag));
@@ -75,6 +66,12 @@ export class PastryFormComponent implements OnInit {
     }, 10);
   }
 
+  handleStockChanges(): void {
+    if (this.validateForm.controls['stock'].value === '') {
+      this.validateForm.controls['stock'].setValue(null);
+    }
+  }
+
   handleInputConfirm(closeInput: boolean = true): void {
     const ingredients = this.validateForm.controls['ingredients'].value;
     if (this.ingredientsInputValue && ingredients.indexOf(this.ingredientsInputValue) === -1) {
@@ -84,7 +81,7 @@ export class PastryFormComponent implements OnInit {
     this.ingredientsInputVisible = closeInput;
   }
 
-  handleChanges(event: Event): void {
+  handleIngredientsChanges(event: Event): void {
     this.ingredientsInputValue = (event.target as HTMLInputElement).value;
   }
 

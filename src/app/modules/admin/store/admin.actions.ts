@@ -54,6 +54,9 @@ export const setPastryNameError = createAction(
 export const setPastryNoNameError = createAction(
   '[Admin page] Set no name error',
 );
+export const reactivatePastryName = createAction(
+  '[Admin page] Reactivate pastry name input',
+);
 export const postingPastry = createAction(
   '[Admin page] Posting pastry',
   props<{ pastry: CorePastry }>()

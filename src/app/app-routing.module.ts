@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from './modules/about/components/about/about.component';
 import { AdminComponent } from './modules/admin/components/admin.component';
 import { HomeComponent } from './modules/home/components/home.component';
-import { LoginComponent } from './modules/login/components/login/login.component';
+import { LoginComponent } from './modules/login/components/login-modal/login.component';
 import { FourOhFourComponent } from './shared/components/four-oh-four/four-oh-four.component';
 
 export const DEMO_RESTO: string = 'demo-resto';

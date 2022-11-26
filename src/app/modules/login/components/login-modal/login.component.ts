@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
@@ -12,7 +12,7 @@ import { selectToken } from '../../store/login.selectors';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   isVisible: boolean = true;
   password: string = '';
   passwordVisible: boolean = false;

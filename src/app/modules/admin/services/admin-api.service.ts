@@ -30,6 +30,12 @@ export class AdminApiService {
     ) as Observable<boolean>;
   }
 
+  validatePastryIsAlreadyOrdered(code: string, pastryId: string): Observable<boolean> {
+    return this.http.get(
+      `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/pastries/${pastryId}/isAlreadyOrdered`,
+    ) as Observable<boolean>;
+  }
+
   postPastry(code: string, pastry: CorePastry): Observable<Pastry> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}`,

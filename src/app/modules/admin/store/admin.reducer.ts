@@ -25,6 +25,7 @@ import {
   reorderPastries,
   movingPastry,
   pastryMoved,
+  reactivatePastryName,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -34,6 +35,7 @@ export interface AdminState {
   commands: Command[];
   loading: boolean;
   pastryNameError: { error: boolean, duplicated: boolean } | null | undefined;
+  pastryNameDeactivated: boolean;
   isNameValidating: boolean;
   isSavingPastry: boolean;
   isMovingPastry: boolean;
@@ -46,6 +48,7 @@ export const initialState: AdminState = {
   commands: commandsMock,
   loading: false,
   pastryNameError: undefined,
+  pastryNameDeactivated: true,
   isNameValidating: false,
   isSavingPastry: false,
   isMovingPastry: false,
@@ -116,6 +119,10 @@ const adminReducer = createReducer(
       allPastries: newList,
     };
   }),
+  on(reactivatePastryName, (state) => ({
+    ...state,
+    pastryNameDeactivated: false,
+  })),
   on(validatePastryName, (state) => ({
     ...state,
     pastryNameError: undefined,

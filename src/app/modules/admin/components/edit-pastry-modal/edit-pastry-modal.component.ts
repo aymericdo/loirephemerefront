@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, filter, take, of } from 'rxjs';
+import { Observable, filter, take, of, takeUntil, ReplaySubject } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { editingPastry, setPastryNoNameError, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
-import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
+import { selectIsSavingPastry, selectPastryNameDeactivated, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -14,7 +14,7 @@ import { AppState } from 'src/app/store/app.state';
   templateUrl: './edit-pastry-modal.component.html',
   styleUrls: ['./edit-pastry-modal.component.scss'],
 })
-export class EditPastryModalComponent implements OnInit {
+export class EditPastryModalComponent implements OnInit, OnDestroy {
   @Input() restaurant: Restaurant = null!;
   @Input() pastry: Pastry = null!;
   @Output() clickCancel = new EventEmitter<string>();
@@ -22,14 +22,17 @@ export class EditPastryModalComponent implements OnInit {
   validateForm!: UntypedFormGroup;
   restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   isLoading$!: Observable<boolean>;
+  pastryNameDeactivated$!: Observable<boolean>;
 
   private prevPastryName: string = '';
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.restaurantNameError$ = this.store.select(selectPastryNameError);
     this.isLoading$ = this.store.select(selectIsSavingPastry);
+    this.pastryNameDeactivated$ = this.store.select(selectPastryNameDeactivated);
     this.prevPastryName = this.pastry.name;
 
     this.validateForm = this.fb.group({
@@ -43,6 +46,21 @@ export class EditPastryModalComponent implements OnInit {
       imageUrl: [this.pastry.imageUrl, [Validators.minLength(SIZE.MIN)]],
       type: [this.pastry.type, [Validators.required]],
     });
+
+    this.pastryNameDeactivated$.pipe(
+      takeUntil(this.destroyed$),
+    ).subscribe((pastryNameDeactivated: boolean) => {
+      if (pastryNameDeactivated) {
+        this.validateForm.controls['name'].disable();
+      } else {
+        this.validateForm.controls['name'].enable();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   submitForm(): void {

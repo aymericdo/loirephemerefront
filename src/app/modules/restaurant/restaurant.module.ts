@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RestaurantComponent } from './components/restaurant.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -10,14 +9,15 @@ import { RestaurantEffects } from './store/restaurant.effects';
 import { restaurantFeatureKey } from './store/restaurant.reducer';
 import { NewRestaurantComponent } from './components/new-restaurant/new-restaurant.component';
 import { RestaurantRoutingModule } from './restaurant-routing.module';
+import { LoginComponent } from 'src/app/modules/restaurant/components/login/login.component';
+import { LoginModule } from 'src/app/modules/login/login.module';
 
 @NgModule({
-  declarations: [RestaurantComponent, NewRestaurantComponent],
+  declarations: [RestaurantComponent, NewRestaurantComponent, LoginComponent],
   imports: [
+    LoginModule,
     CommonModule,
     SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
     RestaurantRoutingModule,
     EffectsModule.forFeature([RestaurantEffects]),
     StoreModule.forFeature(restaurantFeatureKey, reducer),

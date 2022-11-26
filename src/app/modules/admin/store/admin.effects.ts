@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { EMPTY } from 'rxjs';
+import { EMPTY, pipe } from 'rxjs';
 import { map, mergeMap, catchError, switchMap, debounceTime, withLatestFrom, filter } from 'rxjs/operators';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
@@ -39,6 +39,8 @@ import {
   pastryMoved,
   incrementPastry,
   decrementPastry,
+  openMenuModal,
+  reactivatePastryName,
 } from './admin.actions';
 
 @Injectable()
@@ -137,6 +139,30 @@ export class AdminEffects {
         return this.adminApiService.getAllPastries(action.code).pipe(
           map((pastries) => setAllPastries({ pastries })),
           catchError(() => EMPTY)
+        );
+      })
+    )
+  );
+
+  openMenuModal$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(openMenuModal),
+      pipe(
+        filter((value) => value.modal === 'edit')
+      ),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.validatePastryIsAlreadyOrdered(restaurant.code, action.pastry?._id!).pipe(
+          switchMap((isNotValid: boolean) => {
+            if (isNotValid) {
+              // By default, in edit mode, name is deactivated
+              return EMPTY;
+            }
+
+            return [reactivatePastryName()];
+          })
         );
       })
     )

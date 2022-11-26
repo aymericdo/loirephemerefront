@@ -3,7 +3,7 @@
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Nom</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
       [nzErrorTip]="restaurantNameErrorTpl">
-      <input nz-input formControlName="name" placeholder="Gaufre choco fraise" />
+      <input nz-input formControlName="name" placeholder="Gaufre choco fraise"/>
       <ng-template #restaurantNameErrorTpl let-control>
         <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
         <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }} caractères
@@ -53,14 +53,14 @@
         Ajouter
       </nz-tag>
       <input #inputElement nz-input nzSize="small" *ngIf="ingredientsInputVisible" type="text"
-        [attr.maxlength]="SIZE.SMALL" [value]="ingredientsInputValue" (input)="handleChanges($event)"
+        [attr.maxlength]="SIZE.SMALL" [value]="ingredientsInputValue" (input)="handleIngredientsChanges($event)"
         style="width: 78px;" (blur)="handleInputConfirm(false)" (keydown.enter)="handleInputConfirm()" />
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Stock</nz-form-label>
     <nz-form-control [nzSm]="12" [nzXs]="24">
-      <nz-input-number formControlName="stock" [nzStep]="1" [nzMin]="0" nzPlaceHolder="50"></nz-input-number>
+      <nz-input-number formControlName="stock" (input)="handleStockChanges()" [nzStep]="1" [nzMin]="0" nzPlaceHolder="50"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>

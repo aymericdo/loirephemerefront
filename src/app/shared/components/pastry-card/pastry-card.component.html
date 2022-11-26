@@ -48,7 +48,7 @@
   <span *ngIf="!!count">{{ count }}</span>
 </ng-template>
 <ng-template #actionPlus>
-  <i nz-icon nzType="plus" (click)="!maxLimitReached && !isLoading && clickPlus.emit()"></i>
+  <i nz-icon nzType="plus" (click)="!isMaxLimitReached && !isLoading && clickPlus.emit()"></i>
 </ng-template>
 <ng-template #actionMinus>
   <i nz-icon nzType="minus" (click)="count > 0 && !isLoading && clickMinus.emit()"></i>

@@ -7,7 +7,6 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HomeEffects } from './store/home.effects';
 import { OrderFooterComponent } from './components/order-footer/order-footer.component';
-import { FormsModule } from '@angular/forms';
 import { OrderModalComponent } from './components/order-modal/order-modal.component';
 import { OrderNameModalComponent } from './components/order-name-modal/order-name-modal.component';
 import { OrderSuccessModalComponent } from './components/order-success-modal/order-success-modal.component';
@@ -25,7 +24,6 @@ import { OrderErrorModalComponent } from './components/order-error-modal/order-e
   imports: [
     CommonModule,
     SharedModule,
-    FormsModule,
     EffectsModule.forFeature([HomeEffects]),
     StoreModule.forFeature(homeFeatureKey, reducer),
   ],

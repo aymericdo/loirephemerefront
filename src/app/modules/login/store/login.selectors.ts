@@ -8,3 +8,13 @@ export const selectToken = createSelector(
   selectFeature,
   (state: LoginState) => state.token
 );
+
+export const selectUserEmailError = createSelector(
+  selectFeature,
+  (state: LoginState) => state.userEmailError
+);
+
+export const selectIsEmailValidating = createSelector(
+  selectFeature,
+  (state: LoginState) => state.isEmailValidating
+);

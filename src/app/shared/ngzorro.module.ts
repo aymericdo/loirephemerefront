@@ -28,6 +28,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 
 @NgModule({
   exports: [
@@ -59,6 +60,7 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     NzTagModule,
     NzUploadModule,
     NzMessageModule,
+    NzStepsModule,
   ],
   declarations: [],
 })

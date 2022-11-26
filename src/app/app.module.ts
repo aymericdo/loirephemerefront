@@ -8,7 +8,6 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { fr_FR } from 'ng-zorro-antd/i18n';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import fr from '@angular/common/locales/fr';
-import { FormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -29,7 +28,6 @@ registerLocaleData(fr, 'fr');
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    FormsModule,
     BrowserAnimationsModule,
     HomeModule,
     RouterModule,

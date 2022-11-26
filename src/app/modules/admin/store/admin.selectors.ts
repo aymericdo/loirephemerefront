@@ -84,6 +84,11 @@ export const selectMenuModalOpened = createSelector(
   (state: AdminState) => state.menuModalOpened
 );
 
+export const selectPastryNameDeactivated = createSelector(
+  selectFeature,
+  (state: AdminState) => state.pastryNameDeactivated
+);
+
 export const selectEditingPastry = createSelector(
   selectFeature,
   (state: AdminState) => state.editingPastry
