@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AboutComponent } from './modules/about/components/about/about.component';
-import { AdminComponent } from './modules/admin/components/admin.component';
-import { HomeComponent } from './modules/home/components/home.component';
-import { LoginComponent } from './modules/login/components/login-modal/login.component';
-import { FourOhFourComponent } from './shared/components/four-oh-four/four-oh-four.component';
+import { AboutComponent } from 'src/app/modules/about/components/about/about.component';
+import { AdminComponent } from 'src/app/modules/admin/components/admin.component';
+import { HomeComponent } from 'src/app/modules/home/components/home.component';
+import { FourOhFourComponent } from 'src/app/shared/components/four-oh-four/four-oh-four.component';
 
 export const DEMO_RESTO: string = 'demo-resto';
 
@@ -21,7 +20,6 @@ const routes: Routes = [
   },
   {
     path: 'page/login',
-    component: LoginComponent,
     loadChildren: () =>
       import('./modules/login/login.module').then((m) => m.LoginModule),
   },

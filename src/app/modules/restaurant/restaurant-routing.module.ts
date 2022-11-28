@@ -8,6 +8,10 @@ const routes: Routes = [
     path: '',
     component: RestaurantComponent,
     children: [{
+      path: '',
+      pathMatch: 'full',
+      redirectTo: 'new',
+    }, {
       path: 'new',
       component: NewRestaurantComponent,
     }]

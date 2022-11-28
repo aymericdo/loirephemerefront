@@ -9,16 +9,15 @@ import { RestaurantEffects } from './store/restaurant.effects';
 import { restaurantFeatureKey } from './store/restaurant.reducer';
 import { NewRestaurantComponent } from './components/new-restaurant/new-restaurant.component';
 import { RestaurantRoutingModule } from './restaurant-routing.module';
-import { LoginComponent } from 'src/app/modules/restaurant/components/login/login.component';
 import { LoginModule } from 'src/app/modules/login/login.module';
 
 @NgModule({
-  declarations: [RestaurantComponent, NewRestaurantComponent, LoginComponent],
+  declarations: [RestaurantComponent, NewRestaurantComponent],
   imports: [
-    LoginModule,
+    RestaurantRoutingModule,
     CommonModule,
     SharedModule,
-    RestaurantRoutingModule,
+    LoginModule,
     EffectsModule.forFeature([RestaurantEffects]),
     StoreModule.forFeature(restaurantFeatureKey, reducer),
   ],

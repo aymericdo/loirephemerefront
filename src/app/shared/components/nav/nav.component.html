@@ -2,19 +2,34 @@
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
     <li nz-menu-item [nzSelected]="routeName === 'home'">
-      <a [routerLink]="[restaurantCode]">
+      <a [routerLink]="[restaurantCode || DEMO_RESTO]">
         <i nz-icon nzType="heart"></i>
         <span>Pâtisseries</span>
       </a>
     </li>
-    <li nz-menu-item [nzMatchRouter]="true">
-      <a [routerLink]="['page', 'restaurant', 'new']">
-        <i nz-icon nzType="coffee"></i>
-        <span>Restaurant</span>
-      </a>
+
+    <li *ngIf="isLoggedIn" nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length" nzTitle="Restaurants" nzIcon="coffee">
+      <ul>
+        <li nz-menu-item [nzMatchRouter]="true">
+          <a [routerLink]="['page', 'restaurant', 'new']">
+            <i nz-icon nzType="coffee"></i>
+            <span>Nouveau</span>
+          </a>
+        </li>
+        <ng-container *ngFor="let restaurant of (userRestaurants$ | async)">
+          <li nz-menu-item>
+            <a [routerLink]="[restaurant.code, 'admin', 'menu']">
+              <i nz-icon nzType="coffee"></i>
+              <span>{{ restaurant.name }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
     </li>
-    <li *ngIf="restaurantCode" nz-submenu [nzOpen]="!isCollapsed"
-    (nzOpenChange)="toggleCollapsed()" nzTitle="Admin" nzIcon="lock">
+
+
+    <li *ngIf="isLoggedIn && restaurantCode" nz-submenu [nzOpen]="!isAdminCollapsed"
+    (nzOpenChange)="isAdminCollapsed = !isAdminCollapsed" nzTitle="Admin" nzIcon="lock">
       <ul>
         <li nz-menu-item [nzSelected]="routeName === 'menu'">
           <a [routerLink]="[restaurantCode, 'admin', 'menu']">
@@ -43,8 +58,25 @@
       </a>
     </li>
     <div class="block"></div>
-    <li>
-      <span class="version">v3.0.0</span>
+    <li nz-submenu [nzOpen]="!isUserCollapsed"
+    (nzOpenChange)="isUserCollapsed = !isUserCollapsed" nzTitle="Mon compte" nzIcon="user">
+      <ul>
+        <li *ngIf="isLoggedIn" nz-menu-item>
+          <a (click)="handleDisconnect()">
+            <i nz-icon nzType="logout"></i>
+            <span>Se déconnecter</span>
+          </a>
+        </li>
+        <li *ngIf="!isLoggedIn" nz-menu-item [nzMatchRouter]="true">
+          <a [routerLink]="['page', 'login']">
+            <i nz-icon nzType="login"></i>
+            <span>Connexion</span>
+          </a>
+        </li>
+        <li>
+          <span class="version">v3.0.0</span>
+        </li>
+      </ul>
     </li>
   </ul>
 </nz-sider>

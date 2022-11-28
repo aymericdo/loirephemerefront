@@ -96,13 +96,6 @@ export class HomeEffects {
           switchMap((restaurant) => {
             return [setRestaurant({ restaurant }), fetchRestaurantPastries({ code: restaurant.code })];
           }),
-          catchError((error) => {
-            if (error.status === 404) {
-              this.router.navigate(['page', '404']);
-            }
-
-            return EMPTY;
-          })
         );
       })
     )

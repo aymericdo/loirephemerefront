@@ -62,6 +62,7 @@ export class RegisterComponent implements OnInit {
   };
 
   private confirmPasswordValidator = (control: UntypedFormControl) => {
-    return of({ confirmedValidator: control.value !== this.validateForm.value.password });
+    const error = control.value !== this.validateForm.value.password
+    return of(error ? { confirmedValidator: true } : {});
   };
 }

@@ -54,30 +54,19 @@ export class AdminApiService {
     return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/by-code/${restaurantCode}/all`) as Observable<Pastry[]>;
   }
 
-  getCommandsByCode(token: string, code: string, year = new Date().getFullYear().toString()): Observable<any> {
-    const headers = { password: token };
-    return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}?year=${year}`, {
-      headers,
-    });
+  getCommandsByCode(code: string, year = new Date().getFullYear().toString()): Observable<any> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}?year=${year}`);
   }
 
-  closeCommand(token: string, commandId: string): Observable<any> {
-    const headers = { password: token };
+  closeCommand(commandId: string): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/close/${commandId}`,
-      {
-        headers,
-      }
+      `${this.protocolHttp}${this.baseUrl}/commands/close/${commandId}`, null
     );
   }
 
-  payedCommand(token: string, commandId: string): Observable<any> {
-    const headers = { password: token };
+  payedCommand(commandId: string): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/payed/${commandId}`,
-      {
-        headers,
-      }
+      `${this.protocolHttp}${this.baseUrl}/commands/payed/${commandId}`, null
     );
   }
 

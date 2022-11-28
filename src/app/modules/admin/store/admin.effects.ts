@@ -4,6 +4,7 @@ import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY, pipe } from 'rxjs';
 import { map, mergeMap, catchError, switchMap, debounceTime, withLatestFrom, filter } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/auth.service';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -49,14 +50,8 @@ export class AdminEffects {
     this.actions$.pipe(
       ofType(fetchRestaurantCommands),
       mergeMap((action) => {
-        const token = localStorage.getItem('token') as string;
-        return this.adminApiService.getCommandsByCode(token, action.code, action.year).pipe(
+        return this.adminApiService.getCommandsByCode(action.code, action.year).pipe(
           map((commands) => setCommands({ commands })),
-          catchError(() => {
-            localStorage.removeItem('token');
-            this.router.navigate(['/']);
-            return EMPTY;
-          })
         );
       })
     )
@@ -66,16 +61,10 @@ export class AdminEffects {
     this.actions$.pipe(
       ofType(closeCommand),
       mergeMap((action) => {
-        const token = localStorage.getItem('token') as string;
         return this.adminApiService
-          .closeCommand(token, action.command._id!)
+          .closeCommand(action.command._id!)
           .pipe(
             map((command) => editCommand({ command })),
-            catchError(() => {
-              localStorage.removeItem('token');
-              this.router.navigate(['/']);
-              return EMPTY;
-            })
           );
       })
     )
@@ -85,16 +74,10 @@ export class AdminEffects {
     this.actions$.pipe(
       ofType(payedCommand),
       mergeMap((action) => {
-        const token = localStorage.getItem('token') as string;
         return this.adminApiService
-          .payedCommand(token, action.command._id!)
+          .payedCommand(action.command._id!)
           .pipe(
             map((command) => editCommand({ command })),
-            catchError(() => {
-              localStorage.removeItem('token');
-              this.router.navigate(['/']);
-              return EMPTY;
-            })
           );
       })
     )
@@ -120,13 +103,6 @@ export class AdminEffects {
           switchMap((restaurant) => {
             return [setRestaurant({ restaurant }), fetchAllRestaurantPastries({ code: restaurant.code }), fetchRestaurantCommands({ code: restaurant.code, year: new Date().getFullYear().toString() })];
           }),
-          catchError((error) => {
-            if (error.status === 404) {
-              this.router.navigate(['page', '404']);
-            }
-
-            return EMPTY;
-          })
         );
       })
     )
@@ -287,5 +263,6 @@ export class AdminEffects {
     private router: Router,
     private adminApiService: AdminApiService,
     private restaurantApiService: RestaurantApiService,
+    private authService: AuthService,
   ) { }
 }

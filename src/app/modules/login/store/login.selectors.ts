@@ -4,11 +4,6 @@ import { LoginState } from './login.reducer';
 
 export const selectFeature = (state: AppState) => state.login;
 
-export const selectToken = createSelector(
-  selectFeature,
-  (state: LoginState) => state.token
-);
-
 export const selectUserEmailError = createSelector(
   selectFeature,
   (state: LoginState) => state.userEmailError
@@ -17,4 +12,19 @@ export const selectUserEmailError = createSelector(
 export const selectIsEmailValidating = createSelector(
   selectFeature,
   (state: LoginState) => state.isEmailValidating
+);
+
+export const selectUserAuthError = createSelector(
+  selectFeature,
+  (state: LoginState) => state.userAuthError
+);
+
+export const selectUser = createSelector(
+  selectFeature,
+  (state: LoginState) => state.user
+);
+
+export const selectUserRestaurants = createSelector(
+  selectFeature,
+  (state: LoginState) => state.userRestaurants
 );

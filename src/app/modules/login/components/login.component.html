@@ -1,0 +1,18 @@
+<div nz-row nzJustify="center">
+  <div nz-col [nzSm]="20" [nzXs]="24">
+    <nz-tabset nzLinkRouter>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.', 'register']">
+          Créer un compte
+        </a>
+        <router-outlet></router-outlet>
+      </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']">
+          Se connecter
+        </a>
+        <router-outlet name="login-outlet"></router-outlet>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>

@@ -1,18 +1,37 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { debounceTime, map, mergeMap, switchMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { catchError, debounceTime, mergeMap, switchMap } from 'rxjs/operators';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser } from 'src/app/interfaces/user.interface';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
-import { createUser, postPassword, setNewUser, setToken, setUserEmailError, setUserNoEmailError, validateUserEmail } from './login.actions';
+import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
+import { createUser, fetchUser, setAuthError, setNewToken, setUser, setNoAuthError, setUserEmailError, setUserNoEmailError, signInUser, validateUserEmail, fetchUserRestaurant, setUserRestaurants } from './login.actions';
 
 @Injectable()
 export class LoginEffects {
-  postPassword$ = createEffect(() =>
+  fetchUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(postPassword),
-      map((action) => {
-        localStorage.setItem('token', action.password);
-        return setToken({ token: action.password });
+      ofType(fetchUser),
+      mergeMap(() => {
+        return this.loginApiService.getUser().pipe(
+          switchMap((user) => {
+            return [setUser({ user }), fetchUserRestaurant()];
+          })
+        );
+      })
+    )
+  );
+
+  fetchUserRestaurant$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchUserRestaurant),
+      mergeMap(() => {
+        return this.restaurantApiService.getUserRestaurants().pipe(
+          switchMap((restaurants: Restaurant[]) => {
+            return [setUserRestaurants({ restaurants })];
+          })
+        );
       })
     )
   );
@@ -23,8 +42,29 @@ export class LoginEffects {
       mergeMap((action: { user: CoreUser }) => {
         return this.loginApiService.postUser(action.user).pipe(
           switchMap((user) => {
-            return [setNewUser({ user })];
+            return [setUser({ user })];
           })
+        );
+      })
+    )
+  );
+
+  signInUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(signInUser),
+      mergeMap((action: { user: CoreUser }) => {
+        return this.loginApiService.postAuthLogin(action.user).pipe(
+          switchMap((token: { access_token: string }) => {
+            localStorage.setItem('access_token', token.access_token);
+            return [setNewToken({ token: token.access_token }), setNoAuthError(), fetchUser()];
+          }),
+          catchError((error) => {
+            if (error.status === 401) {
+              return [setAuthError({ error: true })];
+            }
+
+            return EMPTY;
+          }),
         );
       })
     )
@@ -51,5 +91,6 @@ export class LoginEffects {
   constructor(
     private actions$: Actions,
     private loginApiService: LoginApiService,
+    private restaurantApiService: RestaurantApiService,
   ) {}
 }

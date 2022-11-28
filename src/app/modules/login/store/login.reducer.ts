@@ -1,39 +1,65 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { setToken, setUserEmailError, setUserNoEmailError, validateUserEmail } from './login.actions';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { User } from 'src/app/interfaces/user.interface';
+import { setAuthError, setNewToken, setNoAuthError, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, validateUserEmail } from './login.actions';
 
 export const loginFeatureKey = 'login';
 
 export interface LoginState {
-  token: string;
   userEmailError: { error: boolean, duplicated: boolean } | null | undefined;
+  userAuthError: { error: boolean } | null | undefined;
   isEmailValidating: boolean;
+  user: User | null;
+  userRestaurants: Restaurant[] | null;
 }
 
 export const initialState: LoginState = {
-  token: '',
   userEmailError: undefined,
+  userAuthError: undefined,
   isEmailValidating: false,
+  user: null,
+  userRestaurants: null,
 };
 
 const tokenReducer = createReducer(
   initialState,
-  on(setToken, (state, { token }) => ({
-    ...state,
-    token: token,
-  })),
   on(validateUserEmail, (state) => ({
     ...state,
     userEmailError: undefined,
+  })),
+  on(signInUser, (state) => ({
+    ...state,
+    userAuthError: undefined,
   })),
   on(setUserEmailError, (state, { error, duplicated }) => ({
     ...state,
     userEmailError: { error, duplicated },
     isEmailValidating: false,
   })),
+  on(setNewToken, (state, { token }) => ({
+    ...state,
+    userToken: token,
+  })),
   on(setUserNoEmailError, (state) => ({
     ...state,
     userEmailError: null,
     isEmailValidating: false,
+  })),
+  on(setAuthError, (state, { error }) => ({
+    ...state,
+    userAuthError: { error },
+  })),
+  on(setNoAuthError, (state) => ({
+    ...state,
+    userAuthError: null,
+  })),
+  on(setUser, (state, { user }) => ({
+    ...state,
+    user,
+  })),
+  on(setUserRestaurants, (state, { restaurants }) => ({
+    ...state,
+    userRestaurants: restaurants,
   })),
 );
 

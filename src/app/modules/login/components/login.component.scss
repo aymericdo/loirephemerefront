@@ -1,0 +1,9 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  nz-tabset {
+    padding: 2rem;
+  }
+}

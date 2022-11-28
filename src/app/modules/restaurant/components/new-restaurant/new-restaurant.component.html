@@ -38,6 +38,22 @@
         </nz-form-item>
       </form>
     </ng-container>
-    <app-login *ngIf="currentStep === 1"></app-login>
+    <ng-container *ngIf="currentStep === 1">
+      <div nz-row nzJustify="center">
+        <div nz-col [nzSm]="20" [nzXs]="24">
+          <nz-tabset>
+            <nz-tab>
+              Créer un compte
+              <app-register></app-register>
+            </nz-tab>
+            <nz-tab>
+              Se connecter
+              <app-sign-in></app-sign-in>
+            </nz-tab>
+          </nz-tabset>
+        </div>
+      </div>
+
+    </ng-container>
   </div>
 </div>
