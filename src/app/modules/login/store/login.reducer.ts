@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { setAuthError, setNewToken, setNoAuthError, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, validateUserEmail } from './login.actions';
+import { createUser, setAuthError, setNewToken, setNoAuthError, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, validateUserEmail } from './login.actions';
 
 export const loginFeatureKey = 'login';
 
@@ -11,6 +11,7 @@ export interface LoginState {
   isEmailValidating: boolean;
   user: User | null;
   userRestaurants: Restaurant[] | null;
+  loading: boolean;
 }
 
 export const initialState: LoginState = {
@@ -19,10 +20,15 @@ export const initialState: LoginState = {
   isEmailValidating: false,
   user: null,
   userRestaurants: null,
+  loading: false,
 };
 
 const tokenReducer = createReducer(
   initialState,
+  on(createUser, signInUser, (state) => ({
+    ...state,
+    loading: true,
+  })),
   on(validateUserEmail, (state) => ({
     ...state,
     userEmailError: undefined,
@@ -60,6 +66,7 @@ const tokenReducer = createReducer(
   on(setUserRestaurants, (state, { restaurants }) => ({
     ...state,
     userRestaurants: restaurants,
+    loading: false,
   })),
 );
 

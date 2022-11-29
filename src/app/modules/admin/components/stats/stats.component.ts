@@ -47,7 +47,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       datalabels: {
         formatter: (value: string, ctx: any) => {
           if (ctx.chart.data.labels) {
-            if (window.matchMedia("(max-width: 800px)").matches && +value > 15) {
+            if (window.matchMedia("(max-width: 992px)").matches && +value > 15) {
               return `${ctx.chart.data.labels[ctx.dataIndex]}\n(${value})`;
             } else {
               return value;

@@ -62,7 +62,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.store.dispatch(fetchRestaurant({ code: params.get('code')! }));
       this.subscribeToWS(params.get('code')!);
     })
 

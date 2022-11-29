@@ -12,45 +12,38 @@
       <ul>
         <li nz-menu-item [nzMatchRouter]="true">
           <a [routerLink]="['page', 'restaurant', 'new']">
-            <i nz-icon nzType="coffee"></i>
+            <i nz-icon nzType="plus"></i>
             <span>Nouveau</span>
           </a>
         </li>
         <ng-container *ngFor="let restaurant of (userRestaurants$ | async)">
-          <li nz-menu-item>
-            <a [routerLink]="[restaurant.code, 'admin', 'menu']">
-              <i nz-icon nzType="coffee"></i>
-              <span>{{ restaurant.name }}</span>
-            </a>
+          <li nz-submenu [nzTitle]="restaurant.name" nzIcon="coffee" [nzOpen]="!isAdminCollapsed"
+            (nzOpenChange)="isAdminCollapsed = !isAdminCollapsed">
+            <ul>
+              <li nz-menu-item [nzSelected]="routeName === 'menu'">
+                <a [routerLink]="[restaurant.code, 'admin', 'menu']">
+                  <i nz-icon nzType="shopping-cart"></i>
+                  <span>Menu</span>
+                </a>
+              </li>
+              <li nz-menu-item [nzSelected]="routeName === 'commands'">
+                <a [routerLink]="[restaurant.code, 'admin', 'commands']">
+                  <i nz-icon nzType="alert"></i>
+                  <span>Commandes</span>
+                </a>
+              </li>
+              <li nz-menu-item [nzSelected]="routeName === 'stats'">
+                <a [routerLink]="[restaurant.code, 'admin', 'stats']">
+                  <i nz-icon nzType="pie-chart"></i>
+                  <span>Stats</span>
+                </a>
+              </li>
+            </ul>
           </li>
         </ng-container>
       </ul>
     </li>
 
-
-    <li *ngIf="isLoggedIn && restaurantCode" nz-submenu [nzOpen]="!isAdminCollapsed"
-    (nzOpenChange)="isAdminCollapsed = !isAdminCollapsed" nzTitle="Admin" nzIcon="lock">
-      <ul>
-        <li nz-menu-item [nzSelected]="routeName === 'menu'">
-          <a [routerLink]="[restaurantCode, 'admin', 'menu']">
-            <i nz-icon nzType="shopping-cart"></i>
-            <span>Menu</span>
-          </a>
-        </li>
-        <li nz-menu-item [nzSelected]="routeName === 'commands'">
-          <a [routerLink]="[restaurantCode, 'admin', 'commands']">
-            <i nz-icon nzType="alert"></i>
-            <span>Commandes</span>
-          </a>
-        </li>
-        <li nz-menu-item [nzSelected]="routeName === 'stats'">
-          <a [routerLink]="[restaurantCode, 'admin', 'stats']">
-            <i nz-icon nzType="pie-chart"></i>
-            <span>Stats</span>
-          </a>
-        </li>
-      </ul>
-    </li>
     <li nz-menu-item [nzMatchRouter]="true">
       <a [routerLink]="['page', 'about']">
         <i nz-icon nzType="question"></i>

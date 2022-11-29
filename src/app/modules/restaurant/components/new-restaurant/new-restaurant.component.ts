@@ -1,8 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { filter, Observable, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
+import { User } from 'src/app/interfaces/user.interface';
+import { selectUser } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 import { createRestaurant, validateRestaurantName } from '../../store/restaurant.actions';
 import { selectRestaurantNameError } from '../../store/restaurant.selectors';
@@ -15,7 +17,8 @@ import { selectRestaurantNameError } from '../../store/restaurant.selectors';
 export class NewRestaurantComponent implements OnInit {
   validateForm!: UntypedFormGroup;
   restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
-  currentStep = 1;
+  user$!: Observable<User | null>;
+  currentStep = 0;
 
   SIZE = SIZE;
 
@@ -23,18 +26,19 @@ export class NewRestaurantComponent implements OnInit {
 
   ngOnInit() {
     this.restaurantNameError$ = this.store.select(selectRestaurantNameError);
+    this.user$ = this.store.select(selectUser);
 
     this.validateForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.restaurantNameAsyncValidator]],
     });
   }
 
-  submitForm(): void {
-    if (this.currentStep < 3) {
-      this.currentStep += 1;
-    } else {
-      this.store.dispatch(createRestaurant({ name: this.validateForm.value.name }));
-    }
+  submitRestaurantForm(): void {
+    this.currentStep = 1;
+  }
+
+  handleCreation(): void {
+    this.store.dispatch(createRestaurant({ name: this.validateForm.value.name }));
   }
 
   resetForm(e: MouseEvent): void {

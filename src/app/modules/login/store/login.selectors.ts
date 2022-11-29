@@ -28,3 +28,8 @@ export const selectUserRestaurants = createSelector(
   selectFeature,
   (state: LoginState) => state.userRestaurants
 );
+
+export const selectLoading = createSelector(
+  selectFeature,
+  (state: LoginState) => state.loading
+);
