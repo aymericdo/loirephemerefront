@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { signInUser } from 'src/app/modules/login/store/login.actions';
-import { selectUserAuthError } from 'src/app/modules/login/store/login.selectors';
+import { selectLoading, selectUserAuthError } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -13,6 +13,7 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit, OnDestroy {
+  isLoading$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;
   passwordVisible = false;
   userAuthError$!: Observable<{ error: boolean } | null | undefined>;
@@ -25,11 +26,25 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userAuthError$ = this.store.select(selectUserAuthError);
+    this.isLoading$ = this.store.select(selectLoading);
 
     this.validateForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)]],
       password: ['', [Validators.required, Validators.minLength(SIZE.MIN_PASSWORD), Validators.maxLength(SIZE.LARGE)]],
     });
+
+    this.isLoading$
+      .pipe(
+        takeUntil(this.destroyed$)
+      ).subscribe((loading) => {
+        if (loading) {
+          this.validateForm.controls.email.disable();
+          this.validateForm.controls.password.disable();
+        } else {
+          this.validateForm.controls.email.enable();
+          this.validateForm.controls.password.enable();
+        }
+      })
 
     this.userAuthError$
       .pipe(
@@ -41,7 +56,6 @@ export class SignInComponent implements OnInit, OnDestroy {
           this.validateForm.controls.password.setErrors({});
         }
       })
-
   }
 
   ngOnDestroy() {

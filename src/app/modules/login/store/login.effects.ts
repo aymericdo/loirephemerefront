@@ -6,7 +6,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser } from 'src/app/interfaces/user.interface';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
 import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
-import { createUser, fetchUser, setAuthError, setNewToken, setUser, setNoAuthError, setUserEmailError, setUserNoEmailError, signInUser, validateUserEmail, fetchUserRestaurant, setUserRestaurants } from './login.actions';
+import { createUser, fetchUser, setAuthError, setNewToken, setUser, setNoAuthError, setUserEmailError, setUserNoEmailError, signInUser, validateUserEmail, fetchUserRestaurant, setUserRestaurants, stopLoading } from './login.actions';
 
 @Injectable()
 export class LoginEffects {
@@ -29,7 +29,7 @@ export class LoginEffects {
       mergeMap(() => {
         return this.restaurantApiService.getUserRestaurants().pipe(
           switchMap((restaurants: Restaurant[]) => {
-            return [setUserRestaurants({ restaurants })];
+            return [setUserRestaurants({ restaurants }), stopLoading()];
           })
         );
       })
@@ -43,7 +43,10 @@ export class LoginEffects {
         return this.loginApiService.postUser(action.user).pipe(
           switchMap((user) => {
             return [setUser({ user })];
-          })
+          }),
+          catchError(() => {
+            return [stopLoading()];
+          }),
         );
       })
     )
@@ -60,10 +63,11 @@ export class LoginEffects {
           }),
           catchError((error) => {
             if (error.status === 401) {
-              return [setAuthError({ error: true })];
+              localStorage.removeItem('access_token');
+              return [stopLoading(), setAuthError({ error: true })];
             }
 
-            return EMPTY;
+            return [stopLoading()];
           }),
         );
       })

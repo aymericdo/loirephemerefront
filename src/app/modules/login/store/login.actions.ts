@@ -57,3 +57,7 @@ export const setNewToken = createAction(
   '[Login page] Set user token',
   props<{ token: string }>()
 );
+
+export const stopLoading = createAction(
+  '[Login page] Stop loading',
+);

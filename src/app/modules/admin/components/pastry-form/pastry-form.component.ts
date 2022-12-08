@@ -43,8 +43,8 @@ export class PastryFormComponent implements OnInit {
     this.restaurantNameError$ = this.store.select(selectPastryNameError);
     this.uploadUrl = this.adminApiService.getUploadImageUrl(this.restaurant.code);
 
-    if (this.validateForm.controls['imageUrl'].value) {
-      const oldImageUrl = this.validateForm.controls['imageUrl'].value;
+    if (this.validateForm.controls.imageUrl.value) {
+      const oldImageUrl = this.validateForm.controls.imageUrl.value;
       this.fileList = [{
         uid: oldImageUrl,
         name: oldImageUrl,
@@ -55,8 +55,8 @@ export class PastryFormComponent implements OnInit {
   }
 
   handleClose(removedTag: string): void {
-    const ingredients = this.validateForm.controls['ingredients'].value;
-    this.validateForm.controls['ingredients'].setValue(ingredients.filter((tag: string) => tag !== removedTag));
+    const ingredients = this.validateForm.controls.ingredients.value;
+    this.validateForm.controls.ingredients.setValue(ingredients.filter((tag: string) => tag !== removedTag));
   }
 
   showInput(): void {
@@ -73,9 +73,9 @@ export class PastryFormComponent implements OnInit {
   }
 
   handleInputConfirm(closeInput: boolean = true): void {
-    const ingredients = this.validateForm.controls['ingredients'].value;
+    const ingredients = this.validateForm.controls.ingredients.value;
     if (this.ingredientsInputValue && ingredients.indexOf(this.ingredientsInputValue) === -1) {
-      this.validateForm.controls['ingredients'].setValue([...ingredients, this.ingredientsInputValue]);
+      this.validateForm.controls.ingredients.setValue([...ingredients, this.ingredientsInputValue]);
     }
     this.ingredientsInputValue = '';
     this.ingredientsInputVisible = closeInput;
@@ -87,11 +87,11 @@ export class PastryFormComponent implements OnInit {
 
   handleUpload(info: NzUploadChangeParam): void {
     if (info.type === 'removed') {
-      this.validateForm.controls['imageUrl'].setValue(null)
+      this.validateForm.controls.imageUrl.setValue(null)
     } else {
       if (info.file.status === 'done') {
         this.msg.success(`${info.file.name} a été téléchargé avec succès`);
-        this.validateForm.controls['imageUrl'].setValue(info.file.response.filename)
+        this.validateForm.controls.imageUrl.setValue(info.file.response.filename)
       } else if (info.file.status === 'error') {
         this.msg.error(`${info.file.name} : le téléchargement a échoué.`);
       }

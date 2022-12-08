@@ -5,15 +5,13 @@
         <a *nzTabLink nz-tab-link [routerLink]="['.', 'register']">
           Créer un compte
         </a>
-        <nz-spin *ngIf="(isLoading$ | async) === true" nzSimple [nzSize]="'large'"></nz-spin>
-        <router-outlet *ngIf="(isLoading$ | async) === false"></router-outlet>
+        <router-outlet></router-outlet>
       </nz-tab>
       <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="['.']">
           Se connecter
         </a>
-        <nz-spin *ngIf="(isLoading$ | async) === true" nzSimple [nzSize]="'large'"></nz-spin>
-        <router-outlet *ngIf="(isLoading$ | async) === false" name="login-outlet"></router-outlet>
+        <router-outlet name="login-outlet"></router-outlet>
       </nz-tab>
     </nz-tabset>
   </div>

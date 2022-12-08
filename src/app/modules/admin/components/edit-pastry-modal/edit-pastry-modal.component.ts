@@ -51,9 +51,9 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe((pastryNameDeactivated: boolean) => {
       if (pastryNameDeactivated) {
-        this.validateForm.controls['name'].disable();
+        this.validateForm.controls.name.disable();
       } else {
-        this.validateForm.controls['name'].enable();
+        this.validateForm.controls.name.enable();
       }
     });
   }

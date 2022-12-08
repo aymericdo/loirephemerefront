@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { selectLoading, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -12,7 +12,6 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  isLoading$!: Observable<boolean>;
   userRestaurants$!: Observable<Restaurant[] | null>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -23,7 +22,6 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isLoading$ = this.store.select(selectLoading);
     this.userRestaurants$ = this.store.select(selectUserRestaurants);
     this.userRestaurants$.pipe(
       filter(Boolean),

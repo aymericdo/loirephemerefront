@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, filter, take, of } from 'rxjs';
+import { Observable, filter, take, of, ReplaySubject, takeUntil } from 'rxjs';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
 import { createUser, validateUserEmail } from 'src/app/modules/login/store/login.actions';
-import { selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
+import { selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -13,23 +13,47 @@ import { AppState } from 'src/app/store/app.state';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+  isLoading$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;
   userEmailError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   passwordVisible = false;
 
   SIZE = SIZE;
 
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.userEmailError$ = this.store.select(selectUserEmailError);
+    this.isLoading$ = this.store.select(selectLoading);
 
     this.validateForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.userEmailAsyncValidator]],
       password: ['', [Validators.required, Validators.minLength(SIZE.MIN_PASSWORD), Validators.maxLength(SIZE.LARGE), Validators.pattern(REGEX.PASSWORD)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(SIZE.MIN_PASSWORD), Validators.maxLength(SIZE.LARGE)], [this.confirmPasswordValidator]],
     });
+
+    this.isLoading$
+      .pipe(
+        takeUntil(this.destroyed$)
+      ).subscribe((loading) => {
+        if (loading) {
+          this.validateForm.controls.email.disable();
+          this.validateForm.controls.password.disable();
+          this.validateForm.controls.confirmPassword.disable();
+        } else {
+          this.validateForm.controls.email.enable();
+          this.validateForm.controls.password.enable();
+          this.validateForm.controls.confirmPassword.enable();
+        }
+      })
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   submitForm(): void {

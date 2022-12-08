@@ -38,7 +38,7 @@
     <nz-form-control [nzSm]="{ span: 12, offset: 8 }" [nzXs]="24">
       <div nzFlex nz-row nzJustify="end">
         <nz-space>
-          <button *nzSpaceItem nz-button nzType="primary" [disabled]="!validateForm.valid">Se connecter</button>
+          <button *nzSpaceItem nz-button [nzLoading]="(isLoading$ | async) === true" nzType="primary" [disabled]="!validateForm.valid">Se connecter</button>
         </nz-space>
       </div>
     </nz-form-control>
