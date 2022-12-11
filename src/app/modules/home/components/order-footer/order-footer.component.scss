@@ -1,11 +1,15 @@
 :host {
-  position: absolute;
-  left: 0;
+  position: fixed;
+  right: 0;
   bottom: 0;
-  width: 100%;
+  width: calc(100% - 200px);
 
   nz-footer {
     display: flex;
     justify-content: space-between;
+  }
+
+  @media screen and (max-width: 992px) {
+    width: calc(100%);
   }
 }

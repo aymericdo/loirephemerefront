@@ -3,13 +3,12 @@
   height: 100%;
   position: relative;
 
-  .scrollable-zone {
-    overflow-y: auto;
+  .home-section {
     height: 100%;
-    padding: 24px;
+    padding: 1rem;
   }
 
-  .scrollable-zone.-has-order-footer {
-    height: calc(100% - 80px);
+  .home-section.-has-order-footer {
+    margin-bottom: 80px;
   }
 }

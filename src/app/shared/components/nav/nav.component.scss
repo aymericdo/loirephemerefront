@@ -29,8 +29,13 @@
     flex: 1;
   }
 
+  .account-name-tooltip {
+    width: 100%;
+  }
+
   ::ng-deep .account-name {
-    max-width: calc(100% - 10px);
+    display: block;
+    max-width: calc(100% - 20px);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

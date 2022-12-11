@@ -73,7 +73,14 @@
     </li>
 
     <ng-template #titleTpl>
-      <span class="account-name">{{ (user$ | async)?.email || 'Mon compte' }}</span>
+      <ng-container *ngIf="isLoggedIn">
+        <span class="account-name-tooltip" nz-tooltip [nzTooltipTitle]="(user$ | async)?.email" [nzTooltipMouseEnterDelay]="1">
+          <span class="account-name">{{ (user$ | async)?.email }}</span>
+        </span>
+      </ng-container>
+      <ng-container *ngIf="!isLoggedIn">
+        <span>Mon compte</span>
+      </ng-container>
     </ng-template>
   </ul>
 </nz-sider>

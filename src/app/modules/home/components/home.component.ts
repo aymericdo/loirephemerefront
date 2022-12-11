@@ -49,8 +49,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
   styleUrls: ['./home.component.scss'],
   providers: [HomeWebSocketService],
 })
-export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('scrollframe', { static: false }) scrollFrame!: ElementRef;
+export class HomeComponent implements OnInit, OnDestroy {
   @ViewChildren('item') itemElements!: QueryList<any>;
 
   restaurant$: Observable<Restaurant | null>;
@@ -71,7 +70,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private scrollContainer: any;
 
   constructor(
     private store: Store<AppState>,
@@ -129,10 +127,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  ngAfterViewInit() {
-    this.scrollContainer = this.scrollFrame.nativeElement;
-  }
-
   handleClickPlus(pastry: Pastry): void {
     let count: number = 0;
     this.selectedPastries$.pipe(take(1)).subscribe((selectedPastries: { [pastryId: string]: number }) => {
@@ -142,15 +136,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (count === 0) {
       const cardToScroll = this.itemElements.find(
         (item) => item.pastry._id === pastry._id
-      );
+        );
 
-      if (cardToScroll) {
-        this.scrollContainer.scroll({
+        if (cardToScroll) {
+        window.scroll({
           top:
-            this.scrollContainer.scrollTop +
+            window.pageYOffset +
             cardToScroll.elem.nativeElement.getBoundingClientRect().top -
             50,
-          left: 0,
           behavior: 'smooth',
         });
       }

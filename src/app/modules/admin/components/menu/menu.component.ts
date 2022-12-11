@@ -14,8 +14,6 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent {
-  @ViewChild('scrollframe', { static: false }) scrollFrame!: ElementRef;
-  @ViewChildren('item') itemElements!: QueryList<any>;
   restaurant$: Observable<Restaurant | null>;
   pastries$: Observable<Pastry[]>;
   isLoading$: Observable<boolean>;

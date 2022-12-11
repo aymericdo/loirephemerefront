@@ -30,6 +30,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   exports: [
@@ -63,6 +64,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzMessageModule,
     NzSpinModule,
     NzStepsModule,
+    NzToolTipModule,
   ],
   declarations: [],
 })

@@ -3,13 +3,9 @@
   height: 100%;
   position: relative;
 
-  .scrollable-zone {
+  .menu-section {
     height: 100%;
-    padding: 1.625rem;
-  }
-
-  .scrollable-zone.-has-order-footer {
-    height: calc(100% - 80px);
+    padding: 1rem;
   }
 
   .pastry-list {
