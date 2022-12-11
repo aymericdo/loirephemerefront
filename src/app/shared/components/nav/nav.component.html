@@ -8,7 +8,7 @@
       </a>
     </li>
 
-    <li *ngIf="isLoggedIn" nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length" nzTitle="Restaurants" nzIcon="coffee">
+    <li *ngIf="isLoggedIn" nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'" nzTitle="Restaurants" nzIcon="coffee">
       <ul>
         <li nz-menu-item [nzMatchRouter]="true">
           <a [routerLink]="['page', 'restaurant', 'new']">
@@ -52,7 +52,7 @@
     </li>
     <div class="block"></div>
     <li nz-submenu [nzOpen]="!isUserCollapsed"
-    (nzOpenChange)="isUserCollapsed = !isUserCollapsed" nzTitle="Mon compte" nzIcon="user">
+    (nzOpenChange)="isUserCollapsed = !isUserCollapsed" [nzTitle]="titleTpl" nzIcon="user">
       <ul>
         <li *ngIf="isLoggedIn" nz-menu-item>
           <a (click)="handleDisconnect()">
@@ -71,5 +71,9 @@
         </li>
       </ul>
     </li>
+
+    <ng-template #titleTpl>
+      <span class="account-name">{{ (user$ | async)?.email || 'Mon compte' }}</span>
+    </ng-template>
   </ul>
 </nz-sider>

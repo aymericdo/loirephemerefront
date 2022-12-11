@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, filter, take, of, ReplaySubject, takeUntil } from 'rxjs';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
-import { createUser, validateUserEmail } from 'src/app/modules/login/store/login.actions';
-import { selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
+import { confirmEmail, validateUserEmail } from 'src/app/modules/login/store/login.actions';
+import { selectLoading, selectModalOpened, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -14,10 +14,12 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, OnDestroy {
+  modalOpened$!: Observable<boolean>;
   isLoading$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;
   userEmailError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   passwordVisible = false;
+  confirmationModalVisible = false;
 
   SIZE = SIZE;
 
@@ -28,6 +30,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userEmailError$ = this.store.select(selectUserEmailError);
     this.isLoading$ = this.store.select(selectLoading);
+    this.modalOpened$ = this.store.select(selectModalOpened);
 
     this.validateForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.userEmailAsyncValidator]],
@@ -57,11 +60,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   submitForm(): void {
-    this.store.dispatch(createUser({
-      user: {
-        email: this.validateForm.value.email,
-        password: this.validateForm.value.password,
-      },
+    this.store.dispatch(confirmEmail({
+      email: this.validateForm.value.email,
     }));
   }
 

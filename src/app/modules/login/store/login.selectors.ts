@@ -33,3 +33,13 @@ export const selectLoading = createSelector(
   selectFeature,
   (state: LoginState) => state.loading
 );
+
+export const selectCode2 = createSelector(
+  selectFeature,
+  (state: LoginState) => state.code2
+);
+
+export const selectModalOpened = createSelector(
+  selectFeature,
+  (state: LoginState) => state.modalOpened
+);

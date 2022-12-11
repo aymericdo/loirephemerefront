@@ -20,6 +20,10 @@ export const setUser = createAction(
   props<{ user: User }>()
 );
 
+export const resetUser = createAction(
+  '[Login page] Reset User',
+);
+
 export const setAuthError = createAction(
   '[Login page] Set auth error',
   props<{ error: boolean }>()
@@ -45,7 +49,22 @@ export const setUserNoEmailError = createAction(
 
 export const createUser = createAction(
   '[Login page] Create a new user',
-  props<{ user: CoreUser }>()
+  props<{ user: CoreUser, emailCode: string }>()
+);
+
+export const confirmEmail = createAction(
+  '[Login page] Confirm an email of a new user',
+  props<{ email: string }>()
+);
+
+export const setCode2 = createAction(
+  '[Login page] Set code 2',
+  props<{ code2: string }>()
+);
+
+export const openConfirmationModal = createAction(
+  '[Admin page] Open confirmation modal',
+  props<{ modal: boolean }>()
 );
 
 export const signInUser = createAction(

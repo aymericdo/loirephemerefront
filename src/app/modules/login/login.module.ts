@@ -9,10 +9,12 @@ import { RegisterComponent } from 'src/app/modules/login/components/register/reg
 import { SignInComponent } from 'src/app/modules/login/components/sign-in/sign-in.component';
 import { LoginComponent } from 'src/app/modules/login/components/login.component';
 import { LoginRoutingModule } from 'src/app/modules/login/login-routing.module';
+import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
+    ConfirmationModalComponent,
     RegisterComponent,
     SignInComponent,
   ],

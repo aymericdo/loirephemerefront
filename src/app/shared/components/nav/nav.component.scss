@@ -29,6 +29,13 @@
     flex: 1;
   }
 
+  ::ng-deep .account-name {
+    max-width: calc(100% - 10px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   @media screen and (max-width: 992px) {
     nz-sider {
       overflow: inherit;

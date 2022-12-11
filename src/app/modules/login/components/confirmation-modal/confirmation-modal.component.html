@@ -1,0 +1,26 @@
+<nz-modal [nzVisible]="true" nzCentered nzTitle="Code de confirmation (vérifiez vos emails)" [nzClosable]="false">
+  <form nz-form [formGroup]="validateForm">
+    <ng-container *nzModalContent>
+      <nz-form-item nzJustify="center">
+        <div nzFlex nz-row nzJustify="center">
+          <nz-form-control [nzXs]="6">
+            <nz-input-number formControlName="figure1" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9" nzPlaceHolder="0"></nz-input-number>
+          </nz-form-control>
+          <nz-form-control [nzXs]="6">
+            <nz-input-number formControlName="figure2" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9" nzPlaceHolder="0"></nz-input-number>
+          </nz-form-control>
+          <nz-form-control [nzXs]="6">
+            <nz-input-number formControlName="figure3" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9" nzPlaceHolder="0"></nz-input-number>
+          </nz-form-control>
+          <nz-form-control [nzXs]="6">
+            <nz-input-number formControlName="figure4" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9" nzPlaceHolder="0"></nz-input-number>
+          </nz-form-control>
+        </div>
+      </nz-form-item>
+    </ng-container>
+
+    <ng-container *nzModalFooter>
+      <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!validateForm.valid" [nzLoading]="isLoading$ | async">Créer le compte</button>
+    </ng-container>
+  </form>
+</nz-modal>

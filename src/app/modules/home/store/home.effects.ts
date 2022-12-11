@@ -118,6 +118,5 @@ export class HomeEffects {
     private store$: Store<AppState>,
     private homeApiService: HomeApiService,
     private restaurantApiService: RestaurantApiService,
-    private router: Router,
   ) { }
 }

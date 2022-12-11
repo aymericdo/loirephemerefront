@@ -29,11 +29,18 @@ export class LoginApiService {
     ) as Observable<User>;
   }
 
-  postUser(user: CoreUser): Observable<User> {
+  postUser(user: CoreUser, emailCode: string, code2: string): Observable<User> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/users`,
-      user
+      { ...user, emailCode, code2 }
     ) as Observable<User>;
+  }
+
+  postConfirmEmailUser(email: string): Observable<string> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/users/confirm-email`,
+      { email }
+    ) as Observable<string>;
   }
 
   postAuthLogin(user: CoreUser): Observable<{ access_token: string }> {

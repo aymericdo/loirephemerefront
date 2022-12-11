@@ -27,8 +27,10 @@ export class LoginComponent implements OnInit {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurants) => {
-      if (restaurants) {
+      if (restaurants.length) {
         this.router.navigate([restaurants[0].code, 'admin', 'menu']);
+      } else {
+        this.router.navigate(['page', 'restaurant', 'new']);
       }
     })
   }

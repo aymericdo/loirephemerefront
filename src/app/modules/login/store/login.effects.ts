@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
-import { catchError, debounceTime, mergeMap, switchMap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { catchError, debounceTime, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser } from 'src/app/interfaces/user.interface';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
+import { selectCode2 } from 'src/app/modules/login/store/login.selectors';
 import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
-import { createUser, fetchUser, setAuthError, setNewToken, setUser, setNoAuthError, setUserEmailError, setUserNoEmailError, signInUser, validateUserEmail, fetchUserRestaurant, setUserRestaurants, stopLoading } from './login.actions';
+import { AppState } from 'src/app/store/app.state';
+import { createUser, fetchUser, setAuthError, setNewToken, setUser, setNoAuthError, setUserEmailError, setUserNoEmailError, signInUser, validateUserEmail, fetchUserRestaurant, setUserRestaurants, stopLoading, confirmEmail, openConfirmationModal, setCode2 } from './login.actions';
 
 @Injectable()
 export class LoginEffects {
@@ -36,13 +38,31 @@ export class LoginEffects {
     )
   );
 
+  confirmEmail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(confirmEmail),
+      mergeMap((action: { email: string }) => {
+        return this.loginApiService.postConfirmEmailUser(action.email).pipe(
+          switchMap((code2: string) => {
+            return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
+          }),
+          catchError(() => {
+            return [stopLoading()];
+          }),
+        );
+      })
+    )
+  );
+
   postUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(createUser),
-      mergeMap((action: { user: CoreUser }) => {
-        return this.loginApiService.postUser(action.user).pipe(
-          switchMap((user) => {
-            return [setUser({ user })];
+      withLatestFrom(this.store$.select(selectCode2)),
+      mergeMap(([action, code2]) => {
+        const { user, emailCode }: { user: CoreUser, emailCode: string } = action;
+        return this.loginApiService.postUser(user, emailCode, code2!).pipe(
+          switchMap((userRes) => {
+            return [setUser({ user: userRes }), signInUser({ user: { email: userRes.email, password: user.password } })];
           }),
           catchError(() => {
             return [stopLoading()];
@@ -96,5 +116,6 @@ export class LoginEffects {
     private actions$: Actions,
     private loginApiService: LoginApiService,
     private restaurantApiService: RestaurantApiService,
+    private store$: Store<AppState>,
   ) {}
 }

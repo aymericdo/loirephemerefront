@@ -8,7 +8,10 @@ import { AuthService } from 'src/app/auth/auth.service';
 
 @Injectable()
 export class HttpResponseInterceptor implements HttpInterceptor {
-  blackList = ['/users/auth/login'];
+  blackList = [
+    '/users/auth/login',
+    '/users/confirm-email',
+  ];
 
   constructor(
     private authService: AuthService,

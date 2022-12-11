@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { fetchUser } from 'src/app/modules/login/store/login.actions';
+import { fetchUser, resetUser } from 'src/app/modules/login/store/login.actions';
 import { selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -66,6 +66,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   handleDisconnect(): void {
     this.authService.doLogout();
+    this.store.dispatch(resetUser());
   }
 
   get isLoggedIn(): boolean {
@@ -82,6 +83,10 @@ export class NavComponent implements OnInit, OnDestroy {
         return 'stats';
       } else if (urlArray.length > 2 && urlArray[3].includes('menu')) {
         return 'menu';
+      }
+    } else if (urlArray.length > 1 && urlArray[2] === 'restaurant') {
+      if (urlArray.length > 2 && urlArray[3].includes('new')) {
+        return 'new-restaurant';
       }
     } else if (urlArray.length > 1 && urlArray[2] === 'login') {
       this.isUserCollapsed = this.isLoggedIn;

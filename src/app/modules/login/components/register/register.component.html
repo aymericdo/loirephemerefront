@@ -85,3 +85,5 @@
     </nz-form-control>
   </nz-form-item>
 </form>
+
+<app-confirmation-modal *ngIf="(modalOpened$ | async) === true" [email]="validateForm.value.email" [password]="validateForm.value.password"></app-confirmation-modal>
