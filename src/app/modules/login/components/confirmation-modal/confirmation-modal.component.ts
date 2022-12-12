@@ -47,9 +47,20 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  onPaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const clipboardData = event.clipboardData;
+    const pastedText = clipboardData!.getData('text');
+    if (pastedText && pastedText.toString().length === 4 && pastedText.match(/\d{4}/g)?.length) {
+      this.validateForm.controls.figure1.setValue(pastedText[0]);
+      this.validateForm.controls.figure2.setValue(pastedText[1]);
+      this.validateForm.controls.figure3.setValue(pastedText[2]);
+      this.validateForm.controls.figure4.setValue(pastedText[3]);
+    }
+  }
+
   submitForm(): void {
     const emailCode = `${this.validateForm.value.figure1}${this.validateForm.value.figure2}${this.validateForm.value.figure3}${this.validateForm.value.figure4}`;
-    debugger;
     this.clickConfirm.emit({ emailCode });
   }
 }

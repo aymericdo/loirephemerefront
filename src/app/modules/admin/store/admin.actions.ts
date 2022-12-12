@@ -8,7 +8,7 @@ export const fetchAllRestaurantPastries = createAction(
 );
 export const fetchRestaurantCommands = createAction(
   '[Admin page] Fetch commands for a restaurant',
-  props<{ code: string, year: string }>()
+  props<{ code: string, fromDate: string, toDate: string }>()
 );
 export const setCommands = createAction(
   '[Admin page] Set commands',

@@ -50,7 +50,7 @@ export class AdminEffects {
     this.actions$.pipe(
       ofType(fetchRestaurantCommands),
       mergeMap((action) => {
-        return this.adminApiService.getCommandsByCode(action.code, action.year).pipe(
+        return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate).pipe(
           map((commands) => setCommands({ commands })),
         );
       })
@@ -101,7 +101,10 @@ export class AdminEffects {
       mergeMap((action: { code: string }) => {
         return this.restaurantApiService.getRestaurant(action.code).pipe(
           switchMap((restaurant) => {
-            return [setRestaurant({ restaurant }), fetchAllRestaurantPastries({ code: restaurant.code }), fetchRestaurantCommands({ code: restaurant.code, year: new Date().getFullYear().toString() })];
+            return [
+              setRestaurant({ restaurant }),
+              fetchAllRestaurantPastries({ code: restaurant.code }),
+            ];
           }),
         );
       })

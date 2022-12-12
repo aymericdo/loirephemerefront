@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
+import { Command } from 'src/app/interfaces/command.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -54,8 +55,8 @@ export class AdminApiService {
     return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/by-code/${restaurantCode}/all`) as Observable<Pastry[]>;
   }
 
-  getCommandsByCode(code: string, year = new Date().getFullYear().toString()): Observable<any> {
-    return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}?year=${year}`);
+  getCommandsByCode(code: string, fromDate: string, toDate: string): Observable<Command[]> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}?fromDate=${fromDate}&toDate=${toDate}`) as Observable<Command[]>;;
   }
 
   closeCommand(commandId: string): Observable<any> {

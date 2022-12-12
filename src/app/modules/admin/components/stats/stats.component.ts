@@ -132,6 +132,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
       this.currentRestaurant = restaurant;
+      this.currentYearChange();
     })
 
     combineLatest([this.payedCommands$, this.pastries$])
@@ -287,7 +288,13 @@ export class StatsComponent implements OnInit, OnDestroy {
   }
 
   currentYearChange() {
-    this.store.dispatch(fetchRestaurantCommands({ code: this.currentRestaurant?.code!, year: this.currentYear }));
+    const fromDateNow = new Date(+this.currentYear, 0, 1);
+    const fromDate: string = fromDateNow.toISOString();
+
+    const toDateNow = new Date(+this.currentYear, 12, 1);
+    const toDate: string = toDateNow.toISOString();
+
+    this.store.dispatch(fetchRestaurantCommands({ code: this.currentRestaurant?.code!, fromDate, toDate }));
   }
 
   ngOnDestroy() {

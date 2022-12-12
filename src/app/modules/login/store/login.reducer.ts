@@ -97,7 +97,7 @@ const tokenReducer = createReducer(
   })),
   on(setPasswordAsChanged, (state, { changed }) => ({
     ...state,
-    changed,
+    passwordChanged: changed,
   })),
   on(resetUser, (state) => ({
     ...state,

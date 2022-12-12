@@ -5,7 +5,7 @@
         <div nzFlex nz-row nzJustify="center">
           <nz-form-control [nzXs]="6">
             <nz-input-number formControlName="figure1" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0"></nz-input-number>
+              nzPlaceHolder="0" (paste)="onPaste($event)"></nz-input-number>
           </nz-form-control>
           <nz-form-control [nzXs]="6">
             <nz-input-number formControlName="figure2" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"

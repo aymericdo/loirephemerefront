@@ -8,6 +8,7 @@ import {
   closeCommand,
   editCommand,
   fetchRestaurant,
+  fetchRestaurantCommands,
   payedCommand,
   sendNotificationSub,
 } from 'src/app/modules/admin/store/admin.actions';
@@ -22,11 +23,13 @@ import {
   WebSocketData,
   AdminWebSocketService,
 } from 'src/app/modules/admin/services/admin-socket.service';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from 'src/environments/environment';
 import { SwPush } from '@angular/service-worker';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 
 @Component({
   templateUrl: './commands.component.html',
@@ -39,6 +42,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
   payedCommands$: Observable<Command[]>;
   totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
+  restaurant$: Observable<Restaurant | null>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -58,6 +62,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
     this.payedCommands$ = this.store.select(selectPayedCommands);
     this.totalPayedCommands$ = this.store.select(selectTotalPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
+    this.restaurant$ = this.store.select(selectRestaurant);
   }
 
   ngOnInit(): void {
@@ -70,6 +75,13 @@ export class CommandsComponent implements OnInit, OnDestroy {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'ongoing' } });
       }
     });
+
+    this.restaurant$.pipe(
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe((restaurant) => {
+      this.fetchCommands(restaurant.code);
+    })
 
     if (environment.production) {
       this.swPush
@@ -109,6 +121,18 @@ export class CommandsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private fetchCommands(code: string): void {
+    const fromDateNow = new Date();
+    fromDateNow.setHours(fromDateNow.getHours() - 24)
+    const fromDate: string = fromDateNow.toISOString(); // today - 24h
+
+    const toDateNow = new Date();
+    toDateNow.setHours(toDateNow.getHours() + 24)
+    const toDate: string = toDateNow.toISOString(); // today + 24h
+
+    this.store.dispatch(fetchRestaurantCommands({ code, fromDate, toDate }));
   }
 
   private subscribeToWS(code: string) {
