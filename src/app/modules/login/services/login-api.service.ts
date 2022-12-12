@@ -43,6 +43,27 @@ export class LoginApiService {
     ) as Observable<string>;
   }
 
+  postConfirmRecoverEmailUser(email: string): Observable<string> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/users/confirm-recover-email`,
+      { email }
+    ) as Observable<string>;
+  }
+
+  postValidateRecoverEmailCode(email: string, emailCode: string, code2: string): Observable<boolean> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/users/validate-recover-email-code`,
+      { email, emailCode, code2 }
+    ) as Observable<boolean>;
+  }
+
+  postChangePassword(email: string, password: string, emailCode: string, code2: string): Observable<boolean> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/users/change-password`,
+      { email, password, emailCode, code2 }
+    ) as Observable<boolean>;
+  }
+
   postAuthLogin(user: CoreUser): Observable<{ access_token: string }> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/users/auth/login`,

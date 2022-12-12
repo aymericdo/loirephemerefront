@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { filter, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
@@ -13,6 +13,7 @@ import { AppState } from 'src/app/store/app.state';
 })
 export class LoginComponent implements OnInit {
   userRestaurants$!: Observable<Restaurant[] | null>;
+  isOnRecover = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isOnRecover = this.router.url === '/page/login/recover';
     this.userRestaurants$ = this.store.select(selectUserRestaurants);
     this.userRestaurants$.pipe(
       filter(Boolean),
@@ -33,5 +35,13 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['page', 'restaurant', 'new']);
       }
     })
+
+    this.router.events
+      .pipe(
+        filter(e => (e instanceof ActivationEnd)),
+      )
+      .subscribe(() => {
+        this.isOnRecover = this.router.url === '/page/login/recover';
+      });
   }
 }

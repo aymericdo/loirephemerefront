@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { createUser, openConfirmationModal, resetUser, setAuthError, setCode2, setNewToken, setNoAuthError, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, validateUserEmail } from './login.actions';
+import { confirmEmail, confirmRecoverEmail, createUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError, setCode2, setNewToken, setNoAuthError, setPasswordAsChanged, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, validateUserEmail } from './login.actions';
 
 export const loginFeatureKey = 'login';
 
@@ -13,7 +13,9 @@ export interface LoginState {
   userRestaurants: Restaurant[] | null;
   loading: boolean;
   code2: string | null;
-  modalOpened: boolean;
+  confirmationModalOpened: boolean;
+  recoverModalOpened: boolean;
+  passwordChanged: boolean;
 }
 
 export const initialState: LoginState = {
@@ -24,14 +26,20 @@ export const initialState: LoginState = {
   userRestaurants: null,
   loading: false,
   code2: null,
-  modalOpened: false,
+  confirmationModalOpened: false,
+  recoverModalOpened: false,
+  passwordChanged: false,
 };
 
 const tokenReducer = createReducer(
   initialState,
-  on(createUser, signInUser, (state) => ({
+  on(createUser, signInUser, confirmEmail, confirmRecoverEmail, (state) => ({
     ...state,
     loading: true,
+  })),
+  on(confirmRecoverEmail, (state) => ({
+    ...state,
+    passwordChanged: false,
   })),
   on(validateUserEmail, (state) => ({
     ...state,
@@ -69,7 +77,11 @@ const tokenReducer = createReducer(
   })),
   on(openConfirmationModal, (state, { modal }) => ({
     ...state,
-    modalOpened: modal,
+    confirmationModalOpened: modal,
+  })),
+  on(openRecoverModal, (state, { modal }) => ({
+    ...state,
+    recoverModalOpened: modal,
   })),
   on(setUser, (state, { user }) => ({
     ...state,
@@ -82,6 +94,10 @@ const tokenReducer = createReducer(
   on(stopLoading, (state) => ({
     ...state,
     loading: false,
+  })),
+  on(setPasswordAsChanged, (state, { changed }) => ({
+    ...state,
+    changed,
   })),
   on(resetUser, (state) => ({
     ...state,

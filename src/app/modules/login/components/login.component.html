@@ -13,6 +13,12 @@
         </a>
         <router-outlet name="login-outlet"></router-outlet>
       </nz-tab>
+      <nz-tab *ngIf="isOnRecover">
+        <a *nzTabLink nz-tab-link [routerLink]="['.', 'recover']">
+          Mot de passe oublié
+        </a>
+        <router-outlet></router-outlet>
+      </nz-tab>
     </nz-tabset>
   </div>
 </div>

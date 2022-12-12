@@ -1,0 +1,28 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Email</nz-form-label>
+    <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback [nzErrorTip]="userEmailErrorTpl">
+      <input nz-input formControlName="email" placeholder="mail@mail.com" />
+      <ng-template #userEmailErrorTpl let-control>
+        <ng-container *ngIf="control.hasError('required')">Merci d'entrer un email</ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="form-action-row">
+    <nz-form-control [nzSm]="{ span: 12, offset: 8 }" [nzXs]="24">
+      <div nzFlex nz-row nzJustify="end">
+        <nz-space nzAlign="center">
+          <button *nzSpaceItem nz-button [nzLoading]="(isLoading$ | async) === true" nzType="primary"
+            [disabled]="!validateForm.valid">Confirmer</button>
+        </nz-space>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<app-confirmation-modal *ngIf="(confirmationModalOpened$ | async) === true" (clickConfirm)="handleClickConfirm($event)">
+</app-confirmation-modal>
+<app-recover-modal *ngIf="(recoverModalOpened$ | async) === true" [email]="validateForm.value.email"
+  [emailCode]="emailCode">
+</app-recover-modal>

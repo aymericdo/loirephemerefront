@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, take, of, ReplaySubject, takeUntil } from 'rxjs';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
-import { confirmEmail, validateUserEmail } from 'src/app/modules/login/store/login.actions';
-import { selectLoading, selectModalOpened, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
+import { confirmEmail, createUser, validateUserEmail } from 'src/app/modules/login/store/login.actions';
+import { selectLoading, selectConfirmationModalOpened, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -14,7 +14,7 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  modalOpened$!: Observable<boolean>;
+  confirmationModalOpened$!: Observable<boolean>;
   isLoading$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;
   userEmailError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userEmailError$ = this.store.select(selectUserEmailError);
     this.isLoading$ = this.store.select(selectLoading);
-    this.modalOpened$ = this.store.select(selectModalOpened);
+    this.confirmationModalOpened$ = this.store.select(selectConfirmationModalOpened);
 
     this.validateForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.userEmailAsyncValidator]],
@@ -62,6 +62,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
   submitForm(): void {
     this.store.dispatch(confirmEmail({
       email: this.validateForm.value.email,
+    }));
+  }
+
+  handleClickConfirm(event: { emailCode: string }): void {
+    this.store.dispatch(createUser({
+      user: {
+        email: this.validateForm.value.email,
+        password: this.validateForm.value.password,
+      },
+      emailCode: event.emailCode,
     }));
   }
 

@@ -35,6 +35,10 @@
             "style": "camelCase",
             "type": "attribute"
           }
+        ],
+        "max-line-length": [
+          true,
+          120
         ]
       }
     },

@@ -1,8 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { createUser } from 'src/app/modules/login/store/login.actions';
 import { selectLoading } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -12,8 +11,8 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./confirmation-modal.component.scss']
 })
 export class ConfirmationModalComponent implements OnInit, OnDestroy {
-  @Input() email!: string;
-  @Input() password!: string;
+  @Input() submitButton = 'Suivant';
+  @Output() clickConfirm = new EventEmitter<{ emailCode: string }>();
   isLoading$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;
 
@@ -50,12 +49,7 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     const emailCode = `${this.validateForm.value.figure1}${this.validateForm.value.figure2}${this.validateForm.value.figure3}${this.validateForm.value.figure4}`;
-    this.store.dispatch(createUser({
-      user: {
-        email: this.email,
-        password: this.password,
-      },
-      emailCode,
-    }));
+    debugger;
+    this.clickConfirm.emit({ emailCode });
   }
 }

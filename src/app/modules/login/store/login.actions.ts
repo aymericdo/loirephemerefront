@@ -67,6 +67,11 @@ export const openConfirmationModal = createAction(
   props<{ modal: boolean }>()
 );
 
+export const openRecoverModal = createAction(
+  '[Admin page] Open recover modal',
+  props<{ modal: boolean }>()
+);
+
 export const signInUser = createAction(
   '[Login page] Sign in with a user',
   props<{ user: CoreUser }>()
@@ -79,4 +84,24 @@ export const setNewToken = createAction(
 
 export const stopLoading = createAction(
   '[Login page] Stop loading',
+);
+
+export const confirmRecoverEmail = createAction(
+  '[Login page] Confirm recover email',
+  props<{ email: string }>()
+);
+
+export const validateRecoverEmailCode = createAction(
+  '[Login page] Validate recover email code',
+  props<{ email: string, emailCode: string }>()
+);
+
+export const changePassword = createAction(
+  '[Login page] Change password',
+  props<{ email: string, emailCode: string, password: string }>()
+);
+
+export const setPasswordAsChanged = createAction(
+  '[Login page] Set password as changed',
+  props<{ changed: boolean }>()
 );

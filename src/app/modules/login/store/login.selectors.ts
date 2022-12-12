@@ -39,7 +39,17 @@ export const selectCode2 = createSelector(
   (state: LoginState) => state.code2
 );
 
-export const selectModalOpened = createSelector(
+export const selectConfirmationModalOpened = createSelector(
   selectFeature,
-  (state: LoginState) => state.modalOpened
+  (state: LoginState) => state.confirmationModalOpened
+);
+
+export const selectRecoverModalOpened = createSelector(
+  selectFeature,
+  (state: LoginState) => state.recoverModalOpened
+);
+
+export const selectPasswordChanged = createSelector(
+  selectFeature,
+  (state: LoginState) => state.passwordChanged
 );

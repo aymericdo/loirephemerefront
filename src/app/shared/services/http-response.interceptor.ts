@@ -11,6 +11,8 @@ export class HttpResponseInterceptor implements HttpInterceptor {
   blackList = [
     '/users/auth/login',
     '/users/confirm-email',
+    '/users/confirm-recover-email',
+    '/users/validate-recover-email-code',
   ];
 
   constructor(

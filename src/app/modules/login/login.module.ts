@@ -10,11 +10,15 @@ import { SignInComponent } from 'src/app/modules/login/components/sign-in/sign-i
 import { LoginComponent } from 'src/app/modules/login/components/login.component';
 import { LoginRoutingModule } from 'src/app/modules/login/login-routing.module';
 import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
+import { RecoverModalComponent } from 'src/app/modules/login/components/recover-modal/recover-modal.component';
+import { RecoverComponent } from 'src/app/modules/login/components/recover/recover.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
     ConfirmationModalComponent,
+    RecoverComponent,
+    RecoverModalComponent,
     RegisterComponent,
     SignInComponent,
   ],

@@ -37,7 +37,8 @@
   <nz-form-item class="form-action-row">
     <nz-form-control [nzSm]="{ span: 12, offset: 8 }" [nzXs]="24">
       <div nzFlex nz-row nzJustify="end">
-        <nz-space>
+        <nz-space nzAlign="center">
+          <a *nzSpaceItem [routerLink]="['.', 'recover']">Mot de passe oublié ?</a>
           <button *nzSpaceItem nz-button [nzLoading]="(isLoading$ | async) === true" nzType="primary" [disabled]="!validateForm.valid">Se connecter</button>
         </nz-space>
       </div>

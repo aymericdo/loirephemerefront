@@ -14,9 +14,11 @@ import { AppState } from 'src/app/store/app.state';
 })
 export class SignInComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
+  userAuthError$!: Observable<{ error: boolean } | null | undefined>;
+
   validateForm!: UntypedFormGroup;
   passwordVisible = false;
-  userAuthError$!: Observable<{ error: boolean } | null | undefined>;
+  recoverModalOpened = false;
 
   SIZE = SIZE;
 

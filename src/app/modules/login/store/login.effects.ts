@@ -8,7 +8,17 @@ import { LoginApiService } from 'src/app/modules/login/services/login-api.servic
 import { selectCode2 } from 'src/app/modules/login/store/login.selectors';
 import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
 import { AppState } from 'src/app/store/app.state';
-import { createUser, fetchUser, setAuthError, setNewToken, setUser, setNoAuthError, setUserEmailError, setUserNoEmailError, signInUser, validateUserEmail, fetchUserRestaurant, setUserRestaurants, stopLoading, confirmEmail, openConfirmationModal, setCode2 } from './login.actions';
+import {
+  createUser, fetchUser, setAuthError,
+  setNewToken, setUser, setNoAuthError,
+  setUserEmailError, setUserNoEmailError, signInUser,
+  validateUserEmail, fetchUserRestaurant, setUserRestaurants,
+  stopLoading, confirmEmail, openConfirmationModal,
+  setCode2, confirmRecoverEmail, validateRecoverEmailCode,
+  openRecoverModal,
+  changePassword,
+  setPasswordAsChanged,
+} from './login.actions';
 
 @Injectable()
 export class LoginEffects {
@@ -45,6 +55,66 @@ export class LoginEffects {
         return this.loginApiService.postConfirmEmailUser(action.email).pipe(
           switchMap((code2: string) => {
             return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
+          }),
+          catchError(() => {
+            return [stopLoading()];
+          }),
+        );
+      })
+    )
+  );
+
+  confirmRecoverEmail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(confirmRecoverEmail),
+      mergeMap((action: { email: string }) => {
+        return this.loginApiService.postConfirmRecoverEmailUser(action.email).pipe(
+          switchMap((code2: string) => {
+            return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
+          }),
+          catchError(() => {
+            return [stopLoading()];
+          }),
+        );
+      })
+    )
+  );
+
+  validateRecoverEmailCode$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(validateRecoverEmailCode),
+      withLatestFrom(this.store$.select(selectCode2)),
+      mergeMap(([action, code2]) => {
+        const { email, emailCode }: { email: string, emailCode: string } = action;
+        return this.loginApiService.postValidateRecoverEmailCode(email, emailCode, code2!).pipe(
+          switchMap((isValid: boolean) => {
+            if (isValid) {
+              return [openConfirmationModal({ modal: false }), openRecoverModal({ modal: true }), stopLoading()];
+            } else {
+              return [stopLoading()];
+            }
+          }),
+          catchError(() => {
+            return [stopLoading()];
+          }),
+        );
+      })
+    )
+  );
+
+  changePassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(changePassword),
+      withLatestFrom(this.store$.select(selectCode2)),
+      mergeMap(([action, code2]) => {
+        const { email, password, emailCode }: { email: string, password: string, emailCode: string } = action;
+        return this.loginApiService.postChangePassword(email, password, emailCode, code2!).pipe(
+          switchMap((isValid: boolean) => {
+            if (isValid) {
+              return [openRecoverModal({ modal: false }), stopLoading(), setPasswordAsChanged({ changed: true })];
+            } else {
+              return [stopLoading()];
+            }
           }),
           catchError(() => {
             return [stopLoading()];
