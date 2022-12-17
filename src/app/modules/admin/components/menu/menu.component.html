@@ -25,22 +25,25 @@
       ><nz-empty></nz-empty
   ></ng-container>
 
-  <div *ngIf="isInSequenceMode && (pastries$ | async)?.length" cdkDropList class="pastry-sequence-list" (cdkDropListDropped)="drop($event)">
-    <div class="pastry-sequence-box" [class.-loading]="isMoving$ | async" *ngFor="let pastry of pastries$ | async; trackBy: tackById" cdkDrag [cdkDragData]="pastry">
-      <div class="pastry-sequence-custom-placeholder" *cdkDragPlaceholder>
+  <div class="pastry-sequence-section">
+    <div *ngIf="isInSequenceMode && (pastries$ | async)?.length" cdkDropList class="pastry-sequence-list" (cdkDropListDropped)="drop($event)">
+      <div class="pastry-sequence-box" [class.-loading]="isMoving$ | async" *ngFor="let pastry of pastries$ | async; trackBy: tackById" cdkDrag [cdkDragData]="pastry">
+        <div class="pastry-sequence-custom-placeholder" *cdkDragPlaceholder>
+          <span>{{ pastry.name }}</span>
+        </div>
+        <div *cdkDragPreview></div>
         <span>{{ pastry.name }}</span>
+        <nz-space class="badges-section" nzAlign="center">
+          <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
+          <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence" [nzTitle]="'displaySequence'"></nz-badge>
+        </nz-space>
+          <ng-template #iconHidden>
+          <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
+        </ng-template>
       </div>
-      <div *cdkDragPreview></div>
-      <span>{{ pastry.name }}</span>
-      <nz-space class="badges-section" nzAlign="center">
-        <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
-        <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence" [nzTitle]="'displaySequence'"></nz-badge>
-      </nz-space>
-        <ng-template #iconHidden>
-        <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
-      </ng-template>
     </div>
   </div>
+
   <div *ngIf="!isInSequenceMode && (pastries$ | async)?.length" class="pastry-list" nz-row [nzGutter]="[0, 24]">
     <div *ngFor="let pastry of pastries$ | async; trackBy: tackById" class="pastry-section" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12"
       nzXl="8">

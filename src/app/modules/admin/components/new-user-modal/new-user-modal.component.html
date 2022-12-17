@@ -1,0 +1,29 @@
+<nz-modal [nzVisible]="true" nzTitle="Ajouter un utilisateur" nzCentered (nzOnCancel)="clickCancel.emit()">
+  <form nz-form [formGroup]="validateForm">
+    <ng-container *nzModalContent>
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Email</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
+          [nzErrorTip]="userEmailErrorTpl">
+          <input nz-input formControlName="email" placeholder="mail@mail.com" />
+          <ng-template #userEmailErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Merci d'entrer un email</ng-container>
+            <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un email de plus de {{ SIZE.MIN }}
+              caractères
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un email de moins de {{ SIZE.SMALL }}
+              caractères
+            </ng-container>
+            <ng-container *ngIf="control.hasError('notExists')">L'email n'existe pas dans la plateforme</ng-container>
+            <ng-container *ngIf="control.hasError('alreadyIn')">L'email est déjà présent dans le restaurant
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </ng-container>
+    <ng-container *nzModalFooter>
+      <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!validateForm.valid"
+        [nzLoading]="isLoading$ | async">Enregistrer</button>
+    </ng-container>
+  </form>
+</nz-modal>

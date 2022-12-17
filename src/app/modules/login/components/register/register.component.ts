@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, take, of, ReplaySubject, takeUntil } from 'rxjs';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
-import { confirmEmail, createUser, validateUserEmail } from 'src/app/modules/login/store/login.actions';
+import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
 import { selectLoading, selectConfirmationModalOpened, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -87,7 +87,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   private userEmailAsyncValidator = (control: UntypedFormControl) => {
-    this.store.dispatch(validateUserEmail({ email: control.value }));
+    this.store.dispatch(validatingUserEmail({ email: control.value }));
 
     return this.userEmailError$.pipe(
       filter((value) => value !== undefined),

@@ -5,7 +5,7 @@ import { Observable, filter, take, of, takeUntil, ReplaySubject } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { editingPastry, setPastryNoNameError, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
+import { editingPastry, setPastryNoNameError, validatingPastryName } from 'src/app/modules/admin/store/admin.actions';
 import { selectIsSavingPastry, selectPastryNameDeactivated, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -69,7 +69,7 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
     this.store.dispatch(editingPastry({
       pastry: {
         ...currentPastry,
-        name: this.validateForm.value.name,
+        name: this.validateForm.value.name || currentPastry.name,
         description: this.validateForm.value.description,
         price: this.validateForm.value.price,
         ingredients: this.validateForm.value.ingredients,
@@ -86,7 +86,7 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
     if (this.prevPastryName === control.value) {
       this.store.dispatch(setPastryNoNameError());
     } else {
-      this.store.dispatch(validatePastryName({ pastryName: control.value }));
+      this.store.dispatch(validatingPastryName({ pastryName: control.value }));
     }
 
     return this.restaurantNameError$.pipe(

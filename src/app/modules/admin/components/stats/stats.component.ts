@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
-import { fetchRestaurantCommands } from '../../store/admin.actions';
+import { fetchingRestaurantCommands } from '../../store/admin.actions';
 import {
   selectIsLoading,
   selectPayedCommands,
@@ -294,7 +294,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     const toDateNow = new Date(+this.currentYear, 12, 1);
     const toDate: string = toDateNow.toISOString();
 
-    this.store.dispatch(fetchRestaurantCommands({ code: this.currentRestaurant?.code!, fromDate, toDate }));
+    this.store.dispatch(fetchingRestaurantCommands({ code: this.currentRestaurant?.code!, fromDate, toDate }));
   }
 
   ngOnDestroy() {

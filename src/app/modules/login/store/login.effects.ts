@@ -12,7 +12,7 @@ import {
   createUser, fetchUser, setAuthError,
   setNewToken, setUser, setNoAuthError,
   setUserEmailError, setUserNoEmailError, signInUser,
-  validateUserEmail, fetchUserRestaurant, setUserRestaurants,
+  validatingUserEmail, fetchUserRestaurant, setUserRestaurants,
   stopLoading, confirmEmail, openConfirmationModal,
   setCode2, confirmRecoverEmail, validateRecoverEmailCode,
   openRecoverModal,
@@ -164,9 +164,9 @@ export class LoginEffects {
     )
   );
 
-  validateUserEmail$ = createEffect(() =>
+  validatingUserEmail$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(validateUserEmail),
+      ofType(validatingUserEmail),
       debounceTime(500),
       mergeMap((action: { email: string }) => {
         return this.loginApiService.validateUserEmail(action.email).pipe(

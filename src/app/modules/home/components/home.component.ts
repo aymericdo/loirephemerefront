@@ -17,7 +17,7 @@ import {
   resetCommand,
   setStock,
   sendNotificationSub,
-  fetchRestaurant,
+  fetchingRestaurant,
 } from 'src/app/modules/home/store/home.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.store.dispatch(fetchRestaurant({ code: params.get('code')! }));
+      this.store.dispatch(fetchingRestaurant({ code: params.get('code')! }));
       this.subscribeToWS(params.get('code')!);
     })
 

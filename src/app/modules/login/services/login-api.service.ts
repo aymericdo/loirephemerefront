@@ -19,7 +19,7 @@ export class LoginApiService {
 
   validateUserEmail(email: string): Observable<boolean> {
     return this.http.get(
-      `${this.protocolHttp}${this.baseUrl}/users/validate?email=${email}`,
+      `${this.protocolHttp}${this.baseUrl}/users/not-exists?email=${email}`,
     ) as Observable<boolean>;
   }
 

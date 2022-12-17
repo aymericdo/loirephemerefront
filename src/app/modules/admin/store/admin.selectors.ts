@@ -94,3 +94,17 @@ export const selectEditingPastry = createSelector(
   (state: AdminState) => state.editingPastry
 );
 
+export const selectUsers = createSelector(
+  selectFeature,
+  (state: AdminState) => state.users
+);
+
+export const selectUserEmailError = createSelector(
+  selectFeature,
+  (state: AdminState) => state.userEmailError
+);
+
+export const selectIsEmailValidating = createSelector(
+  selectFeature,
+  (state: AdminState) => state.isEmailValidating
+);

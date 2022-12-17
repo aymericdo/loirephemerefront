@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { postingPastry, validatePastryName } from 'src/app/modules/admin/store/admin.actions';
+import { postingPastry, validatingPastryName } from 'src/app/modules/admin/store/admin.actions';
 import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -55,7 +55,7 @@ export class NewPastryModalComponent implements OnInit {
   }
 
   pastryNameAsyncValidator = (control: UntypedFormControl) => {
-    this.store.dispatch(validatePastryName({ pastryName: control.value }));
+    this.store.dispatch(validatingPastryName({ pastryName: control.value }));
 
     return this.restaurantNameError$.pipe(
       filter((value) => value !== undefined),

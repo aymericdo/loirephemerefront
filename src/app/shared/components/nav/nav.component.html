@@ -8,7 +8,8 @@
       </a>
     </li>
 
-    <li *ngIf="isLoggedIn" nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'" nzTitle="Restaurants" nzIcon="coffee">
+    <li *ngIf="isLoggedIn" nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
+      nzTitle="Restaurants" nzIcon="coffee">
       <ul>
         <li nz-menu-item [nzMatchRouter]="true">
           <a [routerLink]="['page', 'restaurant', 'new']">
@@ -38,6 +39,12 @@
                   <span>Stats</span>
                 </a>
               </li>
+              <li nz-menu-item [nzSelected]="routeName === 'users'">
+                <a [routerLink]="[restaurant.code, 'admin', 'users']">
+                  <i nz-icon nzType="user"></i>
+                  <span>Utilisateurs</span>
+                </a>
+              </li>
             </ul>
           </li>
         </ng-container>
@@ -51,8 +58,8 @@
       </a>
     </li>
     <div class="block"></div>
-    <li nz-submenu [nzOpen]="!isUserCollapsed"
-    (nzOpenChange)="isUserCollapsed = !isUserCollapsed" [nzTitle]="titleTpl" nzIcon="user">
+    <li nz-submenu [nzOpen]="!isUserCollapsed" (nzOpenChange)="isUserCollapsed = !isUserCollapsed" [nzTitle]="titleTpl"
+      nzIcon="user">
       <ul>
         <li *ngIf="isLoggedIn" nz-menu-item>
           <a (click)="handleDisconnect()">
@@ -74,7 +81,8 @@
 
     <ng-template #titleTpl>
       <ng-container *ngIf="isLoggedIn">
-        <span class="account-name-tooltip" nz-tooltip [nzTooltipTitle]="(user$ | async)?.email" [nzTooltipMouseEnterDelay]="1">
+        <span class="account-name-tooltip" nz-tooltip [nzTooltipTitle]="(user$ | async)?.email"
+          [nzTooltipMouseEnterDelay]="1">
           <span class="account-name">{{ (user$ | async)?.email }}</span>
         </span>
       </ng-container>

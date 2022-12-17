@@ -1,17 +1,18 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { User } from 'src/app/interfaces/user.interface';
 import { commandsMock } from 'src/app/mocks/commands.mock';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   addCommand,
   editCommand,
   setCommands,
-  fetchRestaurantCommands,
-  fetchRestaurant,
+  fetchingRestaurantCommands,
+  fetchingRestaurant,
   setAllPastries,
-  fetchAllRestaurantPastries,
-  validatePastryName,
+  fetchingAllRestaurantPastries,
+  validatingPastryName,
   setPastryNameError,
   setPastryNoNameError,
   addPastry,
@@ -26,6 +27,15 @@ import {
   movingPastry,
   pastryMoved,
   reactivatePastryName,
+  setUsers,
+  fetchingUsers,
+  validatingUserEmail,
+  setUserEmailError,
+  setUserNoEmailError,
+  addingUserToRestaurant,
+  addUser,
+  deleteUser,
+  deletingUserToRestaurant,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -41,6 +51,11 @@ export interface AdminState {
   isMovingPastry: boolean;
   editingPastry: Pastry | null;
   menuModalOpened: 'new' | 'edit' | null,
+  users: User[],
+  userEmailError: { error: boolean, notExists: boolean } | null | undefined;
+  isEmailValidating: boolean;
+  isAddingUser: boolean;
+  isDeletingUser: boolean;
 }
 
 export const initialState: AdminState = {
@@ -54,13 +69,18 @@ export const initialState: AdminState = {
   isMovingPastry: false,
   editingPastry: null,
   menuModalOpened: null,
+  users: [],
+  userEmailError: undefined,
+  isEmailValidating: false,
+  isAddingUser: false,
+  isDeletingUser: false,
 };
 
 const adminReducer = createReducer(
   initialState,
 
   // Common
-  on(fetchAllRestaurantPastries, fetchRestaurant, fetchRestaurantCommands, (state) => ({
+  on(fetchingAllRestaurantPastries, fetchingRestaurant, fetchingRestaurantCommands, fetchingUsers, (state) => ({
     ...state,
     loading: true,
   })),
@@ -123,7 +143,7 @@ const adminReducer = createReducer(
     ...state,
     pastryNameDeactivated: false,
   })),
-  on(validatePastryName, (state) => ({
+  on(validatingPastryName, (state) => ({
     ...state,
     pastryNameError: undefined,
     isNameValidating: true,
@@ -171,6 +191,45 @@ const adminReducer = createReducer(
     ...state,
     menuModalOpened: null,
     editingPastry: null,
+  })),
+
+  // Users
+  on(setUsers, (state, { users }) => ({
+    ...state,
+    users,
+    loading: false,
+  })),
+  on(validatingUserEmail, (state) => ({
+    ...state,
+    userEmailError: undefined,
+  })),
+  on(setUserEmailError, (state, { error, notExists }) => ({
+    ...state,
+    userEmailError: { error, notExists },
+    isEmailValidating: false,
+  })),
+  on(setUserNoEmailError, (state) => ({
+    ...state,
+    userEmailError: null,
+    isEmailValidating: false,
+  })),
+  on(addingUserToRestaurant, (state) => ({
+    ...state,
+    isAddingUser: true,
+  })),
+  on(deletingUserToRestaurant, (state) => ({
+    ...state,
+    isDeletingUser: true,
+  })),
+  on(addUser, (state, { user }) => ({
+    ...state,
+    isAddingUser: false,
+    users: [...state.users, user],
+  })),
+  on(deleteUser, (state, { userEmail }) => ({
+    ...state,
+    isDeletingUser: false,
+    users: state.users.filter(user => user.email !== userEmail),
   })),
 );
 

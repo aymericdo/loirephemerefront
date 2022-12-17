@@ -16,6 +16,8 @@ import { NewPastryModalComponent } from 'src/app/modules/admin/components/new-pa
 import { EditPastryModalComponent } from 'src/app/modules/admin/components/edit-pastry-modal/edit-pastry-modal.component';
 import { PastryFormComponent } from 'src/app/modules/admin/components/pastry-form/pastry-form.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { UsersComponent } from 'src/app/modules/admin/components/users/users.component';
+import { NewUserModalComponent } from 'src/app/modules/admin/components/new-user-modal/new-user-modal.component';
 
 
 @NgModule({
@@ -28,6 +30,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     NewPastryModalComponent,
     EditPastryModalComponent,
     PastryFormComponent,
+    UsersComponent,
+    NewUserModalComponent,
   ],
   imports: [
     CommonModule,

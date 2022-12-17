@@ -5,11 +5,10 @@ import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
 import {
   addCommand,
-  closeCommand,
+  closingCommand,
   editCommand,
-  fetchRestaurant,
-  fetchRestaurantCommands,
-  payedCommand,
+  fetchingRestaurantCommands,
+  payingCommand,
   sendNotificationSub,
 } from 'src/app/modules/admin/store/admin.actions';
 import {
@@ -102,11 +101,11 @@ export class CommandsComponent implements OnInit, OnDestroy {
   }
 
   handleClickDone(command: Command): void {
-    this.store.dispatch(closeCommand({ command }));
+    this.store.dispatch(closingCommand({ command }));
   }
 
   handleClickPayed(command: Command): void {
-    this.store.dispatch(payedCommand({ command }));
+    this.store.dispatch(payingCommand({ command }));
   }
 
   handleClickWizz(command: Command): void {
@@ -132,7 +131,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
     toDateNow.setHours(toDateNow.getHours() + 24)
     const toDate: string = toDateNow.toISOString(); // today + 24h
 
-    this.store.dispatch(fetchRestaurantCommands({ code, fromDate, toDate }));
+    this.store.dispatch(fetchingRestaurantCommands({ code, fromDate, toDate }));
   }
 
   private subscribeToWS(code: string) {

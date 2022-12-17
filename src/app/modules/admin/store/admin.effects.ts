@@ -1,31 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY, pipe } from 'rxjs';
 import { map, mergeMap, catchError, switchMap, debounceTime, withLatestFrom, filter } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/auth.service';
-import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { User } from 'src/app/interfaces/user.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
-import { HomeApiService } from '../../home/services/home-api.service';
 import { setRestaurant } from '../../home/store/home.actions';
 import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
 import { AdminApiService } from '../services/admin-api.service';
 import {
-  closeCommand,
+  closingCommand,
   editCommand,
   setCommands,
   notificationSubSent,
   sendNotificationSub,
-  payedCommand,
-  fetchRestaurant,
-  fetchRestaurantCommands,
-  fetchAllRestaurantPastries,
+  payingCommand,
+  fetchingRestaurant,
+  fetchingRestaurantCommands,
+  fetchingAllRestaurantPastries,
   setAllPastries,
   setPastryNoNameError,
   setPastryNameError,
-  validatePastryName,
+  validatingPastryName,
   postingPastry,
   addPastry,
   pastryCreated,
@@ -42,13 +40,22 @@ import {
   decrementPastry,
   openMenuModal,
   reactivatePastryName,
+  fetchingUsers,
+  setUsers,
+  validatingUserEmail,
+  setUserEmailError,
+  setUserNoEmailError,
+  addingUserToRestaurant,
+  addUser,
+  deletingUserToRestaurant,
+  deleteUser,
 } from './admin.actions';
 
 @Injectable()
 export class AdminEffects {
-  fetchRestaurantCommands$ = createEffect(() =>
+  fetchingRestaurantCommands$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchRestaurantCommands),
+      ofType(fetchingRestaurantCommands),
       mergeMap((action) => {
         return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate).pipe(
           map((commands) => setCommands({ commands })),
@@ -57,9 +64,9 @@ export class AdminEffects {
     )
   );
 
-  closeCommand$ = createEffect(() =>
+  closingCommand$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(closeCommand),
+      ofType(closingCommand),
       mergeMap((action) => {
         return this.adminApiService
           .closeCommand(action.command._id!)
@@ -70,9 +77,9 @@ export class AdminEffects {
     )
   );
 
-  payedCommand$ = createEffect(() =>
+  payingCommand$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(payedCommand),
+      ofType(payingCommand),
       mergeMap((action) => {
         return this.adminApiService
           .payedCommand(action.command._id!)
@@ -95,15 +102,15 @@ export class AdminEffects {
     )
   );
 
-  fetchRestaurant$ = createEffect(() =>
+  fetchingRestaurant$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchRestaurant),
+      ofType(fetchingRestaurant),
       mergeMap((action: { code: string }) => {
         return this.restaurantApiService.getRestaurant(action.code).pipe(
           switchMap((restaurant) => {
             return [
               setRestaurant({ restaurant }),
-              fetchAllRestaurantPastries({ code: restaurant.code }),
+              fetchingAllRestaurantPastries({ code: restaurant.code }),
             ];
           }),
         );
@@ -111,9 +118,9 @@ export class AdminEffects {
     )
   );
 
-  fetchAllRestaurantPastries$ = createEffect(() =>
+  fetchingAllRestaurantPastries$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchAllRestaurantPastries),
+      ofType(fetchingAllRestaurantPastries),
       mergeMap((action) => {
         return this.adminApiService.getAllPastries(action.code).pipe(
           map((pastries) => setAllPastries({ pastries })),
@@ -147,9 +154,9 @@ export class AdminEffects {
     )
   );
 
-  validatePastryName$ = createEffect(() =>
+  validatingPastryName$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(validatePastryName),
+      ofType(validatingPastryName),
       debounceTime(500),
       withLatestFrom(
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
@@ -260,12 +267,77 @@ export class AdminEffects {
     )
   );
 
+  fetchingUsers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchingUsers),
+      mergeMap((action) => {
+        return this.adminApiService.getAllUsers(action.code).pipe(
+          switchMap((users) => {
+            return [setUsers({ users })];
+          }),
+          catchError((error) => {
+            console.error(error);
+            return EMPTY;
+          })
+        );
+      })
+    )
+  );
+
+  validatingUserEmail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(validatingUserEmail),
+      debounceTime(500),
+      mergeMap((action: { email: string }) => {
+        return this.adminApiService.validateUserEmail(action.email).pipe(
+          switchMap((isValid: boolean) => {
+            if (isValid) {
+              return [setUserNoEmailError()];
+            } else {
+              return [setUserEmailError({ error: true, notExists: true })];
+            }
+          })
+        );
+      })
+    )
+  );
+
+  addingUserToRestaurant$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(addingUserToRestaurant),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.postUserToRestaurant(restaurant.code, action.email).pipe(
+          switchMap((user: User) => {
+            return [addUser({ user })];
+          })
+        );
+      })
+    )
+  );
+
+  deletingUserToRestaurant$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deletingUserToRestaurant),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.deleteUserToRestaurant(restaurant.code, action.email).pipe(
+          switchMap((isDone: boolean) => {
+            return isDone ? [deleteUser({ userEmail: action.email })] : EMPTY;
+          })
+        );
+      })
+    )
+  );
+
   constructor(
     private actions$: Actions,
     private store$: Store<AppState>,
-    private router: Router,
     private adminApiService: AdminApiService,
     private restaurantApiService: RestaurantApiService,
-    private authService: AuthService,
   ) { }
 }

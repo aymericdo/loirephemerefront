@@ -81,6 +81,8 @@ export class NavComponent implements OnInit, OnDestroy {
         return 'commands';
       } else if (urlArray.length > 2 && urlArray[3].includes('stats')) {
         return 'stats';
+      } else if (urlArray.length > 2 && urlArray[3].includes('users')) {
+        return 'users';
       } else if (urlArray.length > 2 && urlArray[3].includes('menu')) {
         return 'menu';
       }

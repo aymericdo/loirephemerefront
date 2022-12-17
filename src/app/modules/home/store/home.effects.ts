@@ -12,7 +12,7 @@ import {
 import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
-  fetchRestaurant,
+  fetchingRestaurant,
   fetchRestaurantPastries,
   notificationSubSent,
   resetCommand,
@@ -88,9 +88,9 @@ export class HomeEffects {
     )
   );
 
-  fetchRestaurant$ = createEffect(() =>
+  fetchingRestaurant$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchRestaurant),
+      ofType(fetchingRestaurant),
       mergeMap((action: { code: string }) => {
         return this.restaurantApiService.getRestaurant(action.code).pipe(
           switchMap((restaurant) => {

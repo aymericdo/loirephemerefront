@@ -5,7 +5,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   decrementPastry,
-  fetchRestaurant,
+  fetchingRestaurant,
   fetchRestaurantPastries,
   incrementPastry,
   resetCommand,
@@ -39,7 +39,7 @@ export const initialState: HomeState = {
 
 const homeReducer = createReducer(
   initialState,
-  on(fetchRestaurant, fetchRestaurantPastries, (state) => ({
+  on(fetchingRestaurant, fetchRestaurantPastries, (state) => ({
     ...state,
     loading: true,
   })),

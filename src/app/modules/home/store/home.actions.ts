@@ -43,7 +43,7 @@ export const sendNotificationSub = createAction(
 export const notificationSubSent = createAction(
   '[Home page] Notification sub sent'
 );
-export const fetchRestaurant = createAction('[Home page] Fetch restaurant',
+export const fetchingRestaurant = createAction('[Home page] Fetch restaurant',
   props<{ code: string }>()
 );
 export const setRestaurant = createAction(

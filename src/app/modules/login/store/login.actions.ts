@@ -29,7 +29,7 @@ export const setAuthError = createAction(
   props<{ error: boolean }>()
 );
 
-export const validateUserEmail = createAction(
+export const validatingUserEmail = createAction(
   '[Login page] Validate user email',
   props<{ email: string }>()
 );
