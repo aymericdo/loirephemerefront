@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { confirmEmail, confirmRecoverEmail, createUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError, setCode2, setNewToken, setNoAuthError, setPasswordAsChanged, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, validatingUserEmail } from './login.actions';
+import { addUserRestaurants, confirmEmail, confirmRecoverEmail, createUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError, setCode2, setNewToken, setNoAuthError, setPasswordAsChanged, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, validatingUserEmail } from './login.actions';
 
 export const loginFeatureKey = 'login';
 
@@ -90,6 +90,10 @@ const tokenReducer = createReducer(
   on(setUserRestaurants, (state, { restaurants }) => ({
     ...state,
     userRestaurants: restaurants,
+  })),
+  on(addUserRestaurants, (state, { restaurant }) => ({
+    ...state,
+    userRestaurants: [...state.userRestaurants || [], restaurant],
   })),
   on(stopLoading, (state) => ({
     ...state,

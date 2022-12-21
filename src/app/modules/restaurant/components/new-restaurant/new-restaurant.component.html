@@ -17,9 +17,11 @@
             <input nz-input formControlName="name" placeholder="Gaufres et compagnie" />
             <ng-template #restaurantNameErrorTpl let-control>
               <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
-              <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }} caractères
+              <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }}
+                caractères
               </ng-container>
-              <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de {{ SIZE.SMALL }} caractères
+              <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de {{ SIZE.SMALL }}
+                caractères
               </ng-container>
               <ng-container *ngIf="control.hasError('duplicated')">Le nom est déjà pris</ng-container>
             </ng-template>
@@ -40,7 +42,8 @@
     </ng-container>
 
     <ng-container *ngIf="currentStep === 1">
-      <nz-result *ngIf="(user$ | async) !== null" [nzIcon]="'smile-twotone'" [nzTitle]="'Bonjour ' + (user$ | async)?.email">
+      <nz-result *ngIf="(user$ | async) !== null" [nzIcon]="'smile-twotone'"
+        [nzTitle]="'Bonjour ' + (user$ | async)?.email">
         <div nz-result-extra>
           <button nz-button nzType="primary" (click)="currentStep = currentStep + 1">Suivant</button>
         </div>
@@ -65,7 +68,7 @@
     <ng-container *ngIf="currentStep === 2">
       <nz-result nzStatus="success" nzTitle="Bravo, c'est fini !">
         <div nz-result-extra>
-          <button nz-button nzType="primary" (click)="handleCreation()">Créer le groupe</button>
+          <button nz-button nzType="primary" (click)="handleCreation()">Créer le resto</button>
         </div>
       </nz-result>
     </ng-container>

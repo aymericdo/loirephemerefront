@@ -15,6 +15,11 @@ export const setUserRestaurants = createAction(
   props<{ restaurants: Restaurant[] }>()
 );
 
+export const addUserRestaurants = createAction(
+  '[Login page] Add user restaurant',
+  props<{ restaurant: Restaurant }>()
+);
+
 export const setUser = createAction(
   '[Login page] Set User',
   props<{ user: User }>()

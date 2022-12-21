@@ -8,11 +8,17 @@ import { AuthService } from 'src/app/auth/auth.service';
 
 @Injectable()
 export class HttpResponseInterceptor implements HttpInterceptor {
-  blackList = [
+  notifBlackList = [
     '/users/auth/login',
     '/users/confirm-email',
     '/users/confirm-recover-email',
     '/users/validate-recover-email-code',
+    '/commands/notification',
+    '/pastries/notification',
+  ];
+
+  unauthorizedBlackList = [
+    '/users/auth/login',
   ];
 
   constructor(
@@ -28,7 +34,7 @@ export class HttpResponseInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       tap(evt => {
         if (evt instanceof HttpResponse) {
-          if (req.method !== 'GET' && !this.isInBlackList(req.url)) {
+          if (req.method !== 'GET' && !this.isInNotifBlackList(req.url)) {
             this.message.create('success', 'Informations sauvegardées');
           }
         }
@@ -43,7 +49,9 @@ export class HttpResponseInterceptor implements HttpInterceptor {
 
           switch (error.status) {
             case 401: {
-              this.authService.doLogout();
+              if (!this.isIn401BlackList(req.url)) {
+                this.authService.doLogout();
+              }
               break;
             }
 
@@ -63,7 +71,11 @@ export class HttpResponseInterceptor implements HttpInterceptor {
     );
   }
 
-  private isInBlackList(url: string): boolean {
-    return this.blackList.some((route) => url.includes(route));
+  private isInNotifBlackList(url: string): boolean {
+    return this.notifBlackList.some((route) => url.includes(route));
+  }
+
+  private isIn401BlackList(url: string): boolean {
+    return this.unauthorizedBlackList.some((route) => url.includes(route));
   }
 }

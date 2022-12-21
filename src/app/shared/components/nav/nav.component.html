@@ -8,7 +8,7 @@
       </a>
     </li>
 
-    <li *ngIf="isLoggedIn" nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
+    <li nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
       nzTitle="Restaurants" nzIcon="coffee">
       <ul>
         <li nz-menu-item [nzMatchRouter]="true">
@@ -18,8 +18,16 @@
           </a>
         </li>
         <ng-container *ngFor="let restaurant of (userRestaurants$ | async)">
-          <li nz-submenu [nzTitle]="restaurant.name" nzIcon="coffee" [nzOpen]="!isAdminCollapsed"
-            (nzOpenChange)="isAdminCollapsed = !isAdminCollapsed">
+
+          <ng-template #titleNameTpl>
+            <span class="restaurant-name-tooltip" nz-tooltip [nzTooltipTitle]="restaurant.name"
+              nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
+              <span class="restaurant-name">{{ restaurant.name }}</span>
+            </span>
+          </ng-template>
+
+          <li nz-submenu nzIcon="coffee" [nzTitle]="titleNameTpl" [nzOpen]="isAdminCollapsed === restaurant.code"
+            (nzOpenChange)="isAdminCollapsed = isAdminCollapsed === restaurant.code ? '' : restaurant.code">
             <ul>
               <li nz-menu-item [nzSelected]="routeName === 'menu'">
                 <a [routerLink]="[restaurant.code, 'admin', 'menu']">
@@ -58,8 +66,21 @@
       </a>
     </li>
     <div class="block"></div>
-    <li nz-submenu [nzOpen]="!isUserCollapsed" (nzOpenChange)="isUserCollapsed = !isUserCollapsed" [nzTitle]="titleTpl"
-      nzIcon="user">
+
+    <ng-template #titleUserTpl>
+      <ng-container *ngIf="isLoggedIn">
+        <span class="account-name-tooltip" nz-tooltip [nzTooltipTitle]="(user$ | async)?.email"
+          nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
+          <span class="account-name">{{ (user$ | async)?.email }}</span>
+        </span>
+      </ng-container>
+      <ng-container *ngIf="!isLoggedIn">
+        <span>Mon compte</span>
+      </ng-container>
+    </ng-template>
+
+    <li nz-submenu [nzOpen]="!isUserCollapsed" (nzOpenChange)="isUserCollapsed = !isUserCollapsed"
+      [nzTitle]="titleUserTpl" nzIcon="user">
       <ul>
         <li *ngIf="isLoggedIn" nz-menu-item>
           <a (click)="handleDisconnect()">
@@ -78,17 +99,5 @@
         </li>
       </ul>
     </li>
-
-    <ng-template #titleTpl>
-      <ng-container *ngIf="isLoggedIn">
-        <span class="account-name-tooltip" nz-tooltip [nzTooltipTitle]="(user$ | async)?.email"
-          [nzTooltipMouseEnterDelay]="1">
-          <span class="account-name">{{ (user$ | async)?.email }}</span>
-        </span>
-      </ng-container>
-      <ng-container *ngIf="!isLoggedIn">
-        <span>Mon compte</span>
-      </ng-container>
-    </ng-template>
   </ul>
 </nz-sider>

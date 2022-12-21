@@ -29,10 +29,12 @@
     flex: 1;
   }
 
+  .restaurant-name-tooltip,
   .account-name-tooltip {
     width: 100%;
   }
 
+  ::ng-deep .restaurant-name,
   ::ng-deep .account-name {
     display: block;
     max-width: calc(100% - 20px);

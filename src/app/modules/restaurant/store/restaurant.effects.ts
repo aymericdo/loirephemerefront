@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { debounceTime, mergeMap, switchMap } from 'rxjs/operators';
+import { addUserRestaurants } from 'src/app/modules/login/store/login.actions';
 import { validateRestaurantName, setNewRestaurant, setRestaurantNameError, setRestaurantNoNameError } from '../../restaurant/store/restaurant.actions';
 import { RestaurantApiService } from '../services/restaurant-api.service';
 import { createRestaurant } from './restaurant.actions';
@@ -15,7 +16,7 @@ export class RestaurantEffects {
         return this.restaurantApiService.postRestaurant(action).pipe(
           switchMap((restaurant) => {
             this.router.navigate(['/', restaurant.code]);
-            return [setNewRestaurant({ restaurant })];
+            return [setNewRestaurant({ restaurant }), addUserRestaurants({ restaurant })];
           })
         );
       })

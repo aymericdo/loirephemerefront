@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
@@ -15,16 +16,18 @@ import { AppState } from 'src/app/store/app.state';
 export class SignInComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
   userAuthError$!: Observable<{ error: boolean } | null | undefined>;
+  isInLoginPage = false;
 
   validateForm!: UntypedFormGroup;
   passwordVisible = false;
   recoverModalOpened = false;
 
+
   SIZE = SIZE;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private router: Router, private store: Store<AppState>, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.userAuthError$ = this.store.select(selectUserAuthError);
@@ -58,6 +61,8 @@ export class SignInComponent implements OnInit, OnDestroy {
           this.validateForm.controls.password.setErrors({});
         }
       })
+
+      this.isInLoginPage = this.router.url.includes('page/login');
   }
 
   ngOnDestroy() {
