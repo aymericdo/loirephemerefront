@@ -9,6 +9,7 @@ import {
   editCommand,
   fetchingRestaurantCommands,
   payingCommand,
+  removeNotificationSub,
   sendNotificationSub,
 } from 'src/app/modules/admin/store/admin.actions';
 import {
@@ -42,6 +43,9 @@ export class CommandsComponent implements OnInit, OnDestroy {
   totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
   restaurant$: Observable<Restaurant | null>;
+
+  private sub: PushSubscription = null!;
+  private restaurant: Restaurant = null!;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -79,25 +83,27 @@ export class CommandsComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
+      this.restaurant = restaurant;
       this.fetchCommands(restaurant.code);
+
+      if (environment.production) {
+        this.swPush
+          .requestSubscription({
+            serverPublicKey: this.VAPID_PUBLIC_KEY,
+          })
+          .then((sub: PushSubscription) => {
+            this.sub = sub;
+            this.store.dispatch(sendNotificationSub({ sub, code: restaurant.code }));
+          })
+          .catch((err) =>
+            console.error('Could not subscribe to notifications', err)
+          );
+
+        this.swPush.notificationClicks.subscribe((event) => {
+          this.router.navigate(['/']);
+        });
+      }
     })
-
-    if (environment.production) {
-      this.swPush
-        .requestSubscription({
-          serverPublicKey: this.VAPID_PUBLIC_KEY,
-        })
-        .then((sub) => {
-          this.store.dispatch(sendNotificationSub({ sub }));
-        })
-        .catch((err) =>
-          console.error('Could not subscribe to notifications', err)
-        );
-
-      this.swPush.notificationClicks.subscribe((event) => {
-        this.router.navigate(['/']);
-      });
-    }
   }
 
   handleClickDone(command: Command): void {
@@ -118,6 +124,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.store.dispatch(removeNotificationSub({ sub: this.sub, code: this.restaurant.code }));
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

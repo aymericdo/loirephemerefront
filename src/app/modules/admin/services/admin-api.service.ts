@@ -96,10 +96,17 @@ export class AdminApiService {
     ) as Observable<boolean>;
   }
 
-  postSub(sub: any): Observable<any> {
+  postSub(sub: PushSubscription, code: string): Observable<any> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/commands/notification`,
-      { sub }
+      { sub, code }
+    );
+  }
+
+  deleteSub(sub: PushSubscription, code: string): Observable<any> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/commands/notification/delete`,
+      { sub, code }
     );
   }
 }

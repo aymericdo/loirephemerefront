@@ -37,10 +37,17 @@ export const editCommand = createAction(
 );
 export const sendNotificationSub = createAction(
   '[Admin page] Send notification sub',
-  props<{ sub: any }>()
+  props<{ sub: PushSubscription, code: string }>()
+);
+export const removeNotificationSub = createAction(
+  '[Admin page] Remove notification sub',
+  props<{ sub: PushSubscription, code: string }>()
 );
 export const notificationSubSent = createAction(
   '[Admin page] Notification sub sent'
+);
+export const removeNotificationSubSent = createAction(
+  '[Admin page] Remove notification sub sent'
 );
 export const fetchingRestaurant = createAction('[Admin page] Fetch restaurant',
   props<{ code: string }>()

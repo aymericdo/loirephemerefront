@@ -28,7 +28,7 @@ export class HomeApiService {
     ) as Observable<Command>;
   }
 
-  postSub(commandId: string, sub: any): Observable<any> {
+  postSub(commandId: string, sub: PushSubscription): Observable<any> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/pastries/notification`,
       { commandId, sub }

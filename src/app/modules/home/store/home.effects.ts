@@ -25,9 +25,8 @@ import {
 } from './home.actions';
 import { selectPastries, selectRestaurant, selectSelectedPastries } from './home.selectors';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
+import { CoreCommand } from 'src/app/interfaces/command.interface';
 import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
-import { Router } from '@angular/router';
 
 @Injectable()
 export class HomeEffects {

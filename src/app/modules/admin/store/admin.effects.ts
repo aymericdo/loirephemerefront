@@ -49,6 +49,8 @@ import {
   addUser,
   deletingUserToRestaurant,
   deleteUser,
+  removeNotificationSub,
+  removeNotificationSubSent,
 } from './admin.actions';
 
 @Injectable()
@@ -94,8 +96,20 @@ export class AdminEffects {
     this.actions$.pipe(
       ofType(sendNotificationSub),
       mergeMap((action) => {
-        return this.adminApiService.postSub(action.sub).pipe(
+        return this.adminApiService.postSub(action.sub, action.code).pipe(
           map(() => notificationSubSent()),
+          catchError(() => EMPTY)
+        );
+      })
+    )
+  );
+
+  removeNotificationSub$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(removeNotificationSub),
+      mergeMap((action) => {
+        return this.adminApiService.deleteSub(action.sub, action.code).pipe(
+          map(() => removeNotificationSubSent()),
           catchError(() => EMPTY)
         );
       })
