@@ -131,12 +131,12 @@ export class CommandsComponent implements OnInit, OnDestroy {
 
   private fetchCommands(code: string): void {
     const fromDateNow = new Date();
-    fromDateNow.setHours(fromDateNow.getHours() - 24)
-    const fromDate: string = fromDateNow.toISOString(); // today - 24h
+    fromDateNow.setHours(0, 0, 0, 0);
+    const fromDate: string = fromDateNow.toISOString(); // today.beginningOfDay
 
     const toDateNow = new Date();
-    toDateNow.setHours(toDateNow.getHours() + 24)
-    const toDate: string = toDateNow.toISOString(); // today + 24h
+    toDateNow.setHours(23, 59, 59, 999);
+    const toDate: string = toDateNow.toISOString(); // today.endOfDay
 
     this.store.dispatch(fetchingRestaurantCommands({ code, fromDate, toDate }));
   }

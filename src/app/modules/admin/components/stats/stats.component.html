@@ -1,78 +1,46 @@
 <div class="content">
   <div class="year-selector">
-    <nz-select
-      [(ngModel)]="currentYear"
-      (ngModelChange)="currentYearChange()"
-      nzPlaceHolder="Choisissez l'année"
-      style="width: 50%"
-      >
-      <nz-option
-        *ngFor="let year of years"
-        [nzValue]="year"
-        [nzLabel]="year"
-      ></nz-option>
+    <nz-select [(ngModel)]="currentYear" (ngModelChange)="currentYearChange()" nzPlaceHolder="Choisissez l'année"
+      style="width: 50%">
+      <nz-option *ngFor="let year of years" [nzValue]="year" [nzLabel]="year"></nz-option>
     </nz-select>
   </div>
 
-  <div class="row">
-    <div class="chart">
-      <div>
-        <canvas baseChart
-          [type]="'pie'"
-          [datasets]="pieChartDatasetsPastries"
-          [labels]="pieChartLabels[0]"
-          [options]="pieChartOptions"
-          [plugins]="pieChartPlugins"
-          [legend]="pieChartLegend">
-        </canvas>
+  <div *ngIf="totallyEmpty" class="row">
+    <nz-empty></nz-empty>
+  </div>
+
+  <ng-container *ngIf="!totallyEmpty">
+    <div class="row">
+      <div class="chart">
+        <div>
+          <app-pie-chart [pieChartData]="pieChartDatasetsPastries"></app-pie-chart>
+        </div>
+        <span *ngIf="pastryTotal" class="total">
+          <div>Total de pâtisseries : {{ pastryTotal }}</div>
+        </span>
       </div>
-      <span *ngIf="pastryTotal" class="total"
-        ><div>Total de pâtisseries : {{ pastryTotal }}</div></span
-      >
-    </div>
-    <div class="chart">
-      <div>
-        <canvas baseChart
-          [type]="'pie'"
-          [datasets]="pieChartDatasetsDrinks"
-          [labels]="pieChartLabels[1]"
-          [options]="pieChartOptions"
-          [plugins]="pieChartPlugins"
-          [legend]="pieChartLegend">
-        </canvas>
+      <div class="chart">
+        <div>
+          <app-pie-chart [pieChartData]="pieChartDatasetsDrinks"></app-pie-chart>
+        </div>
+
+        <span *ngIf="drinkTotal" class="total">
+          <div>Total de boissons : {{ drinkTotal }}</div>
+        </span>
       </div>
-
-      <span *ngIf="drinkTotal" class="total">
-        <div>Total de boissons : {{ drinkTotal }}</div></span
-      >
     </div>
-  </div>
 
-  <div class="chart bar">
-    <div>
-      <canvas
-        *ngIf="barChartData.datasets.length"
-        baseChart
-        [data]="barChartData"
-        [options]="barChartOptions"
-        [legend]="barChartLegend"
-        [type]="barChartType"
-      >
-      </canvas>
+    <div class="chart bar">
+      <div>
+        <app-bar-chart [barChartData]="barChartData"></app-bar-chart>
+      </div>
     </div>
-  </div>
 
-  <div class="chart bar">
-    <div>
-      <canvas
-        *ngIf="barChartData2.datasets.length"
-        baseChart
-        [data]="barChartData2"
-        [options]="barChartOptions"
-        [legend]="barChartLegend"
-        [type]="barChartType"
-      >
-      </canvas>
+    <div class="chart bar">
+      <div>
+        <app-bar-chart [barChartData]="barChartData2"></app-bar-chart>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>

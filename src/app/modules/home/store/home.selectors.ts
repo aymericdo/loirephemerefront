@@ -23,8 +23,10 @@ export const selectIsStockIssue = createSelector(
   selectFeature,
   (state: HomeState) =>
     Object.keys(state.selectedPastries).some((pastryId) => {
+      const pastry = state.pastries.find((p) => p._id === pastryId);
+      if (!pastry?.stock) return false;
       return (
-        state.pastries.find((p) => p._id === pastryId)!.stock -
+        pastry.stock -
         state.selectedPastries[pastryId] < 0
       );
     })

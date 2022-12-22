@@ -4,15 +4,35 @@
     <nz-page-header-extra>
       <div class="actions-btn">
         <nz-space nzAlign="center">
-          <ng-container *ngIf="!isInSequenceMode">
-            <button *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock>Séquence d'affichage</button>
+          <ng-container *ngIf="!isInSequenceMode && !isInAssociationMode">
+            <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
+              nzBlock>Association de stock</button>
+            <button class="sequence-mode-btn" *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock>Séquence
+              d'affichage</button>
             <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="openNewPastryModal()">
               <span nz-icon nzType="plus"></span>
               Ajouter une pâtisserie
             </button>
+
+            <button *nzSpaceItem class="more-btn" nz-button nzNoAnimation nz-dropdown [nzDropdownMenu]="menu"
+              nzPlacement="bottomRight" style="border: none; padding: 0">
+              <span nz-icon nzType="more" nzTheme="outline" style="font-size: 20px; vertical-align: top;"></span>
+            </button>
+
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item (click)="isInSequenceMode = true">
+                  Séquence d'affichage
+                </li>
+                <li nz-menu-item (click)="isInAssociationMode = true">
+                  Association de stock
+                </li>
+              </ul>
+            </nz-dropdown-menu>
           </ng-container>
-          <ng-container *ngIf="isInSequenceMode">
-            <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="isInSequenceMode = false">
+          <ng-container *ngIf="isInSequenceMode || isInAssociationMode">
+            <button *nzSpaceItem nz-button nzType="primary" nzBlock
+              (click)="isInSequenceMode = false; isInAssociationMode = false">
               <span nz-icon nzType="right"></span>
               Retour
             </button>
@@ -21,41 +41,65 @@
       </div>
     </nz-page-header-extra>
   </nz-page-header>
-  <ng-container *ngIf="(pastries$ | async)?.length === 0"
-      ><nz-empty></nz-empty
-  ></ng-container>
+  <ng-container *ngIf="(pastries$ | async)?.length === 0"><nz-empty></nz-empty></ng-container>
 
-  <div class="pastry-sequence-section">
-    <div *ngIf="isInSequenceMode && (pastries$ | async)?.length" cdkDropList class="pastry-sequence-list" (cdkDropListDropped)="drop($event)">
-      <div class="pastry-sequence-box" [class.-loading]="isMoving$ | async" *ngFor="let pastry of pastries$ | async; trackBy: tackById" cdkDrag [cdkDragData]="pastry">
+  <div *ngIf="isInSequenceMode" class="pastry-sequence-section">
+    <div *ngIf="(pastries$ | async)?.length" cdkDropList class="pastry-sequence-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="pastry-sequence-box" [class.-loading]="isMoving$ | async"
+        *ngFor="let pastry of pastries$ | async; trackBy: tackById" cdkDrag [cdkDragData]="pastry">
         <div class="pastry-sequence-custom-placeholder" *cdkDragPlaceholder>
           <span>{{ pastry.name }}</span>
         </div>
         <div *cdkDragPreview></div>
         <span>{{ pastry.name }}</span>
         <nz-space class="badges-section" nzAlign="center">
-          <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
-          <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence" [nzTitle]="'displaySequence'"></nz-badge>
+          <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone
+            [nzTitle]="'hidden'"></nz-badge>
+          <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+            [nzTitle]="'displaySequence'"></nz-badge>
         </nz-space>
-          <ng-template #iconHidden>
+        <ng-template #iconHidden>
           <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
         </ng-template>
       </div>
     </div>
   </div>
 
-  <div *ngIf="!isInSequenceMode && (pastries$ | async)?.length" class="pastry-list" nz-row [nzGutter]="[0, 24]">
-    <div *ngFor="let pastry of pastries$ | async; trackBy: tackById" class="pastry-section" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12"
-      nzXl="8">
+  <div *ngIf="isInAssociationMode" class="pastry-association-section">
+    <div *ngIf="(pastries$ | async)?.length" class="pastry-association-list">
+      <div class="pastry-association-box" *ngFor="let pastry of pastries$ | async; trackBy: tackById"
+        [class.-selected]="isPastrySelected(pastry)" (click)="selectPastry(pastry)">
+        <span>{{ pastry.name }}</span>
+        <nz-space class="badges-section" nzAlign="center">
+          <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone
+            [nzTitle]="'hidden'"></nz-badge>
+          <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+            [nzTitle]="'displaySequence'"></nz-badge>
+        </nz-space>
+        <ng-template #iconHidden>
+          <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isInSequenceMode && !isInAssociationMode && (pastries$ | async)?.length" class="pastry-list" nz-row
+    [nzGutter]="[0, 24]">
+    <div *ngFor="let pastry of pastries$ | async; trackBy: tackById" class="pastry-section" nz-col nzXs="24" nzSm="24"
+      nzMd="18" nzLg="12" nzXl="8">
       <div class="inner-box">
-        <app-pastry-card #item [isAdmin]="true" [pastry]="pastry" [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!"
-          [count]="pastry.stock"
-          (clickPlus)="handleClickPlus(pastry)"
-          (clickMinus)="handleClickMinus(pastry)" (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)" (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
+        <app-pastry-card #item [isAdmin]="true" [pastry]="pastry"
+          [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!" [count]="pastry.stock"
+          (clickPlus)="handleClickPlus(pastry)" (clickMinus)="handleClickMinus(pastry)"
+          (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)"
+          (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
       </div>
     </div>
   </div>
 </div>
 
-<app-new-pastry-modal *ngIf="(menuModalOpened$ | async) === 'new'" [restaurant]="(restaurant$ | async)!" (clickCancel)="closeMenuModal()"></app-new-pastry-modal>
-<app-edit-pastry-modal *ngIf="(menuModalOpened$ | async) === 'edit'" [pastry]="(selectEditingPastry$ | async)!" [restaurant]="(restaurant$ | async)!" (clickCancel)="closeMenuModal()"></app-edit-pastry-modal>
+<app-new-pastry-modal *ngIf="(menuModalOpened$ | async) === 'new'" [restaurant]="(restaurant$ | async)!"
+  (clickCancel)="closeMenuModal()"></app-new-pastry-modal>
+<app-edit-pastry-modal *ngIf="(menuModalOpened$ | async) === 'edit'" [pastry]="(selectEditingPastry$ | async)!"
+  [restaurant]="(restaurant$ | async)!" (clickCancel)="closeMenuModal()"></app-edit-pastry-modal>

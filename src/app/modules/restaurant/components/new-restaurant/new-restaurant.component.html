@@ -1,9 +1,9 @@
 <div>
   <div class="steps-section">
     <nz-steps [nzCurrent]="currentStep">
-      <nz-step nzTitle="Restaurant" nzIcon="coffee"></nz-step>
-      <nz-step nzTitle="Utilisateur" nzIcon="user"></nz-step>
-      <nz-step nzTitle="Terminé" nzIcon="check"></nz-step>
+      <nz-step nzTitle="Restaurant" [nzIcon]="currentStep > 0 ? '' : 'coffee'" nzDescription="Étape 1"></nz-step>
+      <nz-step nzTitle="Utilisateur" [nzIcon]="currentStep > 1 ? '' : 'user'" nzDescription="Étape 2"></nz-step>
+      <nz-step nzTitle="Terminé" [nzIcon]="currentStep > 2 ? '' : 'check'" nzDescription="Étape 3"></nz-step>
     </nz-steps>
   </div>
 

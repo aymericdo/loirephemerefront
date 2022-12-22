@@ -76,7 +76,8 @@ export class NavComponent implements OnInit, OnDestroy {
   getRouteName(url: string): string | null {
     const urlArray = url.split('/')
     if (urlArray.length > 1 && urlArray[2] === 'admin') {
-      this.isAdminCollapsed = '';
+      this.isAdminCollapsed = urlArray[1];
+
       if (urlArray.length > 2 && urlArray[3].includes('commands')) {
         return 'commands';
       } else if (urlArray.length > 2 && urlArray[3].includes('stats')) {
@@ -92,7 +93,7 @@ export class NavComponent implements OnInit, OnDestroy {
       }
     } else if (urlArray.length > 1 && urlArray[2] === 'login') {
       this.isUserCollapsed = this.isLoggedIn;
-    }else if (urlArray.length === 2) {
+    } else if (urlArray.length === 2) {
       return 'home';
     }
 

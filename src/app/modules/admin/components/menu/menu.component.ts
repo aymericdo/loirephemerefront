@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
@@ -22,6 +22,9 @@ export class MenuComponent {
   selectEditingPastry$: Observable<Pastry | null>;
 
   isInSequenceMode: boolean = false;
+  isInAssociationMode: boolean = false;
+
+  selectedAssociatedPastries: { [pastryId: string]: Pastry } = {};
 
   constructor(
     private store: Store<AppState>,
@@ -86,6 +89,18 @@ export class MenuComponent {
       ...currentPastry,
       displaySequence: event.currentIndex,
     }}));
+  }
+
+  selectPastry(pastry: Pastry): void {
+    if (this.isPastrySelected(pastry)) {
+      delete this.selectedAssociatedPastries[pastry._id];
+    } else {
+      this.selectedAssociatedPastries[pastry._id] = pastry;
+    }
+  }
+
+  isPastrySelected(pastry: Pastry): boolean {
+    return this.selectedAssociatedPastries.hasOwnProperty(pastry._id);
   }
 
   tackById(_index: any, pastry: Pastry): string {

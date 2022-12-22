@@ -18,6 +18,8 @@ import { PastryFormComponent } from 'src/app/modules/admin/components/pastry-for
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { UsersComponent } from 'src/app/modules/admin/components/users/users.component';
 import { NewUserModalComponent } from 'src/app/modules/admin/components/new-user-modal/new-user-modal.component';
+import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
+import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
 
 
 @NgModule({
@@ -32,6 +34,8 @@ import { NewUserModalComponent } from 'src/app/modules/admin/components/new-user
     PastryFormComponent,
     UsersComponent,
     NewUserModalComponent,
+    BarChartComponent,
+    PieChartComponent,
   ],
   imports: [
     CommonModule,

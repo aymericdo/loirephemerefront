@@ -29,25 +29,25 @@
           <li nz-submenu nzIcon="coffee" [nzTitle]="titleNameTpl" [nzOpen]="isAdminCollapsed === restaurant.code"
             (nzOpenChange)="isAdminCollapsed = isAdminCollapsed === restaurant.code ? '' : restaurant.code">
             <ul>
-              <li nz-menu-item [nzSelected]="routeName === 'menu'">
+              <li nz-menu-item [nzMatchRouter]="true">
                 <a [routerLink]="[restaurant.code, 'admin', 'menu']">
                   <i nz-icon nzType="shopping-cart"></i>
                   <span>Menu</span>
                 </a>
               </li>
-              <li nz-menu-item [nzSelected]="routeName === 'commands'">
+              <li nz-menu-item [nzMatchRouter]="true">
                 <a [routerLink]="[restaurant.code, 'admin', 'commands']">
                   <i nz-icon nzType="alert"></i>
                   <span>Commandes</span>
                 </a>
               </li>
-              <li nz-menu-item [nzSelected]="routeName === 'stats'">
+              <li nz-menu-item [nzMatchRouter]="true">
                 <a [routerLink]="[restaurant.code, 'admin', 'stats']">
                   <i nz-icon nzType="pie-chart"></i>
                   <span>Stats</span>
                 </a>
               </li>
-              <li nz-menu-item [nzSelected]="routeName === 'users'">
+              <li nz-menu-item [nzMatchRouter]="true">
                 <a [routerLink]="[restaurant.code, 'admin', 'users']">
                   <i nz-icon nzType="user"></i>
                   <span>Utilisateurs</span>
