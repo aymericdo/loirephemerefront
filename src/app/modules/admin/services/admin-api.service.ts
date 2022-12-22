@@ -52,6 +52,15 @@ export class AdminApiService {
     ) as Observable<{ pastry: Pastry, displaySequenceById: { [pastryId: string]: number } }>;
   }
 
+  putEditCommonStockPastry(code: string, pastries: CorePastry[], commonStock: string): Observable<Pastry[]> {
+    return this.http.put(
+      `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/common-stock`, {
+        pastries,
+        commonStock,
+      }
+    ) as Observable<Pastry[]>;
+  }
+
   getAllPastries(restaurantCode: string): Observable<Pastry[]> {
     return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/by-code/${restaurantCode}/all`) as Observable<Pastry[]>;
   }

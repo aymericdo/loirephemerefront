@@ -7,7 +7,7 @@ import { activatingPastry, closeMenuModal, deactivatingPastry, movingPastry, ope
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/store/admin.selectors';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+
 
 @Component({
   templateUrl: './menu.component.html',
@@ -23,8 +23,6 @@ export class MenuComponent {
 
   isInSequenceMode: boolean = false;
   isInAssociationMode: boolean = false;
-
-  selectedAssociatedPastries: { [pastryId: string]: Pastry } = {};
 
   constructor(
     private store: Store<AppState>,
@@ -79,28 +77,6 @@ export class MenuComponent {
       ...currentPastry,
       stock: currentPastry.stock - 1,
     }}))
-  }
-
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.currentIndex === event.previousIndex) return;
-    const currentPastry: Pastry = { ...event.item.data };
-    delete currentPastry.restaurant;
-    this.store.dispatch(movingPastry({ pastry: {
-      ...currentPastry,
-      displaySequence: event.currentIndex,
-    }}));
-  }
-
-  selectPastry(pastry: Pastry): void {
-    if (this.isPastrySelected(pastry)) {
-      delete this.selectedAssociatedPastries[pastry._id];
-    } else {
-      this.selectedAssociatedPastries[pastry._id] = pastry;
-    }
-  }
-
-  isPastrySelected(pastry: Pastry): boolean {
-    return this.selectedAssociatedPastries.hasOwnProperty(pastry._id);
   }
 
   tackById(_index: any, pastry: Pastry): string {

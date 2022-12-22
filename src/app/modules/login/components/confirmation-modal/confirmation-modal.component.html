@@ -4,20 +4,20 @@
       <nz-form-item nzJustify="center">
         <div nzFlex nz-row nzJustify="center">
           <nz-form-control [nzXs]="6">
-            <nz-input-number formControlName="figure1" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0" (paste)="onPaste($event)"></nz-input-number>
+            <nz-input-number #figure1 formControlName="figure1" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
+              nzPlaceHolder="0" (paste)="onPaste($event)" (input)="goNext($event, 2)"></nz-input-number>
           </nz-form-control>
           <nz-form-control [nzXs]="6">
-            <nz-input-number formControlName="figure2" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0"></nz-input-number>
+            <nz-input-number #figure2 formControlName="figure2" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
+              nzPlaceHolder="0" (input)="goNext($event, 3)"></nz-input-number>
           </nz-form-control>
           <nz-form-control [nzXs]="6">
-            <nz-input-number formControlName="figure3" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0"></nz-input-number>
+            <nz-input-number #figure3 formControlName="figure3" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
+              nzPlaceHolder="0" (input)="goNext($event, 4)"></nz-input-number>
           </nz-form-control>
           <nz-form-control [nzXs]="6">
-            <nz-input-number formControlName="figure4" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0"></nz-input-number>
+            <nz-input-number #figure4 formControlName="figure4" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
+              nzPlaceHolder="0" (input)="goNext($event, 1)"></nz-input-number>
           </nz-form-control>
         </div>
       </nz-form-item>

@@ -44,44 +44,11 @@
   <ng-container *ngIf="(pastries$ | async)?.length === 0"><nz-empty></nz-empty></ng-container>
 
   <div *ngIf="isInSequenceMode" class="pastry-sequence-section">
-    <div *ngIf="(pastries$ | async)?.length" cdkDropList class="pastry-sequence-list"
-      (cdkDropListDropped)="drop($event)">
-      <div class="pastry-sequence-box" [class.-loading]="isMoving$ | async"
-        *ngFor="let pastry of pastries$ | async; trackBy: tackById" cdkDrag [cdkDragData]="pastry">
-        <div class="pastry-sequence-custom-placeholder" *cdkDragPlaceholder>
-          <span>{{ pastry.name }}</span>
-        </div>
-        <div *cdkDragPreview></div>
-        <span>{{ pastry.name }}</span>
-        <nz-space class="badges-section" nzAlign="center">
-          <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone
-            [nzTitle]="'hidden'"></nz-badge>
-          <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
-            [nzTitle]="'displaySequence'"></nz-badge>
-        </nz-space>
-        <ng-template #iconHidden>
-          <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
-        </ng-template>
-      </div>
-    </div>
+    <app-sequence></app-sequence>
   </div>
 
   <div *ngIf="isInAssociationMode" class="pastry-association-section">
-    <div *ngIf="(pastries$ | async)?.length" class="pastry-association-list">
-      <div class="pastry-association-box" *ngFor="let pastry of pastries$ | async; trackBy: tackById"
-        [class.-selected]="isPastrySelected(pastry)" (click)="selectPastry(pastry)">
-        <span>{{ pastry.name }}</span>
-        <nz-space class="badges-section" nzAlign="center">
-          <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone
-            [nzTitle]="'hidden'"></nz-badge>
-          <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
-            [nzTitle]="'displaySequence'"></nz-badge>
-        </nz-space>
-        <ng-template #iconHidden>
-          <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
-        </ng-template>
-      </div>
-    </div>
+    <app-association></app-association>
   </div>
 
   <div *ngIf="!isInSequenceMode && !isInAssociationMode && (pastries$ | async)?.length" class="pastry-list" nz-row

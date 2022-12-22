@@ -34,6 +34,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzListModule } from 'ng-zorro-antd/list';
 
 @NgModule({
   exports: [
@@ -71,6 +72,7 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     NzTableModule,
     NzDropDownModule,
     NzPopoverModule,
+    NzListModule,
   ],
   declarations: [],
 })

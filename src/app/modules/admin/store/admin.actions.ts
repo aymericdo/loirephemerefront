@@ -85,6 +85,10 @@ export const movingPastry = createAction(
   '[Admin page] Moving pastry',
   props<{ pastry: Pastry }>()
 );
+export const settingCommonStock = createAction(
+  '[Admin page] Setting common stock pastries',
+  props<{ commonStock: string, pastries: Pastry[] }>()
+);
 export const pastryCreated = createAction(
   '[Admin page] Pastry created',
 );

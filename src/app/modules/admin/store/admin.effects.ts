@@ -51,6 +51,7 @@ import {
   deleteUser,
   removeNotificationSub,
   removeNotificationSubSent,
+  settingCommonStock,
 } from './admin.actions';
 
 @Injectable()
@@ -251,6 +252,26 @@ export class AdminEffects {
             } else {
               return [editPastry({ pastry: data.pastry })];
             }
+          }),
+          catchError((error) => {
+            console.error(error);
+            return [pastryEdited()];
+          })
+        );
+      })
+    )
+  );
+
+  settingCommonStock$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(settingCommonStock),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.putEditCommonStockPastry(restaurant.code, action.pastries, action.commonStock).pipe(
+          switchMap((pastries: Pastry[]) => {
+            return [setAllPastries({ pastries })]
           }),
           catchError((error) => {
             console.error(error);

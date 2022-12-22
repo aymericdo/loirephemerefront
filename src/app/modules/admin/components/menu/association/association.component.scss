@@ -1,0 +1,28 @@
+:host {
+  .pastry-association-list {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .pastry-association-box {
+    cursor: pointer;
+    background: white;
+
+    &.-deactivate {
+      cursor: not-allowed;
+    }
+  }
+
+  .pastry-association-list {
+    nz-badge.association-badge {
+      width: 3rem;
+      box-shadow: 0 0 0 2px #000;
+      border-radius: 10px;
+    }
+
+    ::ng-deep nz-badge nz-badge-sup {
+      background-color: #fff;
+      color: #000;
+    }
+  }
+}

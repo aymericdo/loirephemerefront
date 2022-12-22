@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { selectLoading } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -13,6 +14,12 @@ import { AppState } from 'src/app/store/app.state';
 export class ConfirmationModalComponent implements OnInit, OnDestroy {
   @Input() submitButton = 'Suivant';
   @Output() clickConfirm = new EventEmitter<{ emailCode: string }>();
+
+  @ViewChild('figure1') figure1Element!: NzInputNumberComponent;
+  @ViewChild('figure2') figure2Element!: NzInputNumberComponent;
+  @ViewChild('figure3') figure3Element!: NzInputNumberComponent;
+  @ViewChild('figure4') figure4Element!: NzInputNumberComponent;
+
   isLoading$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;
 
@@ -56,6 +63,28 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
       this.validateForm.controls.figure2.setValue(pastedText[1]);
       this.validateForm.controls.figure3.setValue(pastedText[2]);
       this.validateForm.controls.figure4.setValue(pastedText[3]);
+    }
+  }
+
+  goNext(event: Event, figure: number): void {
+    if (!(event as InputEvent).data) return;
+    switch (figure) {
+      case 1: {
+        this.figure1Element.focus();
+        break;
+      }
+      case 2: {
+        this.figure2Element.focus();
+        break;
+      }
+      case 3: {
+        this.figure3Element.focus();
+        break;
+      }
+      case 4: {
+        this.figure4Element.focus()
+        break;
+      }
     }
   }
 

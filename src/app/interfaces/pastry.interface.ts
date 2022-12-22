@@ -15,6 +15,7 @@ export interface CorePastry {
   imageUrl: string | null;
   stock: number;
   displaySequence?: number;
+  commonStock?: string;
   ingredients: string[];
   type: 'pastry' | 'drink' | 'tips' | 'other';
   hidden: boolean;

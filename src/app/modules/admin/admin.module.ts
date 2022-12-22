@@ -20,6 +20,8 @@ import { UsersComponent } from 'src/app/modules/admin/components/users/users.com
 import { NewUserModalComponent } from 'src/app/modules/admin/components/new-user-modal/new-user-modal.component';
 import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
 import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
+import { AssociationComponent } from './components/menu/association/association.component';
+import { SequenceComponent } from './components/menu/sequence/sequence.component';
 
 
 @NgModule({
@@ -36,6 +38,8 @@ import { PieChartComponent } from './components/charts/pie-chart/pie-chart.compo
     NewUserModalComponent,
     BarChartComponent,
     PieChartComponent,
+    AssociationComponent,
+    SequenceComponent,
   ],
   imports: [
     CommonModule,
