@@ -28,7 +28,6 @@ export class PastryCardComponent implements OnChanges {
   @Output() clickActive = new EventEmitter<null>();
   @Output() clickDelete = new EventEmitter<null>();
 
-  isTips = false;
   imageUrl: string | null = null;
   isStockAvailable = false;
   isMaxLimitReached = false;
@@ -40,7 +39,6 @@ export class PastryCardComponent implements OnChanges {
   ) { }
 
   ngOnChanges(): void {
-    this.isTips = this.pastry.type === 'tips';
     this.isStockAvailable = !!this.pastry.stock || this.pastry.stock === 0;
     this.imageUrl = this.adminApiService.getImageUrl(this.pastry.imageUrl! ?? 'default.webp');
     this.isMaxLimitReached = !this.isAdmin && this.isStockAvailable && this.count >= this.pastry.stock

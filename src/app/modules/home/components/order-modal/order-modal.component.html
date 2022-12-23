@@ -1,7 +1,7 @@
 <nz-modal [nzVisible]="true" nzTitle="Récapitulatif" nzCentered [nzMaskClosable]="true"
   (nzOnCancel)="clickCancel.emit()">
   <ng-container *nzModalContent>
-    <p>Vous êtes sur le point de commander ces pâtisseries :</p>
+    <p>Vous êtes sur le point de commander :</p>
     <ul>
       <li *ngFor="let pastry of pastriesStr">{{ pastry }}</li>
     </ul>

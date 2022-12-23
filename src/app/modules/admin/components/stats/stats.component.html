@@ -6,41 +6,89 @@
     </nz-select>
   </div>
 
-  <div *ngIf="totallyEmpty" class="row">
+  <div *ngIf="(isLoading$ | async) === false && totallyEmpty" class="row">
     <nz-empty></nz-empty>
   </div>
 
-  <ng-container *ngIf="!totallyEmpty">
-    <div class="row">
-      <div class="chart">
-        <div>
-          <app-pie-chart [pieChartData]="pieChartDatasetsPastries"></app-pie-chart>
+  <div *ngIf="isLoading$ | async" class="row">
+    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+  </div>
+
+  <ng-container *ngIf="(isLoading$ | async) === false && !totallyEmpty">
+    <nz-tabset nzLinkRouter>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'global' }" queryParamsHandling="merge">
+          Global
+        </a>
+        <div class="row">
+          <div class="chart global">
+            <app-pie-chart class="hidden" [pieChartData]="pieChartDatasetsPastries"></app-pie-chart>
+            <nz-statistic [nzValue]="commandsCount" [nzTitle]="'Nombre de commandes totales'"></nz-statistic>
+            <nz-statistic [nzValue]="totalCash" [nzTitle]="'Argent total'"></nz-statistic>
+          </div>
         </div>
-        <span *ngIf="pastryTotal" class="total">
-          <div>Total de pâtisseries : {{ pastryTotal }}</div>
-        </span>
-      </div>
-      <div class="chart">
-        <div>
-          <app-pie-chart [pieChartData]="pieChartDatasetsDrinks"></app-pie-chart>
+        <div class="row">
+          <div class="chart bar">
+            <div>
+              <app-bar-chart [barChartData]="globalBarChartData"></app-bar-chart>
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'pastry' }" queryParamsHandling="merge">
+          Nourritures
+        </a>
+        <div class="row">
+          <div class="chart">
+            <div>
+              <app-pie-chart [pieChartData]="pieChartDatasetsPastries"></app-pie-chart>
+            </div>
+            <span *ngIf="pastryTotal" class="total">
+              <div>Total de nourritures : {{ pastryTotal }}</div>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="chart bar">
+            <div>
+              <app-bar-chart [barChartData]="barChartDataPastries"></app-bar-chart>
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'drink' }" queryParamsHandling="merge">
+          Boissons
+        </a>
+        <div class="chart">
+          <div>
+            <app-pie-chart [pieChartData]="pieChartDatasetsDrinks"></app-pie-chart>
+          </div>
+
+          <span *ngIf="drinkTotal" class="total">
+            <div>Total de boissons : {{ drinkTotal }}</div>
+          </span>
         </div>
 
-        <span *ngIf="drinkTotal" class="total">
-          <div>Total de boissons : {{ drinkTotal }}</div>
-        </span>
-      </div>
-    </div>
-
-    <div class="chart bar">
-      <div>
-        <app-bar-chart [barChartData]="barChartData"></app-bar-chart>
-      </div>
-    </div>
-
-    <div class="chart bar">
-      <div>
-        <app-bar-chart [barChartData]="barChartData2"></app-bar-chart>
-      </div>
-    </div>
+        <div class="chart bar">
+          <div>
+            <app-bar-chart [barChartData]="barChartDataDrinks"></app-bar-chart>
+          </div>
+        </div>
+      </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'tip' }" queryParamsHandling="merge">
+          Pourboire
+        </a>
+        coucou
+      </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'other' }" queryParamsHandling="merge">
+          Autres
+        </a>
+        coucou
+      </nz-tab>
+    </nz-tabset>
   </ng-container>
 </div>

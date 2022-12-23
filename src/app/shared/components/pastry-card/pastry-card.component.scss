@@ -16,16 +16,18 @@
     align-items: center;
   }
 
-  ::ng-deep .ant-card-cover {
-    position: relative;
+  .-is-admin {
+    ::ng-deep .ant-card-cover {
+      position: relative;
 
-    >img {
-      transition: opacity 250ms;
-    }
-
-    &:hover {
       >img {
-        opacity: 0.6;
+        transition: opacity 250ms;
+      }
+
+      &:hover {
+        >img {
+          opacity: 0.6;
+        }
       }
     }
   }
@@ -103,9 +105,5 @@
 
   .ingredients::first-letter {
     text-transform: capitalize;
-  }
-
-  .learn-more {
-    margin-top: 0.625rem;
   }
 }

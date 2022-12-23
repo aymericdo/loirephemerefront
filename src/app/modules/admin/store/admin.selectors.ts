@@ -54,6 +54,11 @@ export const selectIsLoading = createSelector(
   (state: AdminState) => state.loading
 );
 
+export const selectIsStatsLoading = createSelector(
+  selectFeature,
+  (state: AdminState) => state.statsLoading
+);
+
 export const selectIsSavingPastry = createSelector(
   selectFeature,
   (state: AdminState) => state.isSavingPastry

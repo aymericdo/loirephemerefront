@@ -44,6 +44,7 @@ export interface AdminState {
   allPastries: Pastry[];
   commands: Command[];
   loading: boolean;
+  statsLoading: boolean;
   pastryNameError: { error: boolean, duplicated: boolean } | null | undefined;
   pastryNameDeactivated: boolean;
   isNameValidating: boolean;
@@ -62,6 +63,7 @@ export const initialState: AdminState = {
   allPastries: pastriesMock,
   commands: commandsMock,
   loading: false,
+  statsLoading: false,
   pastryNameError: undefined,
   pastryNameDeactivated: true,
   isNameValidating: false,
@@ -83,16 +85,19 @@ const adminReducer = createReducer(
   on(fetchingAllRestaurantPastries, fetchingRestaurant, fetchingRestaurantCommands, fetchingUsers, (state) => ({
     ...state,
     loading: true,
+    statsLoading: true,
   })),
   on(setAllPastries, (state, { pastries }) => ({
     ...state,
     allPastries: [...pastries],
     loading: false,
+    statsLoading: state.loading,
   })),
   on(setCommands, (state, { commands }) => ({
     ...state,
     commands: [...commands],
     loading: false,
+    statsLoading: state.loading,
   })),
 
   // Command

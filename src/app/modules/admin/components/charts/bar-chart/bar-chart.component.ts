@@ -8,7 +8,8 @@ import { ChartData, ChartOptions } from 'chart.js';
 })
 export class BarChartComponent {
   @Input() barChartData: ChartData<'bar' | 'line'> = {
-    datasets: [{ data: [] }]
+    labels: [],
+    datasets: [],
   }
 
   barChartOptions: ChartOptions = {

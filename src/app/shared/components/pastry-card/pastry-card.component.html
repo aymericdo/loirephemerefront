@@ -1,7 +1,9 @@
-<nz-card style="width: 300px" [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]">
+<nz-card style="width: 300px" [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]"
+  [class.-is-admin]="isAdmin">
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
-    <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock === 0" [class.-stock-issue]="isStockIssue"
-      nzStandalone nzShowZero [nzCount]="pastry.stock" [nzOverflowCount]="99" [nzTitle]="'stock'">
+    <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock === 0"
+      [class.-stock-issue]="isStockIssue" nzStandalone nzShowZero [nzCount]="pastry.stock" [nzOverflowCount]="99"
+      [nzTitle]="'stock'">
       <ng-container *ngIf="pastry.stock === 0">
         <span>Rupture de stock</span>
       </ng-container>
@@ -10,15 +12,11 @@
       </ng-container>
     </nz-badge>
 
-    <nz-badge *ngIf="isAdmin" class="display-sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence" [nzTitle]="'displaySequence'"></nz-badge>
+    <nz-badge *ngIf="isAdmin" class="display-sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+      [nzTitle]="'displaySequence'"></nz-badge>
 
     <nz-card-meta [nzTitle]="pastry.name + ' (' + pastry.price + '€)'" [nzDescription]="pastry.description">
     </nz-card-meta>
-    <ng-container *ngIf="isTips">
-      <div class="learn-more">
-        <a href="https://www.instagram.com/p/CQfi_pboxwM/">En savoir plus</a>
-      </div>
-    </ng-container>
     <nz-collapse *ngIf="pastry.ingredients?.length" nzGhost>
       <nz-collapse-panel nzHeader="Ingrédients">
         <p class="ingredients" style="margin: 0">
@@ -29,16 +27,20 @@
   </nz-skeleton>
 </nz-card>
 <ng-template #coverTemplate>
-  <img class="card-image" *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl" (error)="onImgError($event)" />
+  <img class="card-image" *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl"
+    (error)="onImgError($event)" />
   <div *ngIf="isAdmin && !isLoading && imageUrl" class="card-actions-btn">
     <div class="block-btn">
-      <button nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickEdit.emit()"><span nz-icon nzType="edit"></span></button>
+      <button nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickEdit.emit()"><span nz-icon
+          nzType="edit"></span></button>
     </div>
     <div class="block-btn">
-      <button *ngIf="!pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickDelete.emit()">
+      <button *ngIf="!pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large"
+        (click)="clickDelete.emit()">
         <span nz-icon nzType="eye"></span>
       </button>
-      <button *ngIf="pastry.hidden" nzDanger nz-button nzType="primary" nzShape="circle" nzSize="large" (click)="clickActive.emit()">
+      <button *ngIf="pastry.hidden" nzDanger nz-button nzType="primary" nzShape="circle" nzSize="large"
+        (click)="clickActive.emit()">
         <span nz-icon nzType="eye-invisible"></span>
       </button>
     </div>
