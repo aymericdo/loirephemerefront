@@ -15,7 +15,7 @@ import {
 } from 'chart.js';
 import { filter, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
-import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -36,28 +36,56 @@ export class StatsComponent implements OnInit, OnDestroy {
   pastryTotal: number = 0;
   drinkTotal: number = 0;
 
-  pieChartDatasetsPastries: ChartData<'pie', number[], string | string[]> = {
-    labels: [],
-    datasets: []
-  }
-  pieChartDatasetsDrinks: ChartData<'pie', number[], string | string[]> = {
-    labels: [],
-    datasets: []
-  }
-
-  barChartDataPastries: ChartData<'bar'> = {
-    labels: [],
-    datasets: []
+  pastriesByTypeByDatePieChartData: { [key in PastryType]: ChartData<'pie', number[], string | string[]> } = {
+    pastry: {
+      labels: [],
+      datasets: []
+    },
+    drink: {
+      labels: [],
+      datasets: []
+    },
+    tip: {
+      labels: [],
+      datasets: []
+    },
+    other: {
+      labels: [],
+      datasets: []
+    }
   };
 
-  barChartDataDrinks: ChartData<'bar'> = {
-    labels: [],
-    datasets: []
+  pastriesByTypeByDateBarChartData: { [key in PastryType]: ChartData<'bar'> } = {
+    pastry: {
+      labels: [],
+      datasets: []
+    },
+    drink: {
+      labels: [],
+      datasets: []
+    },
+    tip: {
+      labels: [],
+      datasets: []
+    },
+    other: {
+      labels: [],
+      datasets: []
+    }
   };
 
   globalBarChartData: ChartData<'bar' | 'line'> = {
     labels: [],
     datasets: []
+  };
+
+  totalByType: {
+    [key in PastryType]: number
+  } = {
+    pastry: 0,
+    drink: 0,
+    tip: 0,
+    other: 0,
   };
 
   commandsCount: number = 0;
@@ -66,6 +94,8 @@ export class StatsComponent implements OnInit, OnDestroy {
   years: string[] = [];
   currentYear: string = new Date().getFullYear().toString();
   currentRestaurant: Restaurant | null = null;
+
+  private statsAttributes = ['price', 'type'];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -108,176 +138,44 @@ export class StatsComponent implements OnInit, OnDestroy {
         this.totallyEmpty = commands.length === 0;
         this.commandsCount = commands.length;
 
-        let countByPastry: { [pastryName: string]: number } = {};
-        let countByDrink: { [pastryName: string]: number } = {};
+        let countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } } = {
+          pastry: {},
+          drink: {},
+          tip: {},
+          other: {},
+        };
 
-        let pastriesByDate: {
-          [date: string]: { [pastryName: string]: number };
-        } = {};
-
-        let drinksByDate: {
-          [date: string]: { [pastryName: string]: number };
-        } = {};
+        let pastriesByTypeByDate: {
+          [key in PastryType]: { [date: string]: { [pastryName: string]: number } };
+        } = {
+          pastry: {},
+          drink: {},
+          tip: {},
+          other: {},
+        };
 
         let cashByDate: {
           [date: string]: { [pastryName: string]: number };
         } = {};
 
-        commands.forEach((c) => {
-          const day = this.getFormattedDate(new Date(c.createdAt as string));
-          c.pastries.forEach((p) => {
-            if (p.type === 'pastry') {
-              if (pastriesByDate.hasOwnProperty(day)) {
-                if (pastriesByDate[day].hasOwnProperty(p.name)) {
-                  pastriesByDate[day][p.name] += 1;
-                } else {
-                  pastriesByDate[day][p.name] = 1;
-                }
-              } else {
-                pastriesByDate[day] = {};
-                pastriesByDate[day][p.name] = 1;
-              }
+        commands.forEach((command: Command) => {
+          const day = this.getFormattedDate(new Date(command.createdAt as string));
+          command.pastries.forEach((pastry: Pastry) => {
+            const realPastry = this.checkHistoricalPastry(pastry, command);
+            this.setPastriesByTypeByDate(pastriesByTypeByDate, realPastry, day);
+            this.setCountByTypeByPastry(countByTypeByPastry, realPastry);
+            this.setCashByDate(cashByDate, realPastry, day);
 
-              if (countByPastry.hasOwnProperty(p.name)) {
-                countByPastry[p.name] += 1;
-              } else {
-                countByPastry[p.name] = 1;
-              }
-            } else if (p.type === 'drink') {
-              if (drinksByDate.hasOwnProperty(day)) {
-                if (drinksByDate[day].hasOwnProperty(p.name)) {
-                  drinksByDate[day][p.name] += 1;
-                } else {
-                  drinksByDate[day][p.name] = 1;
-                }
-              } else {
-                drinksByDate[day] = {};
-                drinksByDate[day][p.name] = 1;
-              }
-
-              if (countByDrink.hasOwnProperty(p.name)) {
-                countByDrink[p.name] += 1;
-              } else {
-                countByDrink[p.name] = 1;
-              }
-            }
-
-            this.totalCash += +p.price;
-
-            if (cashByDate.hasOwnProperty(day)) {
-              if (cashByDate[day].hasOwnProperty(p.name)) {
-                cashByDate[day][p.name] += +p.price;
-              } else {
-                cashByDate[day][p.name] = +p.price;
-              }
-            } else {
-              cashByDate[day] = {};
-              cashByDate[day][p.name] = +p.price;
-            }
+            this.totalCash += +realPastry.price;
           });
         });
 
-        if (pastries.length) {
-          this.barChartDataPastries = {
-            labels: Object.keys(pastriesByDate)
-              .reverse()
-              .map((dateStr) => moment(dateStr, 'YYYY/MM/DD').locale('fr').format('dddd DD/MM')),
-            datasets: pastries
-              .filter((p) => p.type === 'pastry' && countByPastry[p.name] > 0)
-              .map((p) => {
-                const countList = Object.keys(pastriesByDate)
-                  .reverse()
-                  .map((date) => {
-                    return pastriesByDate[date][p.name] || 0;
-                  });
-                return { label: p.name, data: countList };
-              }),
-          };
-          this.barChartDataDrinks = {
-            labels: Object.keys(drinksByDate)
-            .reverse()
-            .map((dateStr) => moment(dateStr, 'YYYY/MM/DD').locale('fr').format('dddd DD/MM')),
-            datasets: pastries
-              .filter((p) => p.type === 'drink' && countByDrink[p.name] > 0)
-              .map((p) => {
-                const countList = Object.keys(drinksByDate)
-                  .reverse()
-                  .map((date) => {
-                    return drinksByDate[date][p.name] || 0;
-                  });
-                return { label: p.name, data: countList };
-              }),
-          };
+        if (pastries.length && Object.keys(pastriesByTypeByDate).length) {
+          this.buildPieChartDate(countByTypeByPastry);
+          this.buildBarChartData(pastriesByTypeByDate, countByTypeByPastry, pastries);
+          this.buildGlobalBarChartData(pastriesByTypeByDate, cashByDate);
+          this.setTotalByType(countByTypeByPastry);
         }
-
-        if (Object.keys(pastriesByDate).length || Object.keys(drinksByDate).length) {
-          this.globalBarChartData = {
-            labels: [...new Set(Object.keys(pastriesByDate).concat(Object.keys(drinksByDate)))]
-              .reverse()
-              .map((dateStr) => moment(dateStr, 'YYYY/MM/DD').locale('fr').format('dddd DD/MM')),
-            datasets: [{
-              label: 'Total',
-              data: [...new Set(Object.keys(pastriesByDate).concat(Object.keys(drinksByDate)))]
-                .reverse()
-                .map((date) => {
-                  return (pastriesByDate.hasOwnProperty(date) ? Object.values(pastriesByDate[date]).reduce(
-                    (prev, value) => prev + value,
-                    0
-                  ) : 0) + (drinksByDate.hasOwnProperty(date) ? Object.values(drinksByDate[date]).reduce(
-                    (prev, value) => prev + value,
-                    0
-                  ) : 0);
-                }),
-            }, {
-              label: 'Argent',
-              data: Object.keys(cashByDate)
-                .reverse()
-                .map((date) => {
-                  return Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
-                })
-            }, {
-              type: 'line',
-              label: 'Argent cumulé',
-              data: Object.keys(cashByDate)
-                .reverse()
-                .reduce((prev: number[], date) => {
-                  const dayTotal: number = Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
-                  const last: number = prev.length ? +prev[prev.length - 1] : 0;
-                  prev.push(last + dayTotal);
-
-                  return prev;
-                }, [])
-            }]
-          };
-        }
-
-        this.pieChartDatasetsPastries = {
-          labels: Object.keys(countByPastry).filter((k) => countByPastry[k] > 0),
-          datasets: [
-            {
-              data: Object.values(countByPastry).filter((v) => v > 0),
-            }
-          ]
-        };
-
-        this.pieChartDatasetsDrinks = {
-          labels: Object.keys(countByDrink).filter((k) => countByDrink[k] > 0),
-          datasets: [
-            {
-              data: Object.values(countByDrink).filter((v) => v > 0),
-            }
-          ]
-        };
-
-        this.pastryTotal = Object.values(countByPastry).reduce(
-          (prev, v) => prev + v,
-          0
-        );
-
-        this.drinkTotal = Object.values(countByDrink).reduce(
-          (prev, v) => prev + v,
-          0
-        );
       });
   }
 
@@ -294,6 +192,189 @@ export class StatsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private checkHistoricalPastry(pastry: Pastry, command: Command): Pastry {
+    if (pastry.historical.length) {
+      const commandDate = command.createdAt;
+
+      const realState: { [attribute: string]: (string | number) } = this.statsAttributes.reduce((prev, attr: string) => {
+        (prev as { [attribute: string]: (string | number) })[attr] = pastry[attr as keyof Pastry] as (string | number);
+        return prev;
+      }, {} as { [attribute: string]: (string | number) })
+
+      let historicalDateIndex = 0;
+      while (moment(pastry.historical[historicalDateIndex].date).isSameOrBefore(moment(commandDate))) {
+        const currentHistorical: Historical = pastry.historical[historicalDateIndex];
+        this.statsAttributes.forEach((attr: string) => {
+          if (currentHistorical.hasOwnProperty(attr)) {
+            realState[attr as string] = (currentHistorical[attr as keyof Historical] as ([number, number] | [string, string]))[1];
+          }
+        })
+        historicalDateIndex += 1;
+      }
+
+      return {
+        ...pastry,
+        ...realState,
+      }
+    } else {
+      return pastry;
+    }
+  }
+
+  private setPastriesByTypeByDate(
+    pastriesByTypeByDate: {
+      [key in PastryType]: { [date: string]: { [pastryName: string]: number } };
+    },
+    pastry: Pastry,
+    day: string,
+  ): void {
+    if (pastriesByTypeByDate.hasOwnProperty(pastry.type)) {
+      if (pastriesByTypeByDate[pastry.type].hasOwnProperty(day)) {
+        if (pastriesByTypeByDate[pastry.type][day].hasOwnProperty(pastry.name)) {
+          pastriesByTypeByDate[pastry.type][day][pastry.name] += 1;
+        } else {
+          pastriesByTypeByDate[pastry.type][day][pastry.name] = 1;
+        }
+      } else {
+        pastriesByTypeByDate[pastry.type][day] = {};
+        pastriesByTypeByDate[pastry.type][day][pastry.name] = 1;
+      }
+    } else {
+      pastriesByTypeByDate[pastry.type] = {}
+      pastriesByTypeByDate[pastry.type][day] = {}
+      pastriesByTypeByDate[pastry.type][day][pastry.name] = 1;
+    }
+  }
+
+  private setCountByTypeByPastry(
+    countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } },
+    pastry: Pastry,
+  ): void {
+    if (countByTypeByPastry.hasOwnProperty(pastry.type)) {
+      if (countByTypeByPastry[pastry.type].hasOwnProperty(pastry.name)) {
+        countByTypeByPastry[pastry.type][pastry.name] += 1;
+      } else {
+        countByTypeByPastry[pastry.type][pastry.name] = 1;
+      }
+    } else {
+      countByTypeByPastry[pastry.type] = {}
+      countByTypeByPastry[pastry.type][pastry.name] = 1
+    }
+  }
+
+  private setCashByDate(
+    cashByDate: { [date: string]: { [pastryName: string]: number } },
+    pastry: Pastry,
+    day: string,
+  ): void {
+    if (cashByDate.hasOwnProperty(day)) {
+      if (cashByDate[day].hasOwnProperty(pastry.name)) {
+        cashByDate[day][pastry.name] += +pastry.price;
+      } else {
+        cashByDate[day][pastry.name] = +pastry.price;
+      }
+    } else {
+      cashByDate[day] = {};
+      cashByDate[day][pastry.name] = +pastry.price;
+    }
+  }
+
+  private buildBarChartData(
+    pastriesByTypeByDate: { [key in PastryType]: { [date: string]: { [pastryName: string]: number } } },
+    countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } },
+    pastries: Pastry[],
+  ): void {
+    (Object.keys(pastriesByTypeByDate) as PastryType[]).forEach((type: PastryType) => {
+      this.pastriesByTypeByDateBarChartData[type] = {
+        labels: Object.keys(pastriesByTypeByDate[type])
+          .reverse()
+          .map((dateStr) => moment(dateStr, 'YYYY/MM/DD').locale('fr').format('dddd DD/MM')),
+        datasets: pastries
+          .filter((p) => p.type === type && countByTypeByPastry[type][p.name] > 0)
+          .map((p) => {
+            const countList = Object.keys(pastriesByTypeByDate[type])
+              .reverse()
+              .map((date) => {
+                return pastriesByTypeByDate[type][date][p.name] || 0;
+              });
+            return { label: p.name, data: countList };
+          }),
+      }
+    });
+  }
+
+  private buildGlobalBarChartData(
+    pastriesByTypeByDate: { [key in PastryType]: { [date: string]: { [pastryName: string]: number } } },
+    cashByDate: { [date: string]: { [pastryName: string]: number } },
+  ): void {
+    this.globalBarChartData = {
+      labels: Object.keys(cashByDate)
+        .reverse()
+        .map((dateStr) => moment(dateStr, 'YYYY/MM/DD').locale('fr').format('dddd DD/MM')),
+      datasets: [{
+        label: 'Total',
+        data: Object.keys(cashByDate)
+          .reverse()
+          .map((date) => {
+            return (Object.keys(pastriesByTypeByDate) as PastryType[]).reduce((prev: number, type: PastryType) => {
+              if (pastriesByTypeByDate[type].hasOwnProperty(date)) {
+                prev + (
+                  Object.values(pastriesByTypeByDate[type][date]).reduce((prev, value) => prev + value, 0)
+                )
+              }
+
+              return prev;
+            }, 0);
+          }),
+      }, {
+        label: 'Argent',
+        data: Object.keys(cashByDate)
+          .reverse()
+          .map((date) => {
+            return Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
+          })
+      }, {
+        type: 'line',
+        label: 'Argent cumulé',
+        data: Object.keys(cashByDate)
+          .reverse()
+          .reduce((prev: number[], date) => {
+            const dayTotal: number = Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
+            const last: number = prev.length ? +prev[prev.length - 1] : 0;
+            prev.push(last + dayTotal);
+
+            return prev;
+          }, [])
+      }]
+    };
+  }
+
+  private buildPieChartDate(
+    countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } },
+  ): void {
+    (Object.keys(countByTypeByPastry) as PastryType[]).forEach((type: PastryType) => {
+      if (Object.keys(countByTypeByPastry[type]).length) {
+        this.pastriesByTypeByDatePieChartData[type] = {
+          labels: Object.keys(countByTypeByPastry[type]).filter((k) => countByTypeByPastry[type][k] > 0),
+          datasets: [{
+            data: Object.values(countByTypeByPastry[type]).filter((v) => v > 0),
+          }],
+        }
+      }
+    });
+  }
+
+  private setTotalByType(
+    countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } },
+  ): void {
+    (Object.keys(countByTypeByPastry) as PastryType[]).forEach((type: PastryType) => {
+      this.totalByType[type] = Object.values(countByTypeByPastry[type]).reduce(
+        (prev, v) => prev + v,
+        0
+      )
+    });
   }
 
   private getFormattedDate(date: Date): string {

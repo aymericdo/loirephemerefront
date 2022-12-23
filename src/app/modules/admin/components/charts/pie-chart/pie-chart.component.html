@@ -1,6 +1,3 @@
-<canvas *ngIf="pieChartData.datasets.length" baseChart [type]="'pie'" [data]="pieChartData" [options]="pieChartOptions"
-  [plugins]="pieChartPlugins" [legend]="true">
+<canvas baseChart [type]="'pie'" [data]="pieChartData" [options]="pieChartOptions" [plugins]="pieChartPlugins"
+  [legend]="true">
 </canvas>
-<ng-container *ngIf="pieChartData.datasets.length === 0">
-  <nz-empty></nz-empty>
-</ng-container>

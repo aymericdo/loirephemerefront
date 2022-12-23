@@ -16,6 +16,7 @@ export const pastriesMock: Pastry[] = [
     restaurant: restaurantsMock[0],
     createdAt: '2021-07-22T09:49:07.324+00:00',
     updatedAt: '2021-07-22T09:49:07.324+00:00',
+    historical: [],
   },
   {
     _id: '2349YT',
@@ -31,6 +32,7 @@ export const pastriesMock: Pastry[] = [
     restaurant: restaurantsMock[0],
     createdAt: '2021-07-22T09:49:07.324+00:00',
     updatedAt: '2021-07-22T09:49:07.324+00:00',
+    historical: [],
   },
   {
     _id: '2348YT',
@@ -46,5 +48,6 @@ export const pastriesMock: Pastry[] = [
     restaurant: restaurantsMock[0],
     createdAt: '2021-07-22T09:49:07.324+00:00',
     updatedAt: '2021-07-22T09:49:07.324+00:00',
+    historical: [],
   },
 ];

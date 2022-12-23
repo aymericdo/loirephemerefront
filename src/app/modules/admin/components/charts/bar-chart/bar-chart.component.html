@@ -1,6 +1,2 @@
-<canvas *ngIf="barChartData.datasets.length" baseChart [data]="barChartData" [options]="barChartOptions" [legend]="true"
-  [type]="'bar'">
+<canvas baseChart [data]="barChartData" [options]="barChartOptions" [legend]="true" [type]="'bar'">
 </canvas>
-<ng-container *ngIf="barChartData.datasets.length === 0">
-  <nz-empty></nz-empty>
-</ng-container>
