@@ -1,21 +1,37 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './components/login/login.component';
 import { SharedModule } from '../../shared/shared.module';
-import { FormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { LoginEffects } from './store/login.effects';
 import { loginFeatureKey, reducer } from './store/login.reducer';
+import { RegisterComponent } from 'src/app/modules/login/components/register/register.component';
+import { SignInComponent } from 'src/app/modules/login/components/sign-in/sign-in.component';
+import { LoginComponent } from 'src/app/modules/login/components/login.component';
+import { LoginRoutingModule } from 'src/app/modules/login/login-routing.module';
+import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
+import { RecoverModalComponent } from 'src/app/modules/login/components/recover-modal/recover-modal.component';
+import { RecoverComponent } from 'src/app/modules/login/components/recover/recover.component';
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [
+    LoginComponent,
+    ConfirmationModalComponent,
+    RecoverComponent,
+    RecoverModalComponent,
+    RegisterComponent,
+    SignInComponent,
+  ],
   imports: [
     CommonModule,
     SharedModule,
-    FormsModule,
+    LoginRoutingModule,
     EffectsModule.forFeature([LoginEffects]),
     StoreModule.forFeature(loginFeatureKey, reducer),
   ],
+  exports: [
+    SignInComponent,
+    RegisterComponent,
+  ]
 })
-export class LoginModule {}
+export class LoginModule { }

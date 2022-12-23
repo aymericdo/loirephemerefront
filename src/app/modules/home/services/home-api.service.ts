@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,18 +17,18 @@ export class HomeApiService {
     this.protocolHttp = environment.protocolHttp;
   }
 
-  getAll(): Observable<any> {
-    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries`);
+  getPastries(restaurantCode: string): Observable<Pastry[]> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/by-code/${restaurantCode}`) as Observable<Pastry[]>;
   }
 
-  postCommand(command: Command): Observable<any> {
+  postCommand(restaurantCode: string, command: CoreCommand): Observable<Command> {
     return this.http.post(
-      `${this.protocolHttp}${this.baseUrl}/commands`,
+      `${this.protocolHttp}${this.baseUrl}/commands/${restaurantCode}`,
       command
-    );
+    ) as Observable<Command>;
   }
 
-  postSub(commandId: string, sub: any): Observable<any> {
+  postSub(commandId: string, sub: PushSubscription): Observable<any> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/pastries/notification`,
       { commandId, sub }

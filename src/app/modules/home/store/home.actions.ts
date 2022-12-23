@@ -1,8 +1,12 @@
 import { createAction, props } from '@ngrx/store';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
-export const fetchPastries = createAction('[Home page] Fetch pastries');
+export const fetchRestaurantPastries = createAction(
+  '[Home page] Fetch pastries for a restaurant',
+  props<{ code: string }>()
+);
 export const setPastries = createAction(
   '[Home page] Set pastries',
   props<{ pastries: Pastry[] }>()
@@ -17,7 +21,7 @@ export const decrementPastry = createAction(
 );
 export const sendCommand = createAction(
   '[Home page] Send command',
-  props<{ name: string }>()
+  props<CoreCommand>()
 );
 export const resetCommand = createAction('[Home page] Reset command');
 export const setPersonalCommand = createAction(
@@ -34,8 +38,15 @@ export const setStock = createAction(
 );
 export const sendNotificationSub = createAction(
   '[Home page] Send notification sub',
-  props<{ commandId: string; sub: any }>()
+  props<{ commandId: string; sub: PushSubscription }>()
 );
 export const notificationSubSent = createAction(
   '[Home page] Notification sub sent'
+);
+export const fetchingRestaurant = createAction('[Home page] Fetch restaurant',
+  props<{ code: string }>()
+);
+export const setRestaurant = createAction(
+  '[Home page] Set restaurant',
+  props<{ restaurant: Restaurant }>()
 );

@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  height: 100%;
+  position: relative;
+
+  .home-section {
+    height: 100%;
+  }
+
+  .home-section.-has-order-footer {
+    margin-bottom: 80px;
+  }
+}

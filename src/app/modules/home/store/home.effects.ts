@@ -12,7 +12,8 @@ import {
 import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
-  fetchPastries,
+  fetchingRestaurant,
+  fetchRestaurantPastries,
   notificationSubSent,
   resetCommand,
   sendCommand,
@@ -20,18 +21,20 @@ import {
   setErrorCommand,
   setPastries,
   setPersonalCommand,
+  setRestaurant,
 } from './home.actions';
-import { selectPastries, selectSelectedPastries } from './home.selectors';
+import { selectPastries, selectRestaurant, selectSelectedPastries } from './home.selectors';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { Command } from 'src/app/interfaces/command.interface';
+import { CoreCommand } from 'src/app/interfaces/command.interface';
+import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
 
 @Injectable()
 export class HomeEffects {
-  fetchPastries$ = createEffect(() =>
+  fetchRestaurantPastries$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchPastries),
-      mergeMap(() => {
-        return this.homeApiService.getAll().pipe(
+      ofType(fetchRestaurantPastries),
+      mergeMap((action) => {
+        return this.homeApiService.getPastries(action.code).pipe(
           map((pastries) => setPastries({ pastries })),
           catchError(() => EMPTY)
         );
@@ -44,9 +47,14 @@ export class HomeEffects {
       ofType(sendCommand),
       withLatestFrom(this.store$.select(selectPastries)),
       withLatestFrom(this.store$.select(selectSelectedPastries)),
-      mergeMap(([[action, allPastries], selectedPastries]) => {
-        const command: Command = {
-          name: action.name,
+      withLatestFrom(this.store$.select(selectRestaurant)),
+      mergeMap(([[[action, allPastries], selectedPastries], restaurant]) => {
+        const { name, takeAway, pickUpTime }: CoreCommand = action;
+
+        const command: CoreCommand = {
+          name,
+          takeAway,
+          pickUpTime,
           totalPrice: Object.keys(selectedPastries).reduce((prev, pastryId) => {
             const pastry = allPastries.find(
               (p: Pastry) => p._id === pastryId
@@ -69,11 +77,24 @@ export class HomeEffects {
             []
           ),
         };
-        return this.homeApiService.postCommand(command).pipe(
+        return this.homeApiService.postCommand(restaurant?.code!, command).pipe(
           switchMap((command) => {
             return [setPersonalCommand({ command }), resetCommand()];
           }),
-          catchError((error) => [fetchPastries(), setErrorCommand({ error })])
+          catchError((error) => [fetchRestaurantPastries({ code: restaurant?.code! }), setErrorCommand({ error })])
+        );
+      })
+    )
+  );
+
+  fetchingRestaurant$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchingRestaurant),
+      mergeMap((action: { code: string }) => {
+        return this.restaurantApiService.getRestaurant(action.code).pipe(
+          switchMap((restaurant) => {
+            return [setRestaurant({ restaurant }), fetchRestaurantPastries({ code: restaurant.code })];
+          }),
         );
       })
     )
@@ -94,6 +115,7 @@ export class HomeEffects {
   constructor(
     private actions$: Actions,
     private store$: Store<AppState>,
-    private homeApiService: HomeApiService
+    private homeApiService: HomeApiService,
+    private restaurantApiService: RestaurantApiService,
   ) { }
 }

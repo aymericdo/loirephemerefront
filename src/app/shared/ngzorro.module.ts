@@ -17,8 +17,25 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 
 @NgModule({
   exports: [
@@ -41,7 +58,24 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
     NzInputModule,
     NzResultModule,
     NzModalModule,
+    NzRadioModule,
+    NzSpaceModule,
+    NzTimePickerModule,
+    NzSwitchModule,
+    NzInputNumberModule,
+    NzFormModule,
+    NzTagModule,
+    NzUploadModule,
+    NzMessageModule,
+    NzSpinModule,
+    NzStepsModule,
+    NzToolTipModule,
+    NzTableModule,
+    NzDropDownModule,
+    NzPopoverModule,
+    NzListModule,
+    NzStatisticModule,
   ],
   declarations: [],
 })
-export class NgZorroModule {}
+export class NgZorroModule { }

@@ -1,0 +1,8 @@
+<nz-modal [nzVisible]="true" nzTitle="Nouvelle pâtisserie" nzCentered (nzOnCancel)="clickCancel.emit()">
+  <ng-container *nzModalContent>
+    <app-pastry-form [restaurant]="restaurant" [validateForm]="validateForm"></app-pastry-form>
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!validateForm.valid" [nzLoading]="isLoading$ | async">Enregistrer</button>
+  </ng-container>
+</nz-modal>

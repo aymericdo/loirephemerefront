@@ -1,26 +1,25 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { CoreCommand } from 'src/app/interfaces/command.interface';
 
 @Component({
   selector: 'app-order-footer',
   templateUrl: './order-footer.component.html',
   styleUrls: ['./order-footer.component.scss'],
 })
-export class OrderFooterComponent implements OnInit {
+export class OrderFooterComponent {
   @Input() allPastries: Pastry[] = [];
   @Input() selectedPastries: { [pastryId: string]: number } = {};
   @Input() stockIssue: boolean = false;
   @Input() totalPrice: number = 0;
-  @Output() onClickReset = new EventEmitter<string>();
-  @Output() onClickCommand = new EventEmitter<string>();
+  @Output() clickReset = new EventEmitter<string>();
+  @Output() clickCommand = new EventEmitter<CoreCommand>();
 
   isOrderModalVisible: boolean = false;
   isUltimateConfirmationVisible: boolean = false;
 
-  constructor(private modal: NzModalService) {}
-
-  ngOnInit(): void {}
+  constructor(private modal: NzModalService) { }
 
   showResetConfirm(): void {
     this.modal.confirm({
@@ -30,14 +29,14 @@ export class OrderFooterComponent implements OnInit {
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
-        this.onClickReset.emit();
+        this.clickReset.emit();
       },
       nzCancelText: 'Annuler',
     });
   }
 
-  handleClickConfirm(currentFirstName: string): void {
+  handleClickConfirm({ name, takeAway, pickUpTime }: CoreCommand): void {
     this.isUltimateConfirmationVisible = false;
-    this.onClickCommand.emit(currentFirstName);
+    this.clickCommand.emit({ name, takeAway, pickUpTime });
   }
 }

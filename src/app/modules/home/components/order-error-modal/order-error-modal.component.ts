@@ -8,12 +8,12 @@ import { Pastry } from 'src/app/interfaces/pastry.interface';
 })
 export class OrderErrorModalComponent implements OnInit {
   @Input() errors: Object = null!;
-  @Output() onClickCancel = new EventEmitter<string>();
+  @Output() clickCancel = new EventEmitter<string>();
 
   errorType: string = '';
   pastriesList: string = '';
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     if (this.errors.hasOwnProperty('outOfStock')) {

@@ -1,0 +1,109 @@
+:host {
+  display: flex;
+  justify-content: center;
+
+  nz-badge.stock-badge {
+    width: fit-content;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #52c41a;
+    border-radius: 10px;
+    color: white;
+    padding: 0 8px;
+    box-shadow: 0 0 0 1px #fff;
+    display: flex;
+    align-items: center;
+  }
+
+  .-is-admin {
+    ::ng-deep .ant-card-cover {
+      position: relative;
+
+      >img {
+        transition: opacity 250ms;
+      }
+
+      &:hover {
+        >img {
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+
+  .card-actions-btn {
+    display: flex;
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &>.block-btn {
+      padding: 0.625rem;
+    }
+  }
+
+  .card-image {
+    min-height: 300px;
+  }
+
+  .display-sequence-badge {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+  }
+
+  nz-badge.display-sequence-badge {
+    box-shadow: 0 0 0 2px #000;
+    border-radius: 10px;
+  }
+
+  ::ng-deep nz-badge.display-sequence-badge nz-badge-sup {
+    background-color: #fff;
+    color: #000;
+  }
+
+  ::ng-deep nz-badge.stock-badge.-stock-issue {
+    background-color: #ff4d4f;
+  }
+
+  ::ng-deep nz-badge.stock-badge.-limit-reached {
+    background-color: #fadb14;
+    color: black;
+  }
+
+  ::ng-deep nz-badge.stock-badge.-limit-reached nz-badge-sup {
+    display: none;
+  }
+
+  nz-badge.stock-badge>span {
+    margin-bottom: 1px;
+  }
+
+  ::ng-deep nz-badge.stock-badge nz-badge-sup {
+    box-shadow: none;
+    padding-right: 0;
+    transform: none;
+    background-color: transparent !important;
+    border: none;
+    margin-bottom: -1px;
+  }
+
+  ::ng-deep .ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-arrow {
+    left: 0;
+  }
+
+  ::ng-deep .ant-collapse>.ant-collapse-item>.ant-collapse-header {
+    padding-left: 20px;
+  }
+
+  ::ng-deep .ant-collapse-ghost>.ant-collapse-item>.ant-collapse-content>.ant-collapse-content-box {
+    padding-top: 0;
+  }
+
+  .ingredients::first-letter {
+    text-transform: capitalize;
+  }
+}

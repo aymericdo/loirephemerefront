@@ -1,0 +1,72 @@
+<div class="menu-section">
+  <nz-page-header>
+    <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
+    <nz-page-header-extra>
+      <div class="actions-btn">
+        <nz-space nzAlign="center">
+          <ng-container *ngIf="!isInSequenceMode && !isInAssociationMode">
+            <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
+              nzBlock>Association de stock</button>
+            <button class="sequence-mode-btn" *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock>Séquence
+              d'affichage</button>
+            <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="openNewPastryModal()">
+              <span nz-icon nzType="plus"></span>
+              Ajouter une pâtisserie
+            </button>
+
+            <button *nzSpaceItem class="more-btn" nz-button nzNoAnimation nz-dropdown [nzDropdownMenu]="menu"
+              nzPlacement="bottomRight" style="border: none; padding: 0">
+              <span nz-icon nzType="more" nzTheme="outline" style="font-size: 20px; vertical-align: top;"></span>
+            </button>
+
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item (click)="isInSequenceMode = true">
+                  Séquence d'affichage
+                </li>
+                <li nz-menu-item (click)="isInAssociationMode = true">
+                  Association de stock
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </ng-container>
+          <ng-container *ngIf="isInSequenceMode || isInAssociationMode">
+            <button *nzSpaceItem nz-button nzType="primary" nzBlock
+              (click)="isInSequenceMode = false; isInAssociationMode = false">
+              <span nz-icon nzType="right"></span>
+              Retour
+            </button>
+          </ng-container>
+        </nz-space>
+      </div>
+    </nz-page-header-extra>
+  </nz-page-header>
+  <ng-container *ngIf="(pastries$ | async)?.length === 0"><nz-empty></nz-empty></ng-container>
+
+  <div *ngIf="isInSequenceMode" class="pastry-sequence-section">
+    <app-sequence></app-sequence>
+  </div>
+
+  <div *ngIf="isInAssociationMode" class="pastry-association-section">
+    <app-association></app-association>
+  </div>
+
+  <div *ngIf="!isInSequenceMode && !isInAssociationMode && (pastries$ | async)?.length" class="pastry-list" nz-row
+    [nzGutter]="[0, 24]">
+    <div *ngFor="let pastry of pastries$ | async; trackBy: tackById" class="pastry-section" nz-col nzXs="24" nzSm="24"
+      nzMd="18" nzLg="12" nzXl="8">
+      <div class="inner-box">
+        <app-pastry-card #item [isAdmin]="true" [pastry]="pastry"
+          [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!" [count]="pastry.stock"
+          (clickPlus)="handleClickPlus(pastry)" (clickMinus)="handleClickMinus(pastry)"
+          (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)"
+          (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-new-pastry-modal *ngIf="(menuModalOpened$ | async) === 'new'" [restaurant]="(restaurant$ | async)!"
+  (clickCancel)="closeMenuModal()"></app-new-pastry-modal>
+<app-edit-pastry-modal *ngIf="(menuModalOpened$ | async) === 'edit'" [pastry]="(selectEditingPastry$ | async)!"
+  [restaurant]="(restaurant$ | async)!" (clickCancel)="closeMenuModal()"></app-edit-pastry-modal>

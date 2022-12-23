@@ -1,0 +1,76 @@
+<div>
+  <div class="steps-section">
+    <nz-steps [nzCurrent]="currentStep">
+      <nz-step nzTitle="Restaurant" [nzIcon]="currentStep > 0 ? '' : 'coffee'" nzDescription="Étape 1"></nz-step>
+      <nz-step nzTitle="Utilisateur" [nzIcon]="currentStep > 1 ? '' : 'user'" nzDescription="Étape 2"></nz-step>
+      <nz-step nzTitle="Terminé" [nzIcon]="currentStep > 2 ? '' : 'check'" nzDescription="Étape 3"></nz-step>
+    </nz-steps>
+  </div>
+
+  <div class="form-section">
+    <ng-container *ngIf="currentStep === 0">
+      <form nz-form [formGroup]="validateForm" (ngSubmit)="submitRestaurantForm()">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Nom du restaurant</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
+            [nzErrorTip]="restaurantNameErrorTpl">
+            <input nz-input formControlName="name" placeholder="Gaufres et compagnie" />
+            <ng-template #restaurantNameErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
+              <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }}
+                caractères
+              </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de {{ SIZE.SMALL }}
+                caractères
+              </ng-container>
+              <ng-container *ngIf="control.hasError('duplicated')">Le nom est déjà pris</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item class="form-action-row">
+          <nz-form-control [nzSm]="{ span: 12, offset: 8 }" [nzXs]="24">
+            <div nzFlex nz-row nzJustify="end">
+              <nz-space>
+                <button *nzSpaceItem nz-button (click)="resetForm($event)">Effacer</button>
+                <button *nzSpaceItem nz-button nzType="primary" [disabled]="!validateForm.valid">Suivant</button>
+              </nz-space>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+
+    <ng-container *ngIf="currentStep === 1">
+      <nz-result *ngIf="(user$ | async) !== null" [nzIcon]="'smile-twotone'"
+        [nzTitle]="'Bonjour ' + (user$ | async)?.email">
+        <div nz-result-extra>
+          <button nz-button nzType="primary" (click)="currentStep = currentStep + 1">Suivant</button>
+        </div>
+      </nz-result>
+
+      <ng-container *ngIf="(user$ | async) === null">
+        <div nz-row nzJustify="center">
+          <div nz-col [nzSm]="20" [nzXs]="24">
+            <nz-tabset>
+              <nz-tab nzTitle="Créer un compte">
+                <app-register></app-register>
+              </nz-tab>
+              <nz-tab nzTitle="Se connecter">
+                <app-sign-in></app-sign-in>
+              </nz-tab>
+            </nz-tabset>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="currentStep === 2">
+      <nz-result nzStatus="success" nzTitle="Bravo, c'est fini !">
+        <div nz-result-extra>
+          <button nz-button nzType="primary" (click)="handleCreation()">Créer le resto</button>
+        </div>
+      </nz-result>
+    </ng-container>
+  </div>
+</div>

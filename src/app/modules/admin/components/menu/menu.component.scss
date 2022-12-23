@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  height: 100%;
+  position: relative;
+
+  .actions-btn {
+
+    .association-mode-btn,
+    .sequence-mode-btn {
+      display: block;
+    }
+
+    .more-btn {
+      display: none;
+    }
+  }
+
+  .menu-section {
+    height: 100%;
+  }
+
+  .pastry-list {
+    margin-top: 2rem;
+  }
+
+  .pastry-association-section,
+  .pastry-sequence-section {
+    padding: 1rem;
+  }
+
+  @media screen and (max-width: 992px) {
+    .actions-btn {
+
+      .association-mode-btn,
+      .sequence-mode-btn {
+        display: none;
+      }
+
+      .more-btn {
+        display: block;
+      }
+    }
+  }
+}

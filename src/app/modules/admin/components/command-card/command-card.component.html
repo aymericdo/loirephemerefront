@@ -1,0 +1,34 @@
+<nz-ribbon nzText="€" [nzColor]="isPayed ? 'green' : 'red'">
+  <nz-card style="width: 300px" [class.-is-new]="isNew" [class.-is-just-updated]="isJustUpdated"
+    [nzActions]="isPayed ? [actionWizz] : [actionWizz, actionDone]" [nzTitle]="'Commande #' + command.reference">
+    <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+      <p>Nom : {{ command.name }}</p>
+      <p>Heure : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
+      <p>Lieu : {{ command.takeAway ? 'À emporter' : 'Sur place' }}</p>
+      <p>Pâtisseries :</p>
+      <ul>
+        <li *ngFor="let pastryObj of pastries">
+          {{ pastryObj[0].name + " (x" + pastryObj[1] + ")" }}
+        </li>
+      </ul>
+      <p>Prix total : {{ command.totalPrice }}€</p>
+    </nz-skeleton>
+  </nz-card>
+</nz-ribbon>
+<ng-template #actionWizz>
+  <i nz-icon nzType="bell" (click)="!isLoading && wizzClient()"></i>
+</ng-template>
+<ng-template #iconTemplateGreen>
+  <i nz-icon nzType="euro-circle" class="ant-scroll-number-custom-component" style="color: #52c41a"></i>
+</ng-template>
+<ng-template #iconTemplateRed>
+  <i nz-icon nzType="euro-circle" class="ant-scroll-number-custom-component" style="color: #ff4d4f"></i>
+</ng-template>
+<ng-template #actionDone>
+  <ng-container *ngIf="!isDone">
+    <i nz-icon nzType="check" (click)="!isLoading && showValidationPopup('toDone')"></i>
+  </ng-container>
+  <ng-container *ngIf="isDone">
+    <i nz-icon nzType="euro-circle" (click)="!isLoading && showValidationPopup('toPayed')"></i>
+  </ng-container>
+</ng-template>

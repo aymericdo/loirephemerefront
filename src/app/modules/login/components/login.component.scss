@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  nz-tabset {
+    padding: 2rem;
+  }
+
+  nz-spin {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+}

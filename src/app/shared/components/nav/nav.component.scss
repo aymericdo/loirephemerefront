@@ -3,7 +3,10 @@
   z-index: 1;
 
   nz-sider {
+    overflow: auto;
     height: 100%;
+    position: fixed;
+    left: 0;
   }
 
   .logo {
@@ -19,10 +22,30 @@
   .version {
     display: flex;
     justify-content: center;
-    padding: 24px;
+    padding: 1.25rem;
   }
 
   .block {
     flex: 1;
+  }
+
+  .restaurant-name-tooltip,
+  .account-name-tooltip {
+    width: 100%;
+  }
+
+  ::ng-deep .restaurant-name,
+  ::ng-deep .account-name {
+    display: block;
+    max-width: calc(100% - 20px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  @media screen and (max-width: 992px) {
+    nz-sider {
+      overflow: inherit;
+    }
   }
 }

@@ -1,0 +1,19 @@
+<nz-list *ngIf="(pastries$ | async)?.length" nzBordered cdkDropList class="pastry-sequence-list"
+  (cdkDropListDropped)="drop($event)">
+  <nz-list-item class="pastry-sequence-box" [class.-loading]="isMoving$ | async"
+    *ngFor="let pastry of pastries$ | async; trackBy: tackById" cdkDrag [cdkDragData]="pastry">
+    <div class="pastry-sequence-custom-placeholder" *cdkDragPlaceholder>
+      <span>{{ pastry.name }}</span>
+    </div>
+    <div *cdkDragPreview></div>
+    <span>{{ pastry.name }}</span>
+    <nz-space class="badges-section" nzAlign="center">
+      <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
+      <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+        [nzTitle]="'displaySequence'"></nz-badge>
+    </nz-space>
+    <ng-template #iconHidden>
+      <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
+    </ng-template>
+  </nz-list-item>
+</nz-list>

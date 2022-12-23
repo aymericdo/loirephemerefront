@@ -13,8 +13,10 @@ export type WebSocketData = {
 export class AdminWebSocketService {
   ws!: WebSocket;
 
-  createObservableSocket(): Observable<WebSocketData> {
-    this.ws = new WebSocket(`${environment.protocolWs}${environment.apiWs}/`);
+  createObservableSocket(code: string): Observable<WebSocketData> {
+    this.ws = new WebSocket(
+      `${environment.protocolWs}${environment.apiWs}/?code=${code}&bearerToken=${localStorage.getItem('access_token')}`,
+    );
 
     return new Observable((observer) => {
       this.ws.onmessage = (event) => observer.next(event.data);
@@ -29,7 +31,6 @@ export class AdminWebSocketService {
           this.sendMessage(
             JSON.stringify({
               event: 'authorization',
-              data: localStorage.getItem('token') as string,
             })
           );
         }

@@ -1,0 +1,7 @@
+nz-input-number {
+  width: 40px;
+
+  ::ng-deep .ant-input-number-handler-wrap {
+    display: none;
+  }
+}

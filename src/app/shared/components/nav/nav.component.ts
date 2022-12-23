@@ -1,24 +1,102 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { filter, Observable, ReplaySubject } from 'rxjs';
+import { DEMO_RESTO } from 'src/app/app-routing.module';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { User } from 'src/app/interfaces/user.interface';
+import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { fetchUser, resetUser } from 'src/app/modules/login/store/login.actions';
+import { selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { AppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavComponent implements OnInit {
-  isCollapsed = false;
+export class NavComponent implements OnInit, OnDestroy {
+  restaurant$: Observable<Restaurant | null>;
+  user$: Observable<User | null>;
+  userRestaurants$: Observable<Restaurant[] | null>;
+  isUserCollapsed = true;
+  isAdminCollapsed = '';
+  restaurantCode: string | null = null;
+  routeName: string | null = null;
 
-  constructor(private router: Router) { }
+  DEMO_RESTO = DEMO_RESTO;
 
-  ngOnInit(): void { }
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  toggleCollapsed(): void {
-    this.isCollapsed = !this.isCollapsed;
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private store: Store<AppState>,
+  ) {
+    this.restaurant$ = this.store.select(selectRestaurant);
+    this.user$ = this.store.select(selectUser);
+    this.userRestaurants$ = this.store.select(selectUserRestaurants);
   }
 
-  isHome(): boolean {
-    return this.router.url === '/'
+  ngOnInit(): void {
+    this.restaurant$
+      .pipe(filter(Boolean))
+      .subscribe((restaurant) => {
+        this.restaurantCode = restaurant.code;
+      });
+
+    this.router.events
+      .pipe(
+        filter(e => (e instanceof ActivationEnd)),
+      )
+      .subscribe(() => {
+        this.routeName = this.getRouteName(this.router.url);
+      });
+
+    if (this.isLoggedIn) {
+      this.store.dispatch(fetchUser());
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  handleDisconnect(): void {
+    this.authService.doLogout();
+    this.store.dispatch(resetUser());
+  }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn;
+  }
+
+  getRouteName(url: string): string | null {
+    const urlArray = url.split('/')
+    if (urlArray.length > 1 && urlArray[2] === 'admin') {
+      this.isAdminCollapsed = urlArray[1];
+
+      if (urlArray.length > 2 && urlArray[3].includes('commands')) {
+        return 'commands';
+      } else if (urlArray.length > 2 && urlArray[3].includes('stats')) {
+        return 'stats';
+      } else if (urlArray.length > 2 && urlArray[3].includes('users')) {
+        return 'users';
+      } else if (urlArray.length > 2 && urlArray[3].includes('menu')) {
+        return 'menu';
+      }
+    } else if (urlArray.length > 1 && urlArray[2] === 'restaurant') {
+      if (urlArray.length > 2 && urlArray[3].includes('new')) {
+        return 'new-restaurant';
+      }
+    } else if (urlArray.length > 1 && urlArray[2] === 'login') {
+      this.isUserCollapsed = this.isLoggedIn;
+    } else if (urlArray.length === 2) {
+      return 'home';
+    }
+
+    return null;
   }
 }

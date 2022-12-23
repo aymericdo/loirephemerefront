@@ -1,0 +1,57 @@
+<nz-card style="width: 300px" [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]"
+  [class.-is-admin]="isAdmin">
+  <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+    <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock === 0"
+      [class.-stock-issue]="isStockIssue" nzStandalone nzShowZero [nzCount]="pastry.stock" [nzOverflowCount]="99"
+      [nzTitle]="'stock'">
+      <ng-container *ngIf="pastry.stock === 0">
+        <span>Rupture de stock</span>
+      </ng-container>
+      <ng-container *ngIf="pastry.stock > 0">
+        <span>Stock</span>
+      </ng-container>
+    </nz-badge>
+
+    <nz-badge *ngIf="isAdmin" class="display-sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+      [nzTitle]="'displaySequence'"></nz-badge>
+
+    <nz-card-meta [nzTitle]="pastry.name + ' (' + pastry.price + '€)'" [nzDescription]="pastry.description">
+    </nz-card-meta>
+    <nz-collapse *ngIf="pastry.ingredients?.length" nzGhost>
+      <nz-collapse-panel nzHeader="Ingrédients">
+        <p class="ingredients" style="margin: 0">
+          {{ pastry.ingredients.join(", ") }}
+        </p>
+      </nz-collapse-panel>
+    </nz-collapse>
+  </nz-skeleton>
+</nz-card>
+<ng-template #coverTemplate>
+  <img class="card-image" *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl"
+    (error)="onImgError($event)" />
+  <div *ngIf="isAdmin && !isLoading && imageUrl" class="card-actions-btn">
+    <div class="block-btn">
+      <button nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickEdit.emit()"><span nz-icon
+          nzType="edit"></span></button>
+    </div>
+    <div class="block-btn">
+      <button *ngIf="!pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large"
+        (click)="clickDelete.emit()">
+        <span nz-icon nzType="eye"></span>
+      </button>
+      <button *ngIf="pastry.hidden" nzDanger nz-button nzType="primary" nzShape="circle" nzSize="large"
+        (click)="clickActive.emit()">
+        <span nz-icon nzType="eye-invisible"></span>
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #actionCount>
+  <span *ngIf="!!count">{{ count }}</span>
+</ng-template>
+<ng-template #actionPlus>
+  <i nz-icon nzType="plus" (click)="!isMaxLimitReached && !isLoading && clickPlus.emit()"></i>
+</ng-template>
+<ng-template #actionMinus>
+  <i nz-icon nzType="minus" (click)="count > 0 && !isLoading && clickMinus.emit()"></i>
+</ng-template>

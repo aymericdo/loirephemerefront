@@ -1,8 +1,23 @@
 :host {
-  display: block;
   height: 100%;
   width: 100%;
   overflow-y: auto;
+  display: flex;
+
+  // hack, I don't know why I need to add every chart in every tab
+  .hidden {
+    display: none;
+  }
+
+  .content {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+  }
 
   .year-selector {
     padding: 1rem;
@@ -11,13 +26,17 @@
     justify-content: center;
   }
 
-  .content {
+  nz-tabset {
     height: 100%;
     width: 100%;
+  }
+
+  ::ng-deep .ant-tabs-content {
+    height: 100%;
+  }
+
+  ::ng-deep .ant-tabs-tabpane {
     display: flex;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
   }
 
@@ -27,37 +46,40 @@
     width: 100%;
     flex: 1;
     justify-content: center;
+    align-items: center;
   }
 
   .chart {
     position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: row;
     flex: 1;
+    width: 100%;
+    height: 100%;
+
+    >div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      min-width: 100%;
+      min-height: 100%;
+      padding: 1rem;
+      flex: 1;
+    }
   }
 
-  .chart>div {
-    width: 100%;
-    padding: 1rem;
+  .chart.global {
+    justify-content: space-around;
   }
 
   .chart.bar {
-    width: 100%;
-    height: 100%;
     overflow-x: auto;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    justify-content: center;
 
     >div {
-      width: 100%;
-      height: 100%;
       min-width: 900px;
-      position: absolute;
-      left: 0;
-      padding: 1rem;
     }
   }
 
@@ -68,7 +90,7 @@
     font-weight: 500;
   }
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 992px) {
     .content {
       min-height: 100%;
       height: auto;
@@ -76,6 +98,7 @@
 
     .row {
       flex-direction: column;
+      max-height: inherit;
     }
 
     .chart {

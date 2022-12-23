@@ -1,37 +1,103 @@
 <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
-    <li nz-menu-item [nzSelected]="isHome()">
-      <a [routerLink]="['/']">
+    <li nz-menu-item [nzSelected]="routeName === 'home'">
+      <a [routerLink]="[restaurantCode || DEMO_RESTO]">
         <i nz-icon nzType="heart"></i>
         <span>Pâtisseries</span>
       </a>
     </li>
+
+    <li nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
+      nzTitle="Restaurants" nzIcon="coffee">
+      <ul>
+        <li nz-menu-item [nzMatchRouter]="true">
+          <a [routerLink]="['page', 'restaurant', 'new']">
+            <i nz-icon nzType="plus"></i>
+            <span>Nouveau</span>
+          </a>
+        </li>
+        <ng-container *ngFor="let restaurant of (userRestaurants$ | async)">
+
+          <ng-template #titleNameTpl>
+            <span class="restaurant-name-tooltip" nz-tooltip [nzTooltipTitle]="restaurant.name"
+              nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
+              <span class="restaurant-name">{{ restaurant.name }}</span>
+            </span>
+          </ng-template>
+
+          <li nz-submenu nzIcon="coffee" [nzTitle]="titleNameTpl" [nzOpen]="isAdminCollapsed === restaurant.code"
+            (nzOpenChange)="isAdminCollapsed = isAdminCollapsed === restaurant.code ? '' : restaurant.code">
+            <ul>
+              <li nz-menu-item [nzMatchRouter]="true">
+                <a [routerLink]="[restaurant.code, 'admin', 'menu']">
+                  <i nz-icon nzType="shopping-cart"></i>
+                  <span>Menu</span>
+                </a>
+              </li>
+              <li nz-menu-item [nzMatchRouter]="true">
+                <a [routerLink]="[restaurant.code, 'admin', 'commands']">
+                  <i nz-icon nzType="alert"></i>
+                  <span>Commandes</span>
+                </a>
+              </li>
+              <li nz-menu-item [nzMatchRouter]="true">
+                <a [routerLink]="[restaurant.code, 'admin', 'stats']">
+                  <i nz-icon nzType="pie-chart"></i>
+                  <span>Stats</span>
+                </a>
+              </li>
+              <li nz-menu-item [nzMatchRouter]="true">
+                <a [routerLink]="[restaurant.code, 'admin', 'users']">
+                  <i nz-icon nzType="user"></i>
+                  <span>Utilisateurs</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </li>
+
     <li nz-menu-item [nzMatchRouter]="true">
-      <a [routerLink]="['/about']">
+      <a [routerLink]="['page', 'about']">
         <i nz-icon nzType="question"></i>
         <span>À propos</span>
       </a>
     </li>
-    <li nz-submenu nzTitle="Admin" nzIcon="lock">
+    <div class="block"></div>
+
+    <ng-template #titleUserTpl>
+      <ng-container *ngIf="isLoggedIn">
+        <span class="account-name-tooltip" nz-tooltip [nzTooltipTitle]="(user$ | async)?.email"
+          nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
+          <span class="account-name">{{ (user$ | async)?.email }}</span>
+        </span>
+      </ng-container>
+      <ng-container *ngIf="!isLoggedIn">
+        <span>Mon compte</span>
+      </ng-container>
+    </ng-template>
+
+    <li nz-submenu [nzOpen]="!isUserCollapsed" (nzOpenChange)="isUserCollapsed = !isUserCollapsed"
+      [nzTitle]="titleUserTpl" nzIcon="user">
       <ul>
-        <li nz-menu-item [nzMatchRouter]="true">
-          <a [routerLink]="['/', 'admin', 'commands']">
-            <i nz-icon nzType="shopping-cart"></i>
-            <span>Commandes</span>
+        <li *ngIf="isLoggedIn" nz-menu-item>
+          <a (click)="handleDisconnect()">
+            <i nz-icon nzType="logout"></i>
+            <span>Se déconnecter</span>
           </a>
         </li>
-        <li nz-menu-item [nzMatchRouter]="true">
-          <a [routerLink]="['/', 'admin', 'stats']">
-            <i nz-icon nzType="pie-chart"></i>
-            <span>Stats</span>
+        <li *ngIf="!isLoggedIn" nz-menu-item [nzMatchRouter]="true">
+          <a [routerLink]="['page', 'login']">
+            <i nz-icon nzType="login"></i>
+            <span>Connexion</span>
           </a>
+        </li>
+        <li>
+          <span class="version">v3.0.0</span>
         </li>
       </ul>
-    </li>
-    <div class="block"></div>
-    <li>
-      <span class="version">v2.0.1</span>
     </li>
   </ul>
 </nz-sider>

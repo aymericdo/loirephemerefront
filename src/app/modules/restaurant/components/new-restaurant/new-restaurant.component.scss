@@ -1,0 +1,26 @@
+:host {
+  .steps-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.25rem 0;
+
+    nz-steps {
+      width: 80%;
+    }
+  }
+
+  .form-section {
+    display: flex;
+    justify-content: center;
+
+    >* {
+      flex: 1;
+      padding: 1rem;
+    }
+
+    .form-action-row {
+      margin-top: 3rem;
+    }
+  }
+}

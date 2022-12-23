@@ -4,24 +4,9 @@ import { HomeState } from './home.reducer';
 
 export const selectFeature = (state: AppState) => state.home;
 
-export const TIPS_ID = '60aebea4bec7f2f43b69744a';
-
 export const selectPastries = createSelector(
   selectFeature,
-  (state: HomeState) =>
-    [
-      ...state.pastries.filter((p) => !p.hidden && p._id !== TIPS_ID),
-      state.pastries.find((p) => p._id === TIPS_ID)!,
-    ].filter(Boolean)
-);
-
-export const selectAllPastries = createSelector(
-  selectFeature,
-  (state: HomeState) =>
-    [
-      ...state.pastries.filter((p) => p._id !== TIPS_ID),
-      state.pastries.find((p) => p._id === TIPS_ID)!,
-    ].filter(Boolean)
+  (state: HomeState) => state.pastries
 );
 
 export const selectSelectedPastries = createSelector(
@@ -38,11 +23,11 @@ export const selectIsStockIssue = createSelector(
   selectFeature,
   (state: HomeState) =>
     Object.keys(state.selectedPastries).some((pastryId) => {
-      if (pastryId === TIPS_ID) return false;
+      const pastry = state.pastries.find((p) => p._id === pastryId);
+      if (!pastry?.stock) return false;
       return (
-        state.pastries.find((p) => p._id === pastryId)!.stock -
-        state.selectedPastries[pastryId] <
-        0
+        pastry.stock -
+        state.selectedPastries[pastryId] < 0
       );
     })
 );
@@ -75,4 +60,9 @@ export const selectTotalPrice = createSelector(
         state.selectedPastries[pastryId],
       0
     )
+);
+
+export const selectRestaurant = createSelector(
+  selectFeature,
+  (state: HomeState) => state.restaurant
 );

@@ -1,46 +1,49 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from './auth/auth-guard.service';
-import { AboutComponent } from './modules/about/components/about/about.component';
-import { AdminComponent } from './modules/admin/components/admin/admin.component';
-import { StatsComponent } from './modules/admin/components/stats/stats.component';
-import { HomeComponent } from './modules/home/components/home/home.component';
-import { LoginComponent } from './modules/login/components/login/login.component';
+import { AboutComponent } from 'src/app/modules/about/components/about/about.component';
+import { AdminComponent } from 'src/app/modules/admin/components/admin.component';
+import { HomeComponent } from 'src/app/modules/home/components/home.component';
+import { FourOhFourComponent } from 'src/app/shared/components/four-oh-four/four-oh-four.component';
+
+export const DEMO_RESTO: string = 'demo-resto';
 
 const routes: Routes = [
   {
-    path: '',
-    component: HomeComponent,
+    path: 'page/404',
+    component: FourOhFourComponent,
   },
   {
-    path: 'about',
+    path: 'page/about',
     component: AboutComponent,
     loadChildren: () =>
       import('./modules/about/about.module').then((m) => m.AboutModule),
   },
   {
-    path: 'admin',
-    redirectTo: 'admin/commands',
-  },
-  {
-    path: 'admin/commands',
-    component: AdminComponent,
-    canActivate: [AuthGuardService],
-    loadChildren: () =>
-      import('./modules/admin/admin.module').then((m) => m.AdminModule),
-  },
-  {
-    path: 'admin/stats',
-    component: StatsComponent,
-    canActivate: [AuthGuardService],
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
+    path: 'page/login',
     loadChildren: () =>
       import('./modules/login/login.module').then((m) => m.LoginModule),
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: 'page/restaurant',
+    loadChildren: () =>
+      import('./modules/restaurant/restaurant.module').then((m) => m.RestaurantModule),
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: `/${DEMO_RESTO}`,
+  },
+  {
+    path: ':code',
+    component: HomeComponent,
+  },
+  {
+    path: ':code/admin',
+    component: AdminComponent,
+    loadChildren: () =>
+      import('./modules/admin/admin.module').then((m) => m.AdminModule),
+  },
+  { path: '**', redirectTo: 'page/404' },
 ];
 
 @NgModule({

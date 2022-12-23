@@ -1,0 +1,20 @@
+<button *ngIf="canAssociate()" nz-button nzType="default" nzBlock (click)="associate()">
+  {{ hasSelectedAssociatedPastries() ? 'Associer' : 'Dissocier' }}
+</button>
+<button *ngIf="selectedCommonStock.length" nz-button nzType="dashed" nzBlock (click)="reset()">Réinitialiser</button>
+<nz-list *ngIf="(pastries$ | async)?.length" nzBordered class="pastry-association-list">
+  <nz-list-item class="pastry-association-box" *ngFor="let pastry of pastries$ | async; trackBy: tackById"
+    [class.-deactivate]="isDeactivate(pastry)" [ngStyle]="isPastrySelected(pastry) ? getSelectedRowClass() : {}"
+    (click)="!isDeactivate(pastry) && selectPastry(pastry)">
+    <span>{{ pastry.name }}</span>
+    <nz-space class="badges-section" nzAlign="center">
+      <nz-badge *ngIf="pastry.commonStock" [nzColor]="colorByCommonStock[pastry.commonStock]"></nz-badge>
+      <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
+      <nz-badge *nzSpaceItem class="association-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+        [nzTitle]="'displaySequence'"></nz-badge>
+    </nz-space>
+    <ng-template #iconHidden>
+      <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
+    </ng-template>
+  </nz-list-item>
+</nz-list>
