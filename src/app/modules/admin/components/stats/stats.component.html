@@ -24,7 +24,7 @@
           <div class="chart global">
             <app-pie-chart class="hidden" [pieChartData]="pieChartDatasetsPastries"></app-pie-chart>
             <nz-statistic [nzValue]="commandsCount" [nzTitle]="'Nombre de commandes totales'"></nz-statistic>
-            <nz-statistic [nzValue]="totalCash" [nzTitle]="'Argent total'"></nz-statistic>
+            <nz-statistic [nzValue]="totalCash" [nzSuffix]="'€'" [nzTitle]="'Argent total'"></nz-statistic>
           </div>
         </div>
         <div class="row">
