@@ -12,6 +12,7 @@
   .content {
     height: 100%;
     width: 100%;
+    max-width: 100vw;
     display: flex;
     flex: 1;
     align-items: center;
@@ -98,15 +99,16 @@
     .content {
       min-height: 100%;
       height: auto;
+      padding: 0;
+    }
+
+    .chart.global {
+      padding: 1rem;
     }
 
     .row {
       flex-direction: column;
       max-height: inherit;
-    }
-
-    .chart {
-      min-height: 100vh;
     }
   }
 }
