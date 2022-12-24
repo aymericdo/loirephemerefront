@@ -20,6 +20,6 @@ export class AdminComponent implements OnInit {
       if (params.get('code')) {
         this.store.dispatch(fetchingRestaurant({ code: params.get('code')! }));
       }
-    })
+    });
   }
 }

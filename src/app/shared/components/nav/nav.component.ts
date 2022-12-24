@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { filter, Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, filter } from 'rxjs';
 import { DEMO_RESTO } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
@@ -74,7 +74,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   getRouteName(url: string): string | null {
-    const urlArray = url.split('/')
+    const urlArray = url.split('/');
     if (urlArray.length > 1 && urlArray[2] === 'admin') {
       this.isAdminCollapsed = urlArray[1];
 

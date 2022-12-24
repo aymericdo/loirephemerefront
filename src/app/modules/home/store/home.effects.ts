@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { createEffect, ofType, Actions } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
 import {
+  catchError,
   map,
   mergeMap,
-  catchError,
-  withLatestFrom,
   switchMap,
+  withLatestFrom,
 } from 'rxjs/operators';
 import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
-  fetchingRestaurant,
   fetchRestaurantPastries,
+  fetchingRestaurant,
   notificationSubSent,
   resetCommand,
   sendCommand,

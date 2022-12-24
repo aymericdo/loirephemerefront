@@ -20,14 +20,14 @@ import {
   selectTotalPayedCommands,
 } from 'src/app/modules/admin/store/admin.selectors';
 import {
-  WebSocketData,
   AdminWebSocketService,
+  WebSocketData,
 } from 'src/app/modules/admin/services/admin-socket.service';
 import { filter, takeUntil } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from 'src/environments/environment';
 import { SwPush } from '@angular/service-worker';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 
@@ -71,7 +71,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.subscribeToWS(params.get('code')!);
-    })
+    });
 
     this.route.queryParams.subscribe((params) => {
       if (!params['tab']) {
@@ -99,11 +99,11 @@ export class CommandsComponent implements OnInit, OnDestroy {
             console.error('Could not subscribe to notifications', err)
           );
 
-        this.swPush.notificationClicks.subscribe((event) => {
+        this.swPush.notificationClicks.subscribe((_event) => {
           this.router.navigate(['/']);
         });
       }
-    })
+    });
   }
 
   handleClickDone(command: Command): void {

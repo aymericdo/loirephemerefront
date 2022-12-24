@@ -18,7 +18,7 @@ export class HomeWebSocketService {
     return new Observable((observer) => {
       this.ws.onmessage = (event) => observer.next(event.data);
       this.ws.onerror = (event) => observer.error(event);
-      this.ws.onclose = (event) => observer.complete();
+      this.ws.onclose = (_event) => observer.complete();
 
       return () => this.ws.close(1000, 'The user disconnected');
     }).pipe(

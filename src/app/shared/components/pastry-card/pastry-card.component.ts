@@ -1,11 +1,11 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  Input,
-  Output,
-  EventEmitter,
+  Component,
   ElementRef,
+  EventEmitter,
+  Input,
   OnChanges,
+  Output,
 } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
@@ -41,7 +41,7 @@ export class PastryCardComponent implements OnChanges {
   ngOnChanges(): void {
     this.isStockAvailable = !!this.pastry.stock || this.pastry.stock === 0;
     this.imageUrl = this.adminApiService.getImageUrl(this.pastry.imageUrl! ?? 'default.webp');
-    this.isMaxLimitReached = !this.isAdmin && this.isStockAvailable && this.count >= this.pastry.stock
+    this.isMaxLimitReached = !this.isAdmin && this.isStockAvailable && this.count >= this.pastry.stock;
     this.isStockIssue = this.isStockAvailable && this.count > this.pastry.stock;
   }
 

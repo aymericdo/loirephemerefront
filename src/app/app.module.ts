@@ -9,7 +9,7 @@ import { fr_FR } from 'ng-zorro-antd/i18n';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import fr from '@angular/common/locales/fr';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './modules/home/home.module';
 import { StoreModule } from '@ngrx/store';
@@ -20,7 +20,7 @@ import { RouterModule } from '@angular/router';
 import { FourOhFourComponent } from './shared/components/four-oh-four/four-oh-four.component';
 import { AuthInterceptor } from 'src/app/auth/auth.interceptor';
 import { HttpResponseInterceptor } from 'src/app/shared/services/http-response.interceptor';
-import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
+import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
 import { LoginModule } from 'src/app/modules/login/login.module';
 
 registerLocaleData(fr, 'fr');

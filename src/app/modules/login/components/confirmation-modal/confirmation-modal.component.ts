@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
@@ -46,7 +46,7 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
         } else {
           this.validateForm.enable();
         }
-      })
+      });
   }
 
   ngOnDestroy() {
@@ -82,7 +82,7 @@ export class ConfirmationModalComponent implements OnInit, OnDestroy {
         break;
       }
       case 4: {
-        this.figure4Element.focus()
+        this.figure4Element.focus();
         break;
       }
     }

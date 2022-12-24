@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { filter, Observable, take } from 'rxjs';
+import { Observable, filter, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { User } from 'src/app/interfaces/user.interface';
 import { selectUser } from 'src/app/modules/login/store/login.selectors';

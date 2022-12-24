@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
 import { fetchingRestaurantCommands } from '../../store/admin.actions';
 import {
-  selectPayedCommands,
   selectAllPastries,
   selectIsStatsLoading,
+  selectPayedCommands,
 } from '../../store/admin.selectors';
 import {
   ChartData,
@@ -125,7 +125,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     ).subscribe((restaurant) => {
       this.currentRestaurant = restaurant;
       this.currentYearChange();
-    })
+    });
 
     combineLatest([this.payedCommands$, this.pastries$])
       .pipe(
@@ -195,26 +195,28 @@ export class StatsComponent implements OnInit, OnDestroy {
     if (pastry.historical.length) {
       const commandDate = command.createdAt;
 
-      const realState: { [attribute: string]: (string | number) } = this.statsAttributes.reduce((prev, attr: string) => {
+      const realState: { [attribute: string]: (string | number) } =
+        this.statsAttributes.reduce((prev, attr: string) => {
         (prev as { [attribute: string]: (string | number) })[attr] = pastry[attr as keyof Pastry] as (string | number);
         return prev;
-      }, {} as { [attribute: string]: (string | number) })
+      }, {} as { [attribute: string]: (string | number) });
 
       let historicalDateIndex = 0;
       while (moment(pastry.historical[historicalDateIndex].date).isSameOrBefore(moment(commandDate))) {
         const currentHistorical: Historical = pastry.historical[historicalDateIndex];
         this.statsAttributes.forEach((attr: string) => {
           if (currentHistorical.hasOwnProperty(attr)) {
-            realState[attr as string] = (currentHistorical[attr as keyof Historical] as ([number, number] | [string, string]))[1];
+            realState[attr as string] =
+              (currentHistorical[attr as keyof Historical] as ([number, number] | [string, string]))[1];
           }
-        })
+        });
         historicalDateIndex += 1;
       }
 
       return {
         ...pastry,
         ...realState,
-      }
+      };
     } else {
       return pastry;
     }
@@ -239,8 +241,8 @@ export class StatsComponent implements OnInit, OnDestroy {
         pastriesByTypeByDate[pastry.type][day][pastry.name] = 1;
       }
     } else {
-      pastriesByTypeByDate[pastry.type] = {}
-      pastriesByTypeByDate[pastry.type][day] = {}
+      pastriesByTypeByDate[pastry.type] = {};
+      pastriesByTypeByDate[pastry.type][day] = {};
       pastriesByTypeByDate[pastry.type][day][pastry.name] = 1;
     }
   }
@@ -256,8 +258,8 @@ export class StatsComponent implements OnInit, OnDestroy {
         countByTypeByPastry[pastry.type][pastry.name] = 1;
       }
     } else {
-      countByTypeByPastry[pastry.type] = {}
-      countByTypeByPastry[pastry.type][pastry.name] = 1
+      countByTypeByPastry[pastry.type] = {};
+      countByTypeByPastry[pastry.type][pastry.name] = 1;
     }
   }
 
@@ -298,7 +300,7 @@ export class StatsComponent implements OnInit, OnDestroy {
               });
             return { label: p.name, data: countList };
           }),
-      }
+      };
     });
   }
 
@@ -317,9 +319,9 @@ export class StatsComponent implements OnInit, OnDestroy {
           .map((date) => {
             return (Object.keys(pastriesByTypeByDate) as PastryType[]).reduce((prev: number, type: PastryType) => {
               if (pastriesByTypeByDate[type].hasOwnProperty(date)) {
-                prev + (
+                prev = prev + (
                   Object.values(pastriesByTypeByDate[type][date]).reduce((prev, value) => prev + value, 0)
-                )
+                );
               }
 
               return prev;
@@ -331,7 +333,7 @@ export class StatsComponent implements OnInit, OnDestroy {
           .reverse()
           .map((date) => {
             return Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
-          })
+          }),
       }, {
         type: 'line',
         label: 'Argent cumulé',
@@ -358,7 +360,7 @@ export class StatsComponent implements OnInit, OnDestroy {
           datasets: [{
             data: Object.values(countByTypeByPastry[type]).filter((v) => v > 0),
           }],
-        }
+        };
       }
     });
   }
@@ -370,7 +372,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       this.totalByType[type] = Object.values(countByTypeByPastry[type]).reduce(
         (prev, v) => prev + v,
         0
-      )
+      );
     });
   }
 

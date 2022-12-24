@@ -45,7 +45,8 @@ export class AdminApiService {
     ) as Observable<Pastry>;
   }
 
-  putPastry(code: string, pastry: CorePastry): Observable<{ pastry: Pastry, displaySequenceById: { [pastryId: string]: number } }> {
+  putPastry(code: string, pastry: CorePastry):
+    Observable<{ pastry: Pastry, displaySequenceById: { [pastryId: string]: number } }> {
     return this.http.put(
       `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}`,
       pastry

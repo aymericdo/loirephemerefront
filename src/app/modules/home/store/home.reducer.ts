@@ -5,8 +5,8 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   decrementPastry,
-  fetchingRestaurant,
   fetchRestaurantPastries,
+  fetchingRestaurant,
   incrementPastry,
   resetCommand,
   sendCommand,

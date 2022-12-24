@@ -10,7 +10,7 @@ export class BarChartComponent {
   @Input() barChartData: ChartData<'bar' | 'line'> = {
     labels: [],
     datasets: [],
-  }
+  };
 
   barChartOptions: ChartOptions = {
     responsive: true,

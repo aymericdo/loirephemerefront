@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { selectIsMovingPastry, selectAllPastries } from 'src/app/modules/admin/store/admin.selectors';
+import { selectAllPastries, selectIsMovingPastry } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
-import { presetPalettes, generate } from '@ant-design/colors';
+import { generate, presetPalettes } from '@ant-design/colors';
 import { settingCommonStock } from 'src/app/modules/admin/store/admin.actions';
 
 @Component({
@@ -50,7 +50,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe((pastries) => {
       this.reset();
-      let colorIndex = 0
+      let colorIndex = 0;
       this.pastriesByCommonStock = {};
       this.colorByCommonStock = {};
       pastries.forEach((pastry) => {
@@ -103,7 +103,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
   }
 
   isNewPastryCommonStock(): boolean {
-    return !!this.selectedCommonStock.length && !this.pastriesByCommonStock.hasOwnProperty(this.selectedCommonStock)
+    return !!this.selectedCommonStock.length && !this.pastriesByCommonStock.hasOwnProperty(this.selectedCommonStock);
   }
 
   hasSelectedAssociatedPastries(): boolean {
@@ -112,7 +112,9 @@ export class AssociationComponent implements OnInit, OnDestroy {
 
   canAssociate(): boolean {
     return (this.isNewPastryCommonStock() && Object.keys(this.selectedAssociatedPastries).length > 1) ||
-      (!!this.selectedCommonStock.length && !this.isNewPastryCommonStock() && Object.keys(this.selectedAssociatedPastries).length !== 1);
+      (!!this.selectedCommonStock.length &&
+        !this.isNewPastryCommonStock() &&
+        Object.keys(this.selectedAssociatedPastries).length !== 1);
   }
 
   isPastrySelected(pastry: Pastry): boolean {
@@ -131,7 +133,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
     this.store.dispatch(settingCommonStock({
       commonStock: this.selectedCommonStock,
       pastries: Object.values(this.selectedAssociatedPastries),
-    }))
+    }));
   }
 
   reset(): void {
@@ -143,7 +145,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
     return {
       background: this.colorByCommonStock[this.selectedCommonStock],
       color: 'white',
-    }
+    };
   }
 
   tackById(_index: any, pastry: Pastry): string {

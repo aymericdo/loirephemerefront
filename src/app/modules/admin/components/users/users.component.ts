@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { filter, takeUntil, Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { deletingUserToRestaurant, fetchingUsers } from 'src/app/modules/admin/store/admin.actions';
@@ -14,8 +14,8 @@ import { AppState } from 'src/app/store/app.state';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
-  users$: Observable<User[]>
+export class UsersComponent implements OnInit, OnDestroy {
+  users$: Observable<User[]>;
   restaurant$: Observable<Restaurant | null>;
   loading$: Observable<boolean>;
 
@@ -37,7 +37,7 @@ export class UsersComponent implements OnInit {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant: Restaurant) => {
-      this.store.dispatch(fetchingUsers({ code: restaurant.code }))
+      this.store.dispatch(fetchingUsers({ code: restaurant.code }));
     });
   }
 

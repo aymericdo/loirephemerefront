@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { createEffect, ofType, Actions } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY, pipe } from 'rxjs';
-import { map, mergeMap, catchError, switchMap, debounceTime, withLatestFrom, filter } from 'rxjs/operators';
+import { catchError, debounceTime, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
@@ -11,48 +11,48 @@ import { setRestaurant } from '../../home/store/home.actions';
 import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
 import { AdminApiService } from '../services/admin-api.service';
 import {
+  activatingPastry,
+  addPastry,
+  addUser,
+  addingUserToRestaurant,
+  closeMenuModal,
   closingCommand,
+  deactivatingPastry,
+  decrementPastry,
+  deleteUser,
+  deletingUserToRestaurant,
   editCommand,
-  setCommands,
-  notificationSubSent,
-  sendNotificationSub,
-  payingCommand,
+  editPastry,
+  editingPastry,
+  fetchingAllRestaurantPastries,
   fetchingRestaurant,
   fetchingRestaurantCommands,
-  fetchingAllRestaurantPastries,
-  setAllPastries,
-  setPastryNoNameError,
-  setPastryNameError,
-  validatingPastryName,
-  postingPastry,
-  addPastry,
-  pastryCreated,
-  closeMenuModal,
-  editingPastry,
-  editPastry,
-  pastryEdited,
-  activatingPastry,
-  deactivatingPastry,
-  movingPastry,
-  reorderPastries,
-  pastryMoved,
-  incrementPastry,
-  decrementPastry,
-  openMenuModal,
-  reactivatePastryName,
   fetchingUsers,
-  setUsers,
-  validatingUserEmail,
-  setUserEmailError,
-  setUserNoEmailError,
-  addingUserToRestaurant,
-  addUser,
-  deletingUserToRestaurant,
-  deleteUser,
+  incrementPastry,
+  movingPastry,
+  notificationSubSent,
+  openMenuModal,
+  pastryCreated,
+  pastryEdited,
+  pastryMoved,
+  payingCommand,
+  postingPastry,
+  reactivatePastryName,
   removeNotificationSub,
   removeNotificationSubSent,
+  reorderPastries,
+  sendNotificationSub,
+  setAllPastries,
+  setCommands,
+  setPastryNameError,
+  setPastryNoNameError,
+  setUserEmailError,
+  setUserNoEmailError,
+  setUsers,
   settingCommonStock,
   stopStatsLoading,
+  validatingPastryName,
+  validatingUserEmail,
 } from './admin.actions';
 
 @Injectable()
@@ -63,7 +63,7 @@ export class AdminEffects {
       mergeMap((action) => {
         return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate).pipe(
           switchMap((commands) => {
-            return [setCommands({ commands }), stopStatsLoading()]
+            return [setCommands({ commands }), stopStatsLoading()];
           }),
         );
       })
@@ -223,7 +223,12 @@ export class AdminEffects {
         return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
           switchMap((data: { pastry: Pastry, displaySequenceById?: { [pastryId: string]: number } }) => {
             if (data.displaySequenceById) {
-              return [editPastry({ pastry: data.pastry }), pastryEdited(), closeMenuModal(), reorderPastries({ sequence: data.displaySequenceById })];
+              return [
+                editPastry({ pastry: data.pastry }),
+                pastryEdited(),
+                closeMenuModal(),
+                reorderPastries({ sequence: data.displaySequenceById }),
+              ];
             } else {
               return [editPastry({ pastry: data.pastry }), pastryEdited(), closeMenuModal()];
             }
@@ -274,7 +279,7 @@ export class AdminEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.putEditCommonStockPastry(restaurant.code, action.pastries, action.commonStock).pipe(
           switchMap((pastries: Pastry[]) => {
-            return [setAllPastries({ pastries })]
+            return [setAllPastries({ pastries })];
           }),
           catchError((error) => {
             console.error(error);

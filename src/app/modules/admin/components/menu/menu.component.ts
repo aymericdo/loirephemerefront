@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { activatingPastry, closeMenuModal, deactivatingPastry, movingPastry, openMenuModal, incrementPastry, decrementPastry } from 'src/app/modules/admin/store/admin.actions';
+import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, incrementPastry, openMenuModal } from 'src/app/modules/admin/store/admin.actions';
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/store/admin.selectors';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -36,11 +36,11 @@ export class MenuComponent {
   }
 
   openNewPastryModal(): void {
-    this.store.dispatch(openMenuModal({ modal: 'new' }))
+    this.store.dispatch(openMenuModal({ modal: 'new' }));
   }
 
   openEditPastryModal(pastry: Pastry): void {
-    this.store.dispatch(openMenuModal({ modal: 'edit', pastry }))
+    this.store.dispatch(openMenuModal({ modal: 'edit', pastry }));
   }
 
   handleActivePastry(pastry: Pastry): void {
@@ -48,7 +48,7 @@ export class MenuComponent {
     this.store.dispatch(activatingPastry({ pastry: {
       ...currentPastry,
       hidden: false,
-    }}))
+    }}));
   }
 
   handleDeletePastry(pastry: Pastry): void {
@@ -56,11 +56,11 @@ export class MenuComponent {
     this.store.dispatch(deactivatingPastry({ pastry: {
       ...currentPastry,
       hidden: true,
-    }}))
+    }}));
   }
 
   closeMenuModal(): void {
-    this.store.dispatch(closeMenuModal())
+    this.store.dispatch(closeMenuModal());
   }
 
   handleClickPlus(pastry: Pastry): void {
@@ -68,7 +68,7 @@ export class MenuComponent {
     this.store.dispatch(incrementPastry({ pastry: {
       ...currentPastry,
       stock: currentPastry.stock + 1,
-    }}))
+    }}));
   }
 
   handleClickMinus(pastry: Pastry): void {
@@ -76,7 +76,7 @@ export class MenuComponent {
     this.store.dispatch(decrementPastry({ pastry: {
       ...currentPastry,
       stock: currentPastry.stock - 1,
-    }}))
+    }}));
   }
 
   tackById(_index: any, pastry: Pastry): string {

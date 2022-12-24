@@ -1,23 +1,20 @@
 import {
-  AfterViewInit,
   Component,
-  ElementRef,
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import {
-  incrementPastry,
   decrementPastry,
-  sendCommand,
-  resetCommand,
-  setStock,
-  sendNotificationSub,
   fetchingRestaurant,
+  incrementPastry,
+  resetCommand,
+  sendCommand,
+  sendNotificationSub,
+  setStock,
 } from 'src/app/modules/home/store/home.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
@@ -36,8 +33,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import {
-  WebSocketData,
   HomeWebSocketService,
+  WebSocketData,
 } from 'src/app/modules/home/services/home-socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from 'src/environments/environment';
@@ -94,7 +91,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe(params => {
       this.store.dispatch(fetchingRestaurant({ code: params.get('code')! }));
       this.subscribeToWS(params.get('code')!);
-    })
+    });
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
@@ -113,7 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               console.error('Could not subscribe to notifications', err)
             );
 
-          this.swPush.notificationClicks.subscribe((event) => {
+          this.swPush.notificationClicks.subscribe((_event) => {
             this.router.navigate(['/']);
           });
         }
@@ -130,8 +127,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   handleClickPlus(pastry: Pastry): void {
     let count: number = 0;
     this.selectedPastries$.pipe(take(1)).subscribe((selectedPastries: { [pastryId: string]: number }) => {
-      count = selectedPastries[pastry._id] || 0
-    })
+      count = selectedPastries[pastry._id] || 0;
+    });
 
     if (count === 0) {
       const cardToScroll = this.itemElements.find(

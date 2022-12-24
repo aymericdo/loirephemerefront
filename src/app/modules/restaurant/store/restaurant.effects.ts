@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { debounceTime, mergeMap, switchMap } from 'rxjs/operators';
 import { addUserRestaurants } from 'src/app/modules/login/store/login.actions';
-import { validateRestaurantName, setNewRestaurant, setRestaurantNameError, setRestaurantNoNameError } from '../../restaurant/store/restaurant.actions';
+import { setNewRestaurant, setRestaurantNameError, setRestaurantNoNameError, validateRestaurantName } from '../../restaurant/store/restaurant.actions';
 import { RestaurantApiService } from '../services/restaurant-api.service';
 import { createRestaurant } from './restaurant.actions';
 

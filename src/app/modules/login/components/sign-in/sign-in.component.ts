@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
@@ -49,7 +49,7 @@ export class SignInComponent implements OnInit, OnDestroy {
           this.validateForm.controls.email.enable();
           this.validateForm.controls.password.enable();
         }
-      })
+      });
 
     this.userAuthError$
       .pipe(
@@ -60,7 +60,7 @@ export class SignInComponent implements OnInit, OnDestroy {
         } else {
           this.validateForm.controls.password.setErrors({});
         }
-      })
+      });
 
       this.isInLoginPage = this.router.url.includes('page/login');
   }
@@ -71,7 +71,9 @@ export class SignInComponent implements OnInit, OnDestroy {
   }
 
   submitForm(): void {
-    this.store.dispatch(signInUser({ user: { email: this.validateForm.value.email, password: this.validateForm.value.password } }));
+    this.store.dispatch(
+      signInUser({ user: { email: this.validateForm.value.email, password: this.validateForm.value.password } })
+    );
   }
 
   resetForm(e: MouseEvent): void {

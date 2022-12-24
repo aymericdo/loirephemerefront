@@ -18,9 +18,9 @@ export class OrderNameModalComponent {
   constructor() { }
 
   disabledHours(): number[] {
-    const openingHour = 6
-    const closingTime = [...Array(openingHour + 1).keys()]
-    const pastHours = [...Array(new Date().getHours()).keys()]
+    const openingHour = 6;
+    const closingTime = [...Array(openingHour + 1).keys()];
+    const pastHours = [...Array(new Date().getHours()).keys()];
     return [...new Set(closingTime.concat(pastHours))];
   }
 
@@ -29,6 +29,6 @@ export class OrderNameModalComponent {
       name: this.currentFirstName,
       takeAway: this.takeAwayValue,
       pickUpTime: this.needPickUpTimeValue ? this.pickUpTimeValue : null
-    })
+    });
   }
 }

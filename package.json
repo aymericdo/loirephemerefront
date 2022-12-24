@@ -12,6 +12,7 @@
     "start-pwa": "http-server -p 8080 -c-1 dist/loirephemerefront",
     "test": "ng test",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -56,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "5.42.0",
     "@typescript-eslint/parser": "5.42.0",
     "eslint": "^8.27.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "jasmine-core": "^4.0.0",
     "jasmine-spec-reporter": "^7.0.0",
     "karma": "^6.4.1",

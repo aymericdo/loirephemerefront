@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, of, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
 import { changePassword } from 'src/app/modules/login/store/login.actions';
@@ -44,7 +44,7 @@ export class RecoverModalComponent implements OnInit, OnDestroy {
         } else {
           this.validateForm.enable();
         }
-      })
+      });
   }
 
   ngOnDestroy() {
@@ -61,7 +61,7 @@ export class RecoverModalComponent implements OnInit, OnDestroy {
   }
 
   private confirmPasswordValidator = (control: UntypedFormControl) => {
-    const error = control.value !== this.validateForm.value.password
+    const error = control.value !== this.validateForm.value.password;
     return of(error ? { confirmedValidator: true } : {});
   };
 }

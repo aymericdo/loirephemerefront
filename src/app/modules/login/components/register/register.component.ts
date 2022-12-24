@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, filter, take, of, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, filter, of, take, takeUntil } from 'rxjs';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
 import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
-import { selectLoading, selectConfirmationModalOpened, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
+import { selectConfirmationModalOpened, selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.validateForm.controls.password.enable();
           this.validateForm.controls.confirmPassword.enable();
         }
-      })
+      });
   }
 
   ngOnDestroy() {
@@ -96,7 +96,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   };
 
   private confirmPasswordValidator = (control: UntypedFormControl) => {
-    const error = control.value !== this.validateForm.value.password
+    const error = control.value !== this.validateForm.value.password;
     return of(error ? { confirmedValidator: true } : {});
   };
 }

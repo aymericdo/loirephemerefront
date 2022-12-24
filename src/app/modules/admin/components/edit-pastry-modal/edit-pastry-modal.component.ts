@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, filter, take, of, takeUntil, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, filter, take, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
@@ -36,8 +36,14 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
     this.prevPastryName = this.pastry.name;
 
     this.validateForm = this.fb.group({
-      name: [this.pastry.name, [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.pastryNameAsyncValidator]],
-      description: [this.pastry.description, [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.LARGE)]],
+      name: [
+        this.pastry.name,
+        [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)],
+        [this.pastryNameAsyncValidator],
+      ],
+      description: [
+        this.pastry.description,
+        [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.LARGE)]],
       price: [this.pastry.price, [Validators.required, Validators.minLength(0)]],
       ingredients: [this.pastry.ingredients, [Validators.maxLength(SIZE.MEDIUM)]],
       stock: [this.pastry.stock, [Validators.minLength(0)]],

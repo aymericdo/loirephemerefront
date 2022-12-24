@@ -1,13 +1,12 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
-import { Observable, filter, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { validatingPastryName } from 'src/app/modules/admin/store/admin.actions';
 import { selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -50,7 +49,7 @@ export class PastryFormComponent implements OnInit {
         name: oldImageUrl,
         status: 'done',
         url: this.adminApiService.getImageUrl(oldImageUrl),
-      }]
+      }];
     }
   }
 
@@ -87,11 +86,11 @@ export class PastryFormComponent implements OnInit {
 
   handleUpload(info: NzUploadChangeParam): void {
     if (info.type === 'removed') {
-      this.validateForm.controls.imageUrl.setValue(null)
+      this.validateForm.controls.imageUrl.setValue(null);
     } else {
       if (info.file.status === 'done') {
         this.msg.success(`${info.file.name} a été téléchargé avec succès`);
-        this.validateForm.controls.imageUrl.setValue(info.file.response.filename)
+        this.validateForm.controls.imageUrl.setValue(info.file.response.filename);
       } else if (info.file.status === 'error') {
         this.msg.error(`${info.file.name} : le téléchargement a échoué.`);
       }

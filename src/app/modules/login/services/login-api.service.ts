@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CoreUser, User } from 'src/app/interfaces/user.interface';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
 @Injectable({
   providedIn: 'root',

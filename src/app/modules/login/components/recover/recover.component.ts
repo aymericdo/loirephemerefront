@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { filter, Observable, of, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { confirmRecoverEmail, validateRecoverEmailCode } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectPasswordChanged, selectRecoverModalOpened } from 'src/app/modules/login/store/login.selectors';
@@ -46,7 +46,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
         } else {
           this.validateForm.enable();
         }
-      })
+      });
 
     this.passwordChanged$
       .pipe(
@@ -56,7 +56,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
         if (changed) {
           this.router.navigate(['page', 'login']);
         }
-      })
+      });
   }
 
   ngOnDestroy() {

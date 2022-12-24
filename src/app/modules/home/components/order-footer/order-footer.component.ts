@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { CoreCommand } from 'src/app/interfaces/command.interface';

@@ -2,13 +2,13 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { restaurantsMock } from 'src/app/mocks/restaurants.mock';
 import {
+  createRestaurant,
   fetchRestaurants,
-  setRestaurants,
+  setNewRestaurant,
   setRestaurantNameError,
   setRestaurantNoNameError,
+  setRestaurants,
   validateRestaurantName,
-  setNewRestaurant,
-  createRestaurant,
 } from './restaurant.actions';
 
 export const restaurantFeatureKey = 'restaurant';
