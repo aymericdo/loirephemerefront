@@ -124,7 +124,9 @@ export class CommandsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.store.dispatch(removeNotificationSub({ sub: this.sub, code: this.restaurant.code }));
+    if (this.sub) {
+      this.store.dispatch(removeNotificationSub({ sub: this.sub, code: this.restaurant.code }));
+    }
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
