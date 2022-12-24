@@ -23,7 +23,7 @@ export class HomeApiService {
 
   postCommand(restaurantCode: string, command: CoreCommand): Observable<Command> {
     return this.http.post(
-      `${this.protocolHttp}${this.baseUrl}/commands/${restaurantCode}`,
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}`,
       command
     ) as Observable<Command>;
   }
