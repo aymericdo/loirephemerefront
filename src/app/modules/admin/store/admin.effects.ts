@@ -52,6 +52,7 @@ import {
   removeNotificationSub,
   removeNotificationSubSent,
   settingCommonStock,
+  stopStatsLoading,
 } from './admin.actions';
 
 @Injectable()
@@ -61,7 +62,9 @@ export class AdminEffects {
       ofType(fetchingRestaurantCommands),
       mergeMap((action) => {
         return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate).pipe(
-          map((commands) => setCommands({ commands })),
+          switchMap((commands) => {
+            return [setCommands({ commands }), stopStatsLoading()]
+          }),
         );
       })
     )

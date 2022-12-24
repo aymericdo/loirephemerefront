@@ -6,7 +6,6 @@ import { AppState } from 'src/app/store/app.state';
 import { fetchingRestaurantCommands } from '../../store/admin.actions';
 import {
   selectPayedCommands,
-  selectTotalPayedCommands,
   selectAllPastries,
   selectIsStatsLoading,
 } from '../../store/admin.selectors';
@@ -26,7 +25,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class StatsComponent implements OnInit, OnDestroy {
   payedCommands$: Observable<Command[]>;
-  totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
   pastries$: Observable<Pastry[]>;
   restaurant$: Observable<Restaurant | null>;
@@ -105,7 +103,6 @@ export class StatsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
   ) {
     this.payedCommands$ = this.store.select(selectPayedCommands);
-    this.totalPayedCommands$ = this.store.select(selectTotalPayedCommands);
     this.isLoading$ = this.store.select(selectIsStatsLoading);
     this.pastries$ = this.store.select(selectAllPastries);
     this.restaurant$ = this.store.select(selectRestaurant);

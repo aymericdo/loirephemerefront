@@ -36,6 +36,7 @@ import {
   addUser,
   deleteUser,
   deletingUserToRestaurant,
+  stopStatsLoading,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -91,13 +92,15 @@ const adminReducer = createReducer(
     ...state,
     allPastries: [...pastries],
     loading: false,
-    statsLoading: state.loading,
   })),
   on(setCommands, (state, { commands }) => ({
     ...state,
     commands: [...commands],
     loading: false,
-    statsLoading: state.loading,
+  })),
+  on(stopStatsLoading, (state) => ({
+    ...state,
+    statsLoading: false,
   })),
 
   // Command

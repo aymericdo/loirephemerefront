@@ -161,3 +161,6 @@ export const deletingUserToRestaurant = createAction(
   '[Admin page] Deleting email to restaurant',
   props<{ email: string }>()
 );
+export const stopStatsLoading = createAction(
+  '[Admin page] Stop stats loading',
+);
