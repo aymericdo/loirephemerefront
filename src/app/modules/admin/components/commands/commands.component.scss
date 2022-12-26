@@ -4,9 +4,17 @@
   padding: 1.25rem 1.25rem 0 1.25rem;
 
   .information {
-    position: absolute;
-    top: 1.25rem;
+    position: fixed;
+    bottom: 1.25rem;
     right: 1.25rem;
+  }
+
+  .empty-section {
+    min-height: 150px;
+  }
+
+  .data-section {
+    padding-top: 0.875em;
   }
 
   ::ng-deep .ant-tabs-content-holder {
@@ -14,7 +22,6 @@
   }
 
   ::ng-deep .ant-tabs-tabpane {
-    padding-top: 0.875em;
     overflow-y: hidden;
   }
 

@@ -13,7 +13,7 @@
     </nz-page-header-extra>
   </nz-page-header>
   <div class="users-table-section">
-    <nz-table #basicTable [nzData]="(users$ | async)!" [nzLoading]="loading$ | async">
+    <nz-table #basicTable [nzData]="(users$ | async)!" [nzLoading]="loading$ | async" [nzScroll]="{ x: '100%' }">
       <thead>
         <tr>
           <th>Email</th>
@@ -25,9 +25,11 @@
         <tr *ngFor="let user of (users$ | async); trackBy: tackById">
           <td>{{ user.email }}</td>
           <td>{{ user.createdAt | date: "dd/MM/YYYY HH:mm" }}</td>
-          <td nzFlex nz-row nzJustify="center">
-            <button nz-button nzType="default" nzShape="circle" [disabled]="(users$ | async)?.length === 1"
+          <td>
+            <div nzFlex nz-row nzJustify="center">
+              <button nz-button nzType="default" nzShape="circle" [disabled]="(users$ | async)?.length === 1"
               (click)="openDeleteUserConfirmationModal(user.email)"><span nz-icon nzType="delete"></span></button>
+            </div>
           </td>
         </tr>
       </tbody>

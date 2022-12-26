@@ -18,3 +18,11 @@
     </ng-template>
   </nz-list-item>
 </nz-list>
+
+<button class="information" nz-button nz-popover nzType="primary" nzSize="large" nzShape="circle"
+  nzPopoverTitle="Information" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topRight"><span nz-icon nzType="question"></span></button>
+
+<ng-template #contentTemplate>
+  <div>Vous pouvez faire en sorte que les stocks de certaines pâtisseries diminuent conjointement.</div>
+  <div>Il vous suffit de clicker sur les pâtisseries afin de leur associer la même couleur.</div>
+</ng-template>

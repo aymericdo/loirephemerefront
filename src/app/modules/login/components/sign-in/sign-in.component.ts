@@ -22,7 +22,6 @@ export class SignInComponent implements OnInit, OnDestroy {
   passwordVisible = false;
   recoverModalOpened = false;
 
-
   SIZE = SIZE;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

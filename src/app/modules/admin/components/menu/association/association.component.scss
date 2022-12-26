@@ -1,4 +1,10 @@
 :host {
+  .information {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+  }
+
   .pastry-association-list {
     max-width: 100%;
     overflow: hidden;

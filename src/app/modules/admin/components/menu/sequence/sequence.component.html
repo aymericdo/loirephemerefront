@@ -17,3 +17,11 @@
     </ng-template>
   </nz-list-item>
 </nz-list>
+
+<button class="information" nz-button nz-popover nzType="primary" nzSize="large" nzShape="circle"
+  nzPopoverTitle="Information" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topRight"><span nz-icon nzType="question"></span></button>
+
+<ng-template #contentTemplate>
+  <div>Vous pouvez ordonner les pâtisseries dans l'ordre que vous le souhaitez.</div>
+  <div>Il vous suffit de déplacer les lignes en les faisant glisser.</div>
+</ng-template>
