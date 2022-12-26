@@ -2,6 +2,13 @@
   display: flex;
   z-index: 1;
 
+  .main-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
   nz-sider {
     overflow: auto;
     height: 100%;

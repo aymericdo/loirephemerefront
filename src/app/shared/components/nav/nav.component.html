@@ -2,9 +2,12 @@
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
     <li nz-menu-item [nzSelected]="routeName === 'home'">
-      <a [routerLink]="[restaurantCode || DEMO_RESTO]">
+      <a class="main-link" [routerLink]="[restaurantCode || DEMO_RESTO]">
         <i nz-icon nzType="heart"></i>
-        <span>{{ restaurantCode || 'Démo resto' }}</span>
+        <span class="restaurant-name-tooltip" nz-tooltip [nzTooltipTitle]="(restaurant$ | async)?.name || 'Démo resto'"
+          nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
+          <span class="restaurant-name">{{ (restaurant$ | async)?.name || 'Démo resto' }}</span>
+        </span>
       </a>
     </li>
 
