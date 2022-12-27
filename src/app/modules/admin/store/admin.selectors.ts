@@ -6,7 +6,11 @@ export const selectFeature = (state: AppState) => state.admin;
 
 export const selectOnGoingCommands = createSelector(
   selectFeature,
-  (state: AdminState) => state.commands.filter((c) => !c.isDone)
+  (state: AdminState) => state.commands.filter((c) => !c.isDone).sort((a, b) => {
+    return (
+      new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime()
+    );
+  }),
 );
 
 export const selectPastCommands = createSelector(
@@ -19,7 +23,7 @@ export const selectPastCommands = createSelector(
       }
 
       return (
-        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+        new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime()
       );
     }),
 );
