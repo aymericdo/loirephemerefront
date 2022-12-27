@@ -141,7 +141,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
     this.selectedAssociatedPastries = {};
   }
 
-  getSelectedRowClass(): { background: string, color: string } {
+  getSelectedRowStyle(): { background: string, color: string } {
     return {
       background: this.colorByCommonStock[this.selectedCommonStock],
       color: 'white',

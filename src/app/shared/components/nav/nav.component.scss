@@ -2,6 +2,10 @@
   display: flex;
   z-index: 1;
 
+  .demo {
+    background: red;
+  }
+
   .main-link {
     display: flex;
     align-items: center;
@@ -23,6 +27,11 @@
     display: flex;
     flex-direction: column;
     height: calc(100% - 32px);
+  }
+
+  ul.restaurant-section {
+    max-height: 400px;
+    overflow-y: auto;
   }
 
   .version {

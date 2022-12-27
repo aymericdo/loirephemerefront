@@ -10,7 +10,7 @@
 
     <li nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
       nzTitle="Restaurants" nzIcon="coffee">
-      <ul>
+      <ul class="restaurant-section">
         <li nz-menu-item [nzMatchRouter]="true">
           <a (click)="isCollapsed = true" [routerLink]="['page', 'restaurant', 'new']">
             <i nz-icon nzType="plus"></i>
@@ -25,7 +25,8 @@
             </span>
           </ng-template>
 
-          <li nz-submenu nzIcon="coffee" [nzTitle]="titleNameTpl" [nzOpen]="isAdminCollapsed === restaurant.code"
+          <li nz-submenu [nzIcon]="DEMO_RESTO === restaurant.code ? 'bulb' : 'coffee'" [nzTitle]="titleNameTpl" [nzOpen]="isAdminCollapsed === restaurant.code"
+            [ngStyle]="DEMO_RESTO === restaurant.code ? getDemoStyle() : {}"
             (nzOpenChange)="isAdminCollapsed = isAdminCollapsed === restaurant.code ? '' : restaurant.code">
             <ul>
               <li nz-menu-item [nzMatchRouter]="true">

@@ -47,7 +47,7 @@ export class NewUserModalComponent implements OnInit {
   }
 
   private alreadyInValidator = (control: UntypedFormControl) => {
-    const error = this.users.some(user => user.email === control.value);
+    const error = (this.users || []).some(user => user.email === control.value);
     return of(error ? { alreadyIn: true } : {});
   };
 

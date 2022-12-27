@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
+import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter } from 'rxjs';
 import { DEMO_RESTO } from 'src/app/app-routing.module';
@@ -68,6 +69,13 @@ export class NavComponent implements OnInit, OnDestroy {
   handleDisconnect(): void {
     this.authService.doLogout();
     this.store.dispatch(resetUser());
+  }
+
+  getDemoStyle(): { background: string, color: string } {
+    return {
+      background: presetPalettes['gold'].primary as string,
+      color: 'white',
+    };
   }
 
   get isLoggedIn(): boolean {

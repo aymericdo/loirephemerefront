@@ -4,7 +4,7 @@
 <button *ngIf="selectedCommonStock.length" nz-button nzType="dashed" nzBlock (click)="reset()">Réinitialiser</button>
 <nz-list *ngIf="(pastries$ | async)?.length" nzBordered class="pastry-association-list">
   <nz-list-item class="pastry-association-box" *ngFor="let pastry of pastries$ | async; trackBy: tackById"
-    [class.-deactivate]="isDeactivate(pastry)" [ngStyle]="isPastrySelected(pastry) ? getSelectedRowClass() : {}"
+    [class.-deactivate]="isDeactivate(pastry)" [ngStyle]="isPastrySelected(pastry) ? getSelectedRowStyle() : {}"
     (click)="!isDeactivate(pastry) && selectPastry(pastry)">
     <span>{{ pastry.name }}</span>
     <nz-space class="badges-section" nzAlign="center">
