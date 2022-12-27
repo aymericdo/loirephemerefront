@@ -3,10 +3,10 @@
     <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'ongoing' }" queryParamsHandling="merge">
       Commandes en cours
     </a>
-    <ng-container *ngIf="(onGoingCommands$ | async)?.length === 0; else someData">
+    <ng-container *ngIf="(onGoingCommands$ | async)?.length === 0">
       <nz-empty class="empty-section"></nz-empty>
     </ng-container>
-    <ng-template #someData>
+    <ng-container *ngIf="(pastCommands$ | async)?.length! > 0">
       <div class="data-section" nz-row [nzGutter]="[0, 24]">
         <div *ngFor="let command of onGoingCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
           <div class="inner-box">
@@ -15,16 +15,16 @@
           </div>
         </div>
       </div>
-    </ng-template>
+    </ng-container>
   </nz-tab>
   <nz-tab>
     <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'past' }" queryParamsHandling="merge">
       Commandes passées
     </a>
-    <ng-container *ngIf="(pastCommands$ | async)?.length === 0; else someData">
+    <ng-container *ngIf="(pastCommands$ | async)?.length === 0">
       <nz-empty class="empty-section"></nz-empty>
     </ng-container>
-    <ng-template #someData>
+    <ng-container *ngIf="(pastCommands$ | async)?.length! > 0">
       <div class="data-section">
         <nz-page-header>
           <nz-page-header-title *ngIf="(pastCommands$ | async)?.length">Total : {{ totalPayedCommands$ | async }}€
@@ -40,7 +40,7 @@
           </div>
         </div>
       </div>
-    </ng-template>
+    </ng-container>
   </nz-tab>
 </nz-tabset>
 

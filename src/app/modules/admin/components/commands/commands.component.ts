@@ -16,7 +16,6 @@ import {
   selectIsLoading,
   selectOnGoingCommands,
   selectPastCommands,
-  selectPayedCommands,
   selectTotalPayedCommands,
 } from 'src/app/modules/admin/store/admin.selectors';
 import {
@@ -39,7 +38,6 @@ import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 export class CommandsComponent implements OnInit, OnDestroy {
   onGoingCommands$: Observable<Command[]>;
   pastCommands$: Observable<Command[]>;
-  payedCommands$: Observable<Command[]>;
   totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
   restaurant$: Observable<Restaurant | null>;
@@ -62,7 +60,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
   ) {
     this.onGoingCommands$ = this.store.select(selectOnGoingCommands);
     this.pastCommands$ = this.store.select(selectPastCommands);
-    this.payedCommands$ = this.store.select(selectPayedCommands);
     this.totalPayedCommands$ = this.store.select(selectTotalPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
     this.restaurant$ = this.store.select(selectRestaurant);

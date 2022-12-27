@@ -11,22 +11,17 @@ export const selectOnGoingCommands = createSelector(
 
 export const selectPastCommands = createSelector(
   selectFeature,
-  (state: AdminState) => [
-    ...state.commands
-      .filter((c) => c.isDone && !c.isPayed)
-      .sort((a, b) => {
-        return (
-          new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
-        );
-      }),
-    ...state.commands
-      .filter((c) => c.isDone && c.isPayed)
-      .sort((a, b) => {
-        return (
-          new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
-        );
-      }),
-  ]
+  (state: AdminState) => state.commands
+    .filter((c) => c.isDone)
+    .sort((a, b) => {
+      if (a.isPayed !== b.isPayed) {
+        return a.isPayed ? 1 : -1;
+      }
+
+      return (
+        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+      );
+    }),
 );
 
 export const selectPayedCommands = createSelector(
