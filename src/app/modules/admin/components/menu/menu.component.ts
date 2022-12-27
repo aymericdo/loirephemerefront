@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, incrementPastry, openMenuModal } from 'src/app/modules/admin/store/admin.actions';
+import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, incrementPastry, openMenuModal, setStock } from 'src/app/modules/admin/store/admin.actions';
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/store/admin.selectors';
+import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -12,8 +14,9 @@ import { AppState } from 'src/app/store/app.state';
 @Component({
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
+  providers: [HomeWebSocketService],
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit, OnDestroy {
   restaurant$: Observable<Restaurant | null>;
   pastries$: Observable<Pastry[]>;
   isLoading$: Observable<boolean>;
@@ -24,8 +27,12 @@ export class MenuComponent {
   isInSequenceMode: boolean = false;
   isInAssociationMode: boolean = false;
 
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(
     private store: Store<AppState>,
+    private route: ActivatedRoute,
+    private wsService: HomeWebSocketService,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.pastries$ = this.store.select(selectAllPastries);
@@ -33,6 +40,17 @@ export class MenuComponent {
     this.isMoving$ = this.store.select(selectIsMovingPastry);
     this.menuModalOpened$ = this.store.select(selectMenuModalOpened);
     this.selectEditingPastry$ = this.store.select(selectEditingPastry);
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.subscribeToWS(params.get('code')!);
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   openNewPastryModal(): void {
@@ -87,5 +105,38 @@ export class MenuComponent {
     const currentPastry = { ...pastry };
     delete currentPastry.restaurant;
     return currentPastry;
+  }
+
+  private subscribeToWS(code: string) {
+    setInterval(() => {
+      this.wsService.sendMessage('ping');
+    }, 5000);
+
+    this.wsService
+      .createObservableSocket(code)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (data: WebSocketData) => {
+          if (data.hasOwnProperty('stockChanged')) {
+            this.store.dispatch(
+              setStock({
+                pastryId: data.stockChanged.pastryId as string,
+                newStock: data.stockChanged.newStock as number,
+              })
+            );
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+        complete: () => {
+          if (!this.destroyed$.observed) {
+            setTimeout(() => {
+              this.subscribeToWS(code);
+            }, 1000);
+          }
+          console.log('The observable stream is complete');
+        }
+     });
   }
 }

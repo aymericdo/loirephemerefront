@@ -20,9 +20,9 @@ import {
   selectTotalPayedCommands,
 } from 'src/app/modules/admin/store/admin.selectors';
 import {
-  AdminWebSocketService,
+  CommandWebSocketService,
   WebSocketData,
-} from 'src/app/modules/admin/services/admin-socket.service';
+} from 'src/app/modules/admin/services/command-socket.service';
 import { filter, takeUntil } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from 'src/environments/environment';
@@ -34,7 +34,7 @@ import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 @Component({
   templateUrl: './commands.component.html',
   styleUrls: ['./commands.component.scss'],
-  providers: [AdminWebSocketService],
+  providers: [CommandWebSocketService],
 })
 export class CommandsComponent implements OnInit, OnDestroy {
   onGoingCommands$: Observable<Command[]>;
@@ -54,7 +54,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private wsService: AdminWebSocketService,
+    private wsService: CommandWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush,
     private router: Router,

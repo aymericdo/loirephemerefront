@@ -10,7 +10,7 @@ export type WebSocketData = {
   [key: string]: Command | 'bonjour';
 };
 
-export class AdminWebSocketService {
+export class CommandWebSocketService {
   ws!: WebSocket;
 
   createObservableSocket(code: string): Observable<WebSocketData> {

@@ -40,12 +40,12 @@ export class PastryCardComponent implements OnChanges {
 
   ngOnChanges(): void {
     this.isStockAvailable = !!this.pastry.stock || this.pastry.stock === 0;
-    this.imageUrl = this.adminApiService.getImageUrl(this.pastry.imageUrl! ?? 'default.webp');
+    this.imageUrl = this.adminApiService.getImageUrl(this.pastry.imageUrl! ?? 'default.jpg');
     this.isMaxLimitReached = !this.isAdmin && this.isStockAvailable && this.count >= this.pastry.stock;
     this.isStockIssue = this.isStockAvailable && this.count > this.pastry.stock;
   }
 
   onImgError(event: Event) {
-    (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.webp');
+    (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.jpg');
   }
 }

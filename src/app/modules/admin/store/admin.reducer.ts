@@ -31,6 +31,7 @@ import {
   setCommands,
   setPastryNameError,
   setPastryNoNameError,
+  setStock,
   setUserEmailError,
   setUserNoEmailError,
   setUsers,
@@ -200,6 +201,21 @@ const adminReducer = createReducer(
     menuModalOpened: null,
     editingPastry: null,
   })),
+  on(setStock, (state, { pastryId, newStock }) => {
+    const indexOf = state.allPastries.findIndex((p) => p._id === pastryId);
+    const newList: Pastry[] = [...state.allPastries];
+
+    const editedPastry: Pastry = {
+      ...(state.allPastries.find((p) => p._id === pastryId) as Pastry),
+      stock: newStock,
+    };
+    newList.splice(indexOf, 1, editedPastry);
+
+    return {
+      ...state,
+      allPastries: newList,
+    };
+  }),
 
   // Users
   on(setUsers, (state, { users }) => ({

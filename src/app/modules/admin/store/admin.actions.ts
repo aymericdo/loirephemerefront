@@ -111,6 +111,10 @@ export const decrementPastry = createAction(
   '[Admin page] Decrement pastry',
   props<{ pastry: CorePastry }>()
 );
+export const setStock = createAction(
+  '[Admin page] Set stock',
+  props<{ pastryId: string; newStock: number }>()
+);
 export const pastryMoved = createAction(
   '[Admin page] Pastry moved',
   props<{ pastry: Pastry }>()
