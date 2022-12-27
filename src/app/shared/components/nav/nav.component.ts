@@ -25,6 +25,7 @@ export class NavComponent implements OnInit, OnDestroy {
   restaurantCode: string | null = null;
   routeName: string | null = null;
 
+  isCollapsed = false;
   DEMO_RESTO = DEMO_RESTO;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

@@ -1,8 +1,8 @@
-<nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
+<nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0" [nzCollapsed]="isCollapsed" (nzCollapsedChange)="isCollapsed = $event">
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
     <li nz-menu-item [nzSelected]="routeName === 'home'">
-      <a class="main-link" [routerLink]="[restaurantCode || DEMO_RESTO]">
+      <a (click)="isCollapsed = true" class="main-link" [routerLink]="[restaurantCode || DEMO_RESTO]">
         <i nz-icon nzType="heart"></i>
         <span class="restaurant-name">{{ (restaurant$ | async)?.name || 'Démo resto' }}</span>
       </a>
@@ -12,13 +12,12 @@
       nzTitle="Restaurants" nzIcon="coffee">
       <ul>
         <li nz-menu-item [nzMatchRouter]="true">
-          <a [routerLink]="['page', 'restaurant', 'new']">
+          <a (click)="isCollapsed = true" [routerLink]="['page', 'restaurant', 'new']">
             <i nz-icon nzType="plus"></i>
             <span>Nouveau</span>
           </a>
         </li>
         <ng-container *ngFor="let restaurant of (userRestaurants$ | async)">
-
           <ng-template #titleNameTpl>
             <span class="restaurant-name-tooltip" nz-tooltip [nzTooltipTitle]="restaurant.name"
               nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
@@ -30,25 +29,25 @@
             (nzOpenChange)="isAdminCollapsed = isAdminCollapsed === restaurant.code ? '' : restaurant.code">
             <ul>
               <li nz-menu-item [nzMatchRouter]="true">
-                <a [routerLink]="[restaurant.code, 'admin', 'menu']">
+                <a (click)="isCollapsed = true" [routerLink]="[restaurant.code, 'admin', 'menu']">
                   <i nz-icon nzType="shopping-cart"></i>
                   <span>Menu</span>
                 </a>
               </li>
               <li nz-menu-item [nzMatchRouter]="true">
-                <a [routerLink]="[restaurant.code, 'admin', 'commands']">
+                <a (click)="isCollapsed = true" [routerLink]="[restaurant.code, 'admin', 'commands']">
                   <i nz-icon nzType="alert"></i>
                   <span>Commandes</span>
                 </a>
               </li>
               <li nz-menu-item [nzMatchRouter]="true">
-                <a [routerLink]="[restaurant.code, 'admin', 'stats']">
+                <a (click)="isCollapsed = true" [routerLink]="[restaurant.code, 'admin', 'stats']">
                   <i nz-icon nzType="pie-chart"></i>
                   <span>Stats</span>
                 </a>
               </li>
               <li nz-menu-item [nzMatchRouter]="true">
-                <a [routerLink]="[restaurant.code, 'admin', 'users']">
+                <a (click)="isCollapsed = true" [routerLink]="[restaurant.code, 'admin', 'users']">
                   <i nz-icon nzType="user"></i>
                   <span>Utilisateurs</span>
                 </a>
@@ -60,7 +59,7 @@
     </li>
 
     <li nz-menu-item [nzMatchRouter]="true">
-      <a [routerLink]="['page', 'about']">
+      <a (click)="isCollapsed = true" [routerLink]="['page', 'about']">
         <i nz-icon nzType="question"></i>
         <span>À propos</span>
       </a>
