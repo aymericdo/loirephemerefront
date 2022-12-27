@@ -3,8 +3,9 @@
     [nzActions]="isPayed ? [actionWizz] : [actionWizz, actionDone]" [nzTitle]="'Commande #' + command.reference">
     <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
       <p>Nom : {{ command.name }}</p>
-      <p>Heure : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
+      <p>Récupération : {{ command.pickUpTime | date: "dd/MM/YYYY HH:mm" }}</p>
       <p>Lieu : {{ command.takeAway ? 'À emporter' : 'Sur place' }}</p>
+      <p>Commande : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
       <p>Pâtisseries :</p>
       <ul>
         <li *ngFor="let pastryObj of pastries">

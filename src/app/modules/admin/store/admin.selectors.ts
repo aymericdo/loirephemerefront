@@ -7,9 +7,9 @@ export const selectFeature = (state: AppState) => state.admin;
 export const selectOnGoingCommands = createSelector(
   selectFeature,
   (state: AdminState) => state.commands.filter((c) => !c.isDone).sort((a, b) => {
-    return (
-      new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime()
-    );
+    const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
+    const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
+    return dateA - dateB;
   }),
 );
 
@@ -22,9 +22,9 @@ export const selectPastCommands = createSelector(
         return a.isPayed ? 1 : -1;
       }
 
-      return (
-        new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime()
-      );
+      const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
+      const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
+      return dateA - dateB;
     }),
 );
 
@@ -34,9 +34,9 @@ export const selectPayedCommands = createSelector(
     state.commands
       .filter((c) => c.isPayed)
       .sort((a, b) => {
-        return (
-          new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
-        );
+        const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
+        const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
+        return dateA - dateB;
       })
 );
 
