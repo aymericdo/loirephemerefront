@@ -82,6 +82,12 @@ export class NavComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn;
   }
 
+  manuallyCollapse(): void {
+    if (window.matchMedia("(max-width: 992px)").matches) {
+      this.isCollapsed = true;
+    }
+  }
+
   getRouteName(url: string): string | null {
     const urlArray = url.split('/');
     if (urlArray.length > 1 && urlArray[2] === 'admin') {
