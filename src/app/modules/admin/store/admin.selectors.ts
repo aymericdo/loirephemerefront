@@ -13,15 +13,11 @@ export const selectOnGoingCommands = createSelector(
   }),
 );
 
-export const selectPastCommands = createSelector(
+export const selectDeliveredCommands = createSelector(
   selectFeature,
   (state: AdminState) => state.commands
-    .filter((c) => c.isDone)
+    .filter((c) => c.isDone && !c.isPayed)
     .sort((a, b) => {
-      if (a.isPayed !== b.isPayed) {
-        return a.isPayed ? 1 : -1;
-      }
-
       const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
       const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
       return dateA - dateB;
@@ -36,7 +32,7 @@ export const selectPayedCommands = createSelector(
       .sort((a, b) => {
         const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
         const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
-        return dateA - dateB;
+        return dateB - dateA;
       })
 );
 

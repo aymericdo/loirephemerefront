@@ -134,6 +134,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       .subscribe(([commands, pastries]) => {
         this.totallyEmpty = commands.length === 0;
         this.commandsCount = commands.length;
+        this.totalCash = 0;
 
         let countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } } = {
           pastry: {},

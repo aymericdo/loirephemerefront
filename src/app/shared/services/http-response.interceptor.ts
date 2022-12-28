@@ -35,7 +35,7 @@ export class HttpResponseInterceptor implements HttpInterceptor {
       tap(evt => {
         if (evt instanceof HttpResponse) {
           if (req.method !== 'GET' && !this.isInNotifBlackList(req.url)) {
-            this.message.create('success', 'Informations sauvegardées');
+            this.message.create('success', 'Informations sauvegardées', { nzPauseOnHover: false });
           }
         }
       }),

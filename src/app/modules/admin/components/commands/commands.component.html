@@ -1,7 +1,7 @@
 <nz-tabset nzLinkRouter>
   <nz-tab>
     <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'ongoing' }" queryParamsHandling="merge">
-      Commandes en cours
+      En cours
     </a>
     <ng-container *ngIf="(onGoingCommands$ | async)?.length === 0">
       <nz-empty class="empty-section"></nz-empty>
@@ -18,20 +18,39 @@
     </ng-container>
   </nz-tab>
   <nz-tab>
-    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'past' }" queryParamsHandling="merge">
-      Commandes passées
+    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'delivered' }" queryParamsHandling="merge">
+      Livrées
     </a>
-    <ng-container *ngIf="(pastCommands$ | async)?.length === 0">
+    <ng-container *ngIf="(deliveredCommands$ | async)?.length === 0">
       <nz-empty class="empty-section"></nz-empty>
     </ng-container>
-    <ng-container *ngIf="(pastCommands$ | async)?.length! > 0">
+    <ng-container *ngIf="(deliveredCommands$ | async)?.length! > 0">
+      <div class="data-section" nz-row [nzGutter]="[0, 24]">
+        <div *ngFor="let command of deliveredCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
+          <div class="inner-box">
+            <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isDone]="true"
+              [isPayed]="!!command.isPayed" (clickPayed)="handleClickPayed(command)"
+              (clickWizz)="handleClickWizz(command)"></app-command-card>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </nz-tab>
+  <nz-tab>
+    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'payed' }" queryParamsHandling="merge">
+      Payées
+    </a>
+    <ng-container *ngIf="(payedCommands$ | async)?.length === 0">
+      <nz-empty class="empty-section"></nz-empty>
+    </ng-container>
+    <ng-container *ngIf="(payedCommands$ | async)?.length! > 0">
       <div class="data-section">
         <nz-page-header>
-          <nz-page-header-title *ngIf="(pastCommands$ | async)?.length">Total : {{ totalPayedCommands$ | async }}€
+          <nz-page-header-title *ngIf="(payedCommands$ | async)?.length">Total : {{ totalPayedCommands$ | async }}€
           </nz-page-header-title>
         </nz-page-header>
         <div nz-row [nzGutter]="[0, 24]">
-          <div *ngFor="let command of pastCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
+          <div *ngFor="let command of payedCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
             <div class="inner-box">
               <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isDone]="true"
                 [isPayed]="!!command.isPayed" (clickPayed)="handleClickPayed(command)"

@@ -75,7 +75,7 @@ export class CommandCardComponent implements OnInit, OnDestroy {
     if (type === 'toDone') {
       this.modal.confirm({
         nzTitle: `Commande #${this.command.reference}`,
-        nzContent: `Cette commande a bien été livrée ?`,
+        nzContent: `Cette commande a bien été livrée ? <br> (N'oubliez pas d'encaisser par la suite dans l'onglet suivant)`,
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {
