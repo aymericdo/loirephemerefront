@@ -2,6 +2,12 @@
   display: flex;
   justify-content: center;
 
+  .take-away {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+  }
+
   nz-card {
     transition: box-shadow 250ms;
   }

@@ -2,9 +2,10 @@
   <nz-card style="width: 300px" [class.-is-new]="isNew" [class.-is-just-updated]="isJustUpdated"
     [nzActions]="isPayed ? [actionWizz] : [actionWizz, actionDone]" [nzTitle]="'Commande #' + command.reference">
     <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+      <p class="take-away">{{ command.takeAway ? 'À emporter' : 'Sur place' }}</p>
+      <nz-divider></nz-divider>
       <p>Nom : {{ command.name }}</p>
       <p>Récupération : {{ command.pickUpTime || command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
-      <p>Lieu : {{ command.takeAway ? 'À emporter' : 'Sur place' }}</p>
       <p>Pâtisseries :</p>
       <ul>
         <li *ngFor="let pastryObj of pastries">
