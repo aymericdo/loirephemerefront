@@ -33,6 +33,8 @@ export class PastryCardComponent implements OnChanges {
   isMaxLimitReached = false;
   isStockIssue = false;
 
+  imgError = false;
+
   constructor(
     public elem: ElementRef,
     private adminApiService: AdminApiService,
@@ -46,6 +48,11 @@ export class PastryCardComponent implements OnChanges {
   }
 
   onImgError(event: Event) {
-    (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.jpg');
+    if (!this.imgError) {
+      this.imgError = true;
+      (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.jpg');
+    } else {
+      (event.target as HTMLImageElement).src = 'assets/image/default.jpg';
+    }
   }
 }
