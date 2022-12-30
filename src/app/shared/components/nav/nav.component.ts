@@ -71,10 +71,10 @@ export class NavComponent implements OnInit, OnDestroy {
     this.store.dispatch(resetUser());
   }
 
-  getDemoStyle(): { background: string, color: string } {
+  getDemoStyle(): { 'border-left': string, color: string } {
     return {
-      background: presetPalettes['gold'].primary as string,
-      color: 'white',
+      'border-left': `solid ${presetPalettes['gold'].primary as string}`,
+      color: presetPalettes['gold'].primary as string,
     };
   }
 
