@@ -43,10 +43,10 @@ export class CommandCardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const pastriesGroupedBy = this.command.pastries.reduce((prev, pastry) => {
-      if (prev.hasOwnProperty(pastry._id)) {
-        prev[pastry._id] = [pastry, prev[pastry._id][1] + 1];
+      if (prev.hasOwnProperty(pastry.id)) {
+        prev[pastry.id] = [pastry, prev[pastry.id][1] + 1];
       } else {
-        prev[pastry._id] = [pastry, 1];
+        prev[pastry.id] = [pastry, 1];
       }
 
       return prev;

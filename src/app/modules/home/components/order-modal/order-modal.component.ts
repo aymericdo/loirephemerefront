@@ -20,7 +20,7 @@ export class OrderModalComponent implements OnInit {
   ngOnInit(): void {
     this.pastriesStr = Object.keys(this.selectedPastries).reduce(
       (prev, pastryId: string) => {
-        const name = this.allPastries.find((p) => p._id === pastryId)?.name;
+        const name = this.allPastries.find((p) => p.id === pastryId)?.name;
         prev.push(`${name} (x${this.selectedPastries[pastryId]})`);
         return prev;
       },

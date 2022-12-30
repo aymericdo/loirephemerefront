@@ -82,21 +82,21 @@ export class AssociationComponent implements OnInit, OnDestroy {
   selectPastry(pastry: Pastry): void {
     if (this.selectedCommonStock) {
       if (this.isPastrySelected(pastry)) {
-        delete this.selectedAssociatedPastries[pastry._id];
+        delete this.selectedAssociatedPastries[pastry.id];
         if (Object.keys(this.selectedAssociatedPastries).length === 0 && this.isNewPastryCommonStock()) {
           this.reset();
         }
       } else {
-        this.selectedAssociatedPastries[pastry._id] = pastry;
+        this.selectedAssociatedPastries[pastry.id] = pastry;
       }
     } else {
-      this.selectedCommonStock = pastry.commonStock || `${pastry._id}-${Math.floor(Math.random() * 16777215).toString(16)}`;
+      this.selectedCommonStock = pastry.commonStock || `${pastry.id}-${Math.floor(Math.random() * 16777215).toString(16)}`;
       if (this.isNewPastryCommonStock()) {
         this.colorByCommonStock[this.selectedCommonStock] = this.getRandomColor();
-        this.selectedAssociatedPastries[pastry._id] = pastry;
+        this.selectedAssociatedPastries[pastry.id] = pastry;
       } else {
         this.pastriesByCommonStock[this.selectedCommonStock].forEach((p) => {
-          this.selectedAssociatedPastries[p._id] = p;
+          this.selectedAssociatedPastries[p.id] = p;
         });
       }
     }
@@ -118,7 +118,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
   }
 
   isPastrySelected(pastry: Pastry): boolean {
-    return this.selectedAssociatedPastries.hasOwnProperty(pastry._id);
+    return this.selectedAssociatedPastries.hasOwnProperty(pastry.id);
   }
 
   isDeactivate(pastry: Pastry): boolean {
@@ -149,7 +149,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
   }
 
   tackById(_index: any, pastry: Pastry): string {
-    return pastry._id;
+    return pastry.id;
   }
 
   private getRandomColor(): string {

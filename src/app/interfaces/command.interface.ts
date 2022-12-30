@@ -2,7 +2,7 @@ import { Pastry } from './pastry.interface';
 import { Restaurant } from './restaurant.interface';
 
 export interface Command extends CoreCommand {
-  _id: string;
+  id: string;
   reference: string;
   createdAt: string;
   updatedAt: string;
@@ -17,6 +17,5 @@ export interface CoreCommand {
   name: string;
   takeAway: boolean;
   pastries?: Pastry[];
-  totalPrice?: number;
   pickUpTime?: Date | null;
 }

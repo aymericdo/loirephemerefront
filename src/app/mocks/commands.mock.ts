@@ -4,7 +4,7 @@ import { restaurantsMock } from "./restaurants.mock";
 
 export const commandsMock: Command[] = [
   {
-    _id: '06ca4ae0-62a3-11ed-9b6a-0242ac120002',
+    id: '06ca4ae0-62a3-11ed-9b6a-0242ac120002',
     pastries: [pastriesMock[0]],
     name: 'name1',
     takeAway: false,
@@ -15,7 +15,7 @@ export const commandsMock: Command[] = [
     updatedAt: '2021-07-22T09:49:07.324+00:00',
   },
   {
-    _id: '4d81410b-b158-4951-820c-a898e5a49911',
+    id: '4d81410b-b158-4951-820c-a898e5a49911',
     pastries: [pastriesMock[0]],
     name: 'name2',
     takeAway: false,
@@ -26,7 +26,7 @@ export const commandsMock: Command[] = [
     updatedAt: '2021-07-22T09:49:07.324+00:00',
   },
   {
-    _id: 'e2a46283-def5-4209-8a76-67bc12a4ddca',
+    id: 'e2a46283-def5-4209-8a76-67bc12a4ddca',
     pastries: [pastriesMock[0]],
     name: 'name3',
     takeAway: true,

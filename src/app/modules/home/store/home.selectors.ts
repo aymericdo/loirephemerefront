@@ -23,7 +23,7 @@ export const selectIsStockIssue = createSelector(
   selectFeature,
   (state: HomeState) =>
     Object.keys(state.selectedPastries).some((pastryId) => {
-      const pastry = state.pastries.find((p) => p._id === pastryId);
+      const pastry = state.pastries.find((p) => p.id === pastryId);
       if (!pastry?.stock) return false;
       return (
         pastry.stock -
@@ -56,7 +56,7 @@ export const selectTotalPrice = createSelector(
     Object.keys(state.selectedPastries).reduce(
       (prev, pastryId) =>
         prev +
-        (state.pastries.find((p) => p._id === pastryId)?.price || 0) *
+        (state.pastries.find((p) => p.id === pastryId)?.price || 0) *
         state.selectedPastries[pastryId],
       0
     )

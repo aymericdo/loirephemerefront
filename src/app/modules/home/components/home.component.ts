@@ -103,7 +103,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             })
             .then((sub) => {
               this.store.dispatch(
-                sendNotificationSub({ commandId: command._id!, sub })
+                sendNotificationSub({ commandId: command.id!, sub })
               );
             })
             .catch((err) =>
@@ -127,12 +127,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   handleClickPlus(pastry: Pastry): void {
     let count: number = 0;
     this.selectedPastries$.pipe(take(1)).subscribe((selectedPastries: { [pastryId: string]: number }) => {
-      count = selectedPastries[pastry._id] || 0;
+      count = selectedPastries[pastry.id] || 0;
     });
 
     if (count === 0) {
       const cardToScroll = this.itemElements.find(
-        (item) => item.pastry._id === pastry._id
+        (item) => item.pastry.id === pastry.id
         );
 
         if (cardToScroll) {
@@ -173,7 +173,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   tackById(_index: any, pastry: Pastry): string {
-    return pastry._id;
+    return pastry.id;
   }
 
   private subscribeToWS(code: string) {

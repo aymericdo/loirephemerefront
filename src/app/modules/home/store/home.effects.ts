@@ -55,17 +55,10 @@ export class HomeEffects {
           name,
           takeAway,
           pickUpTime,
-          totalPrice: Object.keys(selectedPastries).reduce((prev, pastryId) => {
-            const pastry = allPastries.find(
-              (p: Pastry) => p._id === pastryId
-            ) as Pastry;
-
-            return prev + pastry.price * selectedPastries[pastryId];
-          }, 0),
           pastries: Object.keys(selectedPastries).reduce(
             (prev: Pastry[], pastryId: string) => {
               const pastry = allPastries.find(
-                (p: Pastry) => p._id === pastryId
+                (p: Pastry) => p.id === pastryId
               ) as Pastry;
 
               [...Array(selectedPastries[pastryId]).keys()].forEach(() => {

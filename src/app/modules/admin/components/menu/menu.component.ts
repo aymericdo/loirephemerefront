@@ -98,7 +98,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   tackById(_index: any, pastry: Pastry): string {
-    return pastry._id;
+    return pastry.id;
   }
 
   private getCorePastry(pastry: Pastry): CorePastry {

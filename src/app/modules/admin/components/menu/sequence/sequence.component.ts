@@ -32,6 +32,6 @@ export class SequenceComponent {
   }
 
   tackById(_index: any, pastry: Pastry): string {
-    return pastry._id;
+    return pastry.id;
   }
 }

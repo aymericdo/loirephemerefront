@@ -1,5 +1,5 @@
 export interface Restaurant extends CoreRestaurant {
-  _id: string;
+  id: string;
   code: string;
   createdAt: string;
   updatedAt: string;

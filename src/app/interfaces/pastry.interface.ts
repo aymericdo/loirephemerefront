@@ -9,7 +9,7 @@ export interface Historical {
 export type PastryType = 'pastry' | 'drink' | 'tip' | 'other';
 
 export interface Pastry extends CorePastry {
-  _id: string;
+  id: string;
   restaurant?: Restaurant;
   displaySequence: number;
   createdAt: string;

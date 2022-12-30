@@ -75,7 +75,7 @@ export class AdminEffects {
       ofType(closingCommand),
       mergeMap((action) => {
         return this.adminApiService
-          .closeCommand(action.command._id!)
+          .closeCommand(action.command.id!)
           .pipe(
             map((command) => editCommand({ command })),
           );
@@ -88,7 +88,7 @@ export class AdminEffects {
       ofType(payingCommand),
       mergeMap((action) => {
         return this.adminApiService
-          .payedCommand(action.command._id!)
+          .payedCommand(action.command.id!)
           .pipe(
             map((command) => editCommand({ command })),
           );
@@ -158,7 +158,7 @@ export class AdminEffects {
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
-        return this.adminApiService.validatePastryIsAlreadyOrdered(restaurant.code, action.pastry?._id!).pipe(
+        return this.adminApiService.validatePastryIsAlreadyOrdered(restaurant.code, action.pastry?.id!).pipe(
           switchMap((isNotValid: boolean) => {
             if (isNotValid) {
               // By default, in edit mode, name is deactivated

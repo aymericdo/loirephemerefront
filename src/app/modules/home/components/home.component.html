@@ -10,7 +10,7 @@
       nzXl="8">
       <div class="inner-box">
         <app-pastry-card #item [pastry]="pastry" [isLoading]="(isLoading$ | async)!"
-          [count]="(selectedPastries$ | async)![pastry._id] || 0" (clickPlus)="handleClickPlus(pastry)"
+          [count]="(selectedPastries$ | async)![pastry.id] || 0" (clickPlus)="handleClickPlus(pastry)"
           (clickMinus)="handleClickMinus(pastry)"></app-pastry-card>
       </div>
     </div>

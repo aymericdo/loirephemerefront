@@ -3,7 +3,7 @@ import { restaurantsMock } from "./restaurants.mock";
 
 export const pastriesMock: Pastry[] = [
   {
-    _id: '2345YT',
+    id: '2345YT',
     name: '2345YT',
     price: 24,
     description: '2345YT',
@@ -19,7 +19,7 @@ export const pastriesMock: Pastry[] = [
     historical: [],
   },
   {
-    _id: '2349YT',
+    id: '2349YT',
     name: '2345YT',
     price: 24,
     description: '2345YT',
@@ -35,7 +35,7 @@ export const pastriesMock: Pastry[] = [
     historical: [],
   },
   {
-    _id: '2348YT',
+    id: '2348YT',
     name: '2345YT',
     price: 24,
     description: '2345YT',

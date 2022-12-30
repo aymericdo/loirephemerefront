@@ -110,7 +110,7 @@ const adminReducer = createReducer(
     commands: [...state.commands, command],
   })),
   on(editCommand, (state, { command }) => {
-    const indexOf = state.commands.findIndex((c) => c._id === command._id);
+    const indexOf = state.commands.findIndex((c) => c.id === command.id);
     const newList: Command[] = [...state.commands];
     newList.splice(indexOf, 1, command);
 
@@ -126,7 +126,7 @@ const adminReducer = createReducer(
     allPastries: [...state.allPastries, pastry],
   })),
   on(editPastry, (state, { pastry }) => {
-    const indexOf = state.allPastries.findIndex((c) => c._id === pastry._id);
+    const indexOf = state.allPastries.findIndex((c) => c.id === pastry.id);
     const newList: Pastry[] = [...state.allPastries];
     newList.splice(indexOf, 1, pastry);
 
@@ -138,7 +138,7 @@ const adminReducer = createReducer(
   on(reorderPastries, (state, { sequence }) => {
     const newList: Pastry[] = state.allPastries.map((pastry) => ({
       ...pastry,
-      displaySequence: sequence[pastry._id],
+      displaySequence: sequence[pastry.id],
     })).sort((a, b) => {
       return a.displaySequence - b.displaySequence;
     });
@@ -202,11 +202,11 @@ const adminReducer = createReducer(
     editingPastry: null,
   })),
   on(setStock, (state, { pastryId, newStock }) => {
-    const indexOf = state.allPastries.findIndex((p) => p._id === pastryId);
+    const indexOf = state.allPastries.findIndex((p) => p.id === pastryId);
     const newList: Pastry[] = [...state.allPastries];
 
     const editedPastry: Pastry = {
-      ...(state.allPastries.find((p) => p._id === pastryId) as Pastry),
+      ...(state.allPastries.find((p) => p.id === pastryId) as Pastry),
       stock: newStock,
     };
     newList.splice(indexOf, 1, editedPastry);

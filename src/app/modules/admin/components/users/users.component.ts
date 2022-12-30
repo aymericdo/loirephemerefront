@@ -60,6 +60,6 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   tackById(_index: any, user: User): string {
-    return user._id;
+    return user.id;
   }
 }

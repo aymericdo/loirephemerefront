@@ -49,11 +49,11 @@ const homeReducer = createReducer(
     loading: false,
   })),
   on(setStock, (state, { pastryId, newStock }) => {
-    const indexOf = state.pastries.findIndex((p) => p._id === pastryId);
+    const indexOf = state.pastries.findIndex((p) => p.id === pastryId);
     const newList: Pastry[] = [...state.pastries];
 
     const editedPastry: Pastry = {
-      ...(state.pastries.find((p) => p._id === pastryId) as Pastry),
+      ...(state.pastries.find((p) => p.id === pastryId) as Pastry),
       stock: newStock,
     };
     newList.splice(indexOf, 1, editedPastry);
@@ -67,25 +67,25 @@ const homeReducer = createReducer(
     ...state,
     selectedPastries: {
       ...state.selectedPastries,
-      [pastry._id]: state.selectedPastries.hasOwnProperty(pastry._id)
-        ? state.selectedPastries[pastry._id] + 1
+      [pastry.id]: state.selectedPastries.hasOwnProperty(pastry.id)
+        ? state.selectedPastries[pastry.id] + 1
         : 1,
     },
   })),
   on(decrementPastry, (state, { pastry }) => {
-    const newStock = state.selectedPastries.hasOwnProperty(pastry._id)
-      ? state.selectedPastries[pastry._id] === 0
+    const newStock = state.selectedPastries.hasOwnProperty(pastry.id)
+      ? state.selectedPastries[pastry.id] === 0
         ? 0
-        : state.selectedPastries[pastry._id] - 1
+        : state.selectedPastries[pastry.id] - 1
       : 0;
 
     const newSelectedPastries = {
       ...state.selectedPastries,
-      [pastry._id]: newStock,
+      [pastry.id]: newStock,
     };
 
     if (!newStock) {
-      delete newSelectedPastries[pastry._id];
+      delete newSelectedPastries[pastry.id];
     }
 
     return {
