@@ -39,6 +39,10 @@
     height: 100%;
   }
 
+  ::ng-deep .ant-tabs-nav-wrap {
+    justify-content: center;
+  }
+
   ::ng-deep .ant-tabs-tabpane {
     display: flex;
     flex-direction: column;
