@@ -1,0 +1,17 @@
+<nz-tabset nzCentered>
+  <nz-tab nzTitle="Moi">
+    <div class="content">
+      <nz-form-item>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Email</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24">
+          <input nz-input [value]="(user$ | async)?.email" disabled placeholder="mail@mail.com" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </nz-tab>
+  <nz-tab nzTitle="Sécurité">
+    <div class="content">
+      <app-change-password></app-change-password>
+    </div>
+  </nz-tab>
+</nz-tabset>

@@ -204,8 +204,7 @@ export class AdminEffects {
           switchMap((pastry: Pastry) => {
             return [addPastry({ pastry }), pastryCreated(), closeMenuModal()];
           }),
-          catchError((error) => {
-            console.error(error);
+          catchError(() => {
             return [pastryCreated()];
           })
         );
@@ -233,8 +232,7 @@ export class AdminEffects {
               return [editPastry({ pastry: data.pastry }), pastryEdited(), closeMenuModal()];
             }
           }),
-          catchError((error) => {
-            console.error(error);
+          catchError(() => {
             return [pastryEdited()];
           })
         );
@@ -261,8 +259,7 @@ export class AdminEffects {
               return [editPastry({ pastry: data.pastry })];
             }
           }),
-          catchError((error) => {
-            console.error(error);
+          catchError(() => {
             return [pastryEdited()];
           })
         );
@@ -281,8 +278,7 @@ export class AdminEffects {
           switchMap((pastries: Pastry[]) => {
             return [setAllPastries({ pastries })];
           }),
-          catchError((error) => {
-            console.error(error);
+          catchError(() => {
             return [pastryEdited()];
           })
         );
@@ -301,8 +297,7 @@ export class AdminEffects {
           switchMap(({ pastry }) => {
             return [editPastry({ pastry })];
           }),
-          catchError((error) => {
-            console.error(error);
+          catchError(() => {
             return [pastryEdited()];
           })
         );
@@ -318,8 +313,7 @@ export class AdminEffects {
           switchMap((users) => {
             return [setUsers({ users })];
           }),
-          catchError((error) => {
-            console.error(error);
+          catchError(() => {
             return EMPTY;
           })
         );

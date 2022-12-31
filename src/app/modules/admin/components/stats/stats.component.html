@@ -19,7 +19,7 @@
   <!-- / happy hack  -->
 
   <ng-container *ngIf="(isLoading$ | async) === false && !totallyEmpty">
-    <nz-tabset nzLinkRouter>
+    <nz-tabset nzLinkRouter nzCentered>
       <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'global' }" queryParamsHandling="merge">
           Global

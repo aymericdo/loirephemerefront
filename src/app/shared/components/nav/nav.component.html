@@ -83,6 +83,12 @@
       [nzTitle]="titleUserTpl" nzIcon="user">
       <ul>
         <li *ngIf="isLoggedIn" nz-menu-item>
+          <a [routerLink]="['page', 'profile']">
+            <i nz-icon nzType="profile"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn" nz-menu-item>
           <a (click)="handleDisconnect()">
             <i nz-icon nzType="logout"></i>
             <span>Se déconnecter</span>

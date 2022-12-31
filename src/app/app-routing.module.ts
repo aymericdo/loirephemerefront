@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AboutComponent } from 'src/app/modules/about/components/about/about.component';
+import { AuthGuardService } from 'src/app/auth/auth-guard.service';
+import { AboutComponent } from 'src/app/modules/about/components/about.component';
 import { AdminComponent } from 'src/app/modules/admin/components/admin.component';
 import { HomeComponent } from 'src/app/modules/home/components/home.component';
 import { FourOhFourComponent } from 'src/app/shared/components/four-oh-four/four-oh-four.component';
@@ -29,6 +30,12 @@ const routes: Routes = [
       import('./modules/restaurant/restaurant.module').then((m) => m.RestaurantModule),
   },
   {
+    path: 'page/profile',
+    canActivate: [AuthGuardService],
+    loadChildren: () =>
+      import('./modules/profile/profile.module').then((m) => m.ProfileModule),
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: `/${DEMO_RESTO}`,
@@ -40,6 +47,7 @@ const routes: Routes = [
   {
     path: ':code/admin',
     component: AdminComponent,
+    canActivate: [AuthGuardService],
     loadChildren: () =>
       import('./modules/admin/admin.module').then((m) => m.AdminModule),
   },

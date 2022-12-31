@@ -31,7 +31,7 @@ export const initialState: LoginState = {
   passwordChanged: false,
 };
 
-const tokenReducer = createReducer(
+const loginReducer = createReducer(
   initialState,
   on(createUser, signInUser, confirmEmail, confirmRecoverEmail, (state) => ({
     ...state,
@@ -112,5 +112,5 @@ const tokenReducer = createReducer(
 );
 
 export function reducer(state: LoginState | undefined, action: Action) {
-  return tokenReducer(state, action);
+  return loginReducer(state, action);
 }
