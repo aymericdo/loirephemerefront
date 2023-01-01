@@ -5,6 +5,22 @@
   min-width: 200px;
 
   .content {
-    padding: 2rem 3rem;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+
+    >* {
+      flex: 1;
+      max-width: 90%;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .content {
+      >* {
+        flex: 1;
+        max-width: 100%;
+      }
+    }
   }
 }

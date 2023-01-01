@@ -1,7 +1,7 @@
 <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Email</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
+    <nz-form-label [nzLg]="8" [nzSm]="24" [nzXs]="24" nzRequired>Email</nz-form-label>
+    <nz-form-control [nzLg]="16" [nzSm]="24" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
       [nzErrorTip]="userEmailErrorTpl">
       <input nz-input formControlName="email" placeholder="mail@mail.com" />
       <ng-template #userEmailErrorTpl let-control>
@@ -17,8 +17,8 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Mot de passe</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback [nzErrorTip]="userPasswordErrorTpl">
+    <nz-form-label [nzLg]="8" [nzSm]="24" [nzXs]="24" nzRequired>Mot de passe</nz-form-label>
+    <nz-form-control [nzLg]="16" [nzSm]="24" [nzXs]="24" nzHasFeedback [nzErrorTip]="userPasswordErrorTpl">
       <nz-input-group [nzSuffix]="suffixTemplate">
         <input [type]="passwordVisible ? 'text' : 'password'" nz-input formControlName="password"
           placeholder="**********" />
@@ -38,6 +38,9 @@
         <ng-container *ngIf="control.hasError('maxlength')">
           Merci d'entrer un mot de passe de moins de {{ SIZE.LARGE }} caractères
         </ng-container>
+        <ng-container *ngIf="control.hasError('passwordDifferentToConfirmPasswordValidator')">
+          Merci de confirmer avec le même mot de passe
+        </ng-container>
         <ng-container *ngIf="!control.hasError('minlength') && control.hasError('pattern')">
           Le mot de passe doit contenir au moins un chiffre, une majuscule et une lettre minuscule.
           Il doit aussi comporter au moins un caractère spécial parmi @$!%*#?&^_-
@@ -47,8 +50,8 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Confirmation du mot de passe</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback [nzErrorTip]="userConfirmPasswordErrorTpl">
+    <nz-form-label [nzLg]="8" [nzSm]="24" [nzXs]="24" nzRequired>Confirmation du mot de passe</nz-form-label>
+    <nz-form-control [nzLg]="16" [nzSm]="24" [nzXs]="24" nzHasFeedback [nzErrorTip]="userConfirmPasswordErrorTpl">
       <input [type]="'password'" nz-input formControlName="confirmPassword" placeholder="**********" />
 
       <ng-template #userConfirmPasswordErrorTpl let-control>
@@ -61,7 +64,7 @@
         <ng-container *ngIf="control.hasError('maxlength')">
           Merci d'entrer un mot de passe de moins de {{ SIZE.LARGE }} caractères
         </ng-container>
-        <ng-container *ngIf="control.hasError('confirmedValidator')">
+        <ng-container *ngIf="control.hasError('passwordDifferentToConfirmPasswordValidator')">
           Merci de confirmer avec le même mot de passe
         </ng-container>
       </ng-template>
@@ -69,7 +72,7 @@
   </nz-form-item>
 
   <nz-form-item class="form-action-row">
-    <nz-form-control [nzSm]="{ span: 12, offset: 8 }" [nzXs]="24">
+    <nz-form-control [nzLg]="{ span: 12, offset: 12 }" [nzXs]="24">
       <div nzFlex nz-row nzJustify="end">
         <nz-space>
           <button *nzSpaceItem nz-button (click)="resetForm($event)"

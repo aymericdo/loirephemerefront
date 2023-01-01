@@ -9,8 +9,8 @@
     </li>
 
     <li nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
-      nzTitle="Restaurants" nzIcon="coffee">
-      <ul class="restaurant-section">
+      nzTitle="Restaurants" nzIcon="coffee" [nzMenuClassName]="'restaurant-section'">
+      <ul>
         <li nz-menu-item [nzMatchRouter]="true">
           <a (click)="manuallyCollapse()" [routerLink]="['page', 'restaurant', 'new']">
             <i nz-icon nzType="plus"></i>

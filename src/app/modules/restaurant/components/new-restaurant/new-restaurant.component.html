@@ -11,8 +11,8 @@
     <ng-container *ngIf="currentStep === 0">
       <form nz-form [formGroup]="validateForm" (ngSubmit)="submitRestaurantForm()">
         <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Nom du restaurant</nz-form-label>
-          <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
+          <nz-form-label nzRequired>Nom du restaurant</nz-form-label>
+          <nz-form-control nzHasFeedback nzValidatingTip="En cours de validation..."
             [nzErrorTip]="restaurantNameErrorTpl">
             <input nz-input formControlName="name" placeholder="Gaufres et compagnie" />
             <ng-template #restaurantNameErrorTpl let-control>
@@ -51,7 +51,7 @@
 
       <ng-container *ngIf="(user$ | async) === null">
         <div nz-row nzJustify="center">
-          <div nz-col [nzSm]="20" [nzXs]="24">
+          <div nz-col [nzXs]="24">
             <nz-tabset>
               <nz-tab nzTitle="Créer un compte">
                 <app-register></app-register>

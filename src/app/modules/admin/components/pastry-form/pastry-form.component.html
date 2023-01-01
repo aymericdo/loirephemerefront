@@ -1,7 +1,7 @@
 <form nz-form [formGroup]="validateForm">
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Nom</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
       [nzErrorTip]="restaurantNameErrorTpl">
       <input nz-input formControlName="name" placeholder="Gaufre choco fraise" />
       <ng-template #restaurantNameErrorTpl let-control>
@@ -16,7 +16,7 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Description</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="descriptionErrorTpl">
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorTpl">
       <nz-textarea-count [nzMaxCharacterCount]="SIZE.LARGE">
         <textarea rows="4" nz-input formControlName="description"
           placeholder="Le goût puissant d'une pâte à tartiner maison + coulis de fraise"></textarea>
@@ -32,7 +32,7 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Prix</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24" [nzErrorTip]="priceErrorTpl">
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="priceErrorTpl">
       <nz-input-number-group nzAddOnAfter="€">
         <nz-input-number formControlName="price" [nzStep]="0.5" [nzMin]="0" placeholder="3"></nz-input-number>
       </nz-input-number-group>
@@ -43,7 +43,7 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Ingrédients</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-tag *ngFor="let ingredient of validateForm.controls['ingredients'].value; let i = index"
         [nzMode]="'closeable'" (nzOnClose)="handleClose(ingredient)">
         {{ (ingredient.length > 20) ? (ingredient | slice:0:20) + '…' : ingredient }}
@@ -59,14 +59,14 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Stock</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-input-number formControlName="stock" (input)="handleStockChanges()" [nzStep]="1" [nzMin]="0"
         nzPlaceHolder="50"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Visibilité</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-radio-group formControlName="hidden">
         <label nz-radio-button [nzValue]="true">Caché</label>
         <label nz-radio-button [nzValue]="false">Visible</label>
@@ -75,7 +75,7 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Type</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-radio-group formControlName="type">
         <label nz-radio [nzValue]="'pastry'">Nourriture</label>
         <label nz-radio [nzValue]="'drink'">Boisson</label>
@@ -86,13 +86,13 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Séquence</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-input-number formControlName="displaySequence" [nzStep]="1" [nzMin]="0"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24">Photo</nz-form-label>
-    <nz-form-control [nzSm]="12" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24">
       <div class="clearfix">
         <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [(nzFileList)]="fileList"
           (nzChange)="handleUpload($event)" [nzShowButton]="fileList.length === 0" [nzPreview]="handlePreview">

@@ -37,7 +37,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
     this.validateForm = this.fb.group({
       oldPassword: ['', [Validators.required, Validators.minLength(SIZE.MIN_PASSWORD), Validators.maxLength(SIZE.LARGE), Validators.pattern(REGEX.PASSWORD)]],
-      password: ['', [Validators.required, Validators.minLength(SIZE.MIN_PASSWORD), Validators.maxLength(SIZE.LARGE), Validators.pattern(REGEX.PASSWORD)], [this.confirmDifferentPasswordValidator]],
+      password: ['', [Validators.required, Validators.minLength(SIZE.MIN_PASSWORD), Validators.maxLength(SIZE.LARGE), Validators.pattern(REGEX.PASSWORD)], [this.passwordValidator, this.confirmDifferentPasswordValidator]],
       confirmPassword: ['', [Validators.required, Validators.minLength(SIZE.MIN_PASSWORD), Validators.maxLength(SIZE.LARGE)], [this.confirmPasswordValidator]],
     });
 
@@ -104,11 +104,20 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
   private confirmDifferentPasswordValidator = (control: UntypedFormControl) => {
     const error = control.value === this.validateForm.value.oldPassword;
-    return of(error ? { newPasswordValidator: true } : {});
+    return of(error ? { sameThanOldPasswordValidator: true } : {});
+  };
+
+  private passwordValidator = (control: UntypedFormControl) => {
+    const error = this.validateForm.value.confirmPassword &&
+      control.value &&
+      control.value !== this.validateForm.value.confirmPassword;
+    return of(error ? { passwordDifferentToConfirmPasswordValidator: true } : {});
   };
 
   private confirmPasswordValidator = (control: UntypedFormControl) => {
-    const error = control.value !== this.validateForm.value.password;
-    return of(error ? { confirmedValidator: true } : {});
+    const error = this.validateForm.value.password &&
+      control.value &&
+      control.value !== this.validateForm.value.password;
+    return of(error ? { passwordDifferentToConfirmPasswordValidator: true } : {});
   };
 }

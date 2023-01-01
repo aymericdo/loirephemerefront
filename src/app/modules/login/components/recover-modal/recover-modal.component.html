@@ -3,7 +3,7 @@
     <ng-container *nzModalContent>
       <nz-form-item>
         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Mot de passe</nz-form-label>
-        <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback [nzErrorTip]="userPasswordErrorTpl">
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback [nzErrorTip]="userPasswordErrorTpl">
           <nz-input-group [nzSuffix]="suffixTemplate">
             <input [type]="passwordVisible ? 'text' : 'password'" nz-input formControlName="password"
               placeholder="**********" />
@@ -33,7 +33,7 @@
 
       <nz-form-item>
         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Confirmation</nz-form-label>
-        <nz-form-control [nzSm]="12" [nzXs]="24" nzHasFeedback [nzErrorTip]="userConfirmPasswordErrorTpl">
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback [nzErrorTip]="userConfirmPasswordErrorTpl">
           <input [type]="'password'" nz-input formControlName="confirmPassword" placeholder="**********" />
 
           <ng-template #userConfirmPasswordErrorTpl let-control>

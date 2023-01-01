@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [{
       path: '',
       pathMatch: 'full',
-      outlet: 'login-outlet',
+      outlet: 'sign-in-outlet',
       component: SignInComponent,
     }, {
       path: 'register',

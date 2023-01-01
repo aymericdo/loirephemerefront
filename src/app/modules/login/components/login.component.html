@@ -1,5 +1,5 @@
 <div nz-row nzJustify="center">
-  <div nz-col [nzSm]="20" [nzXs]="24">
+  <div nz-col [nzXs]="24">
     <nz-tabset nzLinkRouter>
       <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="['.', 'register']">
@@ -11,13 +11,13 @@
         <a *nzTabLink nz-tab-link [routerLink]="['.']">
           Se connecter
         </a>
-        <router-outlet name="login-outlet"></router-outlet>
+        <router-outlet name="sign-in-outlet"></router-outlet>
       </nz-tab>
       <nz-tab *ngIf="isOnRecover">
         <a *nzTabLink nz-tab-link [routerLink]="['.', 'recover']">
           Mot de passe oublié
         </a>
-        <router-outlet></router-outlet>
+        <app-recover></app-recover>
       </nz-tab>
     </nz-tabset>
   </div>

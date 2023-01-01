@@ -2,8 +2,8 @@
   <nz-tab nzTitle="Moi">
     <div class="content">
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Email</nz-form-label>
-        <nz-form-control [nzSm]="12" [nzXs]="24">
+        <nz-form-label nzRequired>Email</nz-form-label>
+        <nz-form-control>
           <input nz-input [value]="(user$ | async)?.email" disabled placeholder="mail@mail.com" />
         </nz-form-control>
       </nz-form-item>

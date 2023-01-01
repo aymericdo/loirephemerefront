@@ -25,11 +25,6 @@
     height: calc(100% - 32px);
   }
 
-  ul.restaurant-section {
-    max-height: 400px;
-    overflow-y: auto;
-  }
-
   .version {
     display: flex;
     justify-content: center;
@@ -43,6 +38,11 @@
   .restaurant-name-tooltip,
   .account-name-tooltip {
     width: 100%;
+  }
+
+  ::ng-deep .restaurant-section {
+    max-height: 400px;
+    overflow-y: auto;
   }
 
   ::ng-deep .restaurant-name,
