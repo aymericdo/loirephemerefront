@@ -78,6 +78,14 @@ export class RecoverComponent implements OnInit, OnDestroy {
     this.captchaToken = token;
   }
 
+  onExpired() {
+    this.captchaToken = '';
+  }
+
+  onError() {
+    this.captchaToken = '';
+  }
+
   handleClickConfirm(event: { emailCode: string }): void {
     this.emailCode = event.emailCode;
     this.store.dispatch(validateRecoverEmailCode({

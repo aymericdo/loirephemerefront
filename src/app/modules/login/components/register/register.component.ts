@@ -94,6 +94,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.captchaToken = token;
   }
 
+  onExpired() {
+    this.captchaToken = '';
+  }
+
+  onError() {
+    this.captchaToken = '';
+  }
+
   private userEmailAsyncValidator = (control: UntypedFormControl) => {
     this.store.dispatch(validatingUserEmail({ email: control.value }));
 

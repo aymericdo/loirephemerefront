@@ -78,7 +78,11 @@
           <div nz-row nzJustify="end">
             <nz-space nzWrap>
               <ng-container *ngIf="!captchaToken.length">
-                <ng-hcaptcha (verify)="onVerify($event)"></ng-hcaptcha>
+                <ng-hcaptcha
+                  (verify)="onVerify($event)"
+                  (expired)="onExpired($event)"
+                  (error)="onError($event)"
+                ></ng-hcaptcha>
               </ng-container>
 
               <ng-container *ngIf="captchaToken.length">
