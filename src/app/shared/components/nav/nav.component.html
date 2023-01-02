@@ -82,7 +82,7 @@
     <li nz-submenu [nzOpen]="!isUserCollapsed" (nzOpenChange)="isUserCollapsed = !isUserCollapsed"
       [nzTitle]="titleUserTpl" nzIcon="user">
       <ul>
-        <li *ngIf="isLoggedIn" nz-menu-item>
+        <li *ngIf="isLoggedIn" nz-menu-item [nzMatchRouter]="true">
           <a [routerLink]="['page', 'profile']">
             <i nz-icon nzType="profile"></i>
             <span>Profile</span>

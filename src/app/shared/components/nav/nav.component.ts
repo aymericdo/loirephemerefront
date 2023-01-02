@@ -106,8 +106,6 @@ export class NavComponent implements OnInit, OnDestroy {
       if (urlArray.length > 2 && urlArray[3].includes('new')) {
         return 'new-restaurant';
       }
-    } else if (urlArray.length > 1 && urlArray[2] === 'login') {
-      this.isUserCollapsed = this.isLoggedIn;
     } else if (urlArray.length === 2) {
       return 'home';
     }

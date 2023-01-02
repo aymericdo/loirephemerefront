@@ -1,25 +1,29 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-  <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Email</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback [nzErrorTip]="userEmailErrorTpl">
-      <input nz-input formControlName="email" placeholder="mail@mail.com" />
-      <ng-template #userEmailErrorTpl let-control>
-        <ng-container *ngIf="control.hasError('required')">Merci d'entrer un email</ng-container>
-      </ng-template>
-    </nz-form-control>
-  </nz-form-item>
+<div class="content" nz-row nzJustify="center">
+  <div nz-col [nzLg]="20" [nzXs]="24">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" nz-row nzJustify="center">
+      <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+        <nz-form-label nzRequired>Email</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="userEmailErrorTpl">
+          <input nz-input formControlName="email" placeholder="mail@mail.com" />
+          <ng-template #userEmailErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">Merci d'entrer un email</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
 
-  <nz-form-item class="form-action-row">
-    <nz-form-control [nzSm]="{ span: 12, offset: 10 }" [nzXs]="24">
-      <div nzFlex nz-row nzJustify="end">
-        <nz-space nzAlign="center">
-          <button *nzSpaceItem nz-button [nzLoading]="(isLoading$ | async) === true" nzType="primary"
-            [disabled]="!validateForm.valid">Confirmer</button>
-        </nz-space>
-      </div>
-    </nz-form-control>
-  </nz-form-item>
-</form>
+      <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+        <nz-form-control>
+          <div nzFlex nz-row nzJustify="end">
+            <nz-space nzWrap>
+              <button *nzSpaceItem nz-button [nzLoading]="(isLoading$ | async) === true" nzType="primary"
+                [disabled]="!validateForm.valid">Confirmer</button>
+            </nz-space>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>
 
 <app-confirmation-modal *ngIf="(confirmationModalOpened$ | async) === true" (clickConfirm)="handleClickConfirm($event)">
 </app-confirmation-modal>

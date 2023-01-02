@@ -10,26 +10,7 @@
     }
   }
 
-  .form-section {
-    display: flex;
-    justify-content: center;
-
-    >* {
-      flex: 1;
-      padding: 1rem;
-      max-width: 60%;
-    }
-
-    .form-action-row {
-      margin-top: 3rem;
-    }
-  }
-
-  @media screen and (max-width: 992px) {
-    .form-section {
-      >* {
-        max-width: 100%;
-      }
-    }
+  .content {
+    padding: 2rem;
   }
 }
