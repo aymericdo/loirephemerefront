@@ -4,12 +4,11 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, incrementPastry, openMenuModal, setStock } from 'src/app/modules/admin/store/admin.actions';
-import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/store/admin.selectors';
+import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock } from 'src/app/modules/admin/modules/menu/store/menu.actions';
+import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
-
 
 @Component({
   templateUrl: './menu.component.html',
@@ -44,7 +43,9 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.subscribeToWS(params.get('code')!);
+      const code: string = params.get('code')!;
+      this.subscribeToWS(code);
+      this.store.dispatch(fetchingAllRestaurantPastries({ code: code }));
     });
   }
 
@@ -97,7 +98,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     }}));
   }
 
-  tackById(_index: any, pastry: Pastry): string {
+  trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
   }
 

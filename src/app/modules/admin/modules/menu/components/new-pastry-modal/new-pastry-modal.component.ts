@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { postingPastry, validatingPastryName } from 'src/app/modules/admin/store/admin.actions';
-import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
+import { postingPastry, validatingPastryName } from 'src/app/modules/admin/modules/menu/store/menu.actions';
+import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({

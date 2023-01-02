@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { selectPastryNameError } from 'src/app/modules/admin/store/admin.selectors';
+import { selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({

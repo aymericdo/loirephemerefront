@@ -3,8 +3,8 @@ import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
-import { movingPastry } from 'src/app/modules/admin/store/admin.actions';
-import { selectAllPastries, selectIsMovingPastry } from 'src/app/modules/admin/store/admin.selectors';
+import { movingPastry } from 'src/app/modules/admin/modules/menu/store/menu.actions';
+import { selectAllPastries, selectIsMovingPastry } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -31,7 +31,7 @@ export class SequenceComponent {
     }}));
   }
 
-  tackById(_index: any, pastry: Pastry): string {
+  trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
   }
 }

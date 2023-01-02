@@ -54,7 +54,7 @@ export class LoginEffects {
       mergeMap((action: { email: string }) => {
         return this.loginApiService.postConfirmEmailUser(action.email).pipe(
           switchMap((code2: string) => {
-            return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
+            return [stopLoading(), setCode2({ code2 }), openConfirmationModal({ modal: true })];
           }),
           catchError(() => {
             return [stopLoading()];
@@ -70,7 +70,7 @@ export class LoginEffects {
       mergeMap((action: { email: string }) => {
         return this.loginApiService.postConfirmRecoverEmailUser(action.email).pipe(
           switchMap((code2: string) => {
-            return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
+            return [stopLoading(), setCode2({ code2 }), openConfirmationModal({ modal: true })];
           }),
           catchError(() => {
             return [stopLoading()];
@@ -90,7 +90,7 @@ export class LoginEffects {
         return this.loginApiService.postValidateRecoverEmailCode(email, emailCode, code2!).pipe(
           switchMap((isValid: boolean) => {
             if (isValid) {
-              return [openConfirmationModal({ modal: false }), openRecoverModal({ modal: true }), stopLoading()];
+              return [stopLoading(), openConfirmationModal({ modal: false }), openRecoverModal({ modal: true })];
             } else {
               return [stopLoading()];
             }
@@ -112,7 +112,7 @@ export class LoginEffects {
         return this.loginApiService.postChangePassword(email, password, emailCode, code2!).pipe(
           switchMap((isValid: boolean) => {
             if (isValid) {
-              return [openRecoverModal({ modal: false }), stopLoading(), setPasswordAsChanged({ changed: true })];
+              return [stopLoading(), openRecoverModal({ modal: false }), setPasswordAsChanged({ changed: true })];
             } else {
               return [stopLoading()];
             }

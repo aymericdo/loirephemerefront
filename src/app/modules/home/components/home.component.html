@@ -6,7 +6,7 @@
     <nz-empty></nz-empty>
   </ng-container>
   <div nz-row [nzGutter]="[0, 24]" nzJustify="center">
-    <div *ngFor="let pastry of pastries$ | async; trackBy: tackById" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12"
+    <div *ngFor="let pastry of pastries$ | async; trackBy: trackById" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12"
       nzXl="8">
       <div class="inner-box">
         <app-pastry-card #item [pastry]="pastry" [isLoading]="(isLoading$ | async)!"

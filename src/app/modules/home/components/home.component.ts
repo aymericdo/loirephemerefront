@@ -172,7 +172,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  tackById(_index: any, pastry: Pastry): string {
+  trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
   }
 

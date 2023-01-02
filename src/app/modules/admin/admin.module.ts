@@ -1,52 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../shared/shared.module';
-import { AdminComponent } from './components/admin.component';
-import { CommandCardComponent } from './components/command-card/command-card.component';
+import { AdminComponent } from './modules/menu/components/admin.component';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { AdminEffects } from './store/admin.effects';
 import { adminFeatureKey, reducer } from './store/admin.reducer';
-import { NgChartsModule } from 'ng2-charts';
+import { menuFeatureKey, reducer as menuReducer } from './modules/menu/store/menu.reducer';
+import { commandsFeatureKey, reducer as commandsReducer } from './modules/commands/store/commands.reducer';
+import { usersFeatureKey, reducer as usersReducer } from './modules/users/store/users.reducer';
+import { statsFeatureKey, reducer as statsReducer } from './modules/stats/store/stats.reducer';
 import { AdminRoutingModule } from './admin-routing.module';
-import { CommandsComponent } from './components/commands/commands.component';
-import { MenuComponent } from './components/menu/menu.component';
-import { NewPastryModalComponent } from 'src/app/modules/admin/components/new-pastry-modal/new-pastry-modal.component';
-import { EditPastryModalComponent } from 'src/app/modules/admin/components/edit-pastry-modal/edit-pastry-modal.component';
-import { PastryFormComponent } from 'src/app/modules/admin/components/pastry-form/pastry-form.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { UsersComponent } from 'src/app/modules/admin/components/users/users.component';
-import { NewUserModalComponent } from 'src/app/modules/admin/components/new-user-modal/new-user-modal.component';
-import { AssociationComponent } from './components/menu/association/association.component';
-import { SequenceComponent } from './components/menu/sequence/sequence.component';
-import { StatsModule } from 'src/app/modules/admin/modules/stats/stats.module';
-import { UsersModule } from 'src/app/modules/admin/modules/users/users.module';
 
 
 @NgModule({
   declarations: [
     AdminComponent,
-    CommandsComponent,
-    CommandCardComponent,
-    MenuComponent,
-    NewPastryModalComponent,
-    EditPastryModalComponent,
-    PastryFormComponent,
-    UsersComponent,
-    NewUserModalComponent,
-    AssociationComponent,
-    SequenceComponent,
   ],
   imports: [
-    UsersModule,
-    StatsModule,
     CommonModule,
-    SharedModule,
-    NgChartsModule,
     AdminRoutingModule,
-    DragDropModule,
     EffectsModule.forFeature([AdminEffects]),
-    StoreModule.forFeature(adminFeatureKey, reducer),
+    StoreModule.forFeature(adminFeatureKey, {
+      ...reducer,
+      [menuFeatureKey]: menuReducer,
+      [commandsFeatureKey]: commandsReducer,
+      [statsFeatureKey]: statsReducer,
+      [usersFeatureKey]: usersReducer,
+    }),
   ],
 })
 export class AdminModule { }

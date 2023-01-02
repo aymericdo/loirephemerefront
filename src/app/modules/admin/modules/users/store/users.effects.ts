@@ -5,17 +5,13 @@ import { EMPTY } from 'rxjs';
 import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { setRestaurant } from 'src/app/modules/home/store/home.actions';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
 import { AppState } from 'src/app/store/app.state';
 import {
   addUser,
   addingUserToRestaurant,
   deleteUser,
   deletingUserToRestaurant,
-  fetchingAllRestaurantPastries,
-  fetchingRestaurant,
   fetchingUsers,
   setUserEmailError,
   setUserNoEmailError,
@@ -25,22 +21,6 @@ import {
 
 @Injectable()
 export class UsersEffects {
-  fetchingRestaurant$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(fetchingRestaurant),
-      mergeMap((action: { code: string }) => {
-        return this.restaurantApiService.getRestaurant(action.code).pipe(
-          switchMap((restaurant) => {
-            return [
-              setRestaurant({ restaurant }),
-              fetchingAllRestaurantPastries({ code: restaurant.code }),
-            ];
-          }),
-        );
-      })
-    )
-  );
-
   fetchingUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchingUsers),
@@ -111,6 +91,5 @@ export class UsersEffects {
     private store$: Store<AppState>,
     private actions$: Actions,
     private adminApiService: AdminApiService,
-    private restaurantApiService: RestaurantApiService,
   ) { }
 }

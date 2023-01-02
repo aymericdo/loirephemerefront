@@ -5,11 +5,10 @@ import { commandsMock } from 'src/app/mocks/commands.mock';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   fetchingAllRestaurantPastries,
-  fetchingRestaurant,
   fetchingRestaurantCommands,
   setAllPastries,
   setCommands,
-  stopStatsLoading,
+  stopLoading,
 } from './stats.actions';
 
 export const statsFeatureKey = 'stats';
@@ -28,7 +27,7 @@ export const statsInitialState: StatsState = {
 
 const statsReducer = createReducer(
   statsInitialState,
-  on(fetchingAllRestaurantPastries, fetchingRestaurant, fetchingRestaurantCommands, (state) => ({
+  on(fetchingAllRestaurantPastries, fetchingRestaurantCommands, (state) => ({
     ...state,
     loading: true,
   })),
@@ -40,7 +39,7 @@ const statsReducer = createReducer(
     ...state,
     commands: [...commands],
   })),
-  on(stopStatsLoading, (state) => ({
+  on(stopLoading, (state) => ({
     ...state,
     loading: false,
   })),

@@ -2,46 +2,43 @@ import { createAction, props } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 
 export const fetchingRestaurantCommands = createAction(
-  '[Admin page] Fetch commands for a restaurant',
+  '[Commands page] Fetch commands for a restaurant',
   props<{ code: string, fromDate: string, toDate: string }>()
 );
 export const setCommands = createAction(
-  '[Admin page] Set commands',
+  '[Commands page] Set commands',
   props<{ commands: Command[] }>()
 );
 export const addCommand = createAction(
-  '[Admin page] Add command',
+  '[Commands page] Add command',
   props<{ command: Command }>()
 );
 export const closingCommand = createAction(
-  '[Admin page] Close command',
+  '[Commands page] Close command',
   props<{ command: Command }>()
 );
 export const payingCommand = createAction(
-  '[Admin page] Payed command',
+  '[Commands page] Payed command',
   props<{ command: Command }>()
 );
 export const editCommand = createAction(
-  '[Admin page] Edit command',
+  '[Commands page] Edit command',
   props<{ command: Command }>()
 );
 export const sendNotificationSub = createAction(
-  '[Admin page] Send notification sub',
+  '[Commands page] Send notification sub',
   props<{ sub: PushSubscription, code: string }>()
 );
 export const removeNotificationSub = createAction(
-  '[Admin page] Remove notification sub',
+  '[Commands page] Remove notification sub',
   props<{ sub: PushSubscription, code: string }>()
 );
 export const notificationSubSent = createAction(
-  '[Admin page] Notification sub sent'
+  '[Commands page] Notification sub sent'
 );
 export const removeNotificationSubSent = createAction(
-  '[Admin page] Remove notification sub sent'
-);
-export const fetchingRestaurant = createAction('[Admin page] Fetch restaurant',
-  props<{ code: string }>()
+  '[Commands page] Remove notification sub sent'
 );
 export const stopLoading = createAction(
-  '[Admin page] Stop loading',
+  '[Commands page] Stop loading',
 );

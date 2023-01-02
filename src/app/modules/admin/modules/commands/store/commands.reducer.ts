@@ -4,10 +4,7 @@ import { commandsMock } from 'src/app/mocks/commands.mock';
 import {
   addCommand,
   editCommand,
-  fetchingAllRestaurantPastries,
-  fetchingRestaurant,
   fetchingRestaurantCommands,
-  setAllPastries,
   setCommands,
   stopLoading,
 } from './commands.actions';
@@ -26,29 +23,18 @@ export const commandsInitialState: CommandsState = {
 
 const adminReducer = createReducer(
   commandsInitialState,
-
-  // Common
-  on(fetchingAllRestaurantPastries, fetchingRestaurant, fetchingRestaurantCommands, (state) => ({
+  on(fetchingRestaurantCommands, (state) => ({
     ...state,
     loading: true,
-    statsLoading: true,
-  })),
-  on(setAllPastries, (state, { pastries }) => ({
-    ...state,
-    allPastries: [...pastries],
-    loading: false,
   })),
   on(setCommands, (state, { commands }) => ({
     ...state,
     commands: [...commands],
-    loading: false,
   })),
   on(stopLoading, (state) => ({
     ...state,
     loading: false,
   })),
-
-  // Command
   on(addCommand, (state, { command }) => ({
     ...state,
     commands: [...state.commands, command],

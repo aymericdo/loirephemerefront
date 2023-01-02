@@ -13,7 +13,7 @@ import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { selectAllPastries, selectIsStatsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
-import { fetchingRestaurantCommands } from 'src/app/modules/admin/modules/stats/store/stats.actions';
+import { fetchingAllRestaurantPastries, fetchingRestaurantCommands } from 'src/app/modules/admin/modules/stats/store/stats.actions';
 
 @Component({
   templateUrl: './stats.component.html',
@@ -105,6 +105,11 @@ export class StatsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const code: string = params.get('code')!;
+      this.store.dispatch(fetchingAllRestaurantPastries({ code: code }));
+    });
+
     this.route.queryParams.subscribe((params) => {
       if (!params['tab']) {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'global' } });

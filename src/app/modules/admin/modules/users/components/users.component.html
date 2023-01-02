@@ -22,7 +22,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of (users$ | async); trackBy: tackById">
+        <tr *ngFor="let user of (users$ | async); trackBy: trackById">
           <td>{{ user.email }}</td>
           <td>{{ user.createdAt | date: "dd/MM/YYYY HH:mm" }}</td>
           <td>

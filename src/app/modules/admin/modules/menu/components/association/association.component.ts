@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { selectAllPastries, selectIsMovingPastry } from 'src/app/modules/admin/store/admin.selectors';
+import { selectAllPastries, selectIsMovingPastry } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { AppState } from 'src/app/store/app.state';
 import { generate, presetPalettes } from '@ant-design/colors';
-import { settingCommonStock } from 'src/app/modules/admin/store/admin.actions';
+import { settingCommonStock } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 
 @Component({
   selector: 'app-association',
@@ -148,7 +148,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
     };
   }
 
-  tackById(_index: any, pastry: Pastry): string {
+  trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
   }
 

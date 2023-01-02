@@ -59,7 +59,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     });
   }
 
-  tackById(_index: any, user: User): string {
+  trackById(_index: any, user: User): string {
     return user.id;
   }
 }

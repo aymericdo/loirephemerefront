@@ -4,22 +4,6 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
 import {
-  addCommand,
-  closingCommand,
-  editCommand,
-  fetchingRestaurantCommands,
-  payingCommand,
-  removeNotificationSub,
-  sendNotificationSub,
-} from 'src/app/modules/admin/store/admin.actions';
-import {
-  selectDeliveredCommands,
-  selectIsLoading,
-  selectOnGoingCommands,
-  selectPayedCommands,
-  selectTotalPayedCommands,
-} from 'src/app/modules/admin/store/admin.selectors';
-import {
   CommandWebSocketService,
   WebSocketData,
 } from 'src/app/modules/admin/services/command-socket.service';
@@ -29,7 +13,9 @@ import { environment } from 'src/environments/environment';
 import { SwPush } from '@angular/service-worker';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { selectIsLoading, selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { selectDeliveredCommands, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
+import { addCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub } from 'src/app/modules/admin/modules/commands/store/commands.actions';
 
 @Component({
   templateUrl: './commands.component.html',
