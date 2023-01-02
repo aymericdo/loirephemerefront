@@ -80,8 +80,8 @@
               <ng-container *ngIf="!captchaToken.length">
                 <ng-hcaptcha
                   (verify)="onVerify($event)"
-                  (expired)="onExpired($event)"
-                  (error)="onError($event)"
+                  (expired)="onExpired()"
+                  (error)="onError()"
                 ></ng-hcaptcha>
               </ng-container>
 
