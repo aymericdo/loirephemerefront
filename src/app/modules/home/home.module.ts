@@ -11,6 +11,7 @@ import { OrderModalComponent } from './components/order-modal/order-modal.compon
 import { OrderNameModalComponent } from './components/order-name-modal/order-name-modal.component';
 import { OrderSuccessModalComponent } from './components/order-success-modal/order-success-modal.component';
 import { OrderErrorModalComponent } from './components/order-error-modal/order-error-modal.component';
+import { Title } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -27,5 +28,8 @@ import { OrderErrorModalComponent } from './components/order-error-modal/order-e
     EffectsModule.forFeature([HomeEffects]),
     StoreModule.forFeature(homeFeatureKey, reducer),
   ],
+  providers: [
+    Title,
+  ]
 })
 export class HomeModule { }

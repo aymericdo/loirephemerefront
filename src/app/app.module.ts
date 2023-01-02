@@ -25,6 +25,9 @@ import { LoginModule } from 'src/app/modules/login/login.module';
 
 registerLocaleData(fr, 'fr');
 
+export const APP_NAME = 'Oresto';
+export const VAPID_PUBLIC_KEY = 'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
+
 const ngZorroConfig: NzConfig = {
   message: { nzMaxStack: 1, nzDuration: 2000 },
 };

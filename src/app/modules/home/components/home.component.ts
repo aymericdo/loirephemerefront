@@ -40,6 +40,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { environment } from 'src/environments/environment';
 import { SwPush } from '@angular/service-worker';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { Title } from '@angular/platform-browser';
+import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
 
 @Component({
   templateUrl: './home.component.html',
@@ -63,9 +65,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private audio!: HTMLAudioElement;
 
-  readonly VAPID_PUBLIC_KEY =
-    'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -74,7 +73,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     private wsService: HomeWebSocketService,
     private notification: NzNotificationService,
-    private swPush: SwPush
+    private swPush: SwPush,
+    private titleService: Title,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.pastries$ = this.store.select(selectPastries);
@@ -93,13 +93,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.subscribeToWS(params.get('code')!);
     });
 
+    this.restaurant$.pipe(
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe((restaurant) => {
+      this.titleService.setTitle(restaurant.name);
+    });
+
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
       .subscribe((command: Command | any) => {
         if (environment.production) {
           this.swPush
             .requestSubscription({
-              serverPublicKey: this.VAPID_PUBLIC_KEY,
+              serverPublicKey: VAPID_PUBLIC_KEY,
             })
             .then((sub) => {
               this.store.dispatch(
@@ -168,6 +175,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.titleService.setTitle(APP_NAME);
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

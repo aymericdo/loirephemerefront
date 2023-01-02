@@ -16,6 +16,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { selectIsLoading, selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { selectDeliveredCommands, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
 import { addCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub } from 'src/app/modules/admin/modules/commands/store/commands.actions';
+import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 
 @Component({
   templateUrl: './commands.component.html',
@@ -34,9 +35,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
   private restaurant: Restaurant = null!;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  readonly VAPID_PUBLIC_KEY =
-    'BKLI0usipFB5k2h5ZqMWF67Ln222rePzgMMWG-ctCgDN4DISjK_sK2PICWF3bjDFbhZTYfLS0Wc8qEqZ5paZvec';
 
   constructor(
     private store: Store<AppState>,
@@ -75,7 +73,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
       if (environment.production) {
         this.swPush
           .requestSubscription({
-            serverPublicKey: this.VAPID_PUBLIC_KEY,
+            serverPublicKey: VAPID_PUBLIC_KEY,
           })
           .then((sub: PushSubscription) => {
             this.sub = sub;
