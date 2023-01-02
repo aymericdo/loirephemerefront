@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from 'src/app/auth/auth-guard.service';
-import { UsersComponent } from 'src/app/modules/admin/components/users/users.component';
-import { CommandsComponent } from './components/commands/commands.component';
 import { MenuComponent } from './components/menu/menu.component';
-import { StatsComponent } from './components/stats/stats.component';
 
 const routes: Routes = [
   {
@@ -21,15 +18,18 @@ const routes: Routes = [
     },
     {
       path: 'commands',
-      component: CommandsComponent,
+      loadChildren: () =>
+        import('./modules/commands/commands.module').then((m) => m.CommandsModule),
     },
     {
       path: 'stats',
-      component: StatsComponent,
+      loadChildren: () =>
+        import('./modules/stats/stats.module').then((m) => m.StatsModule),
     },
     {
       path: 'users',
-      component: UsersComponent,
+      loadChildren: () =>
+        import('./modules/users/users.module').then((m) => m.UsersModule),
     },
   ]},
   { path: '**', redirectTo: '' },

@@ -4,8 +4,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { deletingUserToRestaurant, fetchingUsers } from 'src/app/modules/admin/store/admin.actions';
-import { selectIsLoading, selectUsers } from 'src/app/modules/admin/store/admin.selectors';
+import { deletingUserToRestaurant, fetchingUsers } from 'src/app/modules/admin/modules/users/store/users.actions';
+import { selectIsLoading, selectUsers } from 'src/app/modules/admin/modules/users/store/users.selectors';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
 

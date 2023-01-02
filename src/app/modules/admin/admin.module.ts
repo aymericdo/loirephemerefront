@@ -7,7 +7,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { AdminEffects } from './store/admin.effects';
 import { adminFeatureKey, reducer } from './store/admin.reducer';
-import { StatsComponent } from './components/stats/stats.component';
 import { NgChartsModule } from 'ng2-charts';
 import { AdminRoutingModule } from './admin-routing.module';
 import { CommandsComponent } from './components/commands/commands.component';
@@ -18,17 +17,16 @@ import { PastryFormComponent } from 'src/app/modules/admin/components/pastry-for
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { UsersComponent } from 'src/app/modules/admin/components/users/users.component';
 import { NewUserModalComponent } from 'src/app/modules/admin/components/new-user-modal/new-user-modal.component';
-import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
-import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
 import { AssociationComponent } from './components/menu/association/association.component';
 import { SequenceComponent } from './components/menu/sequence/sequence.component';
+import { StatsModule } from 'src/app/modules/admin/modules/stats/stats.module';
+import { UsersModule } from 'src/app/modules/admin/modules/users/users.module';
 
 
 @NgModule({
   declarations: [
     AdminComponent,
     CommandsComponent,
-    StatsComponent,
     CommandCardComponent,
     MenuComponent,
     NewPastryModalComponent,
@@ -36,12 +34,12 @@ import { SequenceComponent } from './components/menu/sequence/sequence.component
     PastryFormComponent,
     UsersComponent,
     NewUserModalComponent,
-    BarChartComponent,
-    PieChartComponent,
     AssociationComponent,
     SequenceComponent,
   ],
   imports: [
+    UsersModule,
+    StatsModule,
     CommonModule,
     SharedModule,
     NgChartsModule,

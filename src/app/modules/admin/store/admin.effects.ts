@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { EMPTY, pipe } from 'rxjs';
 import { catchError, debounceTime, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { User } from 'src/app/interfaces/user.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
 import { setRestaurant } from '../../home/store/home.actions';
@@ -13,21 +12,16 @@ import { AdminApiService } from '../services/admin-api.service';
 import {
   activatingPastry,
   addPastry,
-  addUser,
-  addingUserToRestaurant,
   closeMenuModal,
   closingCommand,
   deactivatingPastry,
   decrementPastry,
-  deleteUser,
-  deletingUserToRestaurant,
   editCommand,
   editPastry,
   editingPastry,
   fetchingAllRestaurantPastries,
   fetchingRestaurant,
   fetchingRestaurantCommands,
-  fetchingUsers,
   incrementPastry,
   movingPastry,
   notificationSubSent,
@@ -46,13 +40,9 @@ import {
   setCommands,
   setPastryNameError,
   setPastryNoNameError,
-  setUserEmailError,
-  setUserNoEmailError,
-  setUsers,
   settingCommonStock,
-  stopStatsLoading,
+  stopLoading,
   validatingPastryName,
-  validatingUserEmail,
 } from './admin.actions';
 
 @Injectable()
@@ -63,7 +53,7 @@ export class AdminEffects {
       mergeMap((action) => {
         return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate).pipe(
           switchMap((commands) => {
-            return [setCommands({ commands }), stopStatsLoading()];
+            return [setCommands({ commands }), stopLoading()];
           }),
         );
       })
@@ -299,72 +289,6 @@ export class AdminEffects {
           }),
           catchError(() => {
             return [pastryEdited()];
-          })
-        );
-      })
-    )
-  );
-
-  fetchingUsers$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(fetchingUsers),
-      mergeMap((action) => {
-        return this.adminApiService.getAllUsers(action.code).pipe(
-          switchMap((users) => {
-            return [setUsers({ users })];
-          }),
-          catchError(() => {
-            return EMPTY;
-          })
-        );
-      })
-    )
-  );
-
-  validatingUserEmail$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(validatingUserEmail),
-      debounceTime(500),
-      mergeMap((action: { email: string }) => {
-        return this.adminApiService.validateUserEmail(action.email).pipe(
-          switchMap((isValid: boolean) => {
-            if (isValid) {
-              return [setUserNoEmailError()];
-            } else {
-              return [setUserEmailError({ error: true, notExists: true })];
-            }
-          })
-        );
-      })
-    )
-  );
-
-  addingUserToRestaurant$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(addingUserToRestaurant),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
-      ),
-      mergeMap(([action, restaurant]) => {
-        return this.adminApiService.postUserToRestaurant(restaurant.code, action.email).pipe(
-          switchMap((user: User) => {
-            return [addUser({ user })];
-          })
-        );
-      })
-    )
-  );
-
-  deletingUserToRestaurant$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(deletingUserToRestaurant),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
-      ),
-      mergeMap(([action, restaurant]) => {
-        return this.adminApiService.deleteUserToRestaurant(restaurant.code, action.email).pipe(
-          switchMap((isDone: boolean) => {
-            return isDone ? [deleteUser({ userEmail: action.email })] : EMPTY;
           })
         );
       })

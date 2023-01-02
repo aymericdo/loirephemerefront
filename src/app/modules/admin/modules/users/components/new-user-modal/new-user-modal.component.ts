@@ -5,8 +5,8 @@ import { Observable, filter, of, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { addingUserToRestaurant, validatingUserEmail } from 'src/app/modules/admin/store/admin.actions';
-import { selectUserEmailError } from 'src/app/modules/admin/store/admin.selectors';
+import { addingUserToRestaurant, validatingUserEmail } from 'src/app/modules/admin/modules/users/store/users.actions';
+import { selectUserEmailError } from 'src/app/modules/admin/modules/users/store/users.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({

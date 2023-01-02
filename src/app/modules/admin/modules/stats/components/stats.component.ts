@@ -3,12 +3,6 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
-import { fetchingRestaurantCommands } from '../../store/admin.actions';
-import {
-  selectAllPastries,
-  selectIsStatsLoading,
-  selectPayedCommands,
-} from '../../store/admin.selectors';
 import {
   ChartData,
 } from 'chart.js';
@@ -18,6 +12,8 @@ import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interf
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { selectAllPastries, selectIsStatsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
+import { fetchingRestaurantCommands } from 'src/app/modules/admin/modules/stats/store/stats.actions';
 
 @Component({
   templateUrl: './stats.component.html',

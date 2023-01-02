@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
-import { User } from 'src/app/interfaces/user.interface';
 
 export const fetchingAllRestaurantPastries = createAction(
   '[Admin page] Fetch all pastries for a restaurant',
@@ -130,41 +129,6 @@ export const openMenuModal = createAction(
 export const closeMenuModal = createAction(
   '[Admin page] Close menu modal',
 );
-export const fetchingUsers = createAction(
-  '[Admin page] Fetching users',
-  props<{ code: string }>()
-);
-export const setUsers = createAction(
-  '[Admin page] Set users',
-  props<{ users: User[] }>()
-);
-export const addUser = createAction(
-  '[Admin page] Add users',
-  props<{ user: User }>()
-);
-export const deleteUser = createAction(
-  '[Admin page] Delete users',
-  props<{ userEmail: string }>()
-);
-export const validatingUserEmail = createAction(
-  '[Admin page] Validating user email',
-  props<{ email: string }>()
-);
-export const setUserEmailError = createAction(
-  '[Admin page] Set user email error',
-  props<{ error: boolean, notExists: boolean }>()
-);
-export const setUserNoEmailError = createAction(
-  '[Admin page] Set no user email error',
-);
-export const addingUserToRestaurant = createAction(
-  '[Admin page] Adding email to restaurant',
-  props<{ email: string }>()
-);
-export const deletingUserToRestaurant = createAction(
-  '[Admin page] Deleting email to restaurant',
-  props<{ email: string }>()
-);
-export const stopStatsLoading = createAction(
-  '[Admin page] Stop stats loading',
+export const stopLoading = createAction(
+  '[Admin page] Stop loading',
 );

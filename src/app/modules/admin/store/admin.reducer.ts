@@ -1,24 +1,19 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { User } from 'src/app/interfaces/user.interface';
 import { commandsMock } from 'src/app/mocks/commands.mock';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
+import { CommandsState, commandsInitialState } from 'src/app/modules/admin/modules/commands/store/commands.reducer';
+import { StatsState, statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
+import { UsersState, usersInitialState } from 'src/app/modules/admin/modules/users/store/users.reducer';
 import {
-  addCommand,
   addPastry,
-  addUser,
-  addingUserToRestaurant,
   closeMenuModal,
-  deleteUser,
-  deletingUserToRestaurant,
-  editCommand,
   editPastry,
   editingPastry,
   fetchingAllRestaurantPastries,
   fetchingRestaurant,
   fetchingRestaurantCommands,
-  fetchingUsers,
   movingPastry,
   openMenuModal,
   pastryCreated,
@@ -32,21 +27,16 @@ import {
   setPastryNameError,
   setPastryNoNameError,
   setStock,
-  setUserEmailError,
-  setUserNoEmailError,
-  setUsers,
-  stopStatsLoading,
+  stopLoading,
   validatingPastryName,
-  validatingUserEmail,
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
 
 export interface AdminState {
   allPastries: Pastry[];
-  commands: Command[];
+  commandList: Command[];
   loading: boolean;
-  statsLoading: boolean;
   pastryNameError: { error: boolean, duplicated: boolean } | null | undefined;
   pastryNameDeactivated: boolean;
   isNameValidating: boolean;
@@ -54,18 +44,15 @@ export interface AdminState {
   isMovingPastry: boolean;
   editingPastry: Pastry | null;
   menuModalOpened: 'new' | 'edit' | null,
-  users: User[],
-  userEmailError: { error: boolean, notExists: boolean } | null | undefined;
-  isEmailValidating: boolean;
-  isAddingUser: boolean;
-  isDeletingUser: boolean;
+  stats: StatsState;
+  users: UsersState;
+  commands: CommandsState;
 }
 
 export const initialState: AdminState = {
   allPastries: pastriesMock,
-  commands: commandsMock,
+  commandList: commandsMock,
   loading: false,
-  statsLoading: false,
   pastryNameError: undefined,
   pastryNameDeactivated: true,
   isNameValidating: false,
@@ -73,18 +60,17 @@ export const initialState: AdminState = {
   isMovingPastry: false,
   editingPastry: null,
   menuModalOpened: null,
-  users: [],
-  userEmailError: undefined,
-  isEmailValidating: false,
-  isAddingUser: false,
-  isDeletingUser: false,
+
+  users: usersInitialState,
+  stats: statsInitialState,
+  commands: commandsInitialState,
 };
 
 const adminReducer = createReducer(
   initialState,
 
   // Common
-  on(fetchingAllRestaurantPastries, fetchingRestaurant, fetchingRestaurantCommands, fetchingUsers, (state) => ({
+  on(fetchingAllRestaurantPastries, fetchingRestaurant, fetchingRestaurantCommands, (state) => ({
     ...state,
     loading: true,
     statsLoading: true,
@@ -96,29 +82,13 @@ const adminReducer = createReducer(
   })),
   on(setCommands, (state, { commands }) => ({
     ...state,
-    commands: [...commands],
+    commandList: [...commands],
     loading: false,
   })),
-  on(stopStatsLoading, (state) => ({
+  on(stopLoading, (state) => ({
     ...state,
-    statsLoading: false,
+    loading: false,
   })),
-
-  // Command
-  on(addCommand, (state, { command }) => ({
-    ...state,
-    commands: [...state.commands, command],
-  })),
-  on(editCommand, (state, { command }) => {
-    const indexOf = state.commands.findIndex((c) => c.id === command.id);
-    const newList: Command[] = [...state.commands];
-    newList.splice(indexOf, 1, command);
-
-    return {
-      ...state,
-      commands: newList,
-    };
-  }),
 
   // Menu
   on(addPastry, (state, { pastry }) => ({
@@ -216,45 +186,6 @@ const adminReducer = createReducer(
       allPastries: newList,
     };
   }),
-
-  // Users
-  on(setUsers, (state, { users }) => ({
-    ...state,
-    users,
-    loading: false,
-  })),
-  on(validatingUserEmail, (state) => ({
-    ...state,
-    userEmailError: undefined,
-  })),
-  on(setUserEmailError, (state, { error, notExists }) => ({
-    ...state,
-    userEmailError: { error, notExists },
-    isEmailValidating: false,
-  })),
-  on(setUserNoEmailError, (state) => ({
-    ...state,
-    userEmailError: null,
-    isEmailValidating: false,
-  })),
-  on(addingUserToRestaurant, (state) => ({
-    ...state,
-    isAddingUser: true,
-  })),
-  on(deletingUserToRestaurant, (state) => ({
-    ...state,
-    isDeletingUser: true,
-  })),
-  on(addUser, (state, { user }) => ({
-    ...state,
-    isAddingUser: false,
-    users: [...state.users, user],
-  })),
-  on(deleteUser, (state, { userEmail }) => ({
-    ...state,
-    isDeletingUser: false,
-    users: state.users.filter(user => user.email !== userEmail),
-  })),
 );
 
 export function reducer(state: AdminState | undefined, action: Action) {
