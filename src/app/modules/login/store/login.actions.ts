@@ -93,7 +93,7 @@ export const stopLoading = createAction(
 
 export const confirmRecoverEmail = createAction(
   '[Login page] Confirm recover email',
-  props<{ email: string }>()
+  props<{ email: string, captchaToken: string }>()
 );
 
 export const validateRecoverEmailCode = createAction(

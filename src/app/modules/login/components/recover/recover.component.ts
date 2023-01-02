@@ -7,6 +7,7 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { confirmRecoverEmail, validateRecoverEmailCode } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectPasswordChanged, selectRecoverModalOpened } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-recover',
@@ -20,6 +21,8 @@ export class RecoverComponent implements OnInit, OnDestroy {
   passwordChanged$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;
   emailCode!: string;
+
+  captchaToken = (environment.production) ? '' : 'localToken';
 
   SIZE = SIZE;
 
@@ -66,8 +69,13 @@ export class RecoverComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.store.dispatch(confirmRecoverEmail({
+      captchaToken: this.captchaToken,
       email: this.validateForm.value.email,
     }));
+  }
+
+  onVerify(token: string) {
+    this.captchaToken = token;
   }
 
   handleClickConfirm(event: { emailCode: string }): void {

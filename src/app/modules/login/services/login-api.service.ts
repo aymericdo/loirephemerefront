@@ -42,10 +42,10 @@ export class LoginApiService {
     ) as Observable<string>;
   }
 
-  postConfirmRecoverEmailUser(email: string): Observable<string> {
+  postConfirmRecoverEmailUser(email: string, captchaToken: string): Observable<string> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/users/confirm-recover-email`,
-      { email }
+      { email, captchaToken }
     ) as Observable<string>;
   }
 

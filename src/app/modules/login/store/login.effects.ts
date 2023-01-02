@@ -70,8 +70,8 @@ export class LoginEffects {
   confirmRecoverEmail$ = createEffect(() =>
     this.actions$.pipe(
       ofType(confirmRecoverEmail),
-      mergeMap((action: { email: string }) => {
-        return this.loginApiService.postConfirmRecoverEmailUser(action.email).pipe(
+      mergeMap((action: { email: string, captchaToken: string }) => {
+        return this.loginApiService.postConfirmRecoverEmailUser(action.email, action.captchaToken).pipe(
           switchMap((code2: string) => {
             return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
           }),
@@ -139,6 +139,7 @@ export class LoginEffects {
             return [
               setUser({ user: userRes }),
               signInUser({ user: { email: userRes.email, password: user.password } }),
+              openConfirmationModal({ modal: false })
             ];
           }),
           catchError(() => {

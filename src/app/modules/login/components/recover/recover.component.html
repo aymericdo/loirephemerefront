@@ -15,8 +15,14 @@
         <nz-form-control>
           <div nzFlex nz-row nzJustify="end">
             <nz-space nzWrap>
-              <button *nzSpaceItem nz-button [nzLoading]="(isLoading$ | async) === true" nzType="primary"
-                [disabled]="!validateForm.valid">Confirmer</button>
+              <ng-container *ngIf="!captchaToken.length">
+                <ng-hcaptcha (verify)="onVerify($event)"></ng-hcaptcha>
+              </ng-container>
+
+              <ng-container *ngIf="captchaToken.length">
+                <button *nzSpaceItem nz-button [nzLoading]="(isLoading$ | async) === true" nzType="primary"
+                  [disabled]="!validateForm.valid">Confirmer</button>
+              </ng-container>
             </nz-space>
           </div>
         </nz-form-control>
