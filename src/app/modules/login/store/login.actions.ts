@@ -2,12 +2,12 @@ import { createAction, props } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser, User } from 'src/app/interfaces/user.interface';
 
-export const fetchUser = createAction(
-  '[Login page] Fetch User',
+export const fetchingUser = createAction(
+  '[Login page] Fetching User',
 );
 
-export const fetchUserRestaurant = createAction(
-  '[Login page] Fetch user restaurant',
+export const fetchingUserRestaurants = createAction(
+  '[Login page] Fetching user restaurant',
 );
 
 export const setUserRestaurants = createAction(

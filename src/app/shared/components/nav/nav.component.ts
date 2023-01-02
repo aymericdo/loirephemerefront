@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { fetchUser, resetUser } from 'src/app/modules/login/store/login.actions';
+import { fetchingUser, resetUser } from 'src/app/modules/login/store/login.actions';
 import { selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -57,7 +57,7 @@ export class NavComponent implements OnInit, OnDestroy {
       });
 
     if (this.isLoggedIn) {
-      this.store.dispatch(fetchUser());
+      this.store.dispatch(fetchingUser());
     }
   }
 

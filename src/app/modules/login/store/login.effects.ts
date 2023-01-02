@@ -10,7 +10,7 @@ import { RestaurantApiService } from 'src/app/modules/restaurant/services/restau
 import { AppState } from 'src/app/store/app.state';
 import {
   changePassword, confirmEmail, confirmRecoverEmail,
-  createUser, fetchUser, fetchUserRestaurant,
+  createUser, fetchingUser, fetchingUserRestaurants,
   openConfirmationModal, openRecoverModal, setAuthError,
   setCode2, setNewToken, setNoAuthError,
   setPasswordAsChanged, setUser, setUserEmailError,
@@ -22,22 +22,22 @@ import {
 
 @Injectable()
 export class LoginEffects {
-  fetchUser$ = createEffect(() =>
+  fetchingUser$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchUser),
+      ofType(fetchingUser),
       mergeMap(() => {
         return this.loginApiService.getUser().pipe(
           switchMap((user) => {
-            return [setUser({ user }), fetchUserRestaurant()];
+            return [setUser({ user }), fetchingUserRestaurants()];
           })
         );
       })
     )
   );
 
-  fetchUserRestaurant$ = createEffect(() =>
+  fetchingUserRestaurants$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchUserRestaurant),
+      ofType(fetchingUserRestaurants),
       mergeMap(() => {
         return this.restaurantApiService.getUserRestaurants().pipe(
           switchMap((restaurants: Restaurant[]) => {
@@ -153,7 +153,7 @@ export class LoginEffects {
         return this.loginApiService.postAuthLogin(action.user).pipe(
           switchMap((token: { access_token: string }) => {
             localStorage.setItem('access_token', token.access_token);
-            return [setNewToken({ token: token.access_token }), setNoAuthError(), fetchUser()];
+            return [setNewToken({ token: token.access_token }), setNoAuthError(), fetchingUser()];
           }),
           catchError((error) => {
             if (error.status === 401) {

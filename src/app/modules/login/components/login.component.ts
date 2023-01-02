@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
@@ -11,7 +11,7 @@ import { AppState } from 'src/app/store/app.state';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   userRestaurants$!: Observable<Restaurant[] | null>;
   isOnRecover = false;
 
@@ -43,5 +43,10 @@ export class LoginComponent implements OnInit {
       .subscribe(() => {
         this.isOnRecover = this.router.url === '/page/login/recover';
       });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
