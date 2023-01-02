@@ -73,7 +73,7 @@ const loginReducer = createReducer(
   })),
   on(setCode2, (state, { code2 }) => ({
     ...state,
-    code2,
+    code2: code2.toString(),
   })),
   on(openConfirmationModal, (state, { modal }) => ({
     ...state,
