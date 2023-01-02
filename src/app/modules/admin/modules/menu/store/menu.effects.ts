@@ -179,7 +179,7 @@ export class MenuEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.putEditCommonStockPastry(restaurant.code, action.pastries, action.commonStock).pipe(
           switchMap((pastries: Pastry[]) => {
-            return [stopLoading(), setAllPastries({ pastries })];
+            return [setAllPastries({ pastries }), stopLoading()];
           }),
           catchError(() => {
             return [pastryEdited()];

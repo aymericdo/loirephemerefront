@@ -35,10 +35,10 @@ export class LoginApiService {
     ) as Observable<User>;
   }
 
-  postConfirmEmailUser(email: string): Observable<string> {
+  postConfirmEmailUser(email: string, captchaToken: string): Observable<string> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/users/confirm-email`,
-      { email }
+      { email, captchaToken }
     ) as Observable<string>;
   }
 

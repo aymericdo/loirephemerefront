@@ -31,7 +31,7 @@ export class StatsEffects {
       mergeMap((action) => {
         return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate).pipe(
           switchMap((commands) => {
-            return [stopLoading(), setCommands({ commands })];
+            return [setCommands({ commands }), stopLoading()];
           }),
         );
       })

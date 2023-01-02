@@ -41,8 +41,11 @@ export class LoginEffects {
       mergeMap(() => {
         return this.restaurantApiService.getUserRestaurants().pipe(
           switchMap((restaurants: Restaurant[]) => {
-            return [stopLoading(), setUserRestaurants({ restaurants })];
-          })
+            return [setUserRestaurants({ restaurants }), stopLoading()];
+          }),
+          catchError(() => {
+            return [stopLoading()];
+          }),
         );
       })
     )
@@ -51,10 +54,10 @@ export class LoginEffects {
   confirmEmail$ = createEffect(() =>
     this.actions$.pipe(
       ofType(confirmEmail),
-      mergeMap((action: { email: string }) => {
-        return this.loginApiService.postConfirmEmailUser(action.email).pipe(
+      mergeMap((action: { email: string, captchaToken: string }) => {
+        return this.loginApiService.postConfirmEmailUser(action.email, action.captchaToken).pipe(
           switchMap((code2: string) => {
-            return [stopLoading(), setCode2({ code2 }), openConfirmationModal({ modal: true })];
+            return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
           }),
           catchError(() => {
             return [stopLoading()];
@@ -70,7 +73,7 @@ export class LoginEffects {
       mergeMap((action: { email: string }) => {
         return this.loginApiService.postConfirmRecoverEmailUser(action.email).pipe(
           switchMap((code2: string) => {
-            return [stopLoading(), setCode2({ code2 }), openConfirmationModal({ modal: true })];
+            return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
           }),
           catchError(() => {
             return [stopLoading()];
@@ -90,7 +93,7 @@ export class LoginEffects {
         return this.loginApiService.postValidateRecoverEmailCode(email, emailCode, code2!).pipe(
           switchMap((isValid: boolean) => {
             if (isValid) {
-              return [stopLoading(), openConfirmationModal({ modal: false }), openRecoverModal({ modal: true })];
+              return [openConfirmationModal({ modal: false }), openRecoverModal({ modal: true }), stopLoading()];
             } else {
               return [stopLoading()];
             }
@@ -112,7 +115,7 @@ export class LoginEffects {
         return this.loginApiService.postChangePassword(email, password, emailCode, code2!).pipe(
           switchMap((isValid: boolean) => {
             if (isValid) {
-              return [stopLoading(), openRecoverModal({ modal: false }), setPasswordAsChanged({ changed: true })];
+              return [openRecoverModal({ modal: false }), setPasswordAsChanged({ changed: true }), stopLoading()];
             } else {
               return [stopLoading()];
             }
@@ -158,7 +161,7 @@ export class LoginEffects {
           catchError((error) => {
             if (error.status === 401) {
               localStorage.removeItem('access_token');
-              return [stopLoading(), setAuthError({ error: true })];
+              return [setAuthError({ error: true }), stopLoading()];
             }
 
             return [stopLoading()];

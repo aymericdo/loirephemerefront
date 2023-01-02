@@ -59,7 +59,7 @@ export const createUser = createAction(
 
 export const confirmEmail = createAction(
   '[Login page] Confirm an email of a new user',
-  props<{ email: string }>()
+  props<{ email: string, captchaToken: string }>()
 );
 
 export const setCode2 = createAction(

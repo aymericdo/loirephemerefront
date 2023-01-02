@@ -7,6 +7,7 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +21,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   userEmailError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   passwordVisible = false;
   confirmationModalVisible = false;
+
+  captchaToken = (environment.production) ? '' : 'localToken';
 
   SIZE = SIZE;
 
@@ -61,6 +64,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.store.dispatch(confirmEmail({
+      captchaToken: this.captchaToken,
       email: this.validateForm.value.email,
     }));
   }
@@ -84,6 +88,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.validateForm.controls[key].updateValueAndValidity();
       }
     }
+  }
+
+  onVerify(token: string) {
+    this.captchaToken = token;
   }
 
   private userEmailAsyncValidator = (control: UntypedFormControl) => {

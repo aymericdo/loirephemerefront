@@ -77,10 +77,16 @@
         <nz-form-control>
           <div nz-row nzJustify="end">
             <nz-space nzWrap>
-              <button *nzSpaceItem nz-button (click)="resetForm($event)"
-                [disabled]="(isLoading$ | async) === true">Effacer</button>
-              <button *nzSpaceItem nz-button nzType="primary" [disabled]="!validateForm.valid"
-                [nzLoading]="(isLoading$ | async) === true">Créer le compte</button>
+              <ng-container *ngIf="!captchaToken.length">
+                <ng-hcaptcha (verify)="onVerify($event)"></ng-hcaptcha>
+              </ng-container>
+
+              <ng-container *ngIf="captchaToken.length">
+                <button *nzSpaceItem nz-button (click)="resetForm($event)"
+                  [disabled]="(isLoading$ | async) === true">Effacer</button>
+                <button *nzSpaceItem nz-button nzType="primary" [disabled]="!validateForm.valid"
+                  [nzLoading]="(isLoading$ | async) === true">Créer le compte</button>
+              </ng-container>
             </nz-space>
           </div>
         </nz-form-control>

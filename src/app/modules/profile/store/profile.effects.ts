@@ -15,13 +15,13 @@ export class ProfileEffects {
       mergeMap(({ oldPassword, password }) => {
         return this.profileApiService.postChangePassword(oldPassword, password).pipe(
           switchMap((changed: boolean) => {
-            return [stopLoading(), setPasswordAsChanged({ changed })];
+            return [setPasswordAsChanged({ changed }), stopLoading()];
           }),
           catchError((error) => {
             if (error.code === 'old-password-not-ok') {
-              return [stopLoading(), setChangePasswordError({ error: true }), setPasswordAsChanged({ changed: false })];
+              return [setChangePasswordError({ error: true }), setPasswordAsChanged({ changed: false }), stopLoading()];
             } else {
-              return [stopLoading(), setPasswordAsChanged({ changed: false })];
+              return [setPasswordAsChanged({ changed: false }), stopLoading()];
             }
           })
         );
