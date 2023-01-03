@@ -5,9 +5,12 @@ import {
   addingUserToRestaurant,
   deleteUser,
   deletingUserToRestaurant,
+  fetchingUsers,
   setUserEmailError,
   setUserNoEmailError,
   setUsers,
+  startLoading,
+  stopLoading,
   validatingUserEmail,
 } from 'src/app/modules/admin/modules/users/store/users.actions';
 
@@ -33,9 +36,17 @@ export const usersInitialState: UsersState = {
 
 const usersReducer = createReducer(
   usersInitialState,
+  on(fetchingUsers, startLoading, (state) => ({
+    ...state,
+    loading: true,
+    users: [],
+  })),
   on(setUsers, (state, { users }) => ({
     ...state,
     users,
+  })),
+  on(stopLoading, (state) => ({
+    ...state,
     loading: false,
   })),
   on(validatingUserEmail, (state) => ({

@@ -22,6 +22,7 @@ import {
   setPastries,
   setPersonalCommand,
   setRestaurant,
+  stopLoading,
 } from './home.actions';
 import { selectPastries, selectRestaurant, selectSelectedPastries } from './home.selectors';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
@@ -35,7 +36,7 @@ export class HomeEffects {
       ofType(fetchRestaurantPastries),
       mergeMap((action) => {
         return this.homeApiService.getPastries(action.code).pipe(
-          map((pastries) => setPastries({ pastries })),
+          switchMap((pastries) => [setPastries({ pastries }), stopLoading()]),
           catchError(() => EMPTY)
         );
       })

@@ -36,3 +36,9 @@ export const deletingUserToRestaurant = createAction(
   '[Users page] Deleting email to restaurant',
   props<{ email: string }>()
 );
+export const stopLoading = createAction(
+  '[Users page] Stop loading',
+);
+export const startLoading = createAction(
+  '[Users page] Start loading',
+);

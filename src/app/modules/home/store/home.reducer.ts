@@ -15,6 +15,8 @@ import {
   setPersonalCommand,
   setRestaurant,
   setStock,
+  startLoading,
+  stopLoading,
 } from './home.actions';
 
 export const homeFeatureKey = 'home';
@@ -29,7 +31,7 @@ export interface HomeState {
 }
 
 export const initialState: HomeState = {
-  pastries: pastriesMock,
+  pastries: [...pastriesMock],
   selectedPastries: {},
   personalCommand: null,
   errorCommand: null,
@@ -39,13 +41,17 @@ export const initialState: HomeState = {
 
 const homeReducer = createReducer(
   initialState,
-  on(fetchingRestaurant, fetchRestaurantPastries, (state) => ({
+  on(startLoading, fetchingRestaurant, fetchRestaurantPastries, (state) => ({
     ...state,
     loading: true,
+    pastries: [...pastriesMock],
   })),
   on(setPastries, (state, { pastries }) => ({
     ...state,
     pastries: [...pastries],
+  })),
+  on(stopLoading, (state) => ({
+    ...state,
     loading: false,
   })),
   on(setStock, (state, { pastryId, newStock }) => {

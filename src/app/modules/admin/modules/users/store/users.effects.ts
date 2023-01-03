@@ -16,6 +16,7 @@ import {
   setUserEmailError,
   setUserNoEmailError,
   setUsers,
+  stopLoading,
   validatingUserEmail,
 } from './users.actions';
 
@@ -27,7 +28,7 @@ export class UsersEffects {
       mergeMap((action) => {
         return this.adminApiService.getAllUsers(action.code).pipe(
           switchMap((users) => {
-            return [setUsers({ users })];
+            return [setUsers({ users }), stopLoading()];
           }),
           catchError(() => {
             return EMPTY;

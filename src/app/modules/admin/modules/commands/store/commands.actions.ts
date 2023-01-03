@@ -42,3 +42,6 @@ export const removeNotificationSubSent = createAction(
 export const stopLoading = createAction(
   '[Commands page] Stop loading',
 );
+export const startLoading = createAction(
+  '[Commands page] Start loading',
+);

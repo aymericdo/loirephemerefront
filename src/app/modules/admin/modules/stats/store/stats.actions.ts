@@ -21,3 +21,6 @@ export const setCommands = createAction(
 export const stopLoading = createAction(
   '[Stats page] Stop stats loading',
 );
+export const startLoading = createAction(
+  '[Stats page] Start stats loading',
+);

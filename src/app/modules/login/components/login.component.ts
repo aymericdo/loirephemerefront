@@ -3,6 +3,7 @@ import { ActivationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { stopLoading } from 'src/app/modules/login/store/login.actions';
 import { selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -46,6 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.store.dispatch(stopLoading());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

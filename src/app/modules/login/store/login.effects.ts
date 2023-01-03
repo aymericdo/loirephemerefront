@@ -41,7 +41,7 @@ export class LoginEffects {
       mergeMap(() => {
         return this.restaurantApiService.getUserRestaurants().pipe(
           switchMap((restaurants: Restaurant[]) => {
-            return [setUserRestaurants({ restaurants }), stopLoading()];
+            return [setUserRestaurants({ restaurants })];
           }),
           catchError(() => {
             return [stopLoading()];

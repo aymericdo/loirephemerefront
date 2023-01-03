@@ -8,6 +8,7 @@ import {
   fetchingRestaurantCommands,
   setAllPastries,
   setCommands,
+  startLoading,
   stopLoading,
 } from './stats.actions';
 
@@ -20,16 +21,18 @@ export interface StatsState {
 }
 
 export const statsInitialState: StatsState = {
-  allPastries: pastriesMock,
-  commands: commandsMock,
+  allPastries: [...pastriesMock],
+  commands: [...commandsMock],
   loading: false,
 };
 
 const statsReducer = createReducer(
   statsInitialState,
-  on(fetchingAllRestaurantPastries, fetchingRestaurantCommands, (state) => ({
+  on(startLoading, fetchingAllRestaurantPastries, fetchingRestaurantCommands, (state) => ({
     ...state,
     loading: true,
+    allPastries: [...pastriesMock],
+    commands: [...commandsMock],
   })),
   on(setAllPastries, (state, { pastries }) => ({
     ...state,

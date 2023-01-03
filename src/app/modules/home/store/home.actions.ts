@@ -50,3 +50,10 @@ export const setRestaurant = createAction(
   '[Home page] Set restaurant',
   props<{ restaurant: Restaurant }>()
 );
+export const stopLoading = createAction(
+  '[Home page] Stop loading',
+);
+export const startLoading = createAction(
+  '[Home page] Start loading',
+);
+

@@ -13,9 +13,9 @@ import { environment } from 'src/environments/environment';
 import { SwPush } from '@angular/service-worker';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { selectIsLoading, selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { selectDeliveredCommands, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
-import { addCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub } from 'src/app/modules/admin/modules/commands/store/commands.actions';
+import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { selectDeliveredCommands, selectIsLoading, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
+import { addCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
 import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 
 @Component({
@@ -53,6 +53,8 @@ export class CommandsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(startLoading());
+
     this.route.paramMap.subscribe(params => {
       this.subscribeToWS(params.get('code')!);
     });

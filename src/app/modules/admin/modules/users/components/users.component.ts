@@ -4,7 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { deletingUserToRestaurant, fetchingUsers } from 'src/app/modules/admin/modules/users/store/users.actions';
+import { deletingUserToRestaurant, fetchingUsers, startLoading } from 'src/app/modules/admin/modules/users/store/users.actions';
 import { selectIsLoading, selectUsers } from 'src/app/modules/admin/modules/users/store/users.selectors';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -33,6 +33,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(startLoading());
+
     this.restaurant$.pipe(
       filter(Boolean),
       takeUntil(this.destroyed$),

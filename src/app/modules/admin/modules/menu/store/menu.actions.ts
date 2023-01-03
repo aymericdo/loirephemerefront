@@ -91,3 +91,6 @@ export const closeMenuModal = createAction(
 export const stopLoading = createAction(
   '[Menu page] Stop loading',
 );
+export const startLoading = createAction(
+  '[Menu page] Start loading',
+);

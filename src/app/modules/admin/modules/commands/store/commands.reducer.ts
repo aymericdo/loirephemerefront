@@ -6,6 +6,7 @@ import {
   editCommand,
   fetchingRestaurantCommands,
   setCommands,
+  startLoading,
   stopLoading,
 } from './commands.actions';
 
@@ -17,15 +18,16 @@ export interface CommandsState {
 }
 
 export const commandsInitialState: CommandsState = {
-  commands: commandsMock,
+  commands: [...commandsMock],
   loading: false,
 };
 
 const adminReducer = createReducer(
   commandsInitialState,
-  on(fetchingRestaurantCommands, (state) => ({
+  on(startLoading, fetchingRestaurantCommands, (state) => ({
     ...state,
     loading: true,
+    commands: [...commandsMock],
   })),
   on(setCommands, (state, { commands }) => ({
     ...state,

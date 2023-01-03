@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock } from 'src/app/modules/admin/modules/menu/store/menu.actions';
+import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock, startLoading } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
@@ -42,6 +42,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(startLoading());
+
     this.route.paramMap.subscribe(params => {
       const code: string = params.get('code')!;
       this.subscribeToWS(code);

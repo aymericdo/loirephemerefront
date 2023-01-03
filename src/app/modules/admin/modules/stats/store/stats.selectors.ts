@@ -16,7 +16,7 @@ export const selectPayedCommands = createSelector(
       })
 );
 
-export const selectIsStatsLoading = createSelector(
+export const selectIsLoading = createSelector(
   selectFeature,
   (state: StatsState) => state.loading
 );

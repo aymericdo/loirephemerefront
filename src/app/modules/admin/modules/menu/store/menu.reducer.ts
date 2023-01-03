@@ -19,6 +19,7 @@ import {
   setPastryNameError,
   setPastryNoNameError,
   setStock,
+  startLoading,
   stopLoading,
   validatingPastryName,
 } from './menu.actions';
@@ -38,7 +39,7 @@ export interface MenuState {
 }
 
 export const menuInitialState: MenuState = {
-  allPastries: pastriesMock,
+  allPastries: [...pastriesMock],
   loading: false,
   pastryNameError: undefined,
   pastryNameDeactivated: true,
@@ -51,9 +52,10 @@ export const menuInitialState: MenuState = {
 
 const menuReducer = createReducer(
   menuInitialState,
-  on(fetchingAllRestaurantPastries, (state) => ({
+  on(startLoading, fetchingAllRestaurantPastries, (state) => ({
     ...state,
     loading: true,
+    allPastries: [...pastriesMock],
   })),
   on(setAllPastries, (state, { pastries }) => ({
     ...state,
