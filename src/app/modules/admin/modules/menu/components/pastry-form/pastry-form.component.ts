@@ -18,6 +18,7 @@ import { AppState } from 'src/app/store/app.state';
 export class PastryFormComponent implements OnInit {
   @Input() restaurant: Restaurant = null!;
   @Input() validateForm: UntypedFormGroup = null!;
+  @Input() isEditing = false;
 
   restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   ingredientsInputVisible = false;

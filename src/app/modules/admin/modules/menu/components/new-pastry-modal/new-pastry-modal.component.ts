@@ -30,11 +30,11 @@ export class NewPastryModalComponent implements OnInit {
     this.validateForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.pastryNameAsyncValidator]],
       description: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.LARGE)]],
-      price: [0, [Validators.required, Validators.minLength(0)]],
+      price: [0, [Validators.required, Validators.min(0), Validators.minLength(0)]],
       ingredients: [[], [Validators.maxLength(SIZE.MEDIUM)]],
-      stock: [null, [Validators.minLength(0)]],
+      stock: [null, [Validators.min(0), Validators.minLength(0)]],
       hidden: [false, [Validators.required]],
-      displaySequence: [null, [Validators.minLength(0)]],
+      displaySequence: [null, [Validators.min(0), Validators.minLength(0)]],
       imageUrl: [null, [Validators.minLength(SIZE.MIN)]],
       type: ['pastry', [Validators.required]],
     });

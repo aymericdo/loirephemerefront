@@ -16,6 +16,10 @@
       <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
     </ng-template>
   </nz-list-item>
+
+  <div *ngIf="isMoving$ | async" class="loading">
+    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+  </div>
 </nz-list>
 
 <button class="information" nz-button nz-popover nzType="primary" nzSize="large" nzShape="circle"

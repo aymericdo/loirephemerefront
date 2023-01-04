@@ -84,7 +84,7 @@
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
+  <nz-form-item *ngIf="isEditing">
     <nz-form-label [nzSm]="8" [nzXs]="24">Séquence</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-input-number formControlName="displaySequence" [nzStep]="1" [nzMin]="0"></nz-input-number>

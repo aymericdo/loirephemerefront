@@ -44,11 +44,11 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
       description: [
         this.pastry.description,
         [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.LARGE)]],
-      price: [this.pastry.price, [Validators.required, Validators.minLength(0)]],
+      price: [this.pastry.price, [Validators.required, Validators.min(0), Validators.minLength(0)]],
       ingredients: [this.pastry.ingredients, [Validators.maxLength(SIZE.MEDIUM)]],
-      stock: [this.pastry.stock, [Validators.minLength(0)]],
+      stock: [this.pastry.stock, [Validators.min(0), Validators.minLength(0)]],
       hidden: [this.pastry.hidden, [Validators.required]],
-      displaySequence: [this.pastry.displaySequence, [Validators.minLength(0)]],
+      displaySequence: [this.pastry.displaySequence, [Validators.required, Validators.min(0), Validators.minLength(0)]],
       imageUrl: [this.pastry.imageUrl, [Validators.minLength(SIZE.MIN)]],
       type: [this.pastry.type, [Validators.required]],
     });

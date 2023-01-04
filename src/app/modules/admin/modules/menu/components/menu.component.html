@@ -2,7 +2,7 @@
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
     <nz-page-header-extra>
-      <div class="actions-btn">
+      <div *ngIf="(isLoading$ | async) === false" class="actions-btn">
         <nz-space nzAlign="center">
           <ng-container *ngIf="!isInSequenceMode && !isInAssociationMode">
             <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
