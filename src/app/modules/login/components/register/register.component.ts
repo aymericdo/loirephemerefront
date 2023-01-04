@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, of, take, takeUntil } from 'rxjs';
+import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
 import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
@@ -25,6 +26,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   captchaToken = (environment.production) ? '' : 'localToken';
 
   SIZE = SIZE;
+  PASSWORD_SPECIALS_CHARS = PASSWORD_SPECIALS_CHARS;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -113,15 +115,25 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   private passwordValidator = (control: UntypedFormControl) => {
     const error = this.validateForm.value.confirmPassword &&
-      control.value &&
-      control.value !== this.validateForm.value.confirmPassword;
-    return of(error ? { passwordDifferentToConfirmPasswordValidator: true } : {});
+    control.value &&
+    control.value !== this.validateForm.value.confirmPassword;
+    if (error) {
+      return of({ passwordDifferentToConfirmPasswordValidator: true });
+    } else {
+      this.validateForm.controls.confirmPassword.setErrors(null);
+      return of({});
+    }
   };
 
   private confirmPasswordValidator = (control: UntypedFormControl) => {
     const error = this.validateForm.value.password &&
       control.value &&
       control.value !== this.validateForm.value.password;
-    return of(error ? { passwordDifferentToConfirmPasswordValidator: true } : {});
+      if (error) {
+        return of({ passwordDifferentToConfirmPasswordValidator: true });
+      } else {
+        this.validateForm.controls.password.setErrors(null);
+        return of({});
+      }
   };
 }

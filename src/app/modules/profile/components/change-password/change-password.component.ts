@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, of, takeUntil } from 'rxjs';
+import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
 import { selectConfirmationModalOpened, selectLoading } from 'src/app/modules/login/store/login.selectors';
@@ -25,6 +26,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   confirmationModalVisible = false;
 
   SIZE = SIZE;
+  PASSWORD_SPECIALS_CHARS = PASSWORD_SPECIALS_CHARS;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
@@ -63,7 +65,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
         if (changePasswordError) {
           this.validateForm.controls.password.setErrors(changePasswordError);
         } else {
-          this.validateForm.controls.password.setErrors({});
+          this.validateForm.controls.password.setErrors(null);
         }
       });
 
@@ -109,15 +111,25 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
   private passwordValidator = (control: UntypedFormControl) => {
     const error = this.validateForm.value.confirmPassword &&
-      control.value &&
-      control.value !== this.validateForm.value.confirmPassword;
-    return of(error ? { passwordDifferentToConfirmPasswordValidator: true } : {});
+    control.value &&
+    control.value !== this.validateForm.value.confirmPassword;
+    if (error) {
+      return of({ passwordDifferentToConfirmPasswordValidator: true });
+    } else {
+      this.validateForm.controls.confirmPassword.setErrors(null);
+      return of({});
+    }
   };
 
   private confirmPasswordValidator = (control: UntypedFormControl) => {
     const error = this.validateForm.value.password &&
       control.value &&
       control.value !== this.validateForm.value.password;
-    return of(error ? { passwordDifferentToConfirmPasswordValidator: true } : {});
+      if (error) {
+        return of({ passwordDifferentToConfirmPasswordValidator: true });
+      } else {
+        this.validateForm.controls.password.setErrors(null);
+        return of({});
+      }
   };
 }

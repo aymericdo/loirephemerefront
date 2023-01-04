@@ -1,3 +1,4 @@
 export const REGEX = {
-  PASSWORD: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-])./
+  // PASSWORD_SPECIALS_CHARS
+  PASSWORD: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$+!%*#?&^_-])./
 };

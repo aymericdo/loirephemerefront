@@ -57,7 +57,7 @@ export class SignInComponent implements OnInit, OnDestroy {
         if (authError) {
           this.validateForm.controls.password.setErrors(authError);
         } else {
-          this.validateForm.controls.password.setErrors({});
+          this.validateForm.controls.password.setErrors(null);
         }
       });
 
