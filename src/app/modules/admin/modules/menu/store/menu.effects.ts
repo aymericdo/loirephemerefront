@@ -177,7 +177,11 @@ export class MenuEffects {
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
-        return this.adminApiService.putEditCommonStockPastry(restaurant.code, action.pastries, action.commonStock).pipe(
+        return this.adminApiService.putEditCommonStockPastry(
+          restaurant.code,
+          action.pastries.map((p: Pastry) => p.id),
+          action.commonStock
+        ).pipe(
           switchMap((pastries: Pastry[]) => {
             return [setAllPastries({ pastries }), stopLoading()];
           }),

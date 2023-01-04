@@ -53,10 +53,10 @@ export class AdminApiService {
     ) as Observable<{ pastry: Pastry, displaySequenceById: { [pastryId: string]: number } }>;
   }
 
-  putEditCommonStockPastry(code: string, pastries: CorePastry[], commonStock: string): Observable<Pastry[]> {
+  putEditCommonStockPastry(code: string, pastryIds: string[], commonStock: string): Observable<Pastry[]> {
     return this.http.put(
       `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/common-stock`, {
-        pastries,
+        pastryIds,
         commonStock,
       }
     ) as Observable<Pastry[]>;
