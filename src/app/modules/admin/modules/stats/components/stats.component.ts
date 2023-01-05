@@ -6,12 +6,12 @@ import { AppState } from 'src/app/store/app.state';
 import {
   ChartData,
 } from 'chart.js';
-import { filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { selectAllPastries, selectIsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
 import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
 
@@ -89,6 +89,8 @@ export class StatsComponent implements OnInit, OnDestroy {
   currentYear: string = new Date().getFullYear().toString();
   currentRestaurant: Restaurant | null = null;
 
+  dateRange: Date[] | null = null;
+
   private statsAttributes = ['price', 'type'];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -133,18 +135,28 @@ export class StatsComponent implements OnInit, OnDestroy {
       this.currentRestaurant = restaurant;
     });
 
-    this.restaurant$.pipe(
+    const yearParam$ = this.route.queryParamMap.pipe(
+      map((params: ParamMap) => params.get('year')),
       filter(Boolean),
-      withLatestFrom(
-        this.route.queryParams.pipe(
-          map((v) => v['year']),
-          filter(Boolean),
-        ),
-      ),
-      takeUntil(this.destroyed$),
-    ).subscribe(([_restaurant, year]) => {
+    );
+
+    combineLatest([yearParam$, this.restaurant$.pipe(filter(Boolean))])
+    .pipe(take(1))
+    .subscribe(([year]) => {
       this.currentYear = year;
-      this.currentYearChange();
+      this.currentYearChange(false);
+    });
+
+    const rangeDateParam$ = this.route.queryParamMap.pipe(
+      filter((params: ParamMap) => !!params.get('start-date') && !!params.get('end-date')),
+      map((params: ParamMap) => [params.get('start-date') as string, params.get('end-date') as string]),
+    );
+
+    combineLatest([rangeDateParam$, this.restaurant$.pipe(filter(Boolean))])
+    .pipe(take(1))
+    .subscribe(([[startDate, endDate]]) => {
+      this.dateRange = [new Date(startDate), new Date(endDate)];
+      this.onDateRangeChange();
     });
 
     combineLatest([this.payedCommands$, this.pastries$])
@@ -194,25 +206,46 @@ export class StatsComponent implements OnInit, OnDestroy {
           this.buildGlobalBarChartData(pastriesByTypeByDate, cashByDate);
           this.setTotalByType(countByTypeByPastry);
         }
-
-        console.log(this.pastriesByTypeByDatePieChartData.drink);
       });
   }
 
-  currentYearChange() {
+  onDateRangeChange(): void {
+    if (this.dateRange) {
+      const fromDateNow = this.dateRange[0];
+      const fromDate: string = fromDateNow.toISOString();
+
+      this.currentYear = fromDateNow.getFullYear().toString();
+
+      const toDateNow = this.dateRange[1];
+      const toDate: string = toDateNow.toISOString();
+
+      this.fetchData(fromDate, toDate);
+      this.router.navigate([], { relativeTo: this.route, queryParams: { 'start-date': fromDate, 'end-date': toDate, year: this.currentYear }, queryParamsHandling: 'merge' });
+    }
+  }
+
+  currentYearChange(fetching = true) {
     const fromDateNow = new Date(+this.currentYear, 0, 1);
     const fromDate: string = fromDateNow.toISOString();
 
     const toDateNow = new Date(+this.currentYear, 12, 1);
     const toDate: string = toDateNow.toISOString();
 
-    this.store.dispatch(fetchingRestaurantCommands({ code: this.currentRestaurant?.code!, fromDate, toDate }));
-    this.router.navigate([], { relativeTo: this.route, queryParams: { year: this.currentYear }, queryParamsHandling: 'merge' });
+    this.dateRange = [fromDateNow, toDateNow];
+
+    if (fetching) {
+      this.fetchData(fromDate, toDate);
+    }
+    this.router.navigate([], { relativeTo: this.route, queryParams: { 'start-date': fromDate, 'end-date': toDate, year: this.currentYear }, queryParamsHandling: 'merge' });
   }
 
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private fetchData(fromDate: string, toDate: string): void {
+    this.store.dispatch(fetchingRestaurantCommands({ code: this.currentRestaurant?.code!, fromDate, toDate }));
   }
 
   private checkHistoricalPastry(pastry: Pastry, command: Command): Pastry {

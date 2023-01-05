@@ -4,10 +4,10 @@
   </nz-page-header>
   <div class="container-section">
     <div class="year-selector">
-      <nz-select [(ngModel)]="currentYear" (ngModelChange)="currentYearChange()" nzPlaceHolder="Choisissez l'année"
-        style="width: 50%">
-        <nz-option *ngFor="let year of years" [nzValue]="year" [nzLabel]="year"></nz-option>
-      </nz-select>
+      <nz-select [(ngModel)]="currentYear" (ngModelChange)="currentYearChange()" nzPlaceHolder="Choisissez l'année">
+      <nz-option *ngFor="let year of years" [nzValue]="year" [nzLabel]="year"></nz-option>
+    </nz-select>
+    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onDateRangeChange()"></nz-range-picker>
     </div>
 
     <div *ngIf="(isLoading$ | async) === false && totallyEmpty" class="row">
