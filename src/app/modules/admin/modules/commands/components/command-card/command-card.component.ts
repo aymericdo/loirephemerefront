@@ -31,7 +31,6 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   @Output() clickWizz = new EventEmitter<string>();
 
   pastries: [Pastry, number][] = [];
-  totalPrice = 0;
 
   isNew = false;
   isJustUpdated = false;
@@ -56,11 +55,6 @@ export class CommandCardComponent implements OnInit, OnDestroy {
       pastriesGroupedBy[pastryId][0],
       pastriesGroupedBy[pastryId][1],
     ]);
-
-    this.totalPrice = this.pastries.reduce(
-      (prev, p) => prev + p[0].price * p[1],
-      0
-    );
 
     this.setIsNew();
     this.setIsJustUpdated();

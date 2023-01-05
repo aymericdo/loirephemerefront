@@ -156,6 +156,10 @@ export class CommandsComponent implements OnInit, OnDestroy {
             this.store.dispatch(
               editCommand({ command: data.closeCommand as Command })
             );
+          } else if (data.hasOwnProperty('payedCommand')) {
+            this.store.dispatch(
+              editCommand({ command: data.payedCommand as Command })
+            );
           }
         },
         error: (err) => {

@@ -3,7 +3,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { Command } from 'src/app/interfaces/command.interface';
 import { environment } from 'src/environments/environment';
 
-const webSocketDataKey = ['addCommand', 'closeCommand'];
+const webSocketDataKey = ['addCommand', 'closeCommand', 'payedCommand'];
 const SOCKET_IS_OPEN = 1;
 
 export type WebSocketData = {

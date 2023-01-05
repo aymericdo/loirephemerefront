@@ -21,7 +21,7 @@
     </nz-space>
   </ng-container>
   <ng-container *nzModalFooter>
-    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="!currentFirstName.length">
+    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="!currentFirstName.length || currentFirstName.length < 4">
       Envoyer
     </button>
   </ng-container>

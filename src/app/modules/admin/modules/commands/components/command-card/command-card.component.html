@@ -12,7 +12,7 @@
           {{ pastryObj[0].name + " (x" + pastryObj[1] + ")" }}
         </li>
       </ul>
-      <p>Prix total : {{ totalPrice }}€</p>
+      <p>Prix total : {{ command.totalPrice }}€</p>
       <p>Créer le : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
     </nz-skeleton>
   </nz-card>
