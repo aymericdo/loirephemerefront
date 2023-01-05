@@ -6,7 +6,7 @@ import { AppState } from 'src/app/store/app.state';
 import {
   ChartData,
 } from 'chart.js';
-import { filter, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
@@ -136,11 +136,14 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.restaurant$.pipe(
       filter(Boolean),
       withLatestFrom(
-        this.route.queryParams.pipe(filter(Boolean)),
+        this.route.queryParams.pipe(
+          map((v) => v['year']),
+          filter(Boolean),
+        ),
       ),
       takeUntil(this.destroyed$),
-    ).subscribe(([_restaurant, queryParams]) => {
-      this.currentYear = queryParams['year'];
+    ).subscribe(([_restaurant, year]) => {
+      this.currentYear = year;
       this.currentYearChange();
     });
 
@@ -191,6 +194,8 @@ export class StatsComponent implements OnInit, OnDestroy {
           this.buildGlobalBarChartData(pastriesByTypeByDate, cashByDate);
           this.setTotalByType(countByTypeByPastry);
         }
+
+        console.log(this.pastriesByTypeByDatePieChartData.drink);
       });
   }
 
@@ -379,6 +384,11 @@ export class StatsComponent implements OnInit, OnDestroy {
           datasets: [{
             data: Object.values(countByTypeByPastry[type]).filter((v) => v > 0),
           }],
+        };
+      } else {
+        this.pastriesByTypeByDatePieChartData[type] = {
+          labels: [],
+          datasets: []
         };
       }
     });
