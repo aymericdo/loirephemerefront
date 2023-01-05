@@ -66,3 +66,8 @@ export const selectRestaurant = createSelector(
   selectFeature,
   (state: HomeState) => state.restaurant
 );
+
+export const selectIsSiderCollapsed = createSelector(
+  selectFeature,
+  (state: HomeState) => state.isSiderCollapsed
+);

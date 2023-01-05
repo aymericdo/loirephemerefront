@@ -11,6 +11,7 @@ import {
   resetCommand,
   sendCommand,
   setErrorCommand,
+  setIsSiderCollapsed,
   setPastries,
   setPersonalCommand,
   setRestaurant,
@@ -28,6 +29,7 @@ export interface HomeState {
   errorCommand: Object | null;
   loading: boolean;
   restaurant: Restaurant | null;
+  isSiderCollapsed: boolean;
 }
 
 export const initialState: HomeState = {
@@ -37,6 +39,7 @@ export const initialState: HomeState = {
   errorCommand: null,
   loading: false,
   restaurant: null,
+  isSiderCollapsed: true,
 };
 
 const homeReducer = createReducer(
@@ -119,6 +122,10 @@ const homeReducer = createReducer(
   on(setRestaurant, (state, { restaurant }) => ({
     ...state,
     restaurant: { ...restaurant },
+  })),
+  on(setIsSiderCollapsed, (state, { isCollapsed }) => ({
+    ...state,
+    isSiderCollapsed: isCollapsed,
   })),
 );
 

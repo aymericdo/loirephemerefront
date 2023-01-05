@@ -3,6 +3,15 @@
   height: 100%;
   position: relative;
 
+  .menu-section {
+    height: 100%;
+  }
+
+  .container-section {
+    height: 100%;
+    padding: 1rem;
+  }
+
   .actions-btn {
 
     .association-mode-btn,
@@ -15,17 +24,8 @@
     }
   }
 
-  .menu-section {
-    height: 100%;
-  }
-
   .pastry-list {
     margin-top: 2rem;
-  }
-
-  .pastry-association-section,
-  .pastry-sequence-section {
-    padding: 1rem;
   }
 
   @media screen and (max-width: 992px) {

@@ -10,6 +10,7 @@ import { commandsFeatureKey, reducer as commandsReducer } from './modules/comman
 import { usersFeatureKey, reducer as usersReducer } from './modules/users/store/users.reducer';
 import { statsFeatureKey, reducer as statsReducer } from './modules/stats/store/stats.reducer';
 import { AdminRoutingModule } from './admin-routing.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { AdminRoutingModule } from './admin-routing.module';
     AdminComponent,
   ],
   imports: [
+    SharedModule,
     CommonModule,
     AdminRoutingModule,
     EffectsModule.forFeature([AdminEffects]),

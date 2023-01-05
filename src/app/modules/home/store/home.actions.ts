@@ -56,4 +56,8 @@ export const stopLoading = createAction(
 export const startLoading = createAction(
   '[Home page] Start loading',
 );
+export const setIsSiderCollapsed = createAction(
+  '[Home page] Set is sider collapse',
+  props<{ isCollapsed: boolean }>()
+);
 

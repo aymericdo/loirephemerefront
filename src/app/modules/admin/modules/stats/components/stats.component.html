@@ -1,154 +1,159 @@
-<div class="content">
-  <div class="year-selector">
-    <nz-select [(ngModel)]="currentYear" (ngModelChange)="currentYearChange()" nzPlaceHolder="Choisissez l'année"
-      style="width: 50%">
-      <nz-option *ngFor="let year of years" [nzValue]="year" [nzLabel]="year"></nz-option>
-    </nz-select>
-  </div>
+<div class="stats-section">
+  <nz-page-header>
+    <nz-page-header-title>Stats</nz-page-header-title>
+  </nz-page-header>
+  <div class="container-section">
+    <div class="year-selector">
+      <nz-select [(ngModel)]="currentYear" (ngModelChange)="currentYearChange()" nzPlaceHolder="Choisissez l'année"
+        style="width: 50%">
+        <nz-option *ngFor="let year of years" [nzValue]="year" [nzLabel]="year"></nz-option>
+      </nz-select>
+    </div>
 
-  <div *ngIf="(isLoading$ | async) === false && totallyEmpty" class="row">
-    <nz-empty></nz-empty>
-  </div>
+    <div *ngIf="(isLoading$ | async) === false && totallyEmpty" class="row">
+      <nz-empty></nz-empty>
+    </div>
 
-  <div *ngIf="isLoading$ | async" class="row">
-    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
-  </div>
+    <div *ngIf="isLoading$ | async" class="row">
+      <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
 
-  <!-- happy hack  -->
-  <app-pie-chart class="hidden" [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
-  <!-- / happy hack  -->
+    <!-- happy hack  -->
+    <app-pie-chart class="hidden" [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
+    <!-- / happy hack  -->
 
-  <ng-container *ngIf="(isLoading$ | async) === false && !totallyEmpty">
-    <nz-tabset nzLinkRouter nzCentered>
-      <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'global' }" queryParamsHandling="merge">
-          Global
-        </a>
-        <div *ngIf="globalBarChartData.datasets.length === 0; else someDataGlobal" class="row">
-          <nz-empty></nz-empty>
-        </div>
-        <ng-template #someDataGlobal>
-          <div class="row">
-            <div class="chart global">
-              <nz-statistic [nzValue]="commandsCount" [nzTitle]="'Nombre de commandes totales'"></nz-statistic>
-              <nz-statistic [nzValue]="totalCash" [nzSuffix]="'€'" [nzTitle]="'Argent total'"></nz-statistic>
-            </div>
+    <ng-container *ngIf="(isLoading$ | async) === false && !totallyEmpty">
+      <nz-tabset nzLinkRouter>
+        <nz-tab>
+          <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'global' }" queryParamsHandling="merge">
+            Global
+          </a>
+          <div *ngIf="globalBarChartData.datasets.length === 0; else someDataGlobal" class="row">
+            <nz-empty></nz-empty>
           </div>
-          <div class="row">
-            <div class="chart bar">
-              <div>
-                <app-bar-chart [barChartData]="globalBarChartData"></app-bar-chart>
+          <ng-template #someDataGlobal>
+            <div class="row">
+              <div class="chart global">
+                <nz-statistic [nzValue]="commandsCount" [nzTitle]="'Nombre de commandes totales'"></nz-statistic>
+                <nz-statistic [nzValue]="totalCash" [nzSuffix]="'€'" [nzTitle]="'Argent total'"></nz-statistic>
               </div>
             </div>
+            <div class="row">
+              <div class="chart bar">
+                <div>
+                  <app-bar-chart [barChartData]="globalBarChartData"></app-bar-chart>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </nz-tab>
+        <nz-tab>
+          <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'pastry' }" queryParamsHandling="merge">
+            Nourritures
+          </a>
+          <div *ngIf="pastriesByTypeByDatePieChartData.pastry.datasets.length === 0; else someDataPastry" class="row">
+            <nz-empty></nz-empty>
           </div>
-        </ng-template>
-      </nz-tab>
-      <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'pastry' }" queryParamsHandling="merge">
-          Nourritures
-        </a>
-        <div *ngIf="pastriesByTypeByDatePieChartData.pastry.datasets.length === 0; else someDataPastry" class="row">
-          <nz-empty></nz-empty>
-        </div>
-        <ng-template #someDataPastry>
-          <div class="row">
+          <ng-template #someDataPastry>
+            <div class="row">
+              <div class="chart">
+                <div>
+                  <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
+                </div>
+                <span *ngIf="totalByType.pastry" class="total">
+                  <div>Total de nourritures : {{ totalByType.pastry }}</div>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="chart bar">
+                <div>
+                  <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.pastry"></app-bar-chart>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </nz-tab>
+        <nz-tab>
+          <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'drink' }" queryParamsHandling="merge">
+            Boissons
+          </a>
+          <div *ngIf="pastriesByTypeByDatePieChartData.drink.datasets.length === 0; else someDataDrink" class="row">
+            <nz-empty></nz-empty>
+          </div>
+          <ng-template #someDataDrink>
             <div class="chart">
               <div>
-                <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
+                <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.drink"></app-pie-chart>
               </div>
-              <span *ngIf="totalByType.pastry" class="total">
-                <div>Total de nourritures : {{ totalByType.pastry }}</div>
+
+              <span *ngIf="totalByType.drink" class="total">
+                <div>Total de boissons : {{ totalByType.drink }}</div>
               </span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="chart bar">
-              <div>
-                <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.pastry"></app-bar-chart>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-      </nz-tab>
-      <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'drink' }" queryParamsHandling="merge">
-          Boissons
-        </a>
-        <div *ngIf="pastriesByTypeByDatePieChartData.drink.datasets.length === 0; else someDataDrink" class="row">
-          <nz-empty></nz-empty>
-        </div>
-        <ng-template #someDataDrink>
-          <div class="chart">
-            <div>
-              <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.drink"></app-pie-chart>
             </div>
 
-            <span *ngIf="totalByType.drink" class="total">
-              <div>Total de boissons : {{ totalByType.drink }}</div>
-            </span>
-          </div>
-
-          <div class="chart bar">
-            <div>
-              <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.drink"></app-bar-chart>
-            </div>
-          </div>
-        </ng-template>
-      </nz-tab>
-      <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'tip' }" queryParamsHandling="merge">
-          Pourboire
-        </a>
-        <div *ngIf="pastriesByTypeByDatePieChartData.tip.datasets.length === 0; else someDataTip" class="row">
-          <nz-empty></nz-empty>
-        </div>
-        <ng-template #someDataTip>
-          <div class="row">
-            <div class="chart">
-              <div>
-                <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.tip"></app-pie-chart>
-              </div>
-              <span *ngIf="totalByType.tip" class="total">
-                <div>Total de pourboires : {{ totalByType.tip }}</div>
-              </span>
-            </div>
-          </div>
-          <div class="row">
             <div class="chart bar">
               <div>
-                <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.tip"></app-bar-chart>
+                <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.drink"></app-bar-chart>
               </div>
             </div>
+          </ng-template>
+        </nz-tab>
+        <nz-tab>
+          <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'tip' }" queryParamsHandling="merge">
+            Pourboire
+          </a>
+          <div *ngIf="pastriesByTypeByDatePieChartData.tip.datasets.length === 0; else someDataTip" class="row">
+            <nz-empty></nz-empty>
           </div>
-        </ng-template>
-      </nz-tab>
-      <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'other' }" queryParamsHandling="merge">
-          Autres
-        </a>
-        <div *ngIf="pastriesByTypeByDatePieChartData.other.datasets.length === 0; else someDataOther" class="row">
-          <nz-empty></nz-empty>
-        </div>
-        <ng-template #someDataOther>
-          <div class="row">
-            <div class="chart">
-              <div>
-                <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.other"></app-pie-chart>
-              </div>
-              <span *ngIf="totalByType.other" class="total">
-                <div>Total autres : {{ totalByType.other }}</div>
-              </span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="chart bar">
-              <div>
-                <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.other"></app-bar-chart>
+          <ng-template #someDataTip>
+            <div class="row">
+              <div class="chart">
+                <div>
+                  <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.tip"></app-pie-chart>
+                </div>
+                <span *ngIf="totalByType.tip" class="total">
+                  <div>Total de pourboires : {{ totalByType.tip }}</div>
+                </span>
               </div>
             </div>
+            <div class="row">
+              <div class="chart bar">
+                <div>
+                  <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.tip"></app-bar-chart>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </nz-tab>
+        <nz-tab>
+          <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'other' }" queryParamsHandling="merge">
+            Autres
+          </a>
+          <div *ngIf="pastriesByTypeByDatePieChartData.other.datasets.length === 0; else someDataOther" class="row">
+            <nz-empty></nz-empty>
           </div>
-        </ng-template>
-      </nz-tab>
-    </nz-tabset>
-  </ng-container>
+          <ng-template #someDataOther>
+            <div class="row">
+              <div class="chart">
+                <div>
+                  <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.other"></app-pie-chart>
+                </div>
+                <span *ngIf="totalByType.other" class="total">
+                  <div>Total autres : {{ totalByType.other }}</div>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="chart bar">
+                <div>
+                  <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.other"></app-bar-chart>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </nz-tab>
+      </nz-tabset>
+    </ng-container>
+  </div>
 </div>

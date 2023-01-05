@@ -31,7 +31,13 @@ const statsReducer = createReducer(
   on(startLoading, fetchingAllRestaurantPastries, fetchingRestaurantCommands, (state) => ({
     ...state,
     loading: true,
+  })),
+  on(fetchingAllRestaurantPastries, (state) => ({
+    ...state,
     allPastries: [...pastriesMock],
+  })),
+  on(fetchingRestaurantCommands, (state) => ({
+    ...state,
     commands: [...commandsMock],
   })),
   on(setAllPastries, (state, { pastries }) => ({

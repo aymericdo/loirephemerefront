@@ -6,7 +6,7 @@ import { AppState } from 'src/app/store/app.state';
 import {
   ChartData,
 } from 'chart.js';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, takeUntil, withLatestFrom } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
@@ -105,6 +105,7 @@ export class StatsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const nowYear = new Date().getFullYear().toString();
     this.store.dispatch(startLoading());
 
     this.route.paramMap.subscribe(params => {
@@ -114,12 +115,15 @@ export class StatsComponent implements OnInit, OnDestroy {
 
     this.route.queryParams.subscribe((params) => {
       if (!params['tab']) {
-        this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'global' } });
+        this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'global' }, queryParamsHandling: 'merge' });
+      }
+      if (!params['year']) {
+        this.router.navigate([], { relativeTo: this.route, queryParams: { year: this.currentYear }, queryParamsHandling: 'merge' });
       }
     });
 
     this.years = Array.from({
-      length: +this.currentYear - 2021 + 1
+      length: +nowYear - 2021 + 1
     }, (v, k) => k + 2021).map((year) => year.toString());
 
     this.restaurant$.pipe(
@@ -127,6 +131,16 @@ export class StatsComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
       this.currentRestaurant = restaurant;
+    });
+
+    this.restaurant$.pipe(
+      filter(Boolean),
+      withLatestFrom(
+        this.route.queryParams.pipe(filter(Boolean)),
+      ),
+      takeUntil(this.destroyed$),
+    ).subscribe(([_restaurant, queryParams]) => {
+      this.currentYear = queryParams['year'];
       this.currentYearChange();
     });
 
@@ -188,6 +202,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     const toDate: string = toDateNow.toISOString();
 
     this.store.dispatch(fetchingRestaurantCommands({ code: this.currentRestaurant?.code!, fromDate, toDate }));
+    this.router.navigate([], { relativeTo: this.route, queryParams: { year: this.currentYear }, queryParamsHandling: 'merge' });
   }
 
   ngOnDestroy() {

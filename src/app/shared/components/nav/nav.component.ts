@@ -7,7 +7,8 @@ import { DEMO_RESTO } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { setIsSiderCollapsed } from 'src/app/modules/home/store/home.actions';
+import { selectIsSiderCollapsed, selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { fetchingUser, resetUser } from 'src/app/modules/login/store/login.actions';
 import { selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -21,12 +22,12 @@ export class NavComponent implements OnInit, OnDestroy {
   restaurant$: Observable<Restaurant | null>;
   user$: Observable<User | null>;
   userRestaurants$: Observable<Restaurant[] | null>;
+  isSiderCollapsed$: Observable<boolean>;
   isUserCollapsed = true;
   isAdminCollapsed = '';
   restaurantCode: string | null = null;
   routeName: string | null = null;
 
-  isCollapsed = false;
   DEMO_RESTO = DEMO_RESTO;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -39,6 +40,7 @@ export class NavComponent implements OnInit, OnDestroy {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.user$ = this.store.select(selectUser);
     this.userRestaurants$ = this.store.select(selectUserRestaurants);
+    this.isSiderCollapsed$ = this.store.select(selectIsSiderCollapsed);
   }
 
   ngOnInit(): void {
@@ -82,9 +84,13 @@ export class NavComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn;
   }
 
+  siderCollapseChange(isCollapsed: boolean): void {
+    this.store.dispatch(setIsSiderCollapsed({ isCollapsed }));
+  }
+
   manuallyCollapse(): void {
     if (window.matchMedia("(max-width: 992px)").matches) {
-      this.isCollapsed = true;
+      this.store.dispatch(setIsSiderCollapsed({ isCollapsed: true }));
     }
   }
 

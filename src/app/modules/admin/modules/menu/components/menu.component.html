@@ -7,11 +7,11 @@
           <ng-container *ngIf="!isInSequenceMode && !isInAssociationMode">
             <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
               nzBlock>Association de stock</button>
-            <button class="sequence-mode-btn" *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock>Séquence
+            <button class="sequence-mode-btn" *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock>Ordre
               d'affichage</button>
             <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="openNewPastryModal()">
               <span nz-icon nzType="plus"></span>
-              Ajouter une pâtisserie
+              Ajouter
             </button>
 
             <button *nzSpaceItem class="more-btn" nz-button nzNoAnimation nz-dropdown [nzDropdownMenu]="menu"
@@ -22,7 +22,7 @@
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item (click)="isInSequenceMode = true">
-                  Séquence d'affichage
+                  Ordre d'affichage
                 </li>
                 <li nz-menu-item (click)="isInAssociationMode = true">
                   Association de stock
@@ -41,26 +41,29 @@
       </div>
     </nz-page-header-extra>
   </nz-page-header>
-  <ng-container *ngIf="(pastries$ | async)?.length === 0"><nz-empty></nz-empty></ng-container>
 
-  <div *ngIf="isInSequenceMode" class="pastry-sequence-section">
-    <app-sequence></app-sequence>
-  </div>
+  <div class="container-section">
+    <ng-container *ngIf="(pastries$ | async)?.length === 0"><nz-empty></nz-empty></ng-container>
 
-  <div *ngIf="isInAssociationMode" class="pastry-association-section">
-    <app-association></app-association>
-  </div>
+    <div *ngIf="isInSequenceMode" class="pastry-sequence-section">
+      <app-sequence></app-sequence>
+    </div>
 
-  <div *ngIf="!isInSequenceMode && !isInAssociationMode && (pastries$ | async)?.length" class="pastry-list" nz-row
-    [nzGutter]="[0, 24]" nzJustify="center">
-    <div *ngFor="let pastry of pastries$ | async; trackBy: trackById" class="pastry-section" nz-col nzXs="24" nzSm="24"
-      nzMd="18" nzLg="12" nzXl="8">
-      <div class="inner-box">
-        <app-pastry-card #item [isAdmin]="true" [pastry]="pastry"
-          [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!" [count]="pastry.stock"
-          (clickPlus)="handleClickPlus(pastry)" (clickMinus)="handleClickMinus(pastry)"
-          (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)"
-          (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
+    <div *ngIf="isInAssociationMode" class="pastry-association-section">
+      <app-association></app-association>
+    </div>
+
+    <div *ngIf="!isInSequenceMode && !isInAssociationMode && (pastries$ | async)?.length" class="pastry-list" nz-row
+      [nzGutter]="[0, 24]" nzJustify="center">
+      <div *ngFor="let pastry of pastries$ | async; trackBy: trackById" class="pastry-section" nz-col nzXs="24" nzSm="24"
+        nzMd="18" nzLg="12" nzXl="8">
+        <div class="inner-box">
+          <app-pastry-card #item [isAdmin]="true" [pastry]="pastry"
+            [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!" [count]="pastry.stock"
+            (clickPlus)="handleClickPlus(pastry)" (clickMinus)="handleClickMinus(pastry)"
+            (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)"
+            (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
+        </div>
       </div>
     </div>
   </div>
