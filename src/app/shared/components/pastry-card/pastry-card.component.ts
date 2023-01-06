@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pastry-card',
@@ -50,7 +51,11 @@ export class PastryCardComponent implements OnChanges {
   onImgError(event: Event) {
     if (!this.imgError) {
       this.imgError = true;
-      (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.jpg');
+      if (!environment.production) {
+        (event.target as HTMLImageElement).src = this.adminApiService.getProdImageUrl(this.pastry.imageUrl! ?? 'default.jpg');
+      } else {
+        (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.jpg');
+      }
     } else {
       (event.target as HTMLImageElement).src = 'assets/image/default.jpg';
     }

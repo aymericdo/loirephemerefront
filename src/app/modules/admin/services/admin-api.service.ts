@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { environment as prodEnvironment } from 'src/environments/environment.prod';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Command } from 'src/app/interfaces/command.interface';
 import { User } from 'src/app/interfaces/user.interface';
@@ -12,14 +13,29 @@ import { User } from 'src/app/interfaces/user.interface';
 export class AdminApiService {
   private readonly baseUrl: string;
   private readonly protocolHttp: string;
+  private readonly prodBaseUrl: string | null = null;
+  private readonly prodProtocolHttp: string | null = null;
 
   constructor(private http: HttpClient) {
     this.baseUrl = environment.api;
     this.protocolHttp = environment.protocolHttp;
+
+    if (!environment.production) {
+      this.prodBaseUrl = prodEnvironment.api;
+      this.prodProtocolHttp = prodEnvironment.protocolHttp;
+    }
   }
 
   getImageUrl(imageName: string): string {
     return `${this.protocolHttp}${this.baseUrl}/photos/${imageName}`;
+  }
+
+  getProdImageUrl(imageName: string): string {
+    if (environment.production) {
+      throw 'fonction for dev purpose';
+    }
+
+    return `${this.prodProtocolHttp}${this.prodBaseUrl}/photos/${imageName}`;
   }
 
   getUploadImageUrl(code: string): string {
