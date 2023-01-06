@@ -12,6 +12,7 @@
 
   nz-card {
     transition: box-shadow 250ms;
+    max-width: 100%;
   }
 
   nz-card.-is-just-updated {
@@ -20,5 +21,14 @@
 
   nz-card.-is-new {
     box-shadow: 0 0 6px $red;
+  }
+
+  nz-ribbon {
+    // 16px === width of the ribbon
+    max-width: calc(100% - 16px);
+  }
+
+  ::ng-deep nz-ribbon.-is-loading .ant-ribbon {
+    display: none;
   }
 }

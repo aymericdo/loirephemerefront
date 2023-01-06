@@ -4,6 +4,10 @@
   display: flex;
   justify-content: center;
 
+  nz-card {
+    max-width: 100%;
+  }
+
   nz-badge.stock-badge {
     width: fit-content;
     position: absolute;
