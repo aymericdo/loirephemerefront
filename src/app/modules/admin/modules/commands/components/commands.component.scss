@@ -17,11 +17,6 @@
     right: 1.25rem;
   }
 
-  .information-popover {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
-
   .empty-section {
     min-height: 150px;
   }
@@ -46,4 +41,9 @@
     padding-bottom: 6px;
     height: 100%;
   }
+}
+
+.information-popover {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
