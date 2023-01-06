@@ -1,6 +1,8 @@
 <div class="menu-section">
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
+    <nz-page-header-subtitle>Menu</nz-page-header-subtitle>
+    <nz-page-header-tags><nz-tag [nzColor]="'volcano'">Admin</nz-tag></nz-page-header-tags>
     <nz-page-header-extra>
       <div *ngIf="(isLoading$ | async) === false" class="actions-btn">
         <nz-space nzAlign="center">

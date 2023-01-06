@@ -1,3 +1,5 @@
+@import 'src/vars.scss';
+
 :host {
   .layout {
     overflow: hidden;
@@ -15,7 +17,7 @@
     margin-left: 200px;
   }
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: $lg) {
     .right-layout {
       margin-left: inherit;
     }

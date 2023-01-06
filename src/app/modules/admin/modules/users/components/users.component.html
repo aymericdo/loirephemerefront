@@ -1,6 +1,8 @@
 <div class="users-section">
   <nz-page-header>
-    <nz-page-header-title>Utilisateurs</nz-page-header-title>
+    <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
+    <nz-page-header-subtitle>Utilisateurs</nz-page-header-subtitle>
+    <nz-page-header-tags><nz-tag [nzColor]="'volcano'">Admin</nz-tag></nz-page-header-tags>
     <nz-page-header-extra>
       <div class="actions-btn">
         <nz-space nzAlign="center">

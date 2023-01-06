@@ -1,3 +1,5 @@
+@import 'src/vars.scss';
+
 :host {
   display: flex;
   justify-content: center;
@@ -7,7 +9,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #52c41a;
+    background-color: $green;
     border-radius: 10px;
     color: white;
     padding: 0 8px;
@@ -66,11 +68,11 @@
   }
 
   ::ng-deep nz-badge.stock-badge.-stock-issue {
-    background-color: #ff4d4f;
+    background-color: $red;
   }
 
   ::ng-deep nz-badge.stock-badge.-limit-reached {
-    background-color: #fadb14;
+    background-color: $yellow;
     color: black;
   }
 
@@ -91,19 +93,18 @@
     margin-bottom: -1px;
   }
 
-  ::ng-deep .ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-arrow {
-    left: 0;
-  }
-
-  ::ng-deep .ant-collapse>.ant-collapse-item>.ant-collapse-header {
-    padding-left: 20px;
-  }
-
-  ::ng-deep .ant-collapse-ghost>.ant-collapse-item>.ant-collapse-content>.ant-collapse-content-box {
-    padding-top: 0;
+  .ingredients-section {
+    ::ng-deep .ant-collapse-item>.ant-collapse-content>.ant-collapse-content-box {
+      padding-top: 0;
+    }
   }
 
   .ingredients::first-letter {
     text-transform: capitalize;
+  }
+
+  ::ng-deep .ant-card-actions i.-disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
   }
 }

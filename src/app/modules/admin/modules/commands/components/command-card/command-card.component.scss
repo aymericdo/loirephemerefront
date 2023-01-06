@@ -1,3 +1,5 @@
+@import 'src/vars.scss';
+
 :host {
   display: flex;
   justify-content: center;
@@ -13,10 +15,10 @@
   }
 
   nz-card.-is-just-updated {
-    box-shadow: 0 0 6px #fa8c16;
+    box-shadow: 0 0 6px $orange;
   }
 
   nz-card.-is-new {
-    box-shadow: 0 0 6px #ff4d4f;
+    box-shadow: 0 0 6px $red;
   }
 }

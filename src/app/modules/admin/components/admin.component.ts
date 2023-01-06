@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { fetchingRestaurant } from 'src/app/modules/admin/store/admin.actions';
 import { selectIsSiderCollapsed } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -10,8 +10,10 @@ import { AppState } from 'src/app/store/app.state';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
   isSiderCollapsed$: Observable<boolean>;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
@@ -21,10 +23,17 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((params) => {
       if (params.get('code')) {
         this.store.dispatch(fetchingRestaurant({ code: params.get('code')! }));
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

@@ -75,7 +75,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   getDemoStyle(): { 'border-left': string, color: string } {
     return {
-      'border-left': `solid ${presetPalettes['gold'].primary as string}`,
+      'border-left': `3px solid ${presetPalettes['gold'].primary as string}`,
       color: presetPalettes['gold'].primary as string,
     };
   }

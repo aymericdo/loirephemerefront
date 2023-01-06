@@ -91,7 +91,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(startLoading());
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(params => {
       this.store.dispatch(fetchingRestaurant({ code: params.get('code')! }));
       this.subscribeToWS(params.get('code')!);
     });

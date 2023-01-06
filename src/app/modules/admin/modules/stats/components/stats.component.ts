@@ -110,17 +110,31 @@ export class StatsComponent implements OnInit, OnDestroy {
     const nowYear = new Date().getFullYear().toString();
     this.store.dispatch(startLoading());
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(params => {
       const code: string = params.get('code')!;
       this.store.dispatch(fetchingAllRestaurantPastries({ code: code }));
     });
 
-    this.route.queryParams.subscribe((params) => {
-      if (!params['tab']) {
-        this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'global' }, queryParamsHandling: 'merge' });
+    this.route.queryParamMap.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((params: ParamMap) => {
+      const defaultQueryParam: {
+        tab?: string,
+        year?: string,
+      } = {};
+
+      if (!params.get('tab')) {
+        defaultQueryParam['tab'] = 'global';
       }
-      if (!params['year']) {
-        this.router.navigate([], { relativeTo: this.route, queryParams: { year: this.currentYear }, queryParamsHandling: 'merge' });
+
+      if (!params.get('year')) {
+        defaultQueryParam['year'] = this.currentYear;
+      }
+
+      if (Object.keys(defaultQueryParam).length) {
+        this.router.navigate([], { relativeTo: this.route, queryParams: defaultQueryParam, queryParamsHandling: 'merge' });
       }
     });
 
@@ -140,24 +154,24 @@ export class StatsComponent implements OnInit, OnDestroy {
       filter(Boolean),
     );
 
-    combineLatest([yearParam$, this.restaurant$.pipe(filter(Boolean))])
-    .pipe(take(1))
-    .subscribe(([year]) => {
-      this.currentYear = year;
-      this.currentYearChange(false);
-    });
+    combineLatest([yearParam$.pipe(take(1)), this.restaurant$.pipe(filter(Boolean))])
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(([year]) => {
+        this.currentYear = year;
+        this.currentYearChange(false);
+      });
 
     const rangeDateParam$ = this.route.queryParamMap.pipe(
       filter((params: ParamMap) => !!params.get('start-date') && !!params.get('end-date')),
       map((params: ParamMap) => [params.get('start-date') as string, params.get('end-date') as string]),
     );
 
-    combineLatest([rangeDateParam$, this.restaurant$.pipe(filter(Boolean))])
-    .pipe(take(1))
-    .subscribe(([[startDate, endDate]]) => {
-      this.dateRange = [new Date(startDate), new Date(endDate)];
-      this.onDateRangeChange();
-    });
+    combineLatest([rangeDateParam$.pipe(take(1)), this.restaurant$.pipe(filter(Boolean))])
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(([[startDate, endDate]]) => {
+        this.dateRange = [new Date(startDate), new Date(endDate)];
+        this.onDateRangeChange();
+      });
 
     combineLatest([this.payedCommands$, this.pastries$])
       .pipe(

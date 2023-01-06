@@ -25,6 +25,10 @@
     padding: 0.875em 0;
   }
 
+  ::ng-deep nz-ribbon.-is-loading .ant-ribbon {
+    display: none;
+  }
+
   ::ng-deep .ant-tabs-content-holder {
     overflow-y: auto;
   }

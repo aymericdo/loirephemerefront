@@ -1,3 +1,5 @@
+@import 'src/vars.scss';
+
 :host {
   display: flex;
   z-index: 1;
@@ -37,6 +39,21 @@
     flex: 1;
   }
 
+  .admin-section-title {
+    position: relative;
+    width: 100%;
+
+    .admin-tag {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      line-height: 8px;
+      height: 10px;
+      font-size: 8px;
+      font-weight: bold;
+    }
+  }
+
   .restaurant-name-tooltip,
   .account-name-tooltip {
     width: 100%;
@@ -45,6 +62,10 @@
   ::ng-deep .restaurant-section {
     max-height: 400px;
     overflow-y: auto;
+  }
+
+  .restaurant-row {
+    border-left: 3px solid transparent;
   }
 
   ::ng-deep .restaurant-name,
@@ -56,7 +77,7 @@
     text-overflow: ellipsis;
   }
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: $lg) {
     nz-sider {
       overflow: inherit;
     }

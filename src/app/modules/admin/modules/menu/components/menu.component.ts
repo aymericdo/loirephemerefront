@@ -44,7 +44,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(startLoading());
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(params => {
       const code: string = params.get('code')!;
       this.subscribeToWS(code);
       this.store.dispatch(fetchingAllRestaurantPastries({ code: code }));

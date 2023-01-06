@@ -1,4 +1,4 @@
-<nz-ribbon nzText="€" [nzColor]="isPayed ? 'green' : 'red'">
+<nz-ribbon [class.-is-loading]="isLoading" nzText="€" [nzColor]="isPayed ? 'green' : 'red'">
   <nz-card style="width: 300px" [class.-is-new]="isNew" [class.-is-just-updated]="isJustUpdated"
     [nzActions]="isPayed ? [actionWizz] : [actionWizz, actionDone]" [nzTitle]="'Commande #' + command.reference">
     <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
@@ -19,12 +19,6 @@
 </nz-ribbon>
 <ng-template #actionWizz>
   <i nz-icon nzType="bell" (click)="!isLoading && wizzClient()"></i>
-</ng-template>
-<ng-template #iconTemplateGreen>
-  <i nz-icon nzType="euro-circle" class="ant-scroll-number-custom-component" style="color: #52c41a"></i>
-</ng-template>
-<ng-template #iconTemplateRed>
-  <i nz-icon nzType="euro-circle" class="ant-scroll-number-custom-component" style="color: #ff4d4f"></i>
 </ng-template>
 <ng-template #actionDone>
   <ng-container *ngIf="!isDone">

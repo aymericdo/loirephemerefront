@@ -55,11 +55,15 @@ export class CommandsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(startLoading());
 
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(params => {
       this.subscribeToWS(params.get('code')!);
     });
 
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((params) => {
       if (!params['tab']) {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'ongoing' } });
       }

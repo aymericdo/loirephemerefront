@@ -1,14 +1,16 @@
 <div class="stats-section">
   <nz-page-header>
-    <nz-page-header-title>Stats</nz-page-header-title>
+    <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
+    <nz-page-header-subtitle>Stats</nz-page-header-subtitle>
+    <nz-page-header-tags><nz-tag [nzColor]="'volcano'">Admin</nz-tag></nz-page-header-tags>
   </nz-page-header>
   <div class="container-section">
-    <div class="year-selector">
-      <nz-select [(ngModel)]="currentYear" (ngModelChange)="currentYearChange()" nzPlaceHolder="Choisissez l'année">
-      <nz-option *ngFor="let year of years" [nzValue]="year" [nzLabel]="year"></nz-option>
-    </nz-select>
-    <nz-range-picker [(ngModel)]="dateRange" (ngModelChange)="onDateRangeChange()"></nz-range-picker>
-    </div>
+    <nz-space nzAlign="center">
+      <nz-select *nzSpaceItem [(ngModel)]="currentYear" (ngModelChange)="currentYearChange()" nzPlaceHolder="Choisissez l'année">
+        <nz-option *ngFor="let year of years" [nzValue]="year" [nzLabel]="year"></nz-option>
+      </nz-select>
+      <nz-range-picker *nzSpaceItem [(ngModel)]="dateRange" (ngModelChange)="onDateRangeChange()"></nz-range-picker>
+    </nz-space>
 
     <div *ngIf="(isLoading$ | async) === false && totallyEmpty" class="row">
       <nz-empty></nz-empty>

@@ -1,3 +1,5 @@
+@import 'src/vars.scss';
+
 :host {
   display: block;
   overflow: auto;
@@ -15,7 +17,7 @@
     width: 50%;
   }
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: $lg) {
     .sub-content {
       width: 100%;
     }
