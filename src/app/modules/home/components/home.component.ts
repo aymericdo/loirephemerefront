@@ -145,9 +145,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (count === 0) {
       const cardToScroll = this.itemElements.find(
         (item) => item.pastry.id === pastry.id
-        );
+      );
 
-        if (cardToScroll) {
+      if (cardToScroll) {
         window.scroll({
           top:
             window.pageYOffset +

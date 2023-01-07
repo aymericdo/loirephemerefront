@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
@@ -19,12 +19,15 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent implements OnInit, OnDestroy {
+  @ViewChild('list') listElement!: any;
+  @ViewChildren('item') itemElements!: QueryList<any>;
+
   restaurant$: Observable<Restaurant | null>;
   user$: Observable<User | null>;
   userRestaurants$: Observable<Restaurant[] | null>;
   isSiderCollapsed$: Observable<boolean>;
   isUserCollapsed = true;
-  isAdminCollapsed = '';
+  isAdminOpened = '';
   restaurantCode: string | null = null;
   routeName: string | null = null;
 
@@ -94,10 +97,32 @@ export class NavComponent implements OnInit, OnDestroy {
     }
   }
 
+  openAdminResto(restaurantCode: string): void {
+    this.isAdminOpened = this.isAdminOpened = restaurantCode;
+
+    if (restaurantCode.length) {
+      this.isUserCollapsed = true;
+      if (this.isAdminOpened.length &&
+        this.itemElements.last.cdkOverlayOrigin &&
+        this.itemElements.last.cdkOverlayOrigin.nativeElement.parentNode.dataset.restaurantCode === restaurantCode) {
+        setTimeout(() => {
+          const heightToScroll = this.itemElements.last.cdkOverlayOrigin.nativeElement.parentNode.clientHeight;
+
+          if (heightToScroll) {
+            this.listElement.nativeElement.parentNode.scroll({
+              top: heightToScroll,
+              behavior: 'smooth',
+            });
+          }
+        }, 250);
+      }
+    }
+  }
+
   getRouteName(url: string): string | null {
     const urlArray = url.split('/');
     if (urlArray.length > 1 && urlArray[2] === 'admin') {
-      this.isAdminCollapsed = urlArray[1];
+      this.openAdminResto(urlArray[1]);
 
       if (urlArray.length > 2 && urlArray[3].includes('commands')) {
         return 'commands';
