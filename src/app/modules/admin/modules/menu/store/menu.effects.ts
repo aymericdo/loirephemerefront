@@ -6,7 +6,6 @@ import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom }
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
 import { AppState } from 'src/app/store/app.state';
 import {
   activatingPastry,
@@ -216,6 +215,5 @@ export class MenuEffects {
     private actions$: Actions,
     private store$: Store<AppState>,
     private adminApiService: AdminApiService,
-    private restaurantApiService: RestaurantApiService,
   ) { }
 }

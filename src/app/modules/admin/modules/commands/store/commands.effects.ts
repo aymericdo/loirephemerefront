@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
+import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { AppState } from 'src/app/store/app.state';
 import {
   closingCommand,
   editCommand,
@@ -34,9 +37,12 @@ export class CommandsEffects {
   closingCommand$ = createEffect(() =>
     this.actions$.pipe(
       ofType(closingCommand),
-      mergeMap((action) => {
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
         return this.adminApiService
-          .closeCommand(action.command.id!)
+          .closeCommand(restaurant.code, action.command.id!)
           .pipe(
             map((command) => editCommand({ command })),
           );
@@ -47,9 +53,12 @@ export class CommandsEffects {
   payingCommand$ = createEffect(() =>
     this.actions$.pipe(
       ofType(payingCommand),
-      mergeMap((action) => {
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
         return this.adminApiService
-          .payedCommand(action.command.id!)
+          .payedCommand(restaurant.code, action.command.id!)
           .pipe(
             map((command) => editCommand({ command })),
           );
@@ -83,6 +92,7 @@ export class CommandsEffects {
 
   constructor(
     private actions$: Actions,
+    private store$: Store<AppState>,
     private adminApiService: AdminApiService,
   ) { }
 }

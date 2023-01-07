@@ -90,15 +90,15 @@ export class AdminApiService {
     return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}?fromDate=${fromDate}&toDate=${toDate}`) as Observable<Command[]>;;
   }
 
-  closeCommand(commandId: string): Observable<any> {
+  closeCommand(code: string, commandId: string): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/close/${commandId}`, null
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/close/${commandId}`, null
     );
   }
 
-  payedCommand(commandId: string): Observable<any> {
+  payedCommand(code: string, commandId: string): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/payed/${commandId}`, null
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, null
     );
   }
 
@@ -124,15 +124,15 @@ export class AdminApiService {
 
   postSub(sub: PushSubscription, code: string): Observable<any> {
     return this.http.post(
-      `${this.protocolHttp}${this.baseUrl}/commands/notification`,
-      { sub, code }
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/notification`,
+      { sub }
     );
   }
 
   deleteSub(sub: PushSubscription, code: string): Observable<any> {
     return this.http.post(
-      `${this.protocolHttp}${this.baseUrl}/commands/notification/delete`,
-      { sub, code }
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/notification/delete`,
+      { sub }
     );
   }
 }
