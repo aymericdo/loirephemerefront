@@ -261,7 +261,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                     }
                   );
                 });
-            }
 
             const canVibrate = window.navigator.vibrate;
             if (canVibrate!) window.navigator.vibrate([2000, 10, 2000]);
