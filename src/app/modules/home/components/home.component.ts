@@ -31,7 +31,7 @@ import {
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import {
   HomeWebSocketService,
@@ -43,6 +43,7 @@ import { SwPush } from '@angular/service-worker';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { Title } from '@angular/platform-browser';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
+import { selectDemoResto } from 'src/app/modules/login/store/login.selectors';
 
 @Component({
   templateUrl: './home.component.html',
@@ -61,6 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   isStockIssue$: Observable<boolean>;
   personalCommand$: Observable<Command | null>;
   errorCommand$: Observable<Object | null>;
+  demoResto$: Observable<Restaurant | null>;
   isSuccessModalVisible = false;
   isWizzNotificationVisible = false;
 
@@ -86,6 +88,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isStockIssue$ = this.store.select(selectIsStockIssue);
     this.personalCommand$ = this.store.select(selectPersonalCommand);
     this.errorCommand$ = this.store.select(selectErrorCommand);
+    this.demoResto$ = this.store.select(selectDemoResto);
   }
 
   ngOnInit(): void {
@@ -94,8 +97,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(
       takeUntil(this.destroyed$)
     ).subscribe(params => {
-      this.store.dispatch(fetchingRestaurant({ code: params.get('code')! }));
-      this.subscribeToWS(params.get('code')!);
+      if (params.get('code')) {
+        this.store.dispatch(fetchingRestaurant({ code: params.get('code')! }));
+        this.subscribeToWS(params.get('code')!);
+      }
+    });
+
+    this.demoResto$.pipe(
+      filter(Boolean),
+      withLatestFrom(this.route.paramMap),
+      takeUntil(this.destroyed$),
+    ).subscribe(([demoResto, params]) => {
+      if (!params.get('code')) {
+        this.router.navigate(['/', demoResto.code]);
+      }
     });
 
     this.restaurant$.pipe(

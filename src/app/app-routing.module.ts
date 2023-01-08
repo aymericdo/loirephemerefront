@@ -36,7 +36,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'page/404',
+    component: HomeComponent,
   },
   {
     path: ':code',
