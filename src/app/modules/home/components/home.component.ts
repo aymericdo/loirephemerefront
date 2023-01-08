@@ -30,8 +30,8 @@ import {
   selectSelectedPastries,
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
-import { ActivatedRoute, Router } from '@angular/router';
-import { filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import {
   HomeWebSocketService,
@@ -95,20 +95,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.store.dispatch(startLoading());
 
     this.route.paramMap.pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(params => {
-      if (params.get('code')) {
-        this.store.dispatch(fetchingRestaurant({ code: params.get('code')! }));
-        this.subscribeToWS(params.get('code')!);
-      }
+      map((params: ParamMap) => params.get('code')),
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe(code => {
+      this.store.dispatch(fetchingRestaurant({ code }));
+      this.subscribeToWS(code);
     });
 
     this.demoResto$.pipe(
       filter(Boolean),
-      withLatestFrom(this.route.paramMap),
+      withLatestFrom(
+        this.route.paramMap.pipe(
+          map((params: ParamMap) => params.get('code')),
+        ),
+      ),
       takeUntil(this.destroyed$),
-    ).subscribe(([demoResto, params]) => {
-      if (!params.get('code')) {
+    ).subscribe(([demoResto, code]) => {
+      if (!code) {
         this.router.navigate(['/', demoResto.code]);
       }
     });
