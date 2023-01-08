@@ -67,7 +67,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   isSuccessModalVisible = false;
 
   private commandNotificationIdByCommandId: { [commandId: string]: string } = {};
-  private isWizzNotificationVisibleCommandIds: string[] = [];
   private audio!: HTMLAudioElement;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -249,26 +248,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
             this.notification.remove(this.commandNotificationIdByCommandId[commandId]);
 
-            if (!this.isWizzNotificationVisibleCommandIds.some((id) => id === commandId)) {
-              this.isWizzNotificationVisibleCommandIds.push(commandId);
-
-              this.store.select(selectCurrentSentCommandFromCommandList({ commandId }))
-                .pipe(filter(Boolean), take(1))
-                .subscribe((command: Command) => {
-                  this.notification
-                    .create(
-                      'info',
-                      `Votre commande ${command.reference} est prête !`,
-                      'Bonne dégustation ! 🥰', {
-                        nzDuration: 0,
-                      }
-                    ).onClose.subscribe(() => {
-                      this.isWizzNotificationVisibleCommandIds =
-                        this.isWizzNotificationVisibleCommandIds.filter((id) => {
-                        return id !== commandId;
-                      });
-                    });
-                  });
+            this.store.select(selectCurrentSentCommandFromCommandList({ commandId }))
+              .pipe(filter(Boolean), take(1))
+              .subscribe((command: Command) => {
+                this.notification
+                  .create(
+                    'info',
+                    `Votre commande ${command.reference} est prête !`,
+                    'Bonne dégustation ! 🥰', {
+                      nzDuration: 0,
+                      nzKey: commandId,
+                    }
+                  );
+                });
             }
 
             const canVibrate = window.navigator.vibrate;
