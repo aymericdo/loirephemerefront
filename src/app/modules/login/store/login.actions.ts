@@ -15,6 +15,11 @@ export const setUserRestaurants = createAction(
   props<{ restaurants: Restaurant[] }>()
 );
 
+export const setDemoResto = createAction(
+  '[Login page] Set demo resto',
+  props<{ restaurant: Restaurant }>()
+);
+
 export const addUserRestaurants = createAction(
   '[Login page] Add user restaurant',
   props<{ restaurant: Restaurant }>()
@@ -68,12 +73,12 @@ export const setCode2 = createAction(
 );
 
 export const openConfirmationModal = createAction(
-  '[Admin page] Open confirmation modal',
+  '[Login page] Open confirmation modal',
   props<{ modal: boolean }>()
 );
 
 export const openRecoverModal = createAction(
-  '[Admin page] Open recover modal',
+  '[Login page] Open recover modal',
   props<{ modal: boolean }>()
 );
 
@@ -109,4 +114,8 @@ export const changePassword = createAction(
 export const setPasswordAsChanged = createAction(
   '[Login page] Set password as changed',
   props<{ changed: boolean }>()
+);
+
+export const fetchDemoResto = createAction(
+  '[Login page] fetch demo resto only',
 );

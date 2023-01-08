@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { addUserRestaurants, confirmEmail, confirmRecoverEmail, createUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError, setCode2, setNewToken, setNoAuthError, setPasswordAsChanged, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, validatingUserEmail } from './login.actions';
+import { addUserRestaurants, confirmEmail, confirmRecoverEmail, createUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError, setCode2, setDemoResto, setNewToken, setNoAuthError, setPasswordAsChanged, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, validatingUserEmail } from './login.actions';
 
 export const loginFeatureKey = 'login';
 
@@ -11,6 +11,7 @@ export interface LoginState {
   isEmailValidating: boolean;
   user: User | null;
   userRestaurants: Restaurant[] | null;
+  demoResto: Restaurant | null;
   loading: boolean;
   code2: string | null;
   confirmationModalOpened: boolean;
@@ -24,6 +25,7 @@ export const initialState: LoginState = {
   isEmailValidating: false,
   user: null,
   userRestaurants: null,
+  demoResto: null,
   loading: false,
   code2: null,
   confirmationModalOpened: false,
@@ -90,6 +92,10 @@ const loginReducer = createReducer(
   on(setUserRestaurants, (state, { restaurants }) => ({
     ...state,
     userRestaurants: restaurants,
+  })),
+  on(setDemoResto, (state, { restaurant }) => ({
+    ...state,
+    demoResto: restaurant,
   })),
   on(addUserRestaurants, (state, { restaurant }) => ({
     ...state,

@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { selectDemoResto } from 'src/app/modules/login/store/login.selectors';
+import { AppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-four-oh-four',
@@ -6,7 +11,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./four-oh-four.component.scss']
 })
 export class FourOhFourComponent {
+  demoResto$: Observable<Restaurant | null>;
 
-  constructor() { }
-
+  constructor(
+    private store: Store<AppState>,
+  ) {
+    this.demoResto$ = this.store.select(selectDemoResto);
+  }
 }

@@ -10,9 +10,9 @@ import { RestaurantApiService } from 'src/app/modules/restaurant/services/restau
 import { AppState } from 'src/app/store/app.state';
 import {
   changePassword, confirmEmail, confirmRecoverEmail,
-  createUser, fetchingUser, fetchingUserRestaurants,
+  createUser, fetchDemoResto, fetchingUser, fetchingUserRestaurants,
   openConfirmationModal, openRecoverModal, setAuthError,
-  setCode2, setNewToken, setNoAuthError,
+  setCode2, setDemoResto, setNewToken, setNoAuthError,
   setPasswordAsChanged, setUser, setUserEmailError,
   setUserNoEmailError, setUserRestaurants, signInUser,
   stopLoading,
@@ -185,6 +185,22 @@ export class LoginEffects {
               return [setUserEmailError({ error: true, duplicated: true })];
             }
           })
+        );
+      })
+    )
+  );
+
+  fetchDemoResto$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchDemoResto),
+      mergeMap(() => {
+        return this.restaurantApiService.getDemoResto().pipe(
+          switchMap((restaurant: Restaurant) => {
+            return [setDemoResto({ restaurant}), setUserRestaurants({ restaurants: [restaurant] })];
+          }),
+          catchError(() => {
+            return [stopLoading()];
+          }),
         );
       })
     )

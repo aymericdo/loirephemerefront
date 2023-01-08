@@ -3,14 +3,13 @@ import { ActivationEnd, Router } from '@angular/router';
 import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter } from 'rxjs';
-import { DEMO_RESTO } from 'src/app/app-routing.module';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { setIsSiderCollapsed } from 'src/app/modules/home/store/home.actions';
 import { selectIsSiderCollapsed, selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { fetchingUser, resetUser } from 'src/app/modules/login/store/login.actions';
-import { selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { fetchDemoResto, fetchingUser, resetUser } from 'src/app/modules/login/store/login.actions';
+import { selectDemoResto, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -26,12 +25,11 @@ export class NavComponent implements OnInit, OnDestroy {
   user$: Observable<User | null>;
   userRestaurants$: Observable<Restaurant[] | null>;
   isSiderCollapsed$: Observable<boolean>;
+  demoResto$: Observable<Restaurant | null>;
   isUserCollapsed = true;
   isAdminOpened = '';
   restaurantCode: string | null = null;
   routeName: string | null = null;
-
-  DEMO_RESTO = DEMO_RESTO;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -44,6 +42,7 @@ export class NavComponent implements OnInit, OnDestroy {
     this.user$ = this.store.select(selectUser);
     this.userRestaurants$ = this.store.select(selectUserRestaurants);
     this.isSiderCollapsed$ = this.store.select(selectIsSiderCollapsed);
+    this.demoResto$ = this.store.select(selectDemoResto);
   }
 
   ngOnInit(): void {
@@ -64,6 +63,8 @@ export class NavComponent implements OnInit, OnDestroy {
     if (this.isLoggedIn) {
       this.store.dispatch(fetchingUser());
     }
+
+    this.store.dispatch(fetchDemoResto());
   }
 
   ngOnDestroy() {
@@ -102,10 +103,11 @@ export class NavComponent implements OnInit, OnDestroy {
 
     if (restaurantCode.length) {
       this.isUserCollapsed = true;
-      if (this.isAdminOpened.length &&
-        this.itemElements.last.cdkOverlayOrigin &&
-        this.itemElements.last.cdkOverlayOrigin.nativeElement.parentNode.dataset.restaurantCode === restaurantCode) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (this.isAdminOpened.length &&
+          this.itemElements.last &&
+          this.itemElements.last.cdkOverlayOrigin &&
+          this.itemElements.last.cdkOverlayOrigin.nativeElement.parentNode.dataset.restaurantCode === restaurantCode) {
           const heightToScroll = this.itemElements.last.cdkOverlayOrigin.nativeElement.parentNode.clientHeight;
 
           if (heightToScroll) {
@@ -114,8 +116,8 @@ export class NavComponent implements OnInit, OnDestroy {
               behavior: 'smooth',
             });
           }
-        }, 250);
-      }
+        }
+      }, 250);
     }
   }
 

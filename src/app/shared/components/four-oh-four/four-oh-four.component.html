@@ -1,7 +1,7 @@
 <nz-result nzStatus="404" nzTitle="404" nzSubTitle="Désolé, la page que vous avez visitée n'existe pas.">
   <div nz-result-extra>
-    <a [routerLink]="['/']">
-      <button nz-button nzType="primary">Retour vers le resto démo</button>
+    <a [routerLink]="['/', (demoResto$ | async)?.code]">
+      <button nz-button nzType="primary">Retour vers le {{ (demoResto$ | async)?.name }}</button>
     </a>
   </div>
 </nz-result>

@@ -6,8 +6,6 @@ import { AdminComponent } from 'src/app/modules/admin/components/admin.component
 import { HomeComponent } from 'src/app/modules/home/components/home.component';
 import { FourOhFourComponent } from 'src/app/shared/components/four-oh-four/four-oh-four.component';
 
-export const DEMO_RESTO: string = 'demo-resto';
-
 const routes: Routes = [
   {
     path: 'page/404',
@@ -38,7 +36,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: `/${DEMO_RESTO}`,
+    redirectTo: 'page/404',
   },
   {
     path: ':code',

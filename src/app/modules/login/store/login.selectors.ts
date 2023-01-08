@@ -53,3 +53,8 @@ export const selectPasswordChanged = createSelector(
   selectFeature,
   (state: LoginState) => state.passwordChanged
 );
+
+export const selectDemoResto = createSelector(
+  selectFeature,
+  (state: LoginState) => state.demoResto
+);

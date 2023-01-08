@@ -1,10 +1,10 @@
 <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0" [nzCollapsed]="isSiderCollapsed$ | async" (nzCollapsedChange)="siderCollapseChange($event)">
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
-    <li nz-menu-item [nzSelected]="routeName === 'home'">
-      <a (click)="manuallyCollapse()" class="main-link" [routerLink]="[restaurantCode || DEMO_RESTO]">
+    <li nz-menu-item [nzSelected]="routeName === 'home'" [ngStyle]="(demoResto$ | async)?.code === restaurantCode ? getDemoStyle() : {}">
+      <a (click)="manuallyCollapse()" class="main-link" [routerLink]="[restaurantCode || (demoResto$ | async)?.code]">
         <i nz-icon nzType="heart"></i>
-        <span class="restaurant-name">{{ (restaurant$ | async)?.name || 'Démo resto' }}</span>
+        <span class="restaurant-name">{{ (restaurant$ | async)?.name || (demoResto$ | async)?.name }}</span>
       </a>
     </li>
 
@@ -24,6 +24,7 @@
             <span>Nouveau</span>
           </a>
         </li>
+
         <ng-container *ngFor="let restaurant of (userRestaurants$ | async)">
           <ng-template #titleNameTpl>
             <span class="restaurant-name-tooltip" nz-tooltip [nzTooltipTitle]="restaurant.name"
@@ -32,9 +33,9 @@
             </span>
           </ng-template>
 
-          <li #item nz-submenu class="restaurant-row" [nzIcon]="DEMO_RESTO === restaurant.code ? 'bulb' : 'coffee'"
+          <li #item nz-submenu class="restaurant-row" [nzIcon]="(demoResto$ | async)?.code === restaurant.code ? 'bulb' : 'coffee'"
             [nzTitle]="titleNameTpl" [nzOpen]="isAdminOpened === restaurant.code"
-            [ngStyle]="DEMO_RESTO === restaurant.code ? getDemoStyle() : {}"
+            [ngStyle]="(demoResto$ | async)?.code === restaurant.code ? getDemoStyle() : {}"
             (nzOpenChange)="openAdminResto(isAdminOpened === restaurant.code ? '' : restaurant.code)" [attr.data-restaurant-code]="restaurant.code">
             <ul>
               <li nz-menu-item [nzMatchRouter]="true">

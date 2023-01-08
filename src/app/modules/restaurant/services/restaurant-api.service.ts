@@ -40,4 +40,10 @@ export class RestaurantApiService {
       `${this.protocolHttp}${this.baseUrl}/restaurants`,
     ) as Observable<Restaurant[]>;
   }
+
+  getDemoResto(): Observable<Restaurant> {
+    return this.http.get(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/demo-resto`,
+    ) as Observable<Restaurant>;
+  }
 }
