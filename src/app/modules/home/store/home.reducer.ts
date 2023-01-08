@@ -26,6 +26,7 @@ export interface HomeState {
   pastries: Pastry[];
   selectedPastries: { [pastryId: string]: number };
   personalCommand: Command | null;
+  currentSentCommands: Command[];
   errorCommand: Object | null;
   loading: boolean;
   restaurant: Restaurant | null;
@@ -36,6 +37,7 @@ export const initialState: HomeState = {
   pastries: [...pastriesMock],
   selectedPastries: {},
   personalCommand: null,
+  currentSentCommands: [],
   errorCommand: null,
   loading: false,
   restaurant: null,
@@ -114,6 +116,7 @@ const homeReducer = createReducer(
   on(setPersonalCommand, (state, { command }) => ({
     ...state,
     personalCommand: command,
+    currentSentCommands: [...state.currentSentCommands, command]
   })),
   on(setErrorCommand, (state, { error }) => ({
     ...state,

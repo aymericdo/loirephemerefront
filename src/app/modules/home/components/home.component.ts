@@ -20,6 +20,7 @@ import {
 import { Observable, ReplaySubject } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import {
+  selectCurrentSentCommandFromCommandList,
   selectErrorCommand,
   selectHasSelectedPastries,
   selectIsLoading,
@@ -64,8 +65,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   errorCommand$: Observable<Object | null>;
   demoResto$: Observable<Restaurant | null>;
   isSuccessModalVisible = false;
-  isWizzNotificationVisible = false;
 
+  private commandNotificationIdByCommandId: { [commandId: string]: string } = {};
+  private isWizzNotificationVisibleCommandIds: string[] = [];
   private audio!: HTMLAudioElement;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -198,6 +200,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.store.dispatch(resetCommand());
   }
 
+  handleCloseSuccessModal(): void {
+    this.isSuccessModalVisible = false;
+
+    this.personalCommand$.pipe(filter(Boolean), take(1))
+      .subscribe((command: Command) => {
+        this.commandNotificationIdByCommandId[command.id] = this.notification
+          .create(
+            'success',
+            `Votre commande ${command.reference} a bien été envoyée !`,
+            "Pour être averti que votre commande est prête, ne rafraichissez pas cette page. Une notification vous préviendra.", {
+              nzDuration: 0,
+              nzKey: command.id,
+            }
+          ).messageId;
+    });
+  }
+
   ngOnDestroy() {
     this.titleService.setTitle(APP_NAME);
     this.destroyed$.next(true);
@@ -226,15 +245,30 @@ export class HomeComponent implements OnInit, OnDestroy {
               })
             );
           } else if (data.hasOwnProperty('wizz')) {
-            if (!this.isWizzNotificationVisible) {
-              this.isWizzNotificationVisible = true;
-              this.notification
-                .create('success', 'Votre commande est prête !', '', {
-                  nzDuration: 0,
-                })
-                .onClose.subscribe(() => {
-                  this.isWizzNotificationVisible = false;
-                });
+            const commandId = data.wizz.commandId;
+
+            this.notification.remove(this.commandNotificationIdByCommandId[commandId]);
+
+            if (!this.isWizzNotificationVisibleCommandIds.some((id) => id === commandId)) {
+              this.isWizzNotificationVisibleCommandIds.push(commandId);
+
+              this.store.select(selectCurrentSentCommandFromCommandList({ commandId }))
+                .pipe(filter(Boolean), take(1))
+                .subscribe((command: Command) => {
+                  this.notification
+                    .create(
+                      'info',
+                      `Votre commande ${command.reference} est prête !`,
+                      'Bonne dégustation ! 🥰', {
+                        nzDuration: 0,
+                      }
+                    ).onClose.subscribe(() => {
+                      this.isWizzNotificationVisibleCommandIds =
+                        this.isWizzNotificationVisibleCommandIds.filter((id) => {
+                        return id !== commandId;
+                      });
+                    });
+                  });
             }
 
             const canVibrate = window.navigator.vibrate;

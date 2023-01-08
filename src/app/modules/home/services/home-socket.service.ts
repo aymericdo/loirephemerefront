@@ -6,7 +6,7 @@ const webSocketDataKey = ['stockChanged', 'wizz'];
 const SOCKET_IS_OPEN = 1;
 
 export type WebSocketData = {
-  [key: string]: { pastryId: string; newStock: number };
+  [key: string]: { pastryId: string; newStock: number, commandId: string };
 };
 
 export class HomeWebSocketService {

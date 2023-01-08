@@ -22,7 +22,7 @@
 </div>
 
 <app-order-success-modal *ngIf="isSuccessModalVisible && (personalCommand$ | async)"
-  [commandReference]="(personalCommand$ | async)?.reference!" (clickCancel)="isSuccessModalVisible = false">
+  [commandReference]="(personalCommand$ | async)?.reference!" (clickCancel)="handleCloseSuccessModal()">
 </app-order-success-modal>
 
 <app-order-error-modal *ngIf="isSuccessModalVisible && (errorCommand$ | async)" [errors]="(errorCommand$ | async)!"

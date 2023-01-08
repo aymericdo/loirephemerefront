@@ -1,4 +1,5 @@
 import { createSelector } from '@ngrx/store';
+import { Command } from 'src/app/interfaces/command.interface';
 import { AppState } from 'src/app/store/app.state';
 import { HomeState } from './home.reducer';
 
@@ -36,6 +37,16 @@ export const selectPersonalCommand = createSelector(
   selectFeature,
   (state: HomeState) => state.personalCommand
 );
+
+export const selectCurrentSentCommands = createSelector(
+  selectFeature,
+  (state: HomeState) => state.currentSentCommands
+);
+
+export const selectCurrentSentCommandFromCommandList = (props: { commandId: string }) =>
+  createSelector(selectCurrentSentCommands, (commands: Command[]) => {
+    return commands.find((command) => command.id === props.commandId);
+  });
 
 export const selectErrorCommand = createSelector(
   selectFeature,
