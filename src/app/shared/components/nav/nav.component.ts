@@ -4,6 +4,7 @@ import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { APP_VERSION } from 'src/app/helpers/version';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { setIsSiderCollapsed } from 'src/app/modules/home/store/home.actions';
@@ -30,6 +31,8 @@ export class NavComponent implements OnInit, OnDestroy {
   isAdminOpened = '';
   restaurantCode: string | null = null;
   routeName: string | null = null;
+
+  APP_VERSION = APP_VERSION;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

@@ -15,8 +15,8 @@
       </span>
     </ng-template>
 
-    <li nz-submenu [nzOpen]="!!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
-      [nzTitle]="titleAdminSectionTpl" nzIcon="coffee" [nzMenuClassName]="'restaurant-section'">
+    <li nz-submenu [nzOpen]="isUserCollapsed && !!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
+      [nzTitle]="titleAdminSectionTpl" nzIcon="coffee" [nzMenuClassName]="'restaurant-section'" (nzOpenChange)="isUserCollapsed = true">
       <ul #list>
         <li nz-menu-item [nzMatchRouter]="true" class="restaurant-row">
           <a (click)="manuallyCollapse()" [routerLink]="['page', 'restaurant', 'new']">
@@ -88,7 +88,7 @@
       </ng-container>
     </ng-template>
 
-    <li nz-submenu [nzOpen]="!isUserCollapsed" (nzOpenChange)="isAdminOpened = ''; isUserCollapsed = !isUserCollapsed"
+    <li nz-submenu [nzOpen]="!isUserCollapsed" (nzOpenChange)="isUserCollapsed = !isUserCollapsed"
       [nzTitle]="titleUserTpl" nzIcon="user">
       <ul>
         <li *ngIf="isLoggedIn" nz-menu-item [nzMatchRouter]="true">
@@ -110,7 +110,7 @@
           </a>
         </li>
         <li>
-          <span class="version">v3.0.1</span>
+          <span class="version">{{ APP_VERSION }}</span>
         </li>
       </ul>
     </li>
