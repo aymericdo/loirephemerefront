@@ -13,8 +13,7 @@ export class HttpResponseInterceptor implements HttpInterceptor {
     '/users/confirm-email',
     '/users/confirm-recover-email',
     '/users/validate-recover-email-code',
-    '/commands/notification',
-    '/pastries/notification',
+    '/notification',
   ];
 
   unauthorizedBlackList = [
