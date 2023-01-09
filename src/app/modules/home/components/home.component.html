@@ -32,3 +32,9 @@
   (clickCommand)="handleClickCommand($event)" [stockIssue]="(isStockIssue$ | async)!"
   [allPastries]="(pastries$ | async)!" [selectedPastries]="(selectedPastries$ | async)!"
   [totalPrice]="(totalPrice$ | async)!"></app-order-footer>
+
+<app-information-popover *ngIf="(demoResto$ | async)?.id && (demoResto$ | async)?.id === (restaurant$ | async)?.id">
+  <div>Le restaurant <b>{{ (demoResto$ | async)?.name }}</b> permet à tout le monde de tester l'application.</div>
+  <div>Vous pouvez donc prendre des commandes, manipuler, tester.</div>
+  <div>La partie <b>admin</b> de ce resto existe, et elle est accessible à tout le monde, <b>une fois connecté.</b></div>
+</app-information-popover>

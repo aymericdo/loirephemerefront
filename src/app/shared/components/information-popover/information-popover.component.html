@@ -1,0 +1,7 @@
+
+<button class="information" nz-button nz-popover nzType="primary" nzSize="large" nzShape="circle" [nzPopoverOverlayClassName]="'information-popover'"
+  nzPopoverTitle="Information" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topRight"><span nz-icon nzType="question"></span></button>
+
+<ng-template #contentTemplate>
+  <ng-content></ng-content>
+</ng-template>

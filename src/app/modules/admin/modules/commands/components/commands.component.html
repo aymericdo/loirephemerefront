@@ -72,10 +72,7 @@
   </div>
 </div>
 
-<button class="information" nz-button nz-popover nzType="primary" nzSize="large" nzShape="circle" [nzPopoverOverlayClassName]="'information-popover'"
-  nzPopoverTitle="Information" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topRight"><span nz-icon nzType="question"></span></button>
-
-<ng-template #contentTemplate>
+<app-information-popover>
   <div>Les commandes sont celles de la journée courante.</div>
   <div>Nous gardons aussi dans cette liste les commandes qui n'ont pas été livrées, ou pas encore payées.</div>
-</ng-template>
+</app-information-popover>

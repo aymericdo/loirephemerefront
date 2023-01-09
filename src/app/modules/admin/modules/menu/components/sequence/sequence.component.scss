@@ -1,11 +1,5 @@
 :host {
 
-  .information {
-    position: fixed;
-    bottom: 1.25rem;
-    right: 1.25rem;
-  }
-
   .pastry-sequence-list {
     max-width: 100%;
     overflow: hidden;
@@ -66,9 +60,4 @@
       color: #000;
     }
   }
-}
-
-::ng-deep .information-popover {
-  padding-left: 0.625rem;
-  padding-right: 0.625rem;
 }

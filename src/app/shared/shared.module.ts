@@ -9,9 +9,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PastryCardComponent } from './components/pastry-card/pastry-card.component';
+import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 
 @NgModule({
   declarations: [
+    InformationPopoverComponent,
     NavComponent,
     FooterComponent,
     PastryCardComponent,
@@ -24,6 +26,7 @@ import { PastryCardComponent } from './components/pastry-card/pastry-card.compon
     ReactiveFormsModule,
   ],
   exports: [
+    InformationPopoverComponent,
     NavComponent,
     FooterComponent,
     PastryCardComponent,

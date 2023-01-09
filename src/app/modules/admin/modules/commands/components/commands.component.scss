@@ -11,12 +11,6 @@
     padding: 1rem;
   }
 
-  .information {
-    position: fixed;
-    bottom: 1.25rem;
-    right: 1.25rem;
-  }
-
   .empty-section {
     min-height: 150px;
   }
@@ -37,9 +31,4 @@
     padding-bottom: 6px;
     height: 100%;
   }
-}
-
-::ng-deep .information-popover {
-  padding-left: 0.625rem;
-  padding-right: 0.625rem;
 }
