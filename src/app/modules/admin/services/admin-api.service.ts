@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { environment as prodEnvironment } from 'src/environments/environment.prod';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Command } from 'src/app/interfaces/command.interface';
-import { User } from 'src/app/interfaces/user.interface';
+import { Access, User } from 'src/app/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -115,11 +115,18 @@ export class AdminApiService {
     ) as Observable<User>;
   }
 
-  deleteUserToRestaurant(code: string, email: string): Observable<boolean> {
+  deleteUserToRestaurant(code: string, id: string): Observable<boolean> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/users/by-code/${code}/delete`,
-      { email }
+      { id }
     ) as Observable<boolean>;
+  }
+
+  patchUserRestaurantAccess(code: string, id: string, access: Access[]): Observable<User> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/users/by-code/${code}`,
+      { id, access }
+    ) as Observable<User>;
   }
 
   postSub(sub: PushSubscription, code: string): Observable<any> {

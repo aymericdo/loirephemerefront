@@ -2,7 +2,7 @@
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
     <nz-page-header-subtitle>Utilisateurs</nz-page-header-subtitle>
-    <nz-page-header-tags><nz-tag [nzColor]="'volcano'">Admin</nz-tag></nz-page-header-tags>
+    <nz-page-header-tags><nz-tag [nzColor]="'orange'">Admin</nz-tag></nz-page-header-tags>
     <nz-page-header-extra>
       <div class="actions-btn">
         <nz-space nzAlign="center">
@@ -20,6 +20,8 @@
         <tr>
           <th>Email</th>
           <th>Créé le</th>
+          <th>Modifié le</th>
+          <th>Accès</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -27,10 +29,14 @@
         <tr *ngFor="let user of (users$ | async); trackBy: trackById">
           <td>{{ user.email }}</td>
           <td>{{ user.createdAt | date: "dd/MM/YYYY HH:mm" }}</td>
+          <td>{{ user.updatedAt | date: "dd/MM/YYYY HH:mm" }}</td>
+          <td>
+            <nz-checkbox-group [ngModel]="accessCheckOptionsByUserId[user.id]" (ngModelChange)="handleAccessChange(user.id, $event)"></nz-checkbox-group>
+          </td>
           <td>
             <div nzFlex nz-row nzJustify="center">
-              <button nz-button nzType="default" nzShape="circle" [disabled]="(users$ | async)?.length === 1"
-              (click)="openDeleteUserConfirmationModal(user.email)"><span nz-icon nzType="delete"></span></button>
+              <button nz-button nzType="default" nzShape="circle" [disabled]="(user$ | async)?.id === user.id"
+              (click)="openDeleteUserConfirmationModal(user.id, user.email)"><span nz-icon nzType="delete"></span></button>
             </div>
           </td>
         </tr>

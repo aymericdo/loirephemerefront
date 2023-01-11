@@ -6,6 +6,7 @@ import {
   deleteUser,
   deletingUserToRestaurant,
   fetchingUsers,
+  setUser,
   setUserEmailError,
   setUserNoEmailError,
   setUsers,
@@ -45,6 +46,14 @@ const usersReducer = createReducer(
     ...state,
     users,
   })),
+  on(setUser, (state, { user }) => ({
+    ...state,
+    users: [
+      ...state.users.map((u) => {
+        return (u.id === user.id) ? user : u;
+      })
+    ],
+  })),
   on(stopLoading, (state) => ({
     ...state,
     loading: false,
@@ -76,10 +85,10 @@ const usersReducer = createReducer(
     isAddingUser: false,
     users: [...state.users, user],
   })),
-  on(deleteUser, (state, { userEmail }) => ({
+  on(deleteUser, (state, { userId }) => ({
     ...state,
     isDeletingUser: false,
-    users: state.users.filter(user => user.email !== userEmail),
+    users: state.users.filter(user => user.id !== userId),
   })),
 );
 

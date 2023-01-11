@@ -18,12 +18,12 @@
             <ng-container *ngIf="control.hasError('alreadyIn')">L'email est déjà présent dans le restaurant
             </ng-container>
           </ng-template>
+          <div class="info"
+            [ngStyle]="{ width: '100%', 'font-style': 'italic' }">
+            * Il faut au préalable avoir créé un compte <b>Oresto</b> avec cet email.
+          </div>
         </nz-form-control>
       </nz-form-item>
-      <div class="info"
-        [ngStyle]="{ width: '100%', 'font-style': 'italic', 'font-weight': 500, 'text-align': 'center' }">
-        L'email doit déjà avoir été enregistré préalablement.
-      </div>
     </ng-container>
     <ng-container *nzModalFooter>
       <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!validateForm.valid"

@@ -13,6 +13,8 @@ import {
   deleteUser,
   deletingUserToRestaurant,
   fetchingUsers,
+  patchingUserRestaurantAccess,
+  setUser,
   setUserEmailError,
   setUserNoEmailError,
   setUsers,
@@ -79,9 +81,25 @@ export class UsersEffects {
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
-        return this.adminApiService.deleteUserToRestaurant(restaurant.code, action.email).pipe(
+        return this.adminApiService.deleteUserToRestaurant(restaurant.code, action.userId).pipe(
           switchMap((isDone: boolean) => {
-            return isDone ? [deleteUser({ userEmail: action.email })] : EMPTY;
+            return isDone ? [deleteUser({ userId: action.userId })] : EMPTY;
+          })
+        );
+      })
+    )
+  );
+
+  patchingUserRestaurantAccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(patchingUserRestaurantAccess),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService.patchUserRestaurantAccess(restaurant.code, action.userId, action.access).pipe(
+          switchMap((user: User) => {
+            return [setUser({ user })];
           })
         );
       })

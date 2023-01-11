@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { User } from 'src/app/interfaces/user.interface';
+import { Access, User } from 'src/app/interfaces/user.interface';
 
 export const fetchingUsers = createAction(
   '[Users page] Fetching users',
@@ -13,9 +13,13 @@ export const addUser = createAction(
   '[Users page] Add users',
   props<{ user: User }>()
 );
+export const setUser = createAction(
+  '[Users page] Set user',
+  props<{ user: User }>()
+);
 export const deleteUser = createAction(
   '[Users page] Delete users',
-  props<{ userEmail: string }>()
+  props<{ userId: string }>()
 );
 export const validatingUserEmail = createAction(
   '[Users page] Validating user email',
@@ -34,7 +38,11 @@ export const addingUserToRestaurant = createAction(
 );
 export const deletingUserToRestaurant = createAction(
   '[Users page] Deleting email to restaurant',
-  props<{ email: string }>()
+  props<{ userId: string }>()
+);
+export const patchingUserRestaurantAccess = createAction(
+  '[Users page] Patching user restaurant access',
+  props<{ userId: string, access: Access[] }>()
 );
 export const stopLoading = createAction(
   '[Users page] Stop loading',
