@@ -60,10 +60,11 @@ export class UsersComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe(([users, authUser]) => {
       users.forEach((user) => {
+        const userAccess: Access[] = user.access as Access[];
         this.accessCheckOptionsByUserId[user.id] = ACCESS_LIST.map((access) => ({
           label: this.getAccessLabel(access),
           value: access,
-          checked: user.access.some(a => a === access),
+          checked: userAccess.some(a => a === access),
           disabled: access === 'users' && user.id === authUser.id,
         }));
       });

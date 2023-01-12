@@ -10,12 +10,13 @@ import { RestaurantApiService } from 'src/app/modules/restaurant/services/restau
 import { AppState } from 'src/app/store/app.state';
 import {
   changePassword, confirmEmail, confirmRecoverEmail,
-  createUser, fetchDemoResto, fetchingUser, fetchingUserRestaurants,
+  createUser, fetchingDemoResto, fetchingUser, fetchingUserRestaurants,
   openConfirmationModal, openRecoverModal, setAuthError,
   setCode2, setDemoResto, setNewToken, setNoAuthError,
   setPasswordAsChanged, setUser, setUserEmailError,
   setUserNoEmailError, setUserRestaurants, signInUser,
   stopLoading,
+  stopNavLoading,
   validateRecoverEmailCode,
   validatingUserEmail,
 } from './login.actions';
@@ -28,7 +29,7 @@ export class LoginEffects {
       mergeMap(() => {
         return this.loginApiService.getUser().pipe(
           switchMap((user) => {
-            return [setUser({ user }), fetchingUserRestaurants()];
+            return [setUser({ user }), fetchingUserRestaurants(), stopNavLoading()];
           })
         );
       })
@@ -190,16 +191,16 @@ export class LoginEffects {
     )
   );
 
-  fetchDemoResto$ = createEffect(() =>
+  fetchingDemoResto$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchDemoResto),
+      ofType(fetchingDemoResto),
       mergeMap(() => {
         return this.restaurantApiService.getDemoResto().pipe(
           switchMap((restaurant: Restaurant) => {
-            return [setDemoResto({ restaurant}), setUserRestaurants({ restaurants: [restaurant] })];
+            return [setDemoResto({ restaurant}), setUserRestaurants({ restaurants: [restaurant] }), stopNavLoading()];
           }),
           catchError(() => {
-            return [stopLoading()];
+            return [stopLoading(), stopNavLoading()];
           }),
         );
       })

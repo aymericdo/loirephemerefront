@@ -2,15 +2,15 @@ import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from
 import { ActivationEnd, Router } from '@angular/router';
 import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, filter } from 'rxjs';
+import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { APP_VERSION } from 'src/app/helpers/version';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { User } from 'src/app/interfaces/user.interface';
+import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
 import { setIsSiderCollapsed } from 'src/app/modules/home/store/home.actions';
 import { selectIsSiderCollapsed, selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { fetchDemoResto, fetchingUser, resetUser } from 'src/app/modules/login/store/login.actions';
-import { selectDemoResto, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { fetchingDemoResto, fetchingUser, resetUser } from 'src/app/modules/login/store/login.actions';
+import { selectDemoResto, selectNavLoading, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -27,10 +27,12 @@ export class NavComponent implements OnInit, OnDestroy {
   userRestaurants$: Observable<Restaurant[] | null>;
   isSiderCollapsed$: Observable<boolean>;
   demoResto$: Observable<Restaurant | null>;
+  navLoading$: Observable<boolean>;
   isUserCollapsed = true;
   isAdminOpened = '';
   restaurantCode: string | null = null;
   routeName: string | null = null;
+  hasAccessByRestaurantIdBySection: { [restaurantId: string]: { [access: string]: boolean } } = {};
 
   APP_VERSION = APP_VERSION;
 
@@ -46,13 +48,49 @@ export class NavComponent implements OnInit, OnDestroy {
     this.userRestaurants$ = this.store.select(selectUserRestaurants);
     this.isSiderCollapsed$ = this.store.select(selectIsSiderCollapsed);
     this.demoResto$ = this.store.select(selectDemoResto);
+    this.navLoading$ = this.store.select(selectNavLoading);
   }
 
   ngOnInit(): void {
     this.restaurant$
-      .pipe(filter(Boolean))
-      .subscribe((restaurant) => {
+      .pipe(
+        filter(Boolean),
+        takeUntil(this.destroyed$),
+      ).subscribe((restaurant) => {
         this.restaurantCode = restaurant.code;
+      });
+
+    this.demoResto$
+      .pipe(
+        filter(Boolean),
+        takeUntil(this.destroyed$),
+      ).subscribe((demoResto) => {
+        if (!this.isLoggedIn) {
+          this.hasAccessByRestaurantIdBySection[demoResto.id] = [...ACCESS_LIST].reduce((prev, access: Access) => {
+            prev[access] = true;
+            return prev;
+          }, {} as { [access: string]: boolean });
+        }
+      });
+
+    this.user$
+      .pipe(
+        filter(Boolean),
+        takeUntil(this.destroyed$),
+      ).subscribe((user) => {
+        const userAccessByRestaurant: { [restaurantId: string]: Access[] } =
+          user.access as { [restaurantId: string]: Access[] };
+
+        this.hasAccessByRestaurantIdBySection = Object.keys(userAccessByRestaurant).reduce((prev, restaurantId) => {
+          const hasAccessBySection = [...ACCESS_LIST].reduce((prev, access: Access) => {
+            prev[access] = userAccessByRestaurant[restaurantId].includes(access);
+            return prev;
+          }, {} as { [access: string]: boolean });
+
+          prev[restaurantId] = hasAccessBySection;
+
+          return prev;
+        }, {} as { [restaurantId: string]: { [access: string]: boolean } });
       });
 
     this.router.events
@@ -67,7 +105,7 @@ export class NavComponent implements OnInit, OnDestroy {
       this.store.dispatch(fetchingUser());
     }
 
-    this.store.dispatch(fetchDemoResto());
+    this.store.dispatch(fetchingDemoResto());
   }
 
   ngOnDestroy() {
@@ -124,7 +162,7 @@ export class NavComponent implements OnInit, OnDestroy {
     }
   }
 
-  getRouteName(url: string): string | null {
+  private getRouteName(url: string): string | null {
     const urlArray = url.split('/');
     if (urlArray.length > 1 && urlArray[2] === 'admin') {
       this.openAdminResto(urlArray[1]);

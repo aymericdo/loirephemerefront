@@ -8,6 +8,10 @@
       </a>
     </li>
 
+    <div class="loading-section" *ngIf="(navLoading$ | async)">
+      <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+
     <ng-template #titleAdminSectionTpl>
       <span class="admin-section-title">
         <span>Restaurants</span>
@@ -15,7 +19,7 @@
       </span>
     </ng-template>
 
-    <li nz-submenu [nzOpen]="isUserCollapsed && !!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
+    <li *ngIf="(navLoading$ | async) === false" nz-submenu [nzOpen]="isUserCollapsed && !!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
       [nzTitle]="titleAdminSectionTpl" nzIcon="coffee" [nzMenuClassName]="'restaurant-section'" (nzOpenChange)="isUserCollapsed = true">
       <ul #list>
         <li nz-menu-item [nzMatchRouter]="true" class="restaurant-row">
@@ -38,25 +42,25 @@
             [ngStyle]="(demoResto$ | async)?.code === restaurant.code ? getDemoStyle() : {}"
             (nzOpenChange)="openAdminResto(isAdminOpened === restaurant.code ? '' : restaurant.code)" [attr.data-restaurant-code]="restaurant.code">
             <ul>
-              <li nz-menu-item [nzMatchRouter]="true">
+              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id]['menu']" nz-menu-item [nzMatchRouter]="true">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'menu']">
                   <i nz-icon nzType="shopping-cart"></i>
                   <span>Menu</span>
                 </a>
               </li>
-              <li nz-menu-item [nzMatchRouter]="true">
+              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id]['commands']" nz-menu-item [nzMatchRouter]="true">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'commands']">
                   <i nz-icon nzType="alert"></i>
                   <span>Commandes</span>
                 </a>
               </li>
-              <li nz-menu-item [nzMatchRouter]="true">
+              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id]['stats']" nz-menu-item [nzMatchRouter]="true">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'stats']">
                   <i nz-icon nzType="pie-chart"></i>
                   <span>Stats</span>
                 </a>
               </li>
-              <li nz-menu-item [nzMatchRouter]="true">
+              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id]['users']" nz-menu-item [nzMatchRouter]="true">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'users']">
                   <i nz-icon nzType="user"></i>
                   <span>Utilisateurs</span>

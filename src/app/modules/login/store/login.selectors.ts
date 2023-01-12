@@ -58,3 +58,8 @@ export const selectDemoResto = createSelector(
   selectFeature,
   (state: LoginState) => state.demoResto
 );
+
+export const selectNavLoading = createSelector(
+  selectFeature,
+  (state: LoginState) => state.navLoading
+);

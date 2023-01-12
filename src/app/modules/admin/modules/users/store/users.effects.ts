@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
 import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
-import { User } from 'src/app/interfaces/user.interface';
+import { Access, User } from 'src/app/interfaces/user.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -21,6 +21,10 @@ import {
   stopLoading,
   validatingUserEmail,
 } from './users.actions';
+
+import { setUserAccess,
+} from 'src/app/modules/login/store/login.actions';
+import { selectUser } from 'src/app/modules/login/store/login.selectors';
 
 @Injectable()
 export class UsersEffects {
@@ -95,11 +99,19 @@ export class UsersEffects {
       ofType(patchingUserRestaurantAccess),
       withLatestFrom(
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+        this.store$.select(selectUser).pipe(filter(Boolean)),
       ),
-      mergeMap(([action, restaurant]) => {
+      mergeMap(([action, restaurant, currentUser]) => {
         return this.adminApiService.patchUserRestaurantAccess(restaurant.code, action.userId, action.access).pipe(
           switchMap((user: User) => {
-            return [setUser({ user })];
+            if (user.id === currentUser.id) {
+              return [
+                setUser({ user }),
+                setUserAccess({ access: user.access as Access[], restaurantId: restaurant.id })
+              ];
+            } else {
+              return [setUser({ user })];
+            }
           })
         );
       })

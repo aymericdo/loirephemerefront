@@ -10,6 +10,13 @@
     width: 100%;
   }
 
+  .loading-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+
   nz-sider {
     overflow: auto;
     height: 100%;

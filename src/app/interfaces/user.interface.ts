@@ -6,7 +6,7 @@ export interface User {
   email: string;
   createdAt: string;
   updatedAt: string;
-  access: Access[]
+  access: Access[] | { [restaurantId: string]: Access[] };
 }
 
 export interface CoreUser {

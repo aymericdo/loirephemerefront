@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { CoreUser, User } from 'src/app/interfaces/user.interface';
+import { Access, CoreUser, User } from 'src/app/interfaces/user.interface';
 
 export const fetchingUser = createAction(
   '[Login page] Fetching User',
@@ -28,6 +28,11 @@ export const addUserRestaurants = createAction(
 export const setUser = createAction(
   '[Login page] Set User',
   props<{ user: User }>()
+);
+
+export const setUserAccess = createAction(
+  '[Login page] Set User access',
+  props<{ access: Access[], restaurantId: string }>()
 );
 
 export const resetUser = createAction(
@@ -116,6 +121,10 @@ export const setPasswordAsChanged = createAction(
   props<{ changed: boolean }>()
 );
 
-export const fetchDemoResto = createAction(
+export const fetchingDemoResto = createAction(
   '[Login page] fetch demo resto only',
+);
+
+export const stopNavLoading = createAction(
+  '[Login page] Stop nav loading',
 );

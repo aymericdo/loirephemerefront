@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { User } from 'src/app/interfaces/user.interface';
-import { addUserRestaurants, confirmEmail, confirmRecoverEmail, createUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError, setCode2, setDemoResto, setNewToken, setNoAuthError, setPasswordAsChanged, setUser, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, validatingUserEmail } from './login.actions';
+import { Access, User } from 'src/app/interfaces/user.interface';
+import { addUserRestaurants, confirmEmail, confirmRecoverEmail, createUser, fetchingDemoResto, fetchingUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError, setCode2, setDemoResto, setNewToken, setNoAuthError, setPasswordAsChanged, setUser, setUserAccess, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, stopNavLoading, validatingUserEmail } from './login.actions';
 
 export const loginFeatureKey = 'login';
 
@@ -12,6 +12,7 @@ export interface LoginState {
   user: User | null;
   userRestaurants: Restaurant[] | null;
   demoResto: Restaurant | null;
+  navLoading: boolean;
   loading: boolean;
   code2: string | null;
   confirmationModalOpened: boolean;
@@ -26,6 +27,7 @@ export const initialState: LoginState = {
   user: null,
   userRestaurants: null,
   demoResto: null,
+  navLoading: false,
   loading: false,
   code2: null,
   confirmationModalOpened: false,
@@ -35,6 +37,10 @@ export const initialState: LoginState = {
 
 const loginReducer = createReducer(
   initialState,
+  on(fetchingUser, fetchingDemoResto, (state) => ({
+    ...state,
+    navLoading: true,
+  })),
   on(createUser, signInUser, confirmEmail, confirmRecoverEmail, (state) => ({
     ...state,
     loading: true,
@@ -89,6 +95,16 @@ const loginReducer = createReducer(
     ...state,
     user,
   })),
+  on(setUserAccess, (state, { access, restaurantId }) => ({
+    ...state,
+    user: {
+      ...state.user,
+      access: {
+        ...state.user?.access,
+        [restaurantId]: [...access],
+      } as { [restaurantId: string]: Access[] },
+    } as User,
+  })),
   on(setUserRestaurants, (state, { restaurants }) => ({
     ...state,
     userRestaurants: restaurants,
@@ -104,6 +120,10 @@ const loginReducer = createReducer(
   on(stopLoading, (state) => ({
     ...state,
     loading: false,
+  })),
+  on(stopNavLoading, (state) => ({
+    ...state,
+    navLoading: false,
   })),
   on(setPasswordAsChanged, (state, { changed }) => ({
     ...state,
