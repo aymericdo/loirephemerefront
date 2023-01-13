@@ -22,7 +22,7 @@ const routes: Routes = [
       component: RecoverComponent,
     }]
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '/page/404' },
 ];
 
 @NgModule({

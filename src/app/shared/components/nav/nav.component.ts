@@ -170,17 +170,17 @@ export class NavComponent implements OnInit, OnDestroy {
     if (urlArray.length > 1 && urlArray[2] === 'admin') {
       this.openAdminResto(urlArray[1]);
 
-      if (urlArray.length > 2 && urlArray[3].includes('commands')) {
+      if (urlArray.length > 2 && urlArray[3]?.includes('commands')) {
         return 'commands';
-      } else if (urlArray.length > 2 && urlArray[3].includes('stats')) {
+      } else if (urlArray.length > 2 && urlArray[3]?.includes('stats')) {
         return 'stats';
-      } else if (urlArray.length > 2 && urlArray[3].includes('users')) {
+      } else if (urlArray.length > 2 && urlArray[3]?.includes('users')) {
         return 'users';
-      } else if (urlArray.length > 2 && urlArray[3].includes('menu')) {
+      } else if (urlArray.length > 2 && urlArray[3]?.includes('menu')) {
         return 'menu';
       }
     } else if (urlArray.length > 1 && urlArray[2] === 'restaurant') {
-      if (urlArray.length > 2 && urlArray[3].includes('new')) {
+      if (urlArray.length > 2 && urlArray[3]?.includes('new')) {
         return 'new-restaurant';
       }
     } else if (urlArray.length === 2) {

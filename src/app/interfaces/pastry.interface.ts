@@ -1,7 +1,7 @@
 import { Restaurant } from "./restaurant.interface";
 
 export interface Historical {
-  date: Date;
+  date: string;
   price?: [number, number];
   type?: [string | null, string];
 }

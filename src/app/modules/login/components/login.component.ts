@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { ReplaySubject, filter, takeUntil, withLatestFrom } from 'rxjs';
 import { stopLoading } from 'src/app/modules/login/store/login.actions';
-import { selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { selectDemoResto, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -13,7 +12,6 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  userRestaurants$!: Observable<Restaurant[] | null>;
   isOnRecover = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -25,13 +23,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isOnRecover = this.router.url === '/page/login/recover';
-    this.userRestaurants$ = this.store.select(selectUserRestaurants);
-    this.userRestaurants$.pipe(
+    this.store.select(selectUserRestaurants).pipe(
       filter(Boolean),
+      withLatestFrom(this.store.select(selectDemoResto).pipe(filter(Boolean))),
       takeUntil(this.destroyed$),
-    ).subscribe((restaurants) => {
+    ).subscribe(([restaurants, restoDemo]) => {
       if (restaurants.length) {
-        this.router.navigate([restaurants[0].code, 'admin', 'menu']);
+        this.router.navigate([restoDemo.code, 'admin', 'menu']);
       } else {
         this.router.navigate(['page', 'restaurant', 'new']);
       }

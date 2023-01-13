@@ -1,28 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, filter, take } from 'rxjs';
+import { Observable, ReplaySubject, filter, take, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { selectUser } from 'src/app/modules/login/store/login.selectors';
+import { createRestaurant, validateRestaurantName } from 'src/app/modules/restaurant/store/restaurant.actions';
+import { selectNewRestaurant, selectRestaurantNameError } from 'src/app/modules/restaurant/store/restaurant.selectors';
 import { AppState } from 'src/app/store/app.state';
-import { createRestaurant, validateRestaurantName } from '../../store/restaurant.actions';
-import { selectRestaurantNameError } from '../../store/restaurant.selectors';
 
 @Component({
   selector: 'app-new-restaurant',
   templateUrl: './new-restaurant.component.html',
   styleUrls: ['./new-restaurant.component.scss']
 })
-export class NewRestaurantComponent implements OnInit {
+export class NewRestaurantComponent implements OnInit, OnDestroy {
   validateForm!: UntypedFormGroup;
   restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   user$!: Observable<User | null>;
+  restaurant$!: Observable<Restaurant | null>;
   currentStep = 0;
 
   SIZE = SIZE;
 
-  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(
+    private store: Store<AppState>,
+    private router: Router,
+    private fb: UntypedFormBuilder,
+  ) { }
 
   ngOnInit() {
     this.restaurantNameError$ = this.store.select(selectRestaurantNameError);
@@ -31,6 +40,18 @@ export class NewRestaurantComponent implements OnInit {
     this.validateForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.restaurantNameAsyncValidator]],
     });
+
+    this.store.select(selectNewRestaurant).pipe(
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe((restaurant) => {
+      this.router.navigate([restaurant.code, 'admin', 'menu']);
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   submitRestaurantForm(): void {

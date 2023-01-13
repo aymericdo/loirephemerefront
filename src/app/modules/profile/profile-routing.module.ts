@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '',
     component: ProfileComponent,
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '/page/404' },
 ];
 
 @NgModule({

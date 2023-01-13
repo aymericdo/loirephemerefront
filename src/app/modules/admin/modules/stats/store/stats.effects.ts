@@ -29,7 +29,7 @@ export class StatsEffects {
     this.actions$.pipe(
       ofType(fetchingRestaurantCommands),
       mergeMap((action) => {
-        return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate).pipe(
+        return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate, true).pipe(
           switchMap((commands) => {
             return [setCommands({ commands }), stopLoading()];
           }),

@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '',
     component: UsersComponent,
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '/page/404' },
 ];
 
 @NgModule({

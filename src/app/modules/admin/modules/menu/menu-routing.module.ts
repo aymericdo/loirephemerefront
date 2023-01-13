@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '',
     component: MenuComponent,
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '/page/404' },
 ];
 
 @NgModule({

@@ -17,12 +17,14 @@ export interface RestaurantState {
   restaurants: Restaurant[];
   restaurantNameError: { error: boolean, duplicated: boolean } | null | undefined;
   loading: boolean;
+  newRestaurant: Restaurant | null;
 }
 
 export const initialState: RestaurantState = {
   restaurants: restaurantsMock,
   restaurantNameError: undefined,
   loading: false,
+  newRestaurant: null,
 };
 
 const restaurantReducer = createReducer(
@@ -38,7 +40,7 @@ const restaurantReducer = createReducer(
   })),
   on(setNewRestaurant, (state, { restaurant }) => ({
     ...state,
-    restaurant: { ...restaurant },
+    newRestaurant: { ...restaurant },
     loading: false,
   })),
   on(validateRestaurantName, (state) => ({

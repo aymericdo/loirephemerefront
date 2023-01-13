@@ -49,7 +49,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/admin/admin.module').then((m) => m.AdminModule),
   },
-  { path: '**', redirectTo: 'page/404' },
+  { path: '**', redirectTo: '/page/404' },
 ];
 
 @NgModule({

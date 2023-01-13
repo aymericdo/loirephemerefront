@@ -16,7 +16,7 @@ const routes: Routes = [
       component: NewRestaurantComponent,
     }]
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '/page/404' },
 ];
 
 @NgModule({

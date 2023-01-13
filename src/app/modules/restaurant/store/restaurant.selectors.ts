@@ -18,3 +18,8 @@ export const selectRestaurantNameError = createSelector(
   selectFeature,
   (state: RestaurantState) => state.restaurantNameError
 );
+
+export const selectNewRestaurant = createSelector(
+  selectFeature,
+  (state: RestaurantState) => state.newRestaurant
+);

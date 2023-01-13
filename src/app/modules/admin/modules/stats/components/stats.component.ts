@@ -7,13 +7,13 @@ import {
   ChartData,
 } from 'chart.js';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
-import * as moment from 'moment';
 import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { selectAllPastries, selectIsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
 import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
+import { DATE_PIPE_DEFAULT_TIMEZONE, DatePipe } from '@angular/common';
 
 @Component({
   templateUrl: './stats.component.html',
@@ -99,6 +99,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router,
     private route: ActivatedRoute,
+    private datepipe: DatePipe,
   ) {
     this.payedCommands$ = this.store.select(selectPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
@@ -273,7 +274,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       }, {} as { [attribute: string]: (string | number) });
 
       let historicalDateIndex = 0;
-      while (moment(pastry.historical[historicalDateIndex].date).isSameOrBefore(moment(commandDate))) {
+      while (new Date(pastry.historical[historicalDateIndex].date) <= new Date(commandDate)) {
         const currentHistorical: Historical = pastry.historical[historicalDateIndex];
         this.statsAttributes.forEach((attr: string) => {
           if (currentHistorical.hasOwnProperty(attr)) {
@@ -360,7 +361,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       this.pastriesByTypeByDateBarChartData[type] = {
         labels: Object.keys(pastriesByTypeByDate[type])
           .reverse()
-          .map((dateStr) => moment(dateStr, 'YYYY/MM/DD').locale('fr').format('dddd DD/MM')),
+          .map((dateStr) => this.datepipe.transform(new Date(dateStr), 'EEEE dd/MM', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr')),
         datasets: pastries
           .filter((p) => p.type === type && countByTypeByPastry[type][p.name] > 0)
           .map((p) => {
@@ -382,7 +383,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.globalBarChartData = {
       labels: Object.keys(cashByDate)
         .reverse()
-        .map((dateStr) => moment(dateStr, 'YYYY/MM/DD').locale('fr').format('dddd DD/MM')),
+        .map((dateStr) => this.datepipe.transform(new Date(dateStr), 'EEEE dd/MM', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr')),
       datasets: [{
         label: 'Total',
         data: Object.keys(cashByDate)
