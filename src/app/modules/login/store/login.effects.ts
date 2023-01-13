@@ -29,7 +29,7 @@ export class LoginEffects {
       mergeMap(() => {
         return this.loginApiService.getUser().pipe(
           switchMap((user) => {
-            return [setUser({ user }), fetchingUserRestaurants(), stopNavLoading()];
+            return [setUser({ user }), fetchingUserRestaurants()];
           })
         );
       })
@@ -197,7 +197,7 @@ export class LoginEffects {
       mergeMap(() => {
         return this.restaurantApiService.getDemoResto().pipe(
           switchMap((restaurant: Restaurant) => {
-            return [setDemoResto({ restaurant}), setUserRestaurants({ restaurants: [restaurant] }), stopNavLoading()];
+            return [setDemoResto({ restaurant}), setUserRestaurants({ restaurants: [restaurant] })];
           }),
           catchError(() => {
             return [stopLoading(), stopNavLoading()];

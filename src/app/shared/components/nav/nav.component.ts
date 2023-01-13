@@ -9,7 +9,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
 import { setIsSiderCollapsed } from 'src/app/modules/home/store/home.actions';
 import { selectIsSiderCollapsed, selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { fetchingDemoResto, fetchingUser, resetUser } from 'src/app/modules/login/store/login.actions';
+import { fetchingDemoResto, fetchingUser, resetUser, stopNavLoading } from 'src/app/modules/login/store/login.actions';
 import { selectDemoResto, selectNavLoading, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -71,6 +71,7 @@ export class NavComponent implements OnInit, OnDestroy {
             return prev;
           }, {} as { [access: string]: boolean });
         }
+        this.store.dispatch(stopNavLoading());
       });
 
     this.user$
@@ -91,6 +92,8 @@ export class NavComponent implements OnInit, OnDestroy {
 
           return prev;
         }, {} as { [restaurantId: string]: { [access: string]: boolean } });
+
+        this.store.dispatch(stopNavLoading());
       });
 
     this.router.events
