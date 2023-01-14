@@ -2,10 +2,11 @@
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
     <li nz-menu-item [nzSelected]="routeName === 'home'" [ngStyle]="(demoResto$ | async)?.code === restaurantCode ? getDemoStyle() : {}">
-      <a (click)="manuallyCollapse()" class="main-link" [routerLink]="[restaurantCode || (demoResto$ | async)?.code]">
+      <a *ngIf="(navLoading$ | async) === false" (click)="manuallyCollapse()" class="main-link" [routerLink]="[restaurantCode || (demoResto$ | async)?.code]">
         <i nz-icon nzType="heart"></i>
         <span class="restaurant-name">{{ (restaurant$ | async)?.name || (demoResto$ | async)?.name }}</span>
       </a>
+      <nz-spin *ngIf="(navLoading$ | async)" nzSimple [nzSize]="'large'"></nz-spin>
     </li>
 
     <div class="loading-section" *ngIf="(navLoading$ | async)">

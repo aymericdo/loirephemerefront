@@ -18,7 +18,7 @@ import {
   stopLoading,
   stopNavLoading,
   validateRecoverEmailCode,
-  validatingUserEmail,
+  validatingUserEmail
 } from './login.actions';
 
 @Injectable()
