@@ -6,10 +6,12 @@
         <i nz-icon nzType="heart"></i>
         <span class="restaurant-name">{{ (restaurant$ | async)?.name || (demoResto$ | async)?.name }}</span>
       </a>
-      <nz-spin *ngIf="(navLoading$ | async)" nzSimple [nzSize]="'large'"></nz-spin>
+      <div class="loading-section" *ngIf="(navLoading$ | async)">
+        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+      </div>
     </li>
 
-    <div class="loading-section" *ngIf="(navLoading$ | async)">
+    <div class="loading-section large-height" *ngIf="(navLoading$ | async)">
       <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
 
