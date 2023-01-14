@@ -6,8 +6,8 @@ import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
+import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -67,8 +67,8 @@ export class PastryFormComponent implements OnInit {
   }
 
   handleStockChanges(): void {
-    if (this.validateForm.controls['stock'].value === '') {
-      this.validateForm.controls['stock'].setValue(null);
+    if (this.validateForm.controls.stock.value === '') {
+      this.validateForm.controls.stock.setValue(null);
     }
   }
 

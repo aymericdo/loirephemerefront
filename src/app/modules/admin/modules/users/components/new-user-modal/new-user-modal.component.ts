@@ -46,6 +46,10 @@ export class NewUserModalComponent implements OnInit {
     this.clickCancel.emit();
   }
 
+  onEmailBlur(): void {
+    this.validateForm.controls.email.setValue(this.validateForm.value.email.trim());
+  }
+
   private alreadyInValidator = (control: UntypedFormControl) => {
     const error = (this.users || []).some(user => user.email === control.value);
     return of(error ? { alreadyIn: true } : {});

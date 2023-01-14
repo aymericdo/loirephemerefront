@@ -71,6 +71,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }));
   }
 
+  onEmailBlur(): void {
+    this.validateForm.controls.email.setValue(this.validateForm.value.email.trim());
+  }
+
   handleClickConfirm(event: { emailCode: string }): void {
     this.store.dispatch(createUser({
       user: {

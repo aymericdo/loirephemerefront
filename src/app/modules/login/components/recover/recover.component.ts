@@ -74,6 +74,10 @@ export class RecoverComponent implements OnInit, OnDestroy {
     }));
   }
 
+  onEmailBlur(): void {
+    this.validateForm.controls.email.setValue(this.validateForm.value.email.trim());
+  }
+
   onVerify(token: string) {
     this.captchaToken = token;
   }

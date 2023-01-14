@@ -4,7 +4,7 @@
       <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
         <nz-form-label nzRequired>Email</nz-form-label>
         <nz-form-control nzHasFeedback [nzErrorTip]="userEmailErrorTpl">
-          <input nz-input formControlName="email" placeholder="mail@mail.com" />
+          <input nz-input formControlName="email" placeholder="mail@mail.com" (blur)="onEmailBlur()" />
           <ng-template #userEmailErrorTpl let-control>
             <ng-container *ngIf="control.hasError('required')">Merci d'entrer un email</ng-container>
           </ng-template>

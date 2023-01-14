@@ -75,6 +75,10 @@ export class SignInComponent implements OnInit, OnDestroy {
     );
   }
 
+  onEmailBlur(): void {
+    this.validateForm.controls.email.setValue(this.validateForm.value.email.trim());
+  }
+
   resetForm(e: MouseEvent): void {
     e.preventDefault();
     this.validateForm.reset();
