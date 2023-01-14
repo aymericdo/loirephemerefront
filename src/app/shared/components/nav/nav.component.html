@@ -1,7 +1,7 @@
 <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0" [nzCollapsed]="isSiderCollapsed$ | async" (nzCollapsedChange)="siderCollapseChange($event)">
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
-    <li nz-menu-item [nzSelected]="routeName === 'home'" [ngStyle]="(demoResto$ | async)?.code === restaurantCode ? getDemoStyle() : {}">
+    <li nz-menu-item class="row-border-left" [nzSelected]="routeName === 'home'" [ngStyle]="(demoResto$ | async)?.code === restaurantCode ? getDemoStyle() : {}">
       <a *ngIf="(navLoading$ | async) === false" (click)="manuallyCollapse()" class="main-link" [routerLink]="[restaurantCode || (demoResto$ | async)?.code]">
         <i nz-icon nzType="heart"></i>
         <span class="restaurant-name">{{ (restaurant$ | async)?.name || (demoResto$ | async)?.name }}</span>
@@ -25,7 +25,7 @@
     <li *ngIf="(navLoading$ | async) === false" nz-submenu [nzOpen]="isUserCollapsed && !!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
       [nzTitle]="titleAdminSectionTpl" nzIcon="coffee" [nzMenuClassName]="'restaurant-section'" (nzOpenChange)="isUserCollapsed = true">
       <ul #list>
-        <li nz-menu-item [nzMatchRouter]="true" class="restaurant-row">
+        <li nz-menu-item [nzMatchRouter]="true" class="row-border-left">
           <a (click)="manuallyCollapse()" [routerLink]="['page', 'restaurant', 'new']">
             <i nz-icon nzType="plus"></i>
             <span>Nouveau</span>
@@ -40,7 +40,7 @@
             </span>
           </ng-template>
 
-          <li #item nz-submenu class="restaurant-row" [nzIcon]="(demoResto$ | async)?.code === restaurant.code ? 'bulb' : 'coffee'"
+          <li #item nz-submenu class="row-border-left" [nzIcon]="(demoResto$ | async)?.code === restaurant.code ? 'bulb' : 'coffee'"
             [nzTitle]="titleNameTpl" [nzOpen]="isAdminOpened === restaurant.code"
             [ngStyle]="(demoResto$ | async)?.code === restaurant.code ? getDemoStyle() : {}"
             (nzOpenChange)="openAdminResto(isAdminOpened === restaurant.code ? '' : restaurant.code)" [attr.data-restaurant-code]="restaurant.code">
