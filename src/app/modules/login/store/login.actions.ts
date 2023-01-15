@@ -25,6 +25,10 @@ export const addUserRestaurants = createAction(
   props<{ restaurant: Restaurant }>()
 );
 
+export const refreshingUser = createAction(
+  '[Login page] Refreshing User',
+);
+
 export const setUser = createAction(
   '[Login page] Set User',
   props<{ user: User }>()
@@ -125,6 +129,37 @@ export const fetchingDemoResto = createAction(
   '[Login page] fetch demo resto only',
 );
 
-export const stopNavLoading = createAction(
-  '[Login page] Stop nav loading',
+export const stopRestaurantFetching = createAction(
+  '[Login page] Stop restaurant fetching',
+);
+
+export const stopDemoRestoFetching = createAction(
+  '[Login page] Stop demo resto fetching',
+);
+
+export const stopUserFetching = createAction(
+  '[Login page] Stop user fetching',
+);
+
+export const fetchingRestaurant = createAction(
+  '[Login page] Fetching restaurant',
+  props<{ code: string }>()
+);
+
+export const setRestaurant = createAction(
+  '[Login page] Set restaurant',
+  props<{ restaurant: Restaurant }>()
+);
+
+export const setIsSiderCollapsed = createAction(
+  '[Login page] Set is sider collapse',
+  props<{ isCollapsed: boolean }>()
+);
+
+export const startFirstNavigation = createAction(
+  '[Login page] Start First Navigation',
+);
+
+export const stopFirstNavigation = createAction(
+  '[Login page] Stop First Navigation',
 );

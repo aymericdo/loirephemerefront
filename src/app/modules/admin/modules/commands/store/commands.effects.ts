@@ -4,7 +4,8 @@ import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+
 import { AppState } from 'src/app/store/app.state';
 import {
   closingCommand,
@@ -16,7 +17,7 @@ import {
   removeNotificationSubSent,
   sendNotificationSub,
   setCommands,
-  stopLoading,
+  stopLoading
 } from './commands.actions';
 
 @Injectable()

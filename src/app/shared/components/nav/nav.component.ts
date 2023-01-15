@@ -1,16 +1,14 @@
 import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivationEnd, Router } from '@angular/router';
+import { ActivationEnd, NavigationEnd, Router } from '@angular/router';
 import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, combineLatest, filter, map, takeUntil, withLatestFrom } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { APP_VERSION } from 'src/app/helpers/version';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
-import { setIsSiderCollapsed } from 'src/app/modules/home/store/home.actions';
-import { selectIsSiderCollapsed, selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { fetchingDemoResto, fetchingUser, resetUser, stopNavLoading } from 'src/app/modules/login/store/login.actions';
-import { selectDemoResto, selectNavLoading, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { fetchingDemoResto, fetchingRestaurant, fetchingUser, resetUser, setIsSiderCollapsed, startFirstNavigation, stopFirstNavigation } from 'src/app/modules/login/store/login.actions';
+import { selectDemoResto, selectDemoRestoFetching, selectFirstNavigationStarting, selectIsSiderCollapsed, selectRestaurant, selectRestaurantFetching, selectUser, selectUserFetching, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -27,7 +25,8 @@ export class NavComponent implements OnInit, OnDestroy {
   userRestaurants$: Observable<Restaurant[] | null>;
   isSiderCollapsed$: Observable<boolean>;
   demoResto$: Observable<Restaurant | null>;
-  navLoading$: Observable<boolean>;
+  userFetching$: Observable<boolean>;
+  restaurantFetching$: Observable<boolean>;
   isUserCollapsed = true;
   isAdminOpened = '';
   restaurantCode: string | null = null;
@@ -48,18 +47,19 @@ export class NavComponent implements OnInit, OnDestroy {
     this.userRestaurants$ = this.store.select(selectUserRestaurants);
     this.isSiderCollapsed$ = this.store.select(selectIsSiderCollapsed);
     this.demoResto$ = this.store.select(selectDemoResto);
-    this.navLoading$ = this.store.select(selectNavLoading);
+    this.userFetching$ = this.store.select(selectUserFetching);
+    this.restaurantFetching$ = combineLatest([
+      this.store.select(selectRestaurantFetching),
+      this.store.select(selectDemoRestoFetching),
+      this.store.select(selectFirstNavigationStarting),
+    ]).pipe(
+      map(([restaurantFetching, demoRestoFetching, firstNavigationStarting]) => {
+        return restaurantFetching || demoRestoFetching || firstNavigationStarting;
+      }),
+    );
   }
 
   ngOnInit(): void {
-    this.restaurant$
-      .pipe(
-        filter(Boolean),
-        takeUntil(this.destroyed$),
-      ).subscribe((restaurant) => {
-        this.restaurantCode = restaurant.code;
-      });
-
     this.demoResto$
       .pipe(
         filter(Boolean),
@@ -71,7 +71,6 @@ export class NavComponent implements OnInit, OnDestroy {
             return prev;
           }, {} as { [access: string]: boolean });
         }
-        this.store.dispatch(stopNavLoading());
       });
 
     this.user$
@@ -92,15 +91,27 @@ export class NavComponent implements OnInit, OnDestroy {
 
           return prev;
         }, {} as { [restaurantId: string]: { [access: string]: boolean } });
-
-        this.store.dispatch(stopNavLoading());
       });
 
     this.router.events
       .pipe(
-        filter(e => (e instanceof ActivationEnd)),
+        filter(e => (e instanceof NavigationEnd)),
+        withLatestFrom(this.router.events
+          .pipe(
+            filter(e => (e instanceof ActivationEnd)),
+          )
+        ),
+        map(([_navigationEnd, activationEnd]) => activationEnd)
       )
-      .subscribe(() => {
+      .subscribe((activationEnd) => {
+        if ((activationEnd as ActivationEnd).snapshot.params?.hasOwnProperty('code') &&
+          (activationEnd as ActivationEnd).snapshot.params['code']) {
+          const code = (activationEnd as ActivationEnd).snapshot.params['code'];
+          this.store.dispatch(fetchingRestaurant({ code }));
+        }
+
+        this.store.dispatch(stopFirstNavigation());
+        this.store.dispatch(fetchingDemoResto());
         this.routeName = this.getRouteName(this.router.url);
       });
 
@@ -108,7 +119,7 @@ export class NavComponent implements OnInit, OnDestroy {
       this.store.dispatch(fetchingUser());
     }
 
-    this.store.dispatch(fetchingDemoResto());
+    this.store.dispatch(startFirstNavigation());
   }
 
   ngOnDestroy() {

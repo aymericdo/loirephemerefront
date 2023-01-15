@@ -4,8 +4,7 @@ import { MenuState, menuInitialState } from 'src/app/modules/admin/modules/menu/
 import { StatsState, statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
 import { UsersState, usersInitialState } from 'src/app/modules/admin/modules/users/store/users.reducer';
 import {
-  fetchingRestaurant,
-  stopLoading,
+  stopLoading
 } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
@@ -28,10 +27,6 @@ export const initialState: AdminState = {
 
 const adminReducer = createReducer(
   initialState,
-  on(fetchingRestaurant, (state) => ({
-    ...state,
-    loading: true,
-  })),
   on(stopLoading, (state) => ({
     ...state,
     loading: false,

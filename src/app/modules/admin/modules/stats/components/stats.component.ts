@@ -1,19 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, combineLatest } from 'rxjs';
-import { Command } from 'src/app/interfaces/command.interface';
-import { AppState } from 'src/app/store/app.state';
-import {
-  ChartData,
-} from 'chart.js';
-import { filter, map, take, takeUntil } from 'rxjs/operators';
-import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
-import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { selectAllPastries, selectIsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
-import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
 import { DATE_PIPE_DEFAULT_TIMEZONE, DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import {
+  ChartData
+} from 'chart.js';
+import { Observable, ReplaySubject, combineLatest } from 'rxjs';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
+import { Command } from 'src/app/interfaces/command.interface';
+import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
+import { selectAllPastries, selectIsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
+import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { AppState } from 'src/app/store/app.state';
 
 @Component({
   templateUrl: './stats.component.html',

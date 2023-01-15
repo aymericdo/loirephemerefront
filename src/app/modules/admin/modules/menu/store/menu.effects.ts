@@ -5,17 +5,14 @@ import { EMPTY, pipe } from 'rxjs';
 import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 import {
   activatingPastry,
   addPastry,
   closeMenuModal,
   deactivatingPastry,
-  decrementPastry,
-  editPastry,
-  editingPastry,
-  fetchingAllRestaurantPastries,
+  decrementPastry, editPastry, editingPastry, fetchingAllRestaurantPastries,
   incrementPastry,
   movingPastry,
   openMenuModal,
@@ -30,7 +27,7 @@ import {
   setPastryNoNameError,
   settingCommonStock,
   stopLoading,
-  validatingPastryName,
+  validatingPastryName
 } from './menu.actions';
 
 @Injectable()

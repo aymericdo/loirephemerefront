@@ -1,23 +1,17 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
-  decrementPastry,
-  fetchRestaurantPastries,
-  fetchingRestaurant,
-  incrementPastry,
+  decrementPastry, fetchRestaurantPastries, incrementPastry,
   resetCommand,
   sendCommand,
   setErrorCommand,
-  setIsSiderCollapsed,
   setPastries,
   setPersonalCommand,
-  setRestaurant,
   setStock,
   startLoading,
-  stopLoading,
+  stopLoading
 } from './home.actions';
 
 export const homeFeatureKey = 'home';
@@ -29,8 +23,6 @@ export interface HomeState {
   currentSentCommands: Command[];
   errorCommand: Object | null;
   loading: boolean;
-  restaurant: Restaurant | null;
-  isSiderCollapsed: boolean;
 }
 
 export const initialState: HomeState = {
@@ -40,13 +32,12 @@ export const initialState: HomeState = {
   currentSentCommands: [],
   errorCommand: null,
   loading: false,
-  restaurant: null,
-  isSiderCollapsed: true,
+
 };
 
 const homeReducer = createReducer(
   initialState,
-  on(startLoading, fetchingRestaurant, fetchRestaurantPastries, (state) => ({
+  on(startLoading, fetchRestaurantPastries, (state) => ({
     ...state,
     loading: true,
     pastries: [...pastriesMock],
@@ -121,14 +112,6 @@ const homeReducer = createReducer(
   on(setErrorCommand, (state, { error }) => ({
     ...state,
     errorCommand: error.error,
-  })),
-  on(setRestaurant, (state, { restaurant }) => ({
-    ...state,
-    restaurant: { ...restaurant },
-  })),
-  on(setIsSiderCollapsed, (state, { isCollapsed }) => ({
-    ...state,
-    isSiderCollapsed: isCollapsed,
   })),
 );
 

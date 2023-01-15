@@ -4,19 +4,22 @@ import { Store } from '@ngrx/store';
 import { catchError, debounceTime, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser } from 'src/app/interfaces/user.interface';
+import { fetchRestaurantPastries } from 'src/app/modules/home/store/home.actions';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
 import { selectCode2 } from 'src/app/modules/login/store/login.selectors';
 import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
 import { AppState } from 'src/app/store/app.state';
 import {
   changePassword, confirmEmail, confirmRecoverEmail,
-  createUser, fetchingDemoResto, fetchingUser, fetchingUserRestaurants,
-  openConfirmationModal, openRecoverModal, setAuthError,
+  createUser, fetchingDemoResto, fetchingRestaurant, fetchingUser, fetchingUserRestaurants,
+  openConfirmationModal, openRecoverModal, refreshingUser, setAuthError,
   setCode2, setDemoResto, setNewToken, setNoAuthError,
-  setPasswordAsChanged, setUser, setUserEmailError,
+  setPasswordAsChanged, setRestaurant, setUser, setUserEmailError,
   setUserNoEmailError, setUserRestaurants, signInUser,
+  stopDemoRestoFetching,
   stopLoading,
-  stopNavLoading,
+  stopRestaurantFetching,
+  stopUserFetching,
   validateRecoverEmailCode,
   validatingUserEmail
 } from './login.actions';
@@ -36,13 +39,26 @@ export class LoginEffects {
     )
   );
 
+  refreshingUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(refreshingUser),
+      mergeMap(() => {
+        return this.loginApiService.getUser().pipe(
+          switchMap((user) => {
+            return [setUser({ user })];
+          })
+        );
+      })
+    )
+  );
+
   fetchingUserRestaurants$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchingUserRestaurants),
       mergeMap(() => {
         return this.restaurantApiService.getUserRestaurants().pipe(
           switchMap((restaurants: Restaurant[]) => {
-            return [setUserRestaurants({ restaurants })];
+            return [setUserRestaurants({ restaurants }), stopUserFetching()];
           }),
           catchError(() => {
             return [stopLoading()];
@@ -134,7 +150,8 @@ export class LoginEffects {
       ofType(createUser),
       withLatestFrom(this.store$.select(selectCode2)),
       mergeMap(([action, code2]) => {
-        const { user, emailCode }: { user: CoreUser, emailCode: string } = action;
+        const { user, emailCode }: { user: CoreUser, emailCode: string } =
+          action as { user: CoreUser, emailCode: string };
         return this.loginApiService.postUser(user, emailCode, code2!).pipe(
           switchMap((userRes) => {
             return [
@@ -197,10 +214,34 @@ export class LoginEffects {
       mergeMap(() => {
         return this.restaurantApiService.getDemoResto().pipe(
           switchMap((restaurant: Restaurant) => {
-            return [setDemoResto({ restaurant}), setUserRestaurants({ restaurants: [restaurant] })];
+            return [
+              setDemoResto({ restaurant}),
+              stopDemoRestoFetching()
+            ];
           }),
           catchError(() => {
-            return [stopLoading(), stopNavLoading()];
+            return [stopLoading(), stopDemoRestoFetching()];
+          }),
+        );
+      })
+    )
+  );
+
+  fetchingRestaurant$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchingRestaurant),
+      mergeMap((action: { code: string }) => {
+        return this.restaurantApiService.getRestaurant(action.code).pipe(
+          switchMap((restaurant) => {
+            return [
+              stopLoading(),
+              stopRestaurantFetching(),
+              setRestaurant({ restaurant }),
+              fetchRestaurantPastries({ code: restaurant.code })
+            ];
+          }),
+          catchError(() => {
+            return [stopLoading(), stopRestaurantFetching()];
           }),
         );
       })

@@ -59,7 +59,32 @@ export const selectDemoResto = createSelector(
   (state: LoginState) => state.demoResto
 );
 
-export const selectNavLoading = createSelector(
+export const selectUserFetching = createSelector(
   selectFeature,
-  (state: LoginState) => state.navLoading
+  (state: LoginState) => state.userFetching
+);
+
+export const selectDemoRestoFetching = createSelector(
+  selectFeature,
+  (state: LoginState) => state.demoRestoFetching
+);
+
+export const selectRestaurantFetching = createSelector(
+  selectFeature,
+  (state: LoginState) => state.restaurantFetching
+);
+
+export const selectRestaurant = createSelector(
+  selectFeature,
+  (state: LoginState) => state.restaurant
+);
+
+export const selectIsSiderCollapsed = createSelector(
+  selectFeature,
+  (state: LoginState) => state.isSiderCollapsed
+);
+
+export const selectFirstNavigationStarting = createSelector(
+  selectFeature,
+  (state: LoginState) => state.firstNavigationStarting
 );

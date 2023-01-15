@@ -1,17 +1,15 @@
 <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0" [nzCollapsed]="isSiderCollapsed$ | async" (nzCollapsedChange)="siderCollapseChange($event)">
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
-    <li nz-menu-item class="row-border-left" [nzSelected]="routeName === 'home'" [ngStyle]="(demoResto$ | async)?.code === restaurantCode ? getDemoStyle() : {}">
-      <a *ngIf="(navLoading$ | async) === false" (click)="manuallyCollapse()" class="main-link" [routerLink]="[restaurantCode || (demoResto$ | async)?.code]">
+    <li *ngIf="(restaurantFetching$ | async) === false" nz-menu-item class="row-border-left"
+      [nzSelected]="routeName === 'home'"
+      [ngStyle]="(restaurant$ | async) === null || (demoResto$ | async)?.code === (restaurant$ | async)?.code ? getDemoStyle() : {}">
+      <a (click)="manuallyCollapse()" class="main-link" [routerLink]="[(restaurant$ | async)?.code || (demoResto$ | async)?.code]">
         <i nz-icon nzType="heart"></i>
         <span class="restaurant-name">{{ (restaurant$ | async)?.name || (demoResto$ | async)?.name }}</span>
       </a>
-      <div class="loading-section" *ngIf="(navLoading$ | async)">
-        <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
-      </div>
     </li>
-
-    <div class="loading-section large-height" *ngIf="(navLoading$ | async)">
+    <div class="loading-section" *ngIf="(restaurantFetching$ | async)">
       <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
 
@@ -22,7 +20,11 @@
       </span>
     </ng-template>
 
-    <li *ngIf="(navLoading$ | async) === false" nz-submenu [nzOpen]="isUserCollapsed && !!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
+    <div class="loading-section large-height" *ngIf="(userFetching$ | async)">
+      <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+
+    <li *ngIf="(userFetching$ | async) === false" nz-submenu [nzOpen]="isUserCollapsed && !!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
       [nzTitle]="titleAdminSectionTpl" nzIcon="coffee" [nzMenuClassName]="'restaurant-section'" (nzOpenChange)="isUserCollapsed = true">
       <ul #list>
         <li nz-menu-item [nzMatchRouter]="true" class="row-border-left">

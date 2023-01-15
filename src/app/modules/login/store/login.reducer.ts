@@ -1,7 +1,16 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { Access, User } from 'src/app/interfaces/user.interface';
-import { addUserRestaurants, confirmEmail, confirmRecoverEmail, createUser, fetchingDemoResto, fetchingUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError, setCode2, setDemoResto, setNewToken, setNoAuthError, setPasswordAsChanged, setUser, setUserAccess, setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, stopLoading, stopNavLoading, validatingUserEmail } from './login.actions';
+import {
+  addUserRestaurants, confirmEmail, confirmRecoverEmail,
+  createUser, fetchingDemoResto, fetchingRestaurant,
+  fetchingUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError,
+  setCode2, setDemoResto, setIsSiderCollapsed, setNewToken, setNoAuthError,
+  setPasswordAsChanged, setRestaurant, setUser, setUserAccess, setUserEmailError, setUserNoEmailError,
+  setUserRestaurants, signInUser, startFirstNavigation,
+  stopDemoRestoFetching, stopFirstNavigation, stopLoading, stopRestaurantFetching,
+  stopUserFetching, validatingUserEmail
+} from './login.actions';
 
 export const loginFeatureKey = 'login';
 
@@ -11,13 +20,18 @@ export interface LoginState {
   isEmailValidating: boolean;
   user: User | null;
   userRestaurants: Restaurant[] | null;
+  restaurant: Restaurant | null,
   demoResto: Restaurant | null;
-  navLoading: boolean;
+  firstNavigationStarting: boolean,
+  restaurantFetching: boolean,
+  demoRestoFetching: boolean,
+  userFetching: boolean,
   loading: boolean;
   code2: string | null;
   confirmationModalOpened: boolean;
   recoverModalOpened: boolean;
   passwordChanged: boolean;
+  isSiderCollapsed: boolean;
 }
 
 export const initialState: LoginState = {
@@ -26,20 +40,37 @@ export const initialState: LoginState = {
   isEmailValidating: false,
   user: null,
   userRestaurants: null,
+  restaurant: null,
   demoResto: null,
-  navLoading: false,
+  firstNavigationStarting: false,
+  restaurantFetching: false,
+  demoRestoFetching: false,
+  userFetching: false,
   loading: false,
   code2: null,
   confirmationModalOpened: false,
   recoverModalOpened: false,
   passwordChanged: false,
+  isSiderCollapsed: true,
 };
 
 const loginReducer = createReducer(
   initialState,
-  on(fetchingUser, fetchingDemoResto, (state) => ({
+  on(fetchingDemoResto, (state) => ({
     ...state,
-    navLoading: true,
+    demoRestoFetching: true,
+  })),
+  on(fetchingRestaurant, (state) => ({
+    ...state,
+    restaurantFetching: true,
+  })),
+  on(startFirstNavigation, (state) => ({
+    ...state,
+    firstNavigationStarting: true,
+  })),
+  on(fetchingUser, (state) => ({
+    ...state,
+    userFetching: true,
   })),
   on(createUser, signInUser, confirmEmail, confirmRecoverEmail, (state) => ({
     ...state,
@@ -121,9 +152,21 @@ const loginReducer = createReducer(
     ...state,
     loading: false,
   })),
-  on(stopNavLoading, (state) => ({
+  on(stopRestaurantFetching, (state) => ({
     ...state,
-    navLoading: false,
+    restaurantFetching: false,
+  })),
+  on(stopDemoRestoFetching, (state) => ({
+    ...state,
+    demoRestoFetching: false,
+  })),
+  on(stopFirstNavigation, (state) => ({
+    ...state,
+    firstNavigationStarting: false,
+  })),
+  on(stopUserFetching, (state) => ({
+    ...state,
+    userFetching: false,
   })),
   on(setPasswordAsChanged, (state, { changed }) => ({
     ...state,
@@ -134,6 +177,14 @@ const loginReducer = createReducer(
     user: null,
     userRestaurants: null,
     userToken: null,
+  })),
+  on(setRestaurant, (state, { restaurant }) => ({
+    ...state,
+    restaurant: { ...restaurant },
+  })),
+  on(setIsSiderCollapsed, (state, { isCollapsed }) => ({
+    ...state,
+    isSiderCollapsed: isCollapsed,
   })),
 );
 

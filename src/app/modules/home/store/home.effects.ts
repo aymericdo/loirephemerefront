@@ -4,30 +4,29 @@ import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
 import {
   catchError,
+  filter,
   map,
   mergeMap,
   switchMap,
-  withLatestFrom,
+  withLatestFrom
 } from 'rxjs/operators';
+import { CoreCommand } from 'src/app/interfaces/command.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
+import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
 import { HomeApiService } from '../services/home-api.service';
 import {
-  fetchRestaurantPastries,
-  fetchingRestaurant,
-  notificationSubSent,
+  fetchRestaurantPastries, notificationSubSent,
   resetCommand,
   sendCommand,
   sendNotificationSub,
   setErrorCommand,
   setPastries,
   setPersonalCommand,
-  setRestaurant,
-  stopLoading,
+  stopLoading
 } from './home.actions';
-import { selectPastries, selectRestaurant, selectSelectedPastries } from './home.selectors';
-import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { CoreCommand } from 'src/app/interfaces/command.interface';
-import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
+import { selectPastries, selectSelectedPastries } from './home.selectors';
 
 @Injectable()
 export class HomeEffects {
@@ -48,7 +47,7 @@ export class HomeEffects {
       ofType(sendCommand),
       withLatestFrom(this.store$.select(selectPastries)),
       withLatestFrom(this.store$.select(selectSelectedPastries)),
-      withLatestFrom(this.store$.select(selectRestaurant)),
+      withLatestFrom(this.store$.select(selectRestaurant).pipe(filter(Boolean))),
       mergeMap(([[[action, allPastries], selectedPastries], restaurant]) => {
         const { name, takeAway, pickUpTime }: CoreCommand = action;
 
@@ -75,20 +74,7 @@ export class HomeEffects {
           switchMap((command) => {
             return [setPersonalCommand({ command }), resetCommand()];
           }),
-          catchError((error) => [fetchRestaurantPastries({ code: restaurant?.code! }), setErrorCommand({ error })])
-        );
-      })
-    )
-  );
-
-  fetchingRestaurant$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(fetchingRestaurant),
-      mergeMap((action: { code: string }) => {
-        return this.restaurantApiService.getRestaurant(action.code).pipe(
-          switchMap((restaurant) => {
-            return [setRestaurant({ restaurant }), fetchRestaurantPastries({ code: restaurant.code })];
-          }),
+          catchError((error) => [fetchRestaurantPastries({ code: restaurant.code }), setErrorCommand({ error })])
         );
       })
     )

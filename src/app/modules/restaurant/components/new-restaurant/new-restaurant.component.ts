@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, filter, take, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, combineLatest, filter, take, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
@@ -41,12 +41,19 @@ export class NewRestaurantComponent implements OnInit, OnDestroy {
       name: ['', [Validators.required, Validators.minLength(SIZE.MIN), Validators.maxLength(SIZE.SMALL)], [this.restaurantNameAsyncValidator]],
     });
 
-    this.store.select(selectNewRestaurant).pipe(
-      filter(Boolean),
-      takeUntil(this.destroyed$),
-    ).subscribe((restaurant) => {
-      this.router.navigate([restaurant.code, 'admin', 'menu']);
-    });
+    combineLatest([
+      this.store.select(selectNewRestaurant)
+        .pipe(filter(Boolean)),
+      this.user$,
+    ])
+      .pipe(
+        filter(([restaurant, user]) => {
+          return !!restaurant && !!user?.access.hasOwnProperty(restaurant.id);
+        }),
+        takeUntil(this.destroyed$),
+      ).subscribe(([restaurant]) => {
+        this.router.navigate([restaurant.code, 'admin', 'menu']);
+      });
   }
 
   ngOnDestroy() {

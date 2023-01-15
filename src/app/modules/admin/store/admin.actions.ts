@@ -1,8 +1,4 @@
-import { createAction, props } from '@ngrx/store';
-
-export const fetchingRestaurant = createAction('[Admin page] Fetch restaurant',
-  props<{ code: string }>()
-);
+import { createAction } from '@ngrx/store';
 
 export const stopLoading = createAction(
   '[Admin page] Stop loading',

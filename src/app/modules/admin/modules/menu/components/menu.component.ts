@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, filter, map, takeUntil } from 'rxjs';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock, startLoading } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
-import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -45,11 +45,12 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.store.dispatch(startLoading());
 
     this.route.paramMap.pipe(
+      map((params: ParamMap) => params.get('code')),
+      filter(Boolean),
       takeUntil(this.destroyed$)
-    ).subscribe(params => {
-      const code: string = params.get('code')!;
+    ).subscribe(code => {
       this.subscribeToWS(code);
-      this.store.dispatch(fetchingAllRestaurantPastries({ code: code }));
+      this.store.dispatch(fetchingAllRestaurantPastries({ code }));
     });
   }
 

@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
 export const fetchRestaurantPastries = createAction(
   '[Home page] Fetch pastries for a restaurant',
@@ -43,21 +42,10 @@ export const sendNotificationSub = createAction(
 export const notificationSubSent = createAction(
   '[Home page] Notification sub sent'
 );
-export const fetchingRestaurant = createAction('[Home page] Fetch restaurant',
-  props<{ code: string }>()
-);
-export const setRestaurant = createAction(
-  '[Home page] Set restaurant',
-  props<{ restaurant: Restaurant }>()
-);
 export const stopLoading = createAction(
   '[Home page] Stop loading',
 );
 export const startLoading = createAction(
   '[Home page] Start loading',
-);
-export const setIsSiderCollapsed = createAction(
-  '[Home page] Set is sider collapse',
-  props<{ isCollapsed: boolean }>()
 );
 

@@ -5,12 +5,10 @@ import { EMPTY } from 'rxjs';
 import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Access, User } from 'src/app/interfaces/user.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { selectRestaurant } from 'src/app/modules/home/store/home.selectors';
+import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 import {
-  addUser,
-  addingUserToRestaurant,
-  deleteUser,
+  addUser, addingUserToRestaurant, deleteUser,
   deletingUserToRestaurant,
   fetchingUsers,
   patchingUserRestaurantAccess,
@@ -19,11 +17,10 @@ import {
   setUserNoEmailError,
   setUsers,
   stopLoading,
-  validatingUserEmail,
+  validatingUserEmail
 } from './users.actions';
 
-import { setUserAccess,
-} from 'src/app/modules/login/store/login.actions';
+import { setUserAccess } from 'src/app/modules/login/store/login.actions';
 import { selectUser } from 'src/app/modules/login/store/login.selectors';
 
 @Injectable()

@@ -3,22 +3,32 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChildren,
+  ViewChildren
 } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Observable, ReplaySubject } from 'rxjs';
+import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
+import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import {
+  HomeWebSocketService,
+  WebSocketData
+} from 'src/app/modules/home/services/home-socket.service';
 import {
   decrementPastry,
-  fetchingRestaurant,
   incrementPastry,
   resetCommand,
   sendCommand,
   sendNotificationSub,
   setStock,
-  startLoading,
+  startLoading
 } from 'src/app/modules/home/store/home.actions';
-import { Observable, ReplaySubject } from 'rxjs';
-import { Pastry } from 'src/app/interfaces/pastry.interface';
 import {
   selectCurrentSentCommandFromCommandList,
   selectErrorCommand,
@@ -27,24 +37,12 @@ import {
   selectIsStockIssue,
   selectPastries,
   selectPersonalCommand,
-  selectRestaurant,
   selectSelectedPastries,
-  selectTotalPrice,
+  selectTotalPrice
 } from 'src/app/modules/home/store/home.selectors';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
-import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
-import {
-  HomeWebSocketService,
-  WebSocketData,
-} from 'src/app/modules/home/services/home-socket.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { selectDemoResto, selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { AppState } from 'src/app/store/app.state';
 import { environment } from 'src/environments/environment';
-import { SwPush } from '@angular/service-worker';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { Title } from '@angular/platform-browser';
-import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
-import { selectDemoResto } from 'src/app/modules/login/store/login.selectors';
 
 @Component({
   templateUrl: './home.component.html',
@@ -100,7 +98,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe(code => {
-      this.store.dispatch(fetchingRestaurant({ code }));
       this.subscribeToWS(code);
     });
 
