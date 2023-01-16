@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { catchError, debounceTime, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser } from 'src/app/interfaces/user.interface';
-import { fetchRestaurantPastries } from 'src/app/modules/home/store/home.actions';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
 import { selectCode2 } from 'src/app/modules/login/store/login.selectors';
 import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
@@ -237,7 +236,6 @@ export class LoginEffects {
               stopLoading(),
               stopRestaurantFetching(),
               setRestaurant({ restaurant }),
-              fetchRestaurantPastries({ code: restaurant.code })
             ];
           }),
           catchError(() => {

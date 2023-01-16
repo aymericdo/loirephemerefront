@@ -22,12 +22,12 @@ import {
 } from 'src/app/modules/home/services/home-socket.service';
 import {
   decrementPastry,
+  fetchRestaurantPastries,
   incrementPastry,
   resetCommand,
   sendCommand,
   sendNotificationSub,
-  setStock,
-  startLoading
+  setStock
 } from 'src/app/modules/home/store/home.actions';
 import {
   selectCurrentSentCommandFromCommandList,
@@ -91,13 +91,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(startLoading());
-
     this.route.paramMap.pipe(
       map((params: ParamMap) => params.get('code')),
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe(code => {
+      this.store.dispatch(fetchRestaurantPastries({ code }));
       this.subscribeToWS(code);
     });
 

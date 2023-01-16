@@ -27,6 +27,7 @@ export class NavComponent implements OnInit, OnDestroy {
   demoResto$: Observable<Restaurant | null>;
   userFetching$: Observable<boolean>;
   restaurantFetching$: Observable<boolean>;
+
   isUserCollapsed = true;
   isAdminOpened = '';
   restaurantCode: string | null = null;
@@ -107,12 +108,22 @@ export class NavComponent implements OnInit, OnDestroy {
         if ((activationEnd as ActivationEnd).snapshot.params?.hasOwnProperty('code') &&
           (activationEnd as ActivationEnd).snapshot.params['code']) {
           const code = (activationEnd as ActivationEnd).snapshot.params['code'];
-          this.store.dispatch(fetchingRestaurant({ code }));
+
+          if (this.restaurantCode !== code) {
+            this.store.dispatch(fetchingRestaurant({ code }));
+          }
         }
 
         this.store.dispatch(stopFirstNavigation());
-        this.store.dispatch(fetchingDemoResto());
         this.routeName = this.getRouteName(this.router.url);
+      });
+
+    this.restaurant$
+      .pipe(
+        filter(Boolean),
+        takeUntil(this.destroyed$),
+      ).subscribe((restaurant) => {
+        this.restaurantCode = restaurant.code;
       });
 
     if (this.isLoggedIn) {
@@ -120,6 +131,7 @@ export class NavComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch(startFirstNavigation());
+    this.store.dispatch(fetchingDemoResto());
   }
 
   ngOnDestroy() {
@@ -154,7 +166,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   openAdminResto(restaurantCode: string): void {
-    this.isAdminOpened = this.isAdminOpened = restaurantCode;
+    this.isAdminOpened = restaurantCode;
 
     if (restaurantCode.length) {
       this.isUserCollapsed = true;
