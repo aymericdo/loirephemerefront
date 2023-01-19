@@ -96,8 +96,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe(code => {
-      this.store.dispatch(fetchRestaurantPastries({ code }));
       this.subscribeToWS(code);
+      this.store.dispatch(fetchRestaurantPastries({ code }));
     });
 
     this.demoResto$.pipe(
