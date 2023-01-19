@@ -32,7 +32,10 @@ export class LoginEffects {
         return this.loginApiService.getUser().pipe(
           switchMap((user) => {
             return [setUser({ user }), fetchingUserRestaurants()];
-          })
+          }),
+          catchError(() => {
+            return [stopUserFetching()];
+          }),
         );
       })
     )
@@ -60,7 +63,7 @@ export class LoginEffects {
             return [setUserRestaurants({ restaurants }), stopUserFetching()];
           }),
           catchError(() => {
-            return [stopLoading()];
+            return [stopUserFetching(), stopLoading()];
           }),
         );
       })
