@@ -47,7 +47,9 @@ export class NewUserModalComponent implements OnInit {
   }
 
   onEmailBlur(): void {
-    this.validateForm.controls.email.setValue(this.validateForm.value.email.trim());
+    if (this.validateForm.value.email !== this.validateForm.value.email.trim()) {
+      this.validateForm.controls.email.setValue(this.validateForm.value.email.trim());
+    }
   }
 
   private alreadyInValidator = (control: UntypedFormControl) => {
