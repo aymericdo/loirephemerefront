@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { APP_VERSION } from 'src/app/helpers/version';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
-import { fetchingDemoResto, fetchingRestaurant, fetchingUser, resetUser, setIsSiderCollapsed, startFirstNavigation, stopFirstNavigation } from 'src/app/modules/login/store/login.actions';
+import { fetchingDemoResto, fetchingRestaurant, fetchingUser, resetUser, setIsSiderCollapsed, setUserRestaurants, startFirstNavigation, stopFirstNavigation } from 'src/app/modules/login/store/login.actions';
 import { selectDemoResto, selectDemoRestoFetching, selectFirstNavigationStarting, selectIsSiderCollapsed, selectRestaurant, selectRestaurantFetching, selectUser, selectUserFetching, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -71,6 +71,8 @@ export class NavComponent implements OnInit, OnDestroy {
             prev[access] = true;
             return prev;
           }, {} as { [access: string]: boolean });
+
+          this.store.dispatch(setUserRestaurants({ restaurants: [demoResto] }));
         }
       });
 
