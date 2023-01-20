@@ -110,7 +110,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe(([demoResto, code]) => {
       if (!code) {
-        this.router.navigate(['/', demoResto.code]);
+        const saveCode = localStorage.getItem('current_code');
+        this.router.navigate(['/', saveCode || demoResto.code]);
       }
     });
 

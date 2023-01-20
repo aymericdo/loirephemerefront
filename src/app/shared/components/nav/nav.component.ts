@@ -125,6 +125,7 @@ export class NavComponent implements OnInit, OnDestroy {
         filter(Boolean),
         takeUntil(this.destroyed$),
       ).subscribe((restaurant) => {
+        localStorage.setItem('current_code', restaurant.code);
         this.restaurantCode = restaurant.code;
       });
 
