@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ReplaySubject, filter, map, takeUntil, withLatestFrom } from 'rxjs';
+import { ReplaySubject, filter, takeUntil, withLatestFrom } from 'rxjs';
 import { stopLoading } from 'src/app/modules/login/store/login.actions';
 import { selectDemoResto, selectUser } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -44,9 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             filter(e => (e instanceof ActivationEnd)),
           ),
         ),
-        map(([_navigationEnd, activationEnd]) => activationEnd)
-      ).subscribe((activationEnd) => {
-        console.log((activationEnd as ActivationEnd).snapshot);
+      ).subscribe(() => {
         this.isOnRecover = this.router.url === '/page/login/recover';
       });
   }

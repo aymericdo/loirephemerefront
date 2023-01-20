@@ -174,8 +174,9 @@ export class StatsComponent implements OnInit, OnDestroy {
         this.onDateRangeChange();
       });
 
-    combineLatest([this.payedCommands$, this.pastries$])
+    combineLatest([this.payedCommands$, this.pastries$, this.isLoading$])
       .pipe(
+        filter(([_commands, _pastries, isLoading]) => !isLoading),
         takeUntil(this.destroyed$)
       )
       .subscribe(([commands, pastries]) => {
@@ -203,8 +204,12 @@ export class StatsComponent implements OnInit, OnDestroy {
           [date: string]: { [pastryName: string]: number };
         } = {};
 
+        const timeInterval = this.daysBetweenTwoDates(this.dateRange![0], this.dateRange![1]) > 60 &&
+          commands.length > 100 ? 'month' : 'day';
+
         commands.forEach((command: Command) => {
-          const day = this.getFormattedDate(new Date(command.createdAt as string));
+          const day = this.getFormattedDate(new Date(command.createdAt as string), timeInterval);
+
           command.pastries.forEach((pastry: Pastry) => {
             const realPastry = this.checkHistoricalPastry(pastry, command);
             this.setPastriesByTypeByDate(pastriesByTypeByDate, realPastry, day);
@@ -217,8 +222,8 @@ export class StatsComponent implements OnInit, OnDestroy {
 
         if (pastries.length && Object.keys(pastriesByTypeByDate).length) {
           this.buildPieChartDate(countByTypeByPastry);
-          this.buildBarChartData(pastriesByTypeByDate, countByTypeByPastry, pastries);
-          this.buildGlobalBarChartData(pastriesByTypeByDate, cashByDate);
+          this.buildBarChartData(pastriesByTypeByDate, countByTypeByPastry, pastries, timeInterval);
+          this.buildGlobalBarChartData(pastriesByTypeByDate, cashByDate, timeInterval);
           this.setTotalByType(countByTypeByPastry);
         }
       });
@@ -356,12 +361,13 @@ export class StatsComponent implements OnInit, OnDestroy {
     pastriesByTypeByDate: { [key in PastryType]: { [date: string]: { [pastryName: string]: number } } },
     countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } },
     pastries: Pastry[],
+    timeInterval: 'day' | 'month',
   ): void {
     (Object.keys(pastriesByTypeByDate) as PastryType[]).forEach((type: PastryType) => {
       this.pastriesByTypeByDateBarChartData[type] = {
         labels: Object.keys(pastriesByTypeByDate[type])
           .reverse()
-          .map((dateStr) => this.datepipe.transform(new Date(dateStr), 'EEEE dd/MM', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr')),
+          .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'dd/MM', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr')),
         datasets: pastries
           .filter((p) => p.type === type && countByTypeByPastry[type][p.name] > 0)
           .map((p) => {
@@ -379,11 +385,12 @@ export class StatsComponent implements OnInit, OnDestroy {
   private buildGlobalBarChartData(
     pastriesByTypeByDate: { [key in PastryType]: { [date: string]: { [pastryName: string]: number } } },
     cashByDate: { [date: string]: { [pastryName: string]: number } },
+    timeInterval: 'day' | 'month',
   ): void {
     this.globalBarChartData = {
       labels: Object.keys(cashByDate)
         .reverse()
-        .map((dateStr) => this.datepipe.transform(new Date(dateStr), 'EEEE dd/MM', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr')),
+        .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'MMM YYYY', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr')),
       datasets: [{
         label: 'Total',
         data: Object.keys(cashByDate)
@@ -453,15 +460,30 @@ export class StatsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getFormattedDate(date: Date): string {
-    var year = date.getFullYear();
+  private getFormattedDate(date: Date, timeInterval: 'month' | 'day'): string {
+    if (timeInterval === 'day') {
+      const year = date.getFullYear();
 
-    var month = (1 + date.getMonth()).toString();
-    month = month.length > 1 ? month : '0' + month;
+      let month = (1 + date.getMonth()).toString();
+      month = month.length > 1 ? month : '0' + month;
 
-    var day = date.getDate().toString();
-    day = day.length > 1 ? day : '0' + day;
+      let day = date.getDate().toString();
+      day = day.length > 1 ? day : '0' + day;
 
-    return year + '/' + month + '/' + day;
+      return year + '/' + month + '/' + day;
+    } else {
+      var year = date.getFullYear();
+
+      var month = (1 + date.getMonth()).toString();
+      month = month.length > 1 ? month : '0' + month;
+
+      return year + '/' + month;
+    }
   }
+
+  private daysBetweenTwoDates(date1: Date, date2: Date) {
+    const difference = date1.getTime() - date2.getTime();
+    const total = Math.ceil(difference / (1000 * 3600 * 24));
+    return total > 0 ? total : total * -1;
+};
 }
