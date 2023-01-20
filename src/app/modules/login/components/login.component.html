@@ -5,13 +5,13 @@
         <a *nzTabLink nz-tab-link [routerLink]="['.', 'register']">
           Créer un compte
         </a>
-        <router-outlet></router-outlet>
+        <app-register></app-register>
       </nz-tab>
       <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="['.']">
           Se connecter
         </a>
-        <router-outlet name="sign-in-outlet"></router-outlet>
+        <app-sign-in></app-sign-in>
       </nz-tab>
       <nz-tab *ngIf="isOnRecover">
         <a *nzTabLink nz-tab-link [routerLink]="['.', 'recover']">

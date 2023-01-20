@@ -12,7 +12,6 @@ const routes: Routes = [
     children: [{
       path: '',
       pathMatch: 'full',
-      outlet: 'sign-in-outlet',
       component: SignInComponent,
     }, {
       path: 'register',

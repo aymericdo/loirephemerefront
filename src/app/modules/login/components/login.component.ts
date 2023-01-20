@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivationEnd, Router } from '@angular/router';
+import { ActivationEnd, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ReplaySubject, filter, takeUntil, withLatestFrom } from 'rxjs';
+import { ReplaySubject, filter, map, takeUntil, withLatestFrom } from 'rxjs';
 import { stopLoading } from 'src/app/modules/login/store/login.actions';
-import { selectDemoResto, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { selectDemoResto, selectUser } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -23,13 +23,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isOnRecover = this.router.url === '/page/login/recover';
-    this.store.select(selectUserRestaurants).pipe(
+
+    this.store.select(selectUser).pipe(
       filter(Boolean),
       withLatestFrom(this.store.select(selectDemoResto).pipe(filter(Boolean))),
       takeUntil(this.destroyed$),
-    ).subscribe(([restaurants, restoDemo]) => {
-      if (restaurants.length) {
-        this.router.navigate([restoDemo.code, 'admin', 'menu']);
+    ).subscribe(([user, demoResto]) => {
+      if (user) {
+        this.router.navigate([demoResto.code, 'admin', 'menu']);
       } else {
         this.router.navigate(['page', 'restaurant', 'new']);
       }
@@ -37,9 +38,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.router.events
       .pipe(
-        filter(e => (e instanceof ActivationEnd)),
-      )
-      .subscribe(() => {
+        filter(e => (e instanceof NavigationEnd)),
+        withLatestFrom(this.router.events
+          .pipe(
+            filter(e => (e instanceof ActivationEnd)),
+          ),
+        ),
+        map(([_navigationEnd, activationEnd]) => activationEnd)
+      ).subscribe((activationEnd) => {
+        console.log((activationEnd as ActivationEnd).snapshot);
         this.isOnRecover = this.router.url === '/page/login/recover';
       });
   }
