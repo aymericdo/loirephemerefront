@@ -29,9 +29,21 @@
   (clickCancel)="isSuccessModalVisible = false"></app-order-error-modal>
 
 <app-order-footer *ngIf="hasSelectedPastries$ | async" (clickReset)="handleClickReset()"
-  (clickCommand)="handleClickCommand($event)" [stockIssue]="(isStockIssue$ | async)!"
-  [allPastries]="(pastries$ | async)!" [selectedPastries]="(selectedPastries$ | async)!"
-  [totalPrice]="(totalPrice$ | async)!"></app-order-footer>
+  (clickConfirm)="isOrderModalVisible = true" [stockIssue]="(isStockIssue$ | async)!"></app-order-footer>
+
+<app-order-modal *ngIf="isOrderModalVisible" [allPastries]="(pastries$ | async)!" [selectedPastries]="(selectedPastries$ | async)!"
+  [totalPrice]="(totalPrice$ | async)!" (clickCancel)="isOrderModalVisible = false" (clickOk)="isOrderModalVisible = false; isUltimateConfirmationVisible = true"></app-order-modal>
+
+<app-order-name-modal *ngIf="isUltimateConfirmationVisible" (clickCancel)="isUltimateConfirmationVisible = false"
+  (clickOk)="handleClickCommand($event)"></app-order-name-modal>
+
+<div *ngIf="hasSelectedPastries$ | async" class="shopping-cart">
+  <nz-badge [nzCount]="(totalCount$ | async)!">
+    <button nz-button nzType="primary" nzSize="large" nzShape="circle" (click)="isOrderModalVisible = true">
+      <span nz-icon nzType="shopping-cart"></span>
+    </button>
+  </nz-badge>
+</div>
 
 <app-information-popover *ngIf="(demoResto$ | async)?.id && (demoResto$ | async)?.id === (restaurant$ | async)?.id">
   <div>Le restaurant <b>{{ (demoResto$ | async)?.name }}</b> permet à tout le monde de tester l'application.</div>

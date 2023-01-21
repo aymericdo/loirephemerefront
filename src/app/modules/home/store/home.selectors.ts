@@ -15,6 +15,14 @@ export const selectSelectedPastries = createSelector(
   (state: HomeState) => state.selectedPastries
 );
 
+export const selectSelectedPastriesTotalCount = createSelector(
+  selectFeature,
+  (state: HomeState) => Object.keys(state.selectedPastries).reduce((prev, pastryId) => {
+    prev += state.selectedPastries[pastryId];
+    return prev;
+  }, 0)
+);
+
 export const selectIsLoading = createSelector(
   selectFeature,
   (state: HomeState) => state.loading

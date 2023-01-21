@@ -38,6 +38,7 @@ import {
   selectPastries,
   selectPersonalCommand,
   selectSelectedPastries,
+  selectSelectedPastriesTotalCount,
   selectTotalPrice
 } from 'src/app/modules/home/store/home.selectors';
 import { selectDemoResto, selectRestaurant } from 'src/app/modules/login/store/login.selectors';
@@ -57,12 +58,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
   hasSelectedPastries$: Observable<boolean>;
   totalPrice$: Observable<number>;
+  totalCount$: Observable<number>;
   isLoading$: Observable<boolean>;
   isStockIssue$: Observable<boolean>;
   personalCommand$: Observable<Command | null>;
   errorCommand$: Observable<Object | null>;
   demoResto$: Observable<Restaurant | null>;
+
   isSuccessModalVisible = false;
+  isOrderModalVisible: boolean = false;
+  isUltimateConfirmationVisible: boolean = false;
 
   private commandNotificationIdByCommandId: { [commandId: string]: string } = {};
   private audio!: HTMLAudioElement;
@@ -82,6 +87,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.pastries$ = this.store.select(selectPastries);
     this.selectedPastries$ = this.store.select(selectSelectedPastries);
     this.totalPrice$ = this.store.select(selectTotalPrice);
+    this.totalCount$ = this.store.select(selectSelectedPastriesTotalCount);
     this.hasSelectedPastries$ = this.store.select(selectHasSelectedPastries);
     this.isLoading$ = this.store.select(selectIsLoading);
     this.isStockIssue$ = this.store.select(selectIsStockIssue);
@@ -182,6 +188,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   handleClickCommand({ name, takeAway, pickUpTime }: CoreCommand): void {
+    this.isUltimateConfirmationVisible = false;
     this.isSuccessModalVisible = true;
     this.store.dispatch(sendCommand({ name, takeAway, pickUpTime }));
 

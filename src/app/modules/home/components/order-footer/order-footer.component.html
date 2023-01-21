@@ -3,15 +3,7 @@
     <i nz-icon nzType="stop"></i>Annuler
   </button>
   <button nz-button [disabled]="stockIssue" nzType="primary" nzSize="default" nzShape="round"
-    (click)="isOrderModalVisible = true">
+    (click)="clickConfirm.emit()">
     <i nz-icon nzType="check"></i>Commander
   </button>
 </nz-footer>
-
-<app-order-modal *ngIf="isOrderModalVisible" [allPastries]="allPastries" [selectedPastries]="selectedPastries"
-  [totalPrice]="totalPrice" (clickCancel)="isOrderModalVisible = false" (clickOk)="
-    isOrderModalVisible = false; isUltimateConfirmationVisible = true
-  "></app-order-modal>
-
-<app-order-name-modal *ngIf="isUltimateConfirmationVisible" (clickCancel)="isUltimateConfirmationVisible = false"
-  (clickOk)="handleClickConfirm($event)"></app-order-name-modal>
