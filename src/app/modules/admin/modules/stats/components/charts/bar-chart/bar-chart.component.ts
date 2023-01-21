@@ -24,6 +24,9 @@ export class BarChartComponent {
     },
     plugins: {
       datalabels: {
+        formatter: (value: string) => {
+          return value || null;
+        },
         anchor: 'end',
         align: 'end',
       },
