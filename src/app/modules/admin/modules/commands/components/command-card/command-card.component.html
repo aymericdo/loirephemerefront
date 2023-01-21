@@ -5,7 +5,7 @@
       <p class="take-away">{{ command.takeAway ? 'À emporter' : 'Sur place' }}</p>
       <nz-divider></nz-divider>
       <p>Nom : {{ command.name }}</p>
-      <p>Récupération : {{ command.pickUpTime || command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
+      <p>Récupération : {{ command.pickUpTime || 'Maintenant' | date: "dd/MM/YYYY HH:mm" }}</p>
       <p>Pâtisseries :</p>
       <ul>
         <li *ngFor="let pastryObj of pastries">
