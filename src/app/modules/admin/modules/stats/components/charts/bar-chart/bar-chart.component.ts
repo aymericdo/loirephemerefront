@@ -24,8 +24,8 @@ export class BarChartComponent {
     },
     plugins: {
       datalabels: {
-        formatter: (value: string) => {
-          return value || null;
+        display: function(context) {
+          return context.dataset.data[context.dataIndex] !== 0;
         },
         anchor: 'end',
         align: 'end',
