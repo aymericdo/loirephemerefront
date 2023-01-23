@@ -13,7 +13,8 @@
         </li>
       </ul>
       <p>Prix total : {{ command.totalPrice }}€</p>
-      <p>Créer le : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
+      <p>Créée le : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
+      <p>Modifiée le : {{ command.updatedAt | date: "dd/MM/YYYY HH:mm" }}</p>
     </nz-skeleton>
   </nz-card>
 </nz-ribbon>
