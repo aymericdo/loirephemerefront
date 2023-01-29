@@ -6,6 +6,7 @@ import { environment as prodEnvironment } from 'src/environments/environment.pro
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Access, User } from 'src/app/interfaces/user.interface';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -141,5 +142,12 @@ export class AdminApiService {
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/notification/delete`,
       { sub }
     );
+  }
+
+  patchOpeningHour(code: string, startHour: string, endHour: string): Observable<Restaurant> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/opening-hours`,
+      { startHour, endHour }
+    ) as Observable<Restaurant>;
   }
 }

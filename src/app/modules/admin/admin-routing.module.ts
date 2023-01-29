@@ -9,7 +9,8 @@ const routes: Routes = [
     children: [{
       path: '',
       pathMatch: 'full',
-      redirectTo: '/page/404',
+      loadChildren: () =>
+        import('./modules/restaurant/restaurant.module').then((m) => m.RestaurantModule),
     },
     {
       path: 'menu',

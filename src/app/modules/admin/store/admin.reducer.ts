@@ -1,6 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { CommandsState, commandsInitialState } from 'src/app/modules/admin/modules/commands/store/commands.reducer';
 import { MenuState, menuInitialState } from 'src/app/modules/admin/modules/menu/store/menu.reducer';
+import { RestaurantState, restaurantInitialState } from 'src/app/modules/admin/modules/restaurant/store/restaurant.reducer';
 import { StatsState, statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
 import { UsersState, usersInitialState } from 'src/app/modules/admin/modules/users/store/users.reducer';
 import {
@@ -11,6 +12,7 @@ export const adminFeatureKey = 'admin';
 
 export interface AdminState {
   loading: boolean;
+  restaurant: RestaurantState;
   stats: StatsState;
   users: UsersState;
   commands: CommandsState;
@@ -19,6 +21,7 @@ export interface AdminState {
 
 export const initialState: AdminState = {
   loading: false,
+  restaurant: restaurantInitialState,
   users: usersInitialState,
   stats: statsInitialState,
   commands: commandsInitialState,

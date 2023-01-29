@@ -36,16 +36,18 @@
 
         <ng-container *ngFor="let restaurant of (userRestaurants$ | async)">
           <ng-template #titleNameTpl>
-            <span class="restaurant-name-tooltip" nz-tooltip [nzTooltipTitle]="restaurant.name"
+            <span (click)="clickToggleRestaurant(restaurant.code, $event)" class="restaurant-name-tooltip"
+              [class.-restaurant-title-selected]="routeName === 'admin-restaurant' && currentOpenedRestaurant === restaurant.code"
+              nz-tooltip [nzTooltipTitle]="restaurant.name"
               nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
               <span class="restaurant-name">{{ restaurant.name }}</span>
             </span>
           </ng-template>
 
           <li #item nz-submenu class="row-border-left" [nzIcon]="(demoResto$ | async)?.code === restaurant.code ? 'bulb' : 'coffee'"
-            [nzTitle]="titleNameTpl" [nzOpen]="isAdminOpened === restaurant.code"
+            [nzTitle]="titleNameTpl" [nzOpen]="currentOpenedRestaurant === restaurant.code"
             [ngStyle]="(demoResto$ | async)?.code === restaurant.code ? getDemoStyle() : {}"
-            (nzOpenChange)="openAdminResto(isAdminOpened === restaurant.code ? '' : restaurant.code)" [attr.data-restaurant-code]="restaurant.code">
+            (nzOpenChange)="openChangeDropdownRestaurantAdmin(restaurant.code)" [attr.data-restaurant-code]="restaurant.code">
             <ul>
               <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['menu']" nz-menu-item [nzMatchRouter]="true">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'menu']">

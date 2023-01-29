@@ -29,13 +29,14 @@ export class NavComponent implements OnInit, OnDestroy {
   restaurantFetching$: Observable<boolean>;
 
   isUserCollapsed = true;
-  isAdminOpened = '';
+  currentOpenedRestaurant = '';
   restaurantCode: string | null = null;
   routeName: string | null = null;
   hasAccessByRestaurantIdBySection: { [restaurantId: string]: { [access: string]: boolean } } = {};
 
   APP_VERSION = APP_VERSION;
 
+  private isFirstLoad = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -168,16 +169,28 @@ export class NavComponent implements OnInit, OnDestroy {
     }
   }
 
-  openAdminResto(restaurantCode: string): void {
-    this.isAdminOpened = restaurantCode;
+  clickToggleRestaurant(restaurantCode: string, event: MouseEvent): void {
+    const newCode = this.currentOpenedRestaurant === restaurantCode ? '' : restaurantCode;
 
-    if (restaurantCode.length) {
+    this.router.navigate([newCode || this.currentOpenedRestaurant, 'admin']);
+
+    if (this.currentOpenedRestaurant && !newCode && this.routeName !== 'admin-restaurant') {
+      event.stopPropagation();
+    }
+  }
+
+  openChangeDropdownRestaurantAdmin(restaurantCode: string): void {
+    const newCode = this.currentOpenedRestaurant === restaurantCode ? '' : restaurantCode;
+
+    this.currentOpenedRestaurant = newCode;
+
+    if (newCode) {
       this.isUserCollapsed = true;
       setTimeout(() => {
-        if (this.isAdminOpened.length &&
+        if (this.currentOpenedRestaurant.length &&
           this.itemElements.last &&
           this.itemElements.last.cdkOverlayOrigin &&
-          this.itemElements.last.cdkOverlayOrigin.nativeElement.parentNode.dataset.restaurantCode === restaurantCode) {
+          this.itemElements.last.cdkOverlayOrigin.nativeElement.parentNode.dataset.restaurantCode === newCode) {
           const heightToScroll = this.itemElements.last.cdkOverlayOrigin.nativeElement.parentNode.clientHeight;
 
           if (heightToScroll) {
@@ -194,7 +207,11 @@ export class NavComponent implements OnInit, OnDestroy {
   private getRouteName(url: string): string | null {
     const urlArray = url.split('/');
     if (urlArray.length > 1 && urlArray[2] === 'admin') {
-      this.openAdminResto(urlArray[1]);
+
+      if (this.isFirstLoad) {
+        this.openChangeDropdownRestaurantAdmin(urlArray[1]);
+        this.isFirstLoad = false;
+      }
 
       if (urlArray.length > 2 && urlArray[3]?.includes('commands')) {
         return 'commands';
@@ -204,6 +221,8 @@ export class NavComponent implements OnInit, OnDestroy {
         return 'users';
       } else if (urlArray.length > 2 && urlArray[3]?.includes('menu')) {
         return 'menu';
+      } else {
+        return 'admin-restaurant';
       }
     } else if (urlArray.length > 1 && urlArray[2] === 'restaurant') {
       if (urlArray.length > 2 && urlArray[3]?.includes('new')) {

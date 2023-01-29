@@ -69,6 +69,10 @@
     width: 100%;
   }
 
+  ::ng-deep .ant-menu-submenu-title:has(.restaurant-name-tooltip.-restaurant-title-selected) {
+    background-color: $blue;
+  }
+
   ::ng-deep .restaurant-section {
     max-height: 400px;
     overflow-y: auto;
