@@ -4,6 +4,43 @@
     <nz-page-header-tags><nz-tag [nzColor]="'orange'">Admin</nz-tag></nz-page-header-tags>
   </nz-page-header>
   <div class="container-section">
-    coucou
+    <nz-tabset>
+      <nz-tab nzTitle="Ouverture">
+        <form nz-form [formGroup]="validateForm" nz-row nzJustify="center">
+          <nz-form-item *ngFor="let weekDayNumber of weekDayNumbers" nz-col
+            [nzLg]="14" [nzSm]="20" [nzXs]="24"
+            [formGroupName]="weekDayNumber">
+            <nz-form-label class="week-day">{{ weekDays[weekDayNumber] }}</nz-form-label>
+            <nz-form-control>
+              <nz-space class="time-picker-section" nzWrap>
+                <nz-time-picker *nzSpaceItem formControlName="openingTime" nzFormat="HH:mm" [nzMinuteStep]="15"></nz-time-picker>
+                <nz-time-picker *nzSpaceItem formControlName="closingTime" nzFormat="HH:mm" [nzMinuteStep]="15"></nz-time-picker>
+                <button
+                  *nzSpaceItem class="duplicate-btn" nz-button
+                  nzType="default" nzShape="circle" (click)="duplicate(weekDayNumber)"
+                  [disabled]="isLoading$ | async">
+                  <span nz-icon nzType="copy"></span>
+                </button>
+              </nz-space>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+            <nz-form-control>
+              <div nz-row nzJustify="end">
+                <nz-space nzWrap>
+                  <button *nzSpaceItem nz-button (click)="resetForm($event)" [disabled]="isLoading$ | async">Réinitialiser</button>
+                  <button *nzSpaceItem nz-button (click)="submitForm()" nzType="primary" [disabled]="!validateForm.valid || (isLoading$ | async)">Enregistrer</button>
+                </nz-space>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+
+        <app-information-popover>
+          <div>En dehors de ces horaires, personne ne pourra prendre de commande.</div>
+        </app-information-popover>
+      </nz-tab>
+    </nz-tabset>
   </div>
 </div>

@@ -2,6 +2,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import {
   startLoading,
   stopLoading,
+  updateOpeningTime,
 } from './restaurant.actions';
 
 export const restaurantFeatureKey = 'restaurant';
@@ -14,9 +15,9 @@ export const restaurantInitialState: RestaurantState = {
   loading: false,
 };
 
-const adminReducer = createReducer(
+const adminRestaurantReducer = createReducer(
   restaurantInitialState,
-  on(startLoading, (state) => ({
+  on(updateOpeningTime, startLoading, (state) => ({
     ...state,
     loading: true,
   })),
@@ -27,5 +28,5 @@ const adminReducer = createReducer(
 );
 
 export function reducer(state: RestaurantState | undefined, action: Action) {
-  return adminReducer(state, action);
+  return adminRestaurantReducer(state, action);
 }

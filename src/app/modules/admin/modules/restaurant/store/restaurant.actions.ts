@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
-export const updateOpeningHour = createAction(
-  '[Admin Restaurant page] Update Opening Hour',
-  props<{ startHour: string, endHour: string }>()
+export const updateOpeningTime = createAction(
+  '[Admin Restaurant page] Update Opening Hours',
+  props<{ openingTime: { [weekDay: number]: { openingTime: string, closingTime: string } } }>()
 );
 export const stopLoading = createAction(
   '[Admin Restaurant page] Stop loading',
@@ -10,3 +10,4 @@ export const stopLoading = createAction(
 export const startLoading = createAction(
   '[Admin Restaurant page] Start loading',
 );
+

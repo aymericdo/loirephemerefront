@@ -14,7 +14,7 @@
         <ng-template #checkedTemplate><span nz-icon nzType="check"></span></ng-template>
         <ng-template #unCheckedTemplate><span nz-icon nzType="close"></span></ng-template>
         <nz-time-picker *nzSpaceItem [nzAllowEmpty]="false" [nzDisabled]="!needPickUpTimeValue" [nzMinuteStep]="10"
-          [nzHideDisabledOptions]="true" [nzSecondStep]="60" [(ngModel)]="pickUpTimeValue"
+          [nzHideDisabledOptions]="true" [(ngModel)]="pickUpTimeValue"
           [nzDisabledHours]="disabledHours" nzFormat="HH:mm">
         </nz-time-picker>
       </nz-space>

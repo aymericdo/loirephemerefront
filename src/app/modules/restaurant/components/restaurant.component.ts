@@ -6,7 +6,4 @@ import { Component } from '@angular/core';
 })
 export class RestaurantComponent {
   subtitle = "Création d'un nouveau restaurant";
-
-  constructor() {
-  }
 }

@@ -1,29 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { filter, map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import { filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { setRestaurant } from 'src/app/modules/login/store/login.actions';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 
 import { AppState } from 'src/app/store/app.state';
 import {
-  updateOpeningHour
+  stopLoading,
+  updateOpeningTime
 } from './restaurant.actions';
 
 @Injectable()
 export class RestaurantEffects {
   updateOpeningHour$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(updateOpeningHour),
+      ofType(updateOpeningTime),
       withLatestFrom(
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
-          .patchOpeningHour(restaurant.code, action.startHour, action.endHour)
+          .patchOpeningTime(restaurant.code, action.openingTime)
           .pipe(
-            map((restaurant) => setRestaurant({ restaurant })),
+            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
           );
       })
     )
