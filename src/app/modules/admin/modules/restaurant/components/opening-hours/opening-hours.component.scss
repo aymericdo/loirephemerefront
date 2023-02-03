@@ -1,0 +1,26 @@
+:host {
+  nz-form-item {
+    padding-bottom: 2rem;
+  }
+
+  .week-day {
+    text-transform: capitalize;
+  }
+
+  .time-picker-section {
+    display: flex;
+    width: 100%;
+
+    ::ng-deep .ant-space-item {
+      flex: 1;
+    }
+
+    ::ng-deep .ant-space-item:has(.duplicate-btn) {
+      flex: initial;
+    }
+
+    nz-time-picker {
+      width: 100%;
+    }
+  }
+}

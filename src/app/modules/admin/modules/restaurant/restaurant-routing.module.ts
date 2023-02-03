@@ -5,6 +5,7 @@ import { RestaurantComponent } from 'src/app/modules/admin/modules/restaurant/co
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     component: RestaurantComponent,
   },
   { path: '**', redirectTo: '/page/404' },

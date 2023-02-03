@@ -146,9 +146,18 @@ export class AdminApiService {
 
   patchOpeningTime(
     code: string,
-    openingTime: { [weekDay: number]: { openingTime: string, closingTime: string } }): Observable<Restaurant> {
+    openingTime: { [weekDay: number]: { startTime: string; endTime: string } }): Observable<Restaurant> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/opening-time`,
+      { openingTime }
+    ) as Observable<Restaurant>;
+  }
+
+  patchOpeningPickupTime(
+    code: string,
+    openingTime: { [weekDay: number]: { startTime: string; endTime: string } }): Observable<Restaurant> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/opening-pickup-time`,
       { openingTime }
     ) as Observable<Restaurant>;
   }

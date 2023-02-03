@@ -52,7 +52,7 @@ export class NewRestaurantComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroyed$),
       ).subscribe(([restaurant]) => {
-        this.router.navigate([restaurant.code, 'admin', 'menu']);
+        this.router.navigate([restaurant.code, 'admin']);
       });
   }
 

@@ -9,12 +9,13 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 import {
   stopLoading,
+  updateOpeningPickupTime,
   updateOpeningTime
 } from './restaurant.actions';
 
 @Injectable()
 export class RestaurantEffects {
-  updateOpeningHour$ = createEffect(() =>
+  updateOpeningHours$ = createEffect(() =>
     this.actions$.pipe(
       ofType(updateOpeningTime),
       withLatestFrom(
@@ -23,6 +24,21 @@ export class RestaurantEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
           .patchOpeningTime(restaurant.code, action.openingTime)
+          .pipe(
+            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
+          );
+      })
+    )
+  );
+  updateOpeningPickupHours$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateOpeningPickupTime),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService
+          .patchOpeningPickupTime(restaurant.code, action.openingTime)
           .pipe(
             switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
           );

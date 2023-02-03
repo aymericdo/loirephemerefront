@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe(([user, demoResto]) => {
       if (user) {
-        this.router.navigate([demoResto.code, 'admin', 'menu']);
+        this.router.navigate([demoResto.code, 'admin']);
       } else {
         this.router.navigate(['page', 'restaurant', 'new']);
       }
