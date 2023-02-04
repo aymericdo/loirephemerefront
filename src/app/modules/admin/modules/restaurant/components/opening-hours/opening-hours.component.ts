@@ -1,4 +1,4 @@
-import { DATE_PIPE_DEFAULT_TIMEZONE, DatePipe } from '@angular/common';
+import { DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -43,7 +43,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
     let currentDate = firstMondayOfWeek;
     this.weekDays = this.weekDayNumbers.map((_i) => {
-      const valEEEE = this.datepipe.transform(currentDate, 'EEEE', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr') as string;
+      const valEEEE = this.datepipe.transform(currentDate, 'EEEE', DATE_PIPE_DEFAULT_OPTIONS.toString(), 'fr') as string;
       currentDate.setDate(currentDate.getDate() + 1);
       return valEEEE;
     });
