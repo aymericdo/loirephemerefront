@@ -17,6 +17,12 @@
         </a>
         <app-opening-pickup></app-opening-pickup>
       </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'qrcode' }" queryParamsHandling="merge">
+          QRCode
+        </a>
+        <qrcode [qrdata]="'https://oresto.app/' + (restaurant$ | async)?.code" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+      </nz-tab>
     </nz-tabset>
   </div>
 </div>
