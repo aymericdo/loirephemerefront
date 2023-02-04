@@ -206,20 +206,20 @@ export class NavComponent implements OnInit, OnDestroy {
 
   private getRouteName(url: string): string | null {
     const urlArray = url.split('/');
-    if (urlArray.length > 1 && urlArray[2] === 'admin') {
+    if (urlArray.length > 1 && urlArray[2]?.startsWith('admin')) {
 
       if (this.isFirstLoad) {
         this.openChangeDropdownRestaurantAdmin(urlArray[1]);
         this.isFirstLoad = false;
       }
 
-      if (urlArray.length > 2 && urlArray[3]?.includes('commands')) {
+      if (urlArray.length > 2 && urlArray[3]?.startsWith('commands')) {
         return 'commands';
-      } else if (urlArray.length > 2 && urlArray[3]?.includes('stats')) {
+      } else if (urlArray.length > 2 && urlArray[3]?.startsWith('stats')) {
         return 'stats';
-      } else if (urlArray.length > 2 && urlArray[3]?.includes('users')) {
+      } else if (urlArray.length > 2 && urlArray[3]?.startsWith('users')) {
         return 'users';
-      } else if (urlArray.length > 2 && urlArray[3]?.includes('menu')) {
+      } else if (urlArray.length > 2 && urlArray[3]?.startsWith('menu')) {
         return 'menu';
       } else {
         return 'admin-restaurant';
@@ -232,6 +232,7 @@ export class NavComponent implements OnInit, OnDestroy {
       return 'home';
     }
 
+    console.log('bite');
     return null;
   }
 }
