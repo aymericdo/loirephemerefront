@@ -1,6 +1,6 @@
 import { DATE_PIPE_DEFAULT_TIMEZONE, DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
@@ -50,8 +50,8 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
     this.validateForm = this.fb.group(this.weekDayNumbers.reduce((prev, weekDay: number) => {
       prev[weekDay] = this.fb.group({
-        startTime: [null, [Validators.required]],
-        endTime: [null, [Validators.required]],
+        startTime: [null],
+        endTime: [null],
       });
 
       return prev;
@@ -65,13 +65,18 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
         Object.keys(restaurant.openingTime).forEach((weekDay: string) => {
           const weekdayOpeningTime = restaurant.openingTime![+weekDay];
 
-          const openingHoursMinutes = weekdayOpeningTime.startTime.split(':');
-          const startTime = new Date();
-          startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+          let startTime = null;
+          let endTime = null;
 
-          const closingHoursMinutes = weekdayOpeningTime.endTime.split(':');
-          const endTime = new Date();
-          endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+          if (weekdayOpeningTime.startTime && weekdayOpeningTime.endTime) {
+            const openingHoursMinutes = weekdayOpeningTime.startTime.split(':');
+            startTime = new Date();
+            startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+
+            const closingHoursMinutes = weekdayOpeningTime.endTime.split(':');
+            endTime = new Date();
+            endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+          }
 
           this.validateForm.controls[weekDay].setValue({
             startTime,
@@ -93,6 +98,17 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
           this.validateForm.enable();
         }
       });
+
+    this.validateForm.valueChanges.subscribe((form) => {
+      Object.keys(form).forEach((wd) => {
+        const weekDayOpeningTime = this.validateForm.controls[wd];
+
+        if ((!weekDayOpeningTime.value.startTime && weekDayOpeningTime.value.endTime) ||
+          (weekDayOpeningTime.value.startTime && !weekDayOpeningTime.value.endTime)) {
+          weekDayOpeningTime.setErrors({ bothOrNothingValidator: true });
+        }
+      });
+    });
   }
 
   ngOnDestroy() {
@@ -134,6 +150,22 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
       nzOnOk: () => {
         this.weekDayNumbers.filter((wd) => wd !== weekDayNumber).forEach((wd) => {
           this.validateForm.controls[wd].setValue(this.validateForm.controls[weekDayNumber].value);
+        });
+      },
+      nzCancelText: 'Annuler',
+    });
+  }
+
+  closeDay(weekDayNumber: number): void {
+    this.modal.confirm({
+      nzTitle: 'Fermeture',
+      nzContent: `Le restaurant est bien fermé le <b>${this.weekDays[weekDayNumber]}</b> ?`,
+      nzOkText: 'Oui',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.validateForm.controls[weekDayNumber].setValue({
+          startTime: null,
+          endTime: null,
         });
       },
       nzCancelText: 'Annuler',

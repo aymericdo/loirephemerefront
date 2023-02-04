@@ -1,6 +1,6 @@
 import { DATE_PIPE_DEFAULT_TIMEZONE, DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
@@ -22,6 +22,8 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
   weekDayNumbers: number[] = [];
   weekDays: string[] = [];
   validateForm!: UntypedFormGroup;
+
+  private restaurant!: Restaurant;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -50,8 +52,8 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
 
     this.validateForm = this.fb.group(this.weekDayNumbers.reduce((prev, weekDay: number) => {
       prev[weekDay] = this.fb.group({
-        startTime: [null, [Validators.required]],
-        endTime: [null, [Validators.required]],
+        startTime: [null],
+        endTime: [null],
       });
 
       return prev;
@@ -61,17 +63,23 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
+      this.restaurant = restaurant;
       if (restaurant.openingPickupTime) {
         Object.keys(restaurant.openingPickupTime).forEach((weekDay: string) => {
-          const weekdayOpeningTime = restaurant.openingTime![+weekDay];
+          const weekdayOpeningTime = restaurant.openingPickupTime![+weekDay];
 
-          const openingHoursMinutes = weekdayOpeningTime.startTime.split(':');
-          const startTime = new Date();
-          startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+          let startTime = null;
+          let endTime = null;
 
-          const closingHoursMinutes = weekdayOpeningTime.endTime.split(':');
-          const endTime = new Date();
-          endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+          if (weekdayOpeningTime.startTime && weekdayOpeningTime.endTime) {
+            const openingHoursMinutes = weekdayOpeningTime.startTime.split(':');
+            startTime = new Date();
+            startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+
+            const closingHoursMinutes = weekdayOpeningTime.endTime.split(':');
+            endTime = new Date();
+            endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+          }
 
           this.validateForm.controls[weekDay].setValue({
             startTime,
@@ -79,6 +87,17 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
           });
         });
       }
+
+      this.validateForm.valueChanges.subscribe((form) => {
+        Object.keys(form).forEach((wd) => {
+          const weekDayOpeningTime = this.validateForm.controls[wd];
+
+          if ((!weekDayOpeningTime.value.startTime && weekDayOpeningTime.value.endTime) ||
+            (weekDayOpeningTime.value.startTime && !weekDayOpeningTime.value.endTime)) {
+            weekDayOpeningTime.setErrors({ bothOrNothingValidator: true });
+          }
+        });
+      });
 
       this.store.dispatch(stopLoading());
     });
@@ -129,11 +148,55 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
     this.modal.confirm({
       nzTitle: 'Duplication',
       nzContent: `Voulez-vous dupliquer les horaires de la journée du <b>${this.weekDays[weekDayNumber]}</b> à tous les autres jours de la semaine ?`,
-      nzOkText: 'OK',
+      nzOkText: 'Oui',
       nzOkType: 'primary',
       nzOnOk: () => {
         this.weekDayNumbers.filter((wd) => wd !== weekDayNumber).forEach((wd) => {
           this.validateForm.controls[wd].setValue(this.validateForm.controls[weekDayNumber].value);
+        });
+      },
+      nzCancelText: 'Annuler',
+    });
+  }
+
+  closeDay(weekDayNumber: number): void {
+    this.modal.confirm({
+      nzTitle: 'Fermeture',
+      nzContent: `Le restaurant est bien fermé le <b>${this.weekDays[weekDayNumber]}</b> ?`,
+      nzOkText: 'Oui',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.validateForm.controls[weekDayNumber].setValue({
+          startTime: null,
+          endTime: null,
+        });
+      },
+      nzCancelText: 'Annuler',
+    });
+  }
+
+  duplicateOpeningHours(): void {
+    this.modal.confirm({
+      nzTitle: 'Duplication',
+      nzContent: `Voulez-vous dupliquer les horaires d'ouvertures du restaurant configurés dans l'onglet précédent ?`,
+      nzOkText: 'Oui',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        Object.keys(this.restaurant.openingTime!).forEach((weekDay: string) => {
+          const weekdayOpeningTime = this.restaurant.openingTime![+weekDay];
+
+          const openingHoursMinutes = weekdayOpeningTime.startTime.split(':');
+          const startTime = new Date();
+          startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+
+          const closingHoursMinutes = weekdayOpeningTime.endTime.split(':');
+          const endTime = new Date();
+          endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+
+          this.validateForm.controls[weekDay].setValue({
+            startTime,
+            endTime,
+          });
         });
       },
       nzCancelText: 'Annuler',

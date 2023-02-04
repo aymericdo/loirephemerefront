@@ -3,6 +3,13 @@
     padding-bottom: 2rem;
   }
 
+  .opening-hours-duplicate-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }
+
   .week-day {
     text-transform: capitalize;
   }
@@ -15,12 +22,18 @@
       flex: 1;
     }
 
-    ::ng-deep .ant-space-item:has(.duplicate-btn) {
+    ::ng-deep .ant-space-item:has(.action-btn) {
       flex: initial;
     }
 
     nz-time-picker {
       width: 100%;
     }
+  }
+
+  .closed-hint {
+    display: flex;
+    justify-content: start;
+    font-style: italic;
   }
 }
