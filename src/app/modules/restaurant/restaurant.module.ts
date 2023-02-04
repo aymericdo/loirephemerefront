@@ -14,11 +14,10 @@ import { LoginModule } from 'src/app/modules/login/login.module';
 @NgModule({
   declarations: [RestaurantComponent, NewRestaurantComponent],
   imports: [
-    QRCodeModule,
-    RestaurantRoutingModule,
     CommonModule,
     SharedModule,
     LoginModule,
+    RestaurantRoutingModule,
     EffectsModule.forFeature([RestaurantEffects]),
     StoreModule.forFeature(restaurantFeatureKey, reducer),
   ],

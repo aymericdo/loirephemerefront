@@ -121,8 +121,8 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
       openingTime: Object.keys(this.validateForm.value)
         .reduce((prev, weekDay: string, index: number) => {
           prev[index] = {
-            startTime: this.datepipe.transform(this.validateForm.value[weekDay].startTime, 'HH:mm', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr') as string,
-            endTime: this.datepipe.transform(this.validateForm.value[weekDay].endTime, 'HH:mm', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr') as string,
+            startTime: this.datepipe.transform(this.validateForm.value[weekDay].startTime, 'HH:mm', 'fr') as string,
+            endTime: this.datepipe.transform(this.validateForm.value[weekDay].endTime, 'HH:mm', 'fr') as string,
           };
 
           return prev;

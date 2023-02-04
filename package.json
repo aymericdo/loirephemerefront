@@ -33,6 +33,7 @@
     "@ngrx/store-devtools": "^15.2.1",
     "@types/chart.js": "^2.9.37",
     "@types/resize-observer-browser": "^0.1.7",
+    "angularx-qrcode": "^15.0.1",
     "chart.js": "^4.2.0",
     "chartjs-plugin-datalabels": "^2.2.0",
     "ng-hcaptcha": "^2.0.0",

@@ -1,4 +1,4 @@
-import { DATE_PIPE_DEFAULT_TIMEZONE, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -367,7 +367,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       this.pastriesByTypeByDateBarChartData[type] = {
         labels: Object.keys(pastriesByTypeByDate[type])
           .reverse()
-          .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'dd/MM', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr')),
+          .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'dd/MM', 'fr')),
         datasets: pastries
           .filter((p) => p.type === type && countByTypeByPastry[type][p.name] > 0)
           .map((p) => {
@@ -390,7 +390,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.globalBarChartData = {
       labels: Object.keys(cashByDate)
         .reverse()
-        .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'MMM YYYY', DATE_PIPE_DEFAULT_TIMEZONE.toString(), 'fr')),
+        .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'MMM YYYY', 'fr')),
       datasets: [{
         label: 'Total',
         data: Object.keys(cashByDate)

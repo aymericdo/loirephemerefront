@@ -10,4 +10,16 @@
   .content {
     display: flex;
   }
+
+  .qrcode-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+
+    .url {
+      font-weight: 500;
+    }
+  }
 }

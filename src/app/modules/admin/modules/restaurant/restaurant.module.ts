@@ -7,6 +7,7 @@ import { RestaurantRoutingModule } from 'src/app/modules/admin/modules/restauran
 import { RestaurantEffects } from 'src/app/modules/admin/modules/restaurant/store/restaurant.effects';
 import { OpeningHoursComponent } from 'src/app/modules/admin/modules/restaurant/components/opening-hours/opening-hours.component';
 import { OpeningPickupComponent } from 'src/app/modules/admin/modules/restaurant/components/opening-pickup/opening-pickup.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { OpeningPickupComponent } from 'src/app/modules/admin/modules/restaurant
     RestaurantComponent,
   ],
   imports: [
+    QRCodeModule,
     CommonModule,
     SharedModule,
     RestaurantRoutingModule,
