@@ -236,7 +236,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private setIsRestaurantOpened(restaurant: Restaurant): void {
     const today = new Date();
     const currentDay = today.getDay();
-    const cwday = currentDay + ((currentDay - 1 + 7) % 7);
+    const cwday = currentDay + ((currentDay - 1) % 7);
 
     if (!!(restaurant.openingTime && restaurant.openingTime[cwday])) {
       const openingHoursMinutes = restaurant.openingTime[cwday].startTime.split(':');
