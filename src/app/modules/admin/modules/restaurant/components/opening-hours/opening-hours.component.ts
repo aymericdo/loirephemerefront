@@ -172,6 +172,16 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
     });
   }
 
+  generateHint(weekDayNumber: number): string {
+    const startTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].startTime, 'HH:mm') as string;
+    const endTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].endTime, 'HH:mm') as string;
+    return (!startTime && !endTime) ?
+      `Fermé le ${this.weekDays[weekDayNumber]}` :
+      (startTime && endTime) ?
+        `Le ${this.weekDays[weekDayNumber]}, le restaurant accepte les commandes programmées pour le moment entre ${startTime} et ${endTime}.`
+        : '';
+  }
+
   private getFirstDayOfTheWeek(d: Date): Date {
     const day = d.getDay();
     const diff = d.getDate() - day + (day === 0 ? -6 : 1);

@@ -1,44 +1,40 @@
 <form nz-form [formGroup]="validateForm" nz-row nzJustify="center">
   <div *ngIf="(restaurant$ | async)?.openingTime !== null" class="opening-hours-duplicate-section">
-    <button
-      class="opening-hours-duplicate-btn" nz-button
-      nzType="primary" nzShape="round" (click)="duplicateOpeningHours()"
-      [disabled]="isLoading$ | async">
+    <button class="opening-hours-duplicate-btn" nz-button nzType="primary" nzShape="round"
+      (click)="duplicateOpeningHours()" [disabled]="isLoading$ | async">
       <span nz-icon nzType="copy"></span>
       Dupliquer horaire d'ouverture
     </button>
   </div>
-  <nz-form-item *ngFor="let weekDayNumber of weekDayNumbers" nz-col
-    [nzLg]="14" [nzSm]="20" [nzXs]="24"
+  <nz-form-item *ngFor="let weekDayNumber of weekDayNumbers" nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24"
     [formGroupName]="weekDayNumber">
     <nz-form-label class="week-day">{{ weekDays[weekDayNumber] }}</nz-form-label>
     <nz-form-control>
       <nz-space class="time-picker-section" nzWrap>
         <nz-time-picker *nzSpaceItem formControlName="startTime" nzFormat="HH:mm" [nzMinuteStep]="15"></nz-time-picker>
         <nz-time-picker *nzSpaceItem formControlName="endTime" nzFormat="HH:mm" [nzMinuteStep]="15"></nz-time-picker>
-        <button
-          *nzSpaceItem class="action-btn" nz-button
-          nzType="default" nzShape="circle" (click)="duplicate(weekDayNumber)"
-          [disabled]="isLoading$ | async">
+        <button *nzSpaceItem class="action-btn" nz-button nzType="default" nzShape="circle"
+          (click)="duplicate(weekDayNumber)" [disabled]="isLoading$ | async">
           <span nz-icon nzType="copy"></span>
         </button>
-        <button
-          *nzSpaceItem class="action-btn" nz-button nzDanger
-          nzType="default" nzShape="circle" (click)="closeDay(weekDayNumber)"
+        <button *nzSpaceItem class="action-btn" nz-button nzType="default" nzShape="circle"
+          (click)="closeDay(weekDayNumber)"
           [disabled]="(!validateForm.value[weekDayNumber].startTime && !validateForm.value[weekDayNumber].endTime) || (isLoading$ | async)">
           <span nz-icon nzType="close"></span>
         </button>
       </nz-space>
     </nz-form-control>
-    <div class="closed-hint">{{ (!validateForm.value[weekDayNumber].startTime && !validateForm.value[weekDayNumber].endTime) ? 'Fermé le ' + weekDays[weekDayNumber] : '' }}</div>
+    <div class="opening-hin">{{ (isLoading$ | async) === false ? generateHint(weekDayNumber) : '' }}</div>
   </nz-form-item>
 
   <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
     <nz-form-control>
       <div nz-row nzJustify="end">
         <nz-space nzWrap>
-          <button *nzSpaceItem nz-button (click)="resetForm($event)" [disabled]="isLoading$ | async">Réinitialiser</button>
-          <button *nzSpaceItem nz-button (click)="submitForm()" nzType="primary" [disabled]="!validateForm.valid || (isLoading$ | async)">Enregistrer</button>
+          <button *nzSpaceItem nz-button (click)="resetForm($event)"
+            [disabled]="isLoading$ | async">Réinitialiser</button>
+          <button *nzSpaceItem nz-button (click)="submitForm()" nzType="primary"
+            [disabled]="!validateForm.valid || (isLoading$ | async)">Enregistrer</button>
         </nz-space>
       </div>
     </nz-form-control>

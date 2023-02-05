@@ -1,5 +1,5 @@
 :host {
-  nz-form-item {
+  form {
     padding-bottom: 2rem;
   }
 
@@ -31,9 +31,11 @@
     }
   }
 
-  .closed-hint {
+  .opening-hin {
     display: flex;
     justify-content: start;
     font-style: italic;
+    max-width: 500px;
+    padding: 0.625rem 0;
   }
 }
