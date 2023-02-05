@@ -207,7 +207,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
     const startTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].startTime, 'HH:mm') as string;
     const endTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].endTime, 'HH:mm') as string;
     return (!startTime && !endTime) ?
-      `Fermé le ${this.weekDays[weekDayNumber]}` :
+      `Commande impossible en dehors des horaires d'ouverture le ${this.weekDays[weekDayNumber]}` :
       (startTime && endTime) ?
         `Le ${this.weekDays[weekDayNumber]}, le restaurant accepte que les commandes soient passées entre ${startTime} et ${endTime}.`
         : '';

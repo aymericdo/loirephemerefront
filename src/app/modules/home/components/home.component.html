@@ -1,6 +1,10 @@
 <div class="home-section" [class.-has-order-footer]="hasSelectedPastries$ | async">
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
+    <nz-page-header-subtitle *ngIf="!isRestaurantOpened">
+        Fermé
+        <span nz-icon nzType="stop" nzTheme="outline"></span>
+    </nz-page-header-subtitle>
   </nz-page-header>
   <div class="container-section">
     <ng-container *ngIf="(pastries$ | async)?.length === 0">
@@ -35,7 +39,7 @@
   [totalPrice]="(totalPrice$ | async)!" (clickCancel)="isOrderModalVisible = false" (clickOk)="isOrderModalVisible = false; isUltimateConfirmationVisible = true"></app-order-modal>
 
 <app-order-name-modal *ngIf="isUltimateConfirmationVisible" (clickCancel)="isUltimateConfirmationVisible = false"
-  (clickOk)="handleClickCommand($event)"></app-order-name-modal>
+  (clickOk)="handleClickCommand($event)" [restaurant]="(restaurant$ | async)!"></app-order-name-modal>
 
 <div *ngIf="hasSelectedPastries$ | async" class="shopping-cart">
   <nz-badge [nzCount]="(totalCount$ | async)!">

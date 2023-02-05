@@ -69,6 +69,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   isOrderModalVisible: boolean = false;
   isUltimateConfirmationVisible: boolean = false;
 
+  isRestaurantOpened: boolean = false;
+
   private commandNotificationIdByCommandId: { [commandId: string]: string } = {};
   private audio!: HTMLAudioElement;
 
@@ -126,6 +128,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
       this.titleService.setTitle(restaurant.name);
+      this.setIsRestaurantOpened(restaurant);
     });
 
     this.personalCommand$
@@ -228,6 +231,26 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
+  }
+
+  private setIsRestaurantOpened(restaurant: Restaurant): void {
+    const today = new Date();
+    const currentDay = today.getDay();
+    const cwday = currentDay + ((currentDay - 1 + 7) % 7);
+
+    if (!!(restaurant.openingTime && restaurant.openingTime[cwday])) {
+      const openingHoursMinutes = restaurant.openingTime[cwday].startTime.split(':');
+      const startTime = new Date();
+      startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+
+      const closingHoursMinutes = restaurant.openingTime[cwday].endTime.split(':');
+      const endTime = new Date();
+      endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+
+      this.isRestaurantOpened = startTime < today && today < endTime;
+    } else {
+      this.isRestaurantOpened = false;
+    }
   }
 
   private subscribeToWS(code: string) {

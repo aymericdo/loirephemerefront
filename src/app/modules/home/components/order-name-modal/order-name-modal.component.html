@@ -9,13 +9,13 @@
       <nz-space *nzSpaceItem nzAlign="center">
         <span *nzSpaceItem>Heure de retrait</span>
         <nz-switch *nzSpaceItem [(ngModel)]="needPickUpTimeValue" [nzCheckedChildren]="checkedTemplate"
-          [nzUnCheckedChildren]="unCheckedTemplate">
+          [nzUnCheckedChildren]="unCheckedTemplate" [disabled]="!pickUpTimeAvailable">
         </nz-switch>
         <ng-template #checkedTemplate><span nz-icon nzType="check"></span></ng-template>
         <ng-template #unCheckedTemplate><span nz-icon nzType="close"></span></ng-template>
         <nz-time-picker *nzSpaceItem [nzAllowEmpty]="false" [nzDisabled]="!needPickUpTimeValue" [nzMinuteStep]="10"
           [nzHideDisabledOptions]="true" [(ngModel)]="pickUpTimeValue"
-          [nzDisabledHours]="disabledHours" nzFormat="HH:mm">
+          [nzDisabledHours]="disabledHours" [nzDisabledMinutes]="disabledMinutes" nzFormat="HH:mm">
         </nz-time-picker>
       </nz-space>
     </nz-space>
