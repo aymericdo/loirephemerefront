@@ -21,7 +21,7 @@
         </button>
       </nz-space>
     </nz-form-control>
-    <div class="opening-hin">{{ (isLoading$ | async) === false   generateHint(weekDayNumber) }}</div>
+    <div class="opening-hin">{{ (isLoading$ | async) === false ? generateHint(weekDayNumber) : '' }}</div>
   </nz-form-item>
 
   <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
