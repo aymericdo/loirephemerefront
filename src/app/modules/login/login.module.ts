@@ -24,9 +24,9 @@ import { NgHcaptchaModule } from 'ng-hcaptcha';
     SignInComponent,
   ],
   imports: [
+    LoginRoutingModule,
     CommonModule,
     SharedModule,
-    LoginRoutingModule,
     NgHcaptchaModule.forRoot({
       siteKey: '76928deb-ad7e-4374-bc74-540e80fa1049',
     }),

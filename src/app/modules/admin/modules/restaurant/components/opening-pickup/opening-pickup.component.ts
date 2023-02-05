@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -45,7 +45,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
 
     let currentDate = firstMondayOfWeek;
     this.weekDays = this.weekDayNumbers.map((_i) => {
-      const valEEEE = this.datepipe.transform(currentDate, 'EEEE', 'fr') as string;
+      const valEEEE = this.datepipe.transform(currentDate, 'EEEE', DATE_PIPE_DEFAULT_OPTIONS.toString(), 'fr') as string;
       currentDate.setDate(currentDate.getDate() + 1);
       return valEEEE;
     });
@@ -124,8 +124,8 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
       openingTime: Object.keys(this.validateForm.value)
         .reduce((prev, weekDay: string, index: number) => {
           prev[index] = {
-            startTime: this.datepipe.transform(this.validateForm.value[weekDay].startTime, 'HH:mm', 'fr') as string,
-            endTime: this.datepipe.transform(this.validateForm.value[weekDay].endTime, 'HH:mm', 'fr') as string,
+            startTime: this.datepipe.transform(this.validateForm.value[weekDay].startTime, 'HH:mm') as string,
+            endTime: this.datepipe.transform(this.validateForm.value[weekDay].endTime, 'HH:mm') as string,
           };
 
           return prev;

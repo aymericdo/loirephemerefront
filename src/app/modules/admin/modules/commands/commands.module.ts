@@ -14,9 +14,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommandCardComponent,
   ],
   imports: [
+    CommandsRoutingModule,
     CommonModule,
     SharedModule,
-    CommandsRoutingModule,
     EffectsModule.forFeature([CommandsEffects]),
   ],
 })

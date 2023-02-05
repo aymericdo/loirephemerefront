@@ -17,10 +17,10 @@ import { QRCodeModule } from 'angularx-qrcode';
     RestaurantComponent,
   ],
   imports: [
+    RestaurantRoutingModule,
     QRCodeModule,
     CommonModule,
     SharedModule,
-    RestaurantRoutingModule,
     EffectsModule.forFeature([RestaurantEffects]),
   ],
 })

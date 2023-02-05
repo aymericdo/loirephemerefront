@@ -17,10 +17,10 @@ import { StatsRoutingModule } from 'src/app/modules/admin/modules/stats/stats-ro
     PieChartComponent,
   ],
   imports: [
+    StatsRoutingModule,
     CommonModule,
     SharedModule,
     NgChartsModule,
-    StatsRoutingModule,
     EffectsModule.forFeature([StatsEffects]),
   ]
 })

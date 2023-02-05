@@ -119,6 +119,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(stopFirstNavigation());
         this.routeName = this.getRouteName(this.router.url);
+        this.isFirstLoad = false;
       });
 
     this.restaurant$
@@ -172,9 +173,11 @@ export class NavComponent implements OnInit, OnDestroy {
   clickToggleRestaurant(restaurantCode: string, event: MouseEvent): void {
     const newCode = this.currentOpenedRestaurant === restaurantCode ? '' : restaurantCode;
 
-    this.router.navigate([newCode || this.currentOpenedRestaurant, 'admin']);
+    if ((this.restaurantCode !== (newCode || this.currentOpenedRestaurant)) || this.routeName !== 'admin-restaurant') {
+      this.router.navigate([newCode || this.currentOpenedRestaurant, 'admin']);
+    }
 
-    if (this.currentOpenedRestaurant && !newCode && this.routeName !== 'admin-restaurant') {
+    if (!!this.currentOpenedRestaurant && !newCode.length && this.routeName !== 'admin-restaurant') {
       event.stopPropagation();
     }
   }
@@ -210,7 +213,6 @@ export class NavComponent implements OnInit, OnDestroy {
 
       if (this.isFirstLoad) {
         this.openChangeDropdownRestaurantAdmin(urlArray[1]);
-        this.isFirstLoad = false;
       }
 
       if (urlArray.length > 2 && urlArray[3]?.startsWith('commands')) {
@@ -232,7 +234,6 @@ export class NavComponent implements OnInit, OnDestroy {
       return 'home';
     }
 
-    console.log('bite');
     return null;
   }
 }

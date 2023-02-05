@@ -14,9 +14,9 @@ import { NewUserModalComponent } from 'src/app/modules/admin/modules/users/compo
     NewUserModalComponent,
   ],
   imports: [
+    UsersRoutingModule,
     CommonModule,
     SharedModule,
-    UsersRoutingModule,
     EffectsModule.forFeature([UsersEffects]),
   ]
 })

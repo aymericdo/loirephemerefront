@@ -22,9 +22,9 @@ import { MenuEffects } from 'src/app/modules/admin/modules/menu/store/menu.effec
     SequenceComponent,
   ],
   imports: [
+    MenuRoutingModule,
     CommonModule,
     SharedModule,
-    MenuRoutingModule,
     DragDropModule,
     EffectsModule.forFeature([MenuEffects]),
   ]

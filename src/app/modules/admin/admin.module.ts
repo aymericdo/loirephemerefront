@@ -19,9 +19,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     AdminComponent,
   ],
   imports: [
+    AdminRoutingModule,
     SharedModule,
     CommonModule,
-    AdminRoutingModule,
     EffectsModule.forFeature([AdminEffects]),
     StoreModule.forFeature(adminFeatureKey, {
       ...reducer,

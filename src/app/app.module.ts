@@ -35,8 +35,8 @@ const ngZorroConfig: NzConfig = {
 @NgModule({
   declarations: [AppComponent, FourOhFourComponent],
   imports: [
-    BrowserModule,
     AppRoutingModule,
+    BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
     RouterModule,
