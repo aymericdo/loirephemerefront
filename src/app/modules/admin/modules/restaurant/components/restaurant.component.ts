@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { updateDisplayStock } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -37,5 +38,9 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  handleDisplayStock(displayStock: boolean): void {
+    this.store.dispatch(updateDisplayStock({ displayStock }));
   }
 }

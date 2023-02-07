@@ -34,6 +34,10 @@ export class OrderNameModalComponent implements OnInit {
       const endTime = new Date();
       endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1], 0, 0);
 
+      if (startTime >= endTime) {
+        endTime.setDate(endTime.getDate() + 1);
+      }
+
       let startOpeningPickupTime = startTime;
       if (this.restaurant.openingPickupTime) {
         const openingPickupHoursMinutes = this.restaurant.openingPickupTime[cwday].startTime.split(':');

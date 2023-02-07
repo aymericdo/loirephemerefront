@@ -248,6 +248,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       const endTime = new Date();
       endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1], 0, 0);
 
+      if (startTime >= endTime) {
+        endTime.setDate(endTime.getDate() + 1);
+      }
+
       this.isRestaurantOpened = startTime < today && today < endTime;
 
       let startOpeningPickupTime = startTime;

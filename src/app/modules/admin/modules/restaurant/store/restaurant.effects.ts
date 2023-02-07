@@ -9,6 +9,7 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 import {
   stopLoading,
+  updateDisplayStock,
   updateOpeningPickupTime,
   updateOpeningTime
 } from './restaurant.actions';
@@ -39,6 +40,21 @@ export class RestaurantEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
           .patchOpeningPickupTime(restaurant.code, action.openingTime)
+          .pipe(
+            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
+          );
+      })
+    )
+  );
+  updateDisplayStock$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateDisplayStock),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService
+          .patchDisplayStock(restaurant.code, action.displayStock)
           .pipe(
             switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
           );

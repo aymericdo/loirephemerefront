@@ -161,4 +161,13 @@ export class AdminApiService {
       { openingTime }
     ) as Observable<Restaurant>;
   }
+
+  patchDisplayStock(
+    code: string,
+    displayStock: boolean): Observable<Restaurant> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/display-stock`,
+      { displayStock }
+    ) as Observable<Restaurant>;
+  }
 }

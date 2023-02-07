@@ -8,6 +8,10 @@ export const updateOpeningPickupTime = createAction(
   '[Admin Restaurant page] Update Opening Pickup Hours',
   props<{ openingTime: { [weekDay: number]: { startTime: string } } }>()
 );
+export const updateDisplayStock = createAction(
+  '[Admin Restaurant page] Update Display Stock',
+  props<{ displayStock: boolean }>()
+);
 export const stopLoading = createAction(
   '[Admin Restaurant page] Stop loading',
 );

@@ -1,8 +1,8 @@
 <nz-modal [nzVisible]="true" nzTitle="Problème" nzCentered [nzClosable]="false" [nzMaskClosable]="true"
   [nzFooter]="null">
   <ng-container *nzModalContent>
-    <nz-result nzStatus="warning">
-      <ng-container *ngIf="errorType === 'outOfStock'">
+    <ng-container *ngIf="errorType === 'outOfStock'">
+      <nz-result nzStatus="warning">
         <div nz-result-title>Problème de stock</div>
         <div nz-result-subtitle>
           Les choix suivants ne sont plus en stock :
@@ -11,19 +11,26 @@
           </div>
           Merci de votre compréhension.
         </div>
-      </ng-container>
-      <ng-container *ngIf="!errorType">
+        <div nz-result-extra>
+          <button nz-button nzType="primary" (click)="clickCancel.emit()">
+            Retour à la page principale
+          </button>
+        </div>
+      </nz-result>
+    </ng-container>
+    <ng-container *ngIf="!errorType">
+      <nz-result nzStatus="warning">
         <div nz-result-title>Une erreur est survenue</div>
         <div nz-result-subtitle>
           Nous vous invitons à rafraichir la page et réessayer.
           Merci de votre compréhension.
         </div>
-      </ng-container>
-      <div nz-result-extra>
-        <button nz-button nzType="primary" (click)="clickCancel.emit()">
-          Retour à la page principale
-        </button>
-      </div>
-    </nz-result>
+        <div nz-result-extra>
+          <button nz-button nzType="primary" (click)="clickCancel.emit()">
+            Retour à la page principale
+          </button>
+        </div>
+      </nz-result>
+    </ng-container>
   </ng-container>
 </nz-modal>

@@ -5,6 +5,7 @@ export interface Restaurant extends CoreRestaurant {
   updatedAt: string;
   openingTime?: { [weekDay: number]: { startTime: string, endTime: string } };
   openingPickupTime?: { [weekDay: number]: { startTime: string } };
+  displayStock?: boolean;
 }
 
 export interface CoreRestaurant {
