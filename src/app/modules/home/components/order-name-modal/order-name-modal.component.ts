@@ -16,22 +16,50 @@ export class OrderNameModalComponent implements OnInit {
   takeAwayValue = false;
   pickUpTimeAvailable = false;
   needPickUpTimeValue = false;
-  pickUpTimeValue = new Date();
+  pickUpTimeValue: Date | null = null;
 
   constructor() { }
 
   ngOnInit(): void {
     const today = new Date();
     const currentDay = today.getDay();
-    const cwday = currentDay + ((currentDay - 1 + 7) % 7);
+    const cwday = ((currentDay - 1 + 7) % 7);
 
-    this.pickUpTimeAvailable = !!(this.restaurant.openingPickupTime && this.restaurant.openingPickupTime[cwday]);
+    if (this.restaurant.openingTime) {
+      const openingHoursMinutes = this.restaurant.openingTime[cwday].startTime.split(':');
+      const startTime = new Date();
+      startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+
+      const closingHoursMinutes = this.restaurant.openingTime[cwday].endTime.split(':');
+      const endTime = new Date();
+      endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+
+      let startOpeningPickupTime = startTime;
+      if (this.restaurant.openingPickupTime) {
+        const openingPickupHoursMinutes = this.restaurant.openingPickupTime[cwday].startTime.split(':');
+        const startTime = new Date();
+        startTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1]);
+
+        startOpeningPickupTime = startTime;
+      }
+
+      this.pickUpTimeAvailable = !!(
+        this.restaurant.openingPickupTime &&
+        this.restaurant.openingPickupTime[cwday] &&
+        today < endTime &&
+        today >= startOpeningPickupTime
+      );
+
+      if (this.pickUpTimeAvailable) {
+        this.pickUpTimeValue = today < startTime ? startTime : today;
+      }
+    }
   }
 
-  disabledHours = (): number[] => {
+  disabledHours(): number[] {
     const today = new Date();
     const currentDay = today.getDay();
-    const cwday = currentDay + ((currentDay - 1 + 7) % 7);
+    const cwday = ((currentDay - 1 + 7) % 7);
 
     if (this.restaurant.openingTime && this.restaurant.openingTime[cwday]) {
       const openingHour: number = +this.restaurant.openingTime[cwday].startTime.split(':')[0];
@@ -50,38 +78,40 @@ export class OrderNameModalComponent implements OnInit {
     }
   };
 
-  disabledMinutes = (hour: number): number[] => {
+  disabledMinutes(hour: number): number[] {
     const today = new Date();
     const currentDay = today.getDay();
-    const cwday = currentDay + ((currentDay - 1 + 7) % 7);
+    const cwday = ((currentDay - 1 + 7) % 7);
+
+    let disabledMinutes: number[] = [];
+
+    const minutesInThePast = today.getHours() === hour ? [...Array(today.getMinutes()).keys()] : [];
+    disabledMinutes = disabledMinutes.concat(minutesInThePast);
 
     if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
       hour === +this.restaurant.openingTime[cwday].startTime.split(':')[0]) {
-      const openingMinute: number = +this.restaurant.openingTime[cwday].startTime.split(':')[1];
-      const closingTime = [...Array(openingMinute).keys()];
-      const pastMinutes = today.getHours() === hour ? [...Array(today.getMinutes()).keys()] : [];
+        const openingMinute: number = +this.restaurant.openingTime[cwday].startTime.split(':')[1];
+        const closedMinutes = [...Array(openingMinute).keys()];
 
-      const closingMinute: number = +this.restaurant.openingTime[cwday].endTime.split(':')[1];
-      let lastClosingMinute = [];
-
-      if (closingMinute !== 0) {
-        for (let i = closingMinute + 1; i < 60; ++i) {
-          lastClosingMinute.push(i);
-        }
-      }
-
-      return [...new Set(closingTime.concat(pastMinutes).concat(lastClosingMinute))];
-    } else if (this.restaurant.openingTime && hour === +this.restaurant.openingTime[cwday].endTime.split(':')[0] &&
-      +this.restaurant.openingTime[cwday].endTime.split(':')[1] === 0) {
-        let lastClosingMinute = [];
-        for (let i = 1; i < 60; ++i) {
-          lastClosingMinute.push(i);
-        }
-
-        return lastClosingMinute;
-    } else {
-      return [];
+        disabledMinutes = disabledMinutes.concat(closedMinutes);
     }
+
+    if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
+      hour === +this.restaurant.openingTime[cwday].endTime.split(':')[0]) {
+        let closingMinute = 1;
+        if (+this.restaurant.openingTime[cwday].endTime.split(':')[1] !== 0) {
+          closingMinute = +this.restaurant.openingTime[cwday].endTime.split(':')[1];
+        }
+
+        let closedMinutes = [];
+        for (let i = closingMinute; i < 60; ++i) {
+          closedMinutes.push(i);
+        }
+
+        disabledMinutes = disabledMinutes.concat(closedMinutes);
+    }
+
+    return disabledMinutes;
   };
 
   handleOnOk(): void {
