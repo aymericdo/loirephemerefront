@@ -70,6 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   isUltimateConfirmationVisible: boolean = false;
 
   isRestaurantOpened: boolean = false;
+  pickUpTimeAvailable: boolean = false;
 
   private commandNotificationIdByCommandId: { [commandId: string]: string } = {};
   private audio!: HTMLAudioElement;
@@ -241,15 +242,32 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (!!(restaurant.openingTime && restaurant.openingTime[cwday])) {
       const openingHoursMinutes = restaurant.openingTime[cwday].startTime.split(':');
       const startTime = new Date();
-      startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+      startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1], 0, 0);
 
       const closingHoursMinutes = restaurant.openingTime[cwday].endTime.split(':');
       const endTime = new Date();
-      endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+      endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1], 0, 0);
 
       this.isRestaurantOpened = startTime < today && today < endTime;
+
+      let startOpeningPickupTime = startTime;
+      if (restaurant.openingPickupTime) {
+        const openingPickupHoursMinutes = restaurant.openingPickupTime[cwday].startTime.split(':');
+        const startTime = new Date();
+        startTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1], 0, 0);
+
+        startOpeningPickupTime = startTime;
+      }
+
+      this.pickUpTimeAvailable = !!(
+        restaurant.openingPickupTime &&
+        restaurant.openingPickupTime[cwday] &&
+        today < endTime &&
+        today >= startOpeningPickupTime
+      );
     } else {
       this.isRestaurantOpened = false;
+      this.pickUpTimeAvailable = false;
     }
   }
 

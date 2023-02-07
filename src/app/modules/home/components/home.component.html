@@ -2,7 +2,7 @@
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
     <nz-page-header-tags *ngIf="(restaurant$ | async) !== null && !isRestaurantOpened">
-      Fermé ⛔
+      Fermé pour le moment ⛔
     </nz-page-header-tags>
   </nz-page-header>
   <div class="container-section">
@@ -13,7 +13,7 @@
       <div *ngFor="let pastry of pastries$ | async; trackBy: trackById" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12"
         nzXl="8">
         <div class="inner-box">
-          <app-pastry-card #item [pastry]="pastry" [isLoading]="(isLoading$ | async)!"
+          <app-pastry-card #item [pastry]="pastry" [isLoading]="(isLoading$ | async)!" [disabled]="!pickUpTimeAvailable"
             [count]="(selectedPastries$ | async)![pastry.id] || 0" (clickPlus)="handleClickPlus(pastry)"
             (clickMinus)="handleClickMinus(pastry)"></app-pastry-card>
         </div>

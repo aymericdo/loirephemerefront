@@ -50,8 +50,8 @@
   <span *ngIf="!!count">{{ count }}</span>
 </ng-template>
 <ng-template #actionPlus>
-  <i nz-icon nzType="plus" [class.-disabled]="isMaxLimitReached || isLoading" (click)="!isMaxLimitReached && !isLoading && clickPlus.emit()"></i>
+  <i nz-icon nzType="plus" [class.-disabled]="isMaxLimitReached || isLoading || disabled" (click)="!disabled && !isMaxLimitReached && !isLoading && clickPlus.emit()"></i>
 </ng-template>
 <ng-template #actionMinus>
-  <i nz-icon nzType="minus" [class.-disabled]="count < 1 || isLoading" (click)="count > 0 && !isLoading && clickMinus.emit()"></i>
+  <i nz-icon nzType="minus" [class.-disabled]="count < 1 || isLoading || disabled" (click)="!disabled && count > 0 && !isLoading && clickMinus.emit()"></i>
 </ng-template>

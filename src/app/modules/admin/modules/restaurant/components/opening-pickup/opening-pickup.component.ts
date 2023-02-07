@@ -74,7 +74,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
             if (weekdayOpeningPickupTime?.startTime || weekdayOpeningTime.startTime) {
               const openingHoursMinutes = weekdayOpeningPickupTime?.startTime?.split(':') || weekdayOpeningTime.startTime.split(':');
               startTime = new Date();
-              startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+              startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1], 0, 0);
             }
           }
 

@@ -28,17 +28,17 @@ export class OrderNameModalComponent implements OnInit {
     if (this.restaurant.openingTime) {
       const openingHoursMinutes = this.restaurant.openingTime[cwday].startTime.split(':');
       const startTime = new Date();
-      startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1]);
+      startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1], 0, 0);
 
       const closingHoursMinutes = this.restaurant.openingTime[cwday].endTime.split(':');
       const endTime = new Date();
-      endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1]);
+      endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1], 0, 0);
 
       let startOpeningPickupTime = startTime;
       if (this.restaurant.openingPickupTime) {
         const openingPickupHoursMinutes = this.restaurant.openingPickupTime[cwday].startTime.split(':');
         const startTime = new Date();
-        startTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1]);
+        startTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1], 0, 0);
 
         startOpeningPickupTime = startTime;
       }

@@ -22,6 +22,7 @@ export class PastryCardComponent implements OnChanges {
   @Input() count: number = 0;
   @Input() isLoading: boolean = false;
   @Input() isAdmin: boolean = false;
+  @Input() disabled: boolean = false;
 
   @Output() clickPlus = new EventEmitter<null>();
   @Output() clickMinus = new EventEmitter<null>();
