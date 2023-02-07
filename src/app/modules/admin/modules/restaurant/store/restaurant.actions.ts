@@ -6,7 +6,7 @@ export const updateOpeningTime = createAction(
 );
 export const updateOpeningPickupTime = createAction(
   '[Admin Restaurant page] Update Opening Pickup Hours',
-  props<{ openingTime: { [weekDay: number]: { startTime: string, endTime: string } } }>()
+  props<{ openingTime: { [weekDay: number]: { startTime: string } } }>()
 );
 export const stopLoading = createAction(
   '[Admin Restaurant page] Stop loading',

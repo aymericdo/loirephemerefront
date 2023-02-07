@@ -62,8 +62,8 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
       if (restaurant.openingTime) {
-        Object.keys(restaurant.openingTime).forEach((weekDay: string) => {
-          const weekdayOpeningTime = restaurant.openingTime![+weekDay];
+        this.weekDayNumbers.forEach((weekDay: number) => {
+          const weekdayOpeningTime = restaurant.openingTime![weekDay];
 
           let startTime = null;
           let endTime = null;
@@ -99,8 +99,8 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.validateForm.valueChanges.subscribe((form) => {
-      Object.keys(form).forEach((wd) => {
+    this.validateForm.valueChanges.subscribe(() => {
+      this.weekDayNumbers.forEach((wd: number) => {
         const weekDayOpeningTime = this.validateForm.controls[wd];
 
         if ((!weekDayOpeningTime.value.startTime && weekDayOpeningTime.value.endTime) ||
@@ -118,8 +118,8 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.store.dispatch(updateOpeningTime({
-      openingTime: Object.keys(this.validateForm.value)
-        .reduce((prev, weekDay: string, index: number) => {
+      openingTime: this.weekDayNumbers
+        .reduce((prev, weekDay: number, index: number) => {
           prev[index] = {
             startTime: this.datepipe.transform(this.validateForm.value[weekDay].startTime, 'HH:mm') as string,
             endTime: this.datepipe.transform(this.validateForm.value[weekDay].endTime, 'HH:mm') as string,
@@ -128,17 +128,6 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
           return prev;
         }, {} as { [weekDay: number]: { startTime: string, endTime: string } })
     }));
-  }
-
-  resetForm(e: MouseEvent): void {
-    e.preventDefault();
-    this.validateForm.reset();
-    for (const key in this.validateForm.controls) {
-      if (this.validateForm.controls.hasOwnProperty(key)) {
-        this.validateForm.controls[key].markAsPristine();
-        this.validateForm.controls[key].updateValueAndValidity();
-      }
-    }
   }
 
   duplicate(weekDayNumber: number): void {
@@ -159,7 +148,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
   closeDay(weekDayNumber: number): void {
     this.modal.confirm({
       nzTitle: 'Fermeture',
-      nzContent: `Le restaurant est bien fermé le <b>${this.weekDays[weekDayNumber]}</b> ?`,
+      nzContent: `Voulez-vous indiquer que le restaurant est fermé le <b>${this.weekDays[weekDayNumber]}</b> ?`,
       nzOkText: 'Oui',
       nzOkType: 'primary',
       nzOnOk: () => {

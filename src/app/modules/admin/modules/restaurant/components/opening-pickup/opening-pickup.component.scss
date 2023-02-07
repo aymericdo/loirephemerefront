@@ -3,13 +3,6 @@
     padding-bottom: 2rem;
   }
 
-  .opening-hours-duplicate-section {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
-  }
-
   .week-day {
     text-transform: capitalize;
   }
@@ -31,11 +24,11 @@
     }
   }
 
-  .opening-hin {
+  .opening-hint {
     display: flex;
     justify-content: start;
+    font-weight: 400;
     font-style: italic;
     max-width: 500px;
-    padding: 0.625rem 0;
   }
 }
