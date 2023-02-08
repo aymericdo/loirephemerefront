@@ -6,14 +6,14 @@ import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock, startLoading } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
-import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
+import { MenuWebSocketService, WebSocketData } from 'src/app/modules/admin/services/menu-socket.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
-  providers: [HomeWebSocketService],
+  providers: [MenuWebSocketService],
 })
 export class MenuComponent implements OnInit, OnDestroy {
   restaurant$: Observable<Restaurant | null>;
@@ -31,7 +31,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
-    private wsService: HomeWebSocketService,
+    private wsService: MenuWebSocketService,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.pastries$ = this.store.select(selectAllPastries);
@@ -124,10 +124,13 @@ export class MenuComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: WebSocketData) => {
           if (data.hasOwnProperty('stockChanged')) {
+            const stockChanged: { pastryId: string; newStock: number, commandId: string } =
+              data.stockChanged as { pastryId: string; newStock: number, commandId: string };
+
             this.store.dispatch(
               setStock({
-                pastryId: data.stockChanged.pastryId as string,
-                newStock: data.stockChanged.newStock as number,
+                pastryId: stockChanged.pastryId as string,
+                newStock: stockChanged.newStock as number,
               })
             );
           }

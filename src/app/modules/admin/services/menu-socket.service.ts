@@ -1,16 +1,15 @@
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { Command } from 'src/app/interfaces/command.interface';
 import { environment } from 'src/environments/environment';
 
-const webSocketDataKey = ['addCommand', 'closeCommand', 'payedCommand'];
+const webSocketDataKey = ['stockChanged'];
 const SOCKET_IS_OPEN = 1;
 
 export type WebSocketData = {
-  [key: string]: Command | 'bonjour';
+  [key: string]: { pastryId: string; newStock: number, commandId: string } | 'bonjour';
 };
 
-export class CommandWebSocketService {
+export class MenuWebSocketService {
   ws!: WebSocket;
 
   createObservableSocket(code: string): Observable<WebSocketData> {
@@ -30,7 +29,7 @@ export class CommandWebSocketService {
         if (data.hello === 'bonjour') {
           this.sendMessage(
             JSON.stringify({
-              event: 'commandsAuthorization',
+              event: 'menuAuthorization',
             })
           );
         }

@@ -61,12 +61,12 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
-      if (restaurant.openingTime) {
-        this.weekDayNumbers.forEach((weekDay: number) => {
-          const weekdayOpeningTime = restaurant.openingTime![weekDay];
+      this.weekDayNumbers.forEach((weekDay: number) => {
+        let startTime = null;
+        let endTime = null;
 
-          let startTime = null;
-          let endTime = null;
+        if (restaurant.openingTime) {
+          const weekdayOpeningTime = restaurant.openingTime![weekDay];
 
           if (weekdayOpeningTime.startTime && weekdayOpeningTime.endTime) {
             const openingHoursMinutes = weekdayOpeningTime.startTime.split(':');
@@ -77,13 +77,13 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
             endTime = new Date();
             endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1], 0, 0);
           }
+        }
 
-          this.validateForm.controls[weekDay].setValue({
-            startTime,
-            endTime,
-          });
+        this.validateForm.controls[weekDay].setValue({
+          startTime,
+          endTime,
         });
-      }
+      });
 
       this.store.dispatch(stopLoading());
     });

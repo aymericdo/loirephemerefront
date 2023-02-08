@@ -25,7 +25,8 @@ export class OrderNameModalComponent implements OnInit {
     const currentDay = today.getDay();
     const cwday = ((currentDay - 1 + 7) % 7);
 
-    if (this.restaurant.openingTime) {
+    if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
+      this.restaurant.openingTime[cwday].startTime) {
       const openingHoursMinutes = this.restaurant.openingTime[cwday].startTime.split(':');
       const startTime = new Date();
       startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1], 0, 0);
@@ -39,7 +40,8 @@ export class OrderNameModalComponent implements OnInit {
       }
 
       let startOpeningPickupTime = startTime;
-      if (this.restaurant.openingPickupTime) {
+      if (this.restaurant.openingPickupTime && this.restaurant.openingPickupTime[cwday] &&
+        this.restaurant.openingPickupTime[cwday].startTime) {
         const openingPickupHoursMinutes = this.restaurant.openingPickupTime[cwday].startTime.split(':');
         const startTime = new Date();
         startTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1], 0, 0);
@@ -65,7 +67,8 @@ export class OrderNameModalComponent implements OnInit {
     const currentDay = today.getDay();
     const cwday = ((currentDay - 1 + 7) % 7);
 
-    if (this.restaurant.openingTime && this.restaurant.openingTime[cwday]) {
+    if (this.restaurant.openingTime && this.restaurant.openingTime[cwday]
+      && this.restaurant.openingTime[cwday].startTime) {
       const openingHour: number = +this.restaurant.openingTime[cwday].startTime.split(':')[0];
       const closingTime = [...Array(openingHour).keys()];
       const pastHours = [...Array(today.getHours()).keys()];
@@ -93,6 +96,7 @@ export class OrderNameModalComponent implements OnInit {
     disabledMinutes = disabledMinutes.concat(minutesInThePast);
 
     if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
+      this.restaurant.openingTime[cwday].startTime &&
       hour === +this.restaurant.openingTime[cwday].startTime.split(':')[0]) {
         const openingMinute: number = +this.restaurant.openingTime[cwday].startTime.split(':')[1];
         const closedMinutes = [...Array(openingMinute).keys()];
@@ -101,6 +105,7 @@ export class OrderNameModalComponent implements OnInit {
     }
 
     if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
+      this.restaurant.openingTime[cwday].endTime &&
       hour === +this.restaurant.openingTime[cwday].endTime.split(':')[0]) {
         let closingMinute = 1;
         if (+this.restaurant.openingTime[cwday].endTime.split(':')[1] !== 0) {

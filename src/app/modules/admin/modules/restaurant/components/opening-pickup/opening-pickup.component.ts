@@ -62,13 +62,15 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
+      this.store.dispatch(startLoading());
+
       this.restaurant = restaurant;
-      if (restaurant.openingPickupTime) {
-        this.weekDayNumbers.forEach((weekDay: number) => {
+      this.weekDayNumbers.forEach((weekDay: number) => {
+        let startTime = null;
+
+        if (restaurant.openingPickupTime) {
           const weekdayOpeningPickupTime = restaurant.openingPickupTime![weekDay];
           const weekdayOpeningTime = this.restaurant.openingTime![weekDay];
-
-          let startTime = null;
 
           if (!this.isDayClosed(weekDay)) {
             if (weekdayOpeningPickupTime?.startTime || weekdayOpeningTime.startTime) {
@@ -77,12 +79,12 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
               startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1], 0, 0);
             }
           }
+        }
 
-          this.validateForm.controls[weekDay].setValue({
-            startTime,
-          });
+        this.validateForm.controls[weekDay].setValue({
+          startTime,
         });
-      }
+      });
 
       this.store.dispatch(stopLoading());
     });
@@ -110,7 +112,8 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
   }
 
   disabledHours(weekDayNumber: number): number[] {
-    if (this.restaurant.openingTime && this.restaurant.openingTime[weekDayNumber]) {
+    if (this.restaurant.openingTime && this.restaurant.openingTime[weekDayNumber]
+      && this.restaurant.openingTime[weekDayNumber].startTime) {
       const openingHour: number = +this.restaurant.openingTime[weekDayNumber].startTime.split(':')[0];
 
       const disabledHours: number[] = [];
@@ -126,6 +129,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
 
   disabledMinutes(weekDayNumber: number, hour: number): number[] {
     if (this.restaurant.openingTime && this.restaurant.openingTime[weekDayNumber] &&
+      this.restaurant.openingTime[weekDayNumber].startTime &&
       hour === +this.restaurant.openingTime[weekDayNumber].startTime.split(':')[0]) {
       const openingMinute: number = +this.restaurant.openingTime[weekDayNumber].startTime.split(':')[1];
 
