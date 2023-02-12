@@ -4,6 +4,7 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, take, takeUntil } from 'rxjs';
+import { hourMinuteToDate } from 'src/app/helpers/date';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { startLoading, stopLoading, updateOpeningTime } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
@@ -70,12 +71,10 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
           if (weekdayOpeningTime.startTime && weekdayOpeningTime.endTime) {
             const openingHoursMinutes = weekdayOpeningTime.startTime.split(':');
-            startTime = new Date();
-            startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1], 0, 0);
+            startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
 
             const closingHoursMinutes = weekdayOpeningTime.endTime.split(':');
-            endTime = new Date();
-            endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1], 0, 0);
+            endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
           }
         }
 
@@ -127,8 +126,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
         openingStartTime.setSeconds(0, 0);
 
         const openingPickupHoursMinutes = restaurant.openingPickupTime[weekDay].startTime.split(':');
-        const pickupStartTime = new Date();
-        pickupStartTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1], 0, 0);
+        const pickupStartTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1]);
 
         return pickupStartTime > openingStartTime;
       }

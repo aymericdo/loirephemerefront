@@ -13,6 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
+import { getCwday, hourMinuteToDate } from 'src/app/helpers/date';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
@@ -236,18 +237,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private setIsRestaurantOpened(restaurant: Restaurant): void {
     const today = new Date();
-    const currentDay = today.getDay();
-    const cwday = ((currentDay - 1 + 7) % 7);
+    const cwday = getCwday();
 
-    if (!!(restaurant.openingTime && restaurant.openingTime[cwday]
-      && restaurant.openingTime[cwday].startTime)) {
+    if (restaurant.openingTime && restaurant.openingTime[cwday] && restaurant.openingTime[cwday].startTime) {
       const openingHoursMinutes = restaurant.openingTime[cwday].startTime.split(':');
-      const startTime = new Date();
-      startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1], 0, 0);
-
       const closingHoursMinutes = restaurant.openingTime[cwday].endTime.split(':');
-      const endTime = new Date();
-      endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1], 0, 0);
+
+      const startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
+      const endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
 
       if (startTime >= endTime) {
         endTime.setDate(endTime.getDate() + 1);
@@ -262,8 +259,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         restaurant.openingPickupTime[cwday].startTime
       ) {
         const openingPickupHoursMinutes = restaurant.openingPickupTime[cwday].startTime.split(':');
-        const startTime = new Date();
-        startTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1], 0, 0);
+        const startTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1]);
 
         startOpeningPickupTime = startTime;
       }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { getCwday, hourMinuteToDate } from 'src/app/helpers/date';
 import { CoreCommand } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
@@ -22,18 +23,15 @@ export class OrderNameModalComponent implements OnInit {
 
   ngOnInit(): void {
     const today = new Date();
-    const currentDay = today.getDay();
-    const cwday = ((currentDay - 1 + 7) % 7);
+    const cwday = getCwday();
 
     if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
       this.restaurant.openingTime[cwday].startTime) {
       const openingHoursMinutes = this.restaurant.openingTime[cwday].startTime.split(':');
-      const startTime = new Date();
-      startTime.setHours(+openingHoursMinutes[0], +openingHoursMinutes[1], 0, 0);
+      const startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
 
       const closingHoursMinutes = this.restaurant.openingTime[cwday].endTime.split(':');
-      const endTime = new Date();
-      endTime.setHours(+closingHoursMinutes[0], +closingHoursMinutes[1], 0, 0);
+      const endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
 
       if (startTime >= endTime) {
         endTime.setDate(endTime.getDate() + 1);
@@ -43,18 +41,14 @@ export class OrderNameModalComponent implements OnInit {
       if (this.restaurant.openingPickupTime && this.restaurant.openingPickupTime[cwday] &&
         this.restaurant.openingPickupTime[cwday].startTime) {
         const openingPickupHoursMinutes = this.restaurant.openingPickupTime[cwday].startTime.split(':');
-        const startTime = new Date();
-        startTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1], 0, 0);
+        const startTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1]);
 
         startOpeningPickupTime = startTime;
       }
 
-      this.pickUpTimeAvailable = !!(
-        this.restaurant.openingPickupTime &&
-        this.restaurant.openingPickupTime[cwday] &&
+      this.pickUpTimeAvailable =
         today < endTime &&
-        today >= startOpeningPickupTime
-      );
+        today >= startOpeningPickupTime;
 
       if (this.pickUpTimeAvailable) {
         this.pickUpTimeValue = today < startTime ? startTime : today;
@@ -64,8 +58,7 @@ export class OrderNameModalComponent implements OnInit {
 
   disabledHours(): number[] {
     const today = new Date();
-    const currentDay = today.getDay();
-    const cwday = ((currentDay - 1 + 7) % 7);
+    const cwday = getCwday();
 
     if (this.restaurant.openingTime && this.restaurant.openingTime[cwday]
       && this.restaurant.openingTime[cwday].startTime) {
@@ -87,8 +80,7 @@ export class OrderNameModalComponent implements OnInit {
 
   disabledMinutes(hour: number): number[] {
     const today = new Date();
-    const currentDay = today.getDay();
-    const cwday = ((currentDay - 1 + 7) % 7);
+    const cwday = getCwday();
 
     let disabledMinutes: number[] = [];
 
