@@ -6,27 +6,6 @@
   <div class="container-section">
     <nz-tabset nzLinkRouter>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-hours' }" queryParamsHandling="merge">
-          Ouverture
-        </a>
-        <app-opening-hours></app-opening-hours>
-      </nz-tab>
-      <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-pickup-hours' }" queryParamsHandling="merge">
-          Prise de commande
-        </a>
-        <app-opening-pickup></app-opening-pickup>
-      </nz-tab>
-      <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'qrcode' }" queryParamsHandling="merge">
-          QRCode
-        </a>
-        <div class="qrcode-section">
-          <qrcode [qrdata]="'https://oresto.app/' + (restaurant$ | async)?.code" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
-          <span class="url"><a [href]="'https://oresto.app/' + (restaurant$ | async)?.code" target="_blank">{{ 'https://oresto.app/' + (restaurant$ | async)?.code }}</a></span>
-        </div>
-      </nz-tab>
-      <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'info' }" queryParamsHandling="merge">
           Informations
         </a>
@@ -83,6 +62,27 @@
               </div>
             </div>
           </div>
+        </div>
+      </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-hours' }" queryParamsHandling="merge">
+          Ouverture
+        </a>
+        <app-opening-hours></app-opening-hours>
+      </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-pickup-hours' }" queryParamsHandling="merge">
+          Prise de commande
+        </a>
+        <app-opening-pickup></app-opening-pickup>
+      </nz-tab>
+      <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'qrcode' }" queryParamsHandling="merge">
+          QRCode
+        </a>
+        <div class="qrcode-section">
+          <qrcode [qrdata]="'https://oresto.app/' + (restaurant$ | async)?.code" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+          <span class="url"><a [href]="'https://oresto.app/' + (restaurant$ | async)?.code" target="_blank">{{ 'https://oresto.app/' + (restaurant$ | async)?.code }}</a></span>
         </div>
       </nz-tab>
     </nz-tabset>

@@ -30,7 +30,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$)
     ).subscribe((params) => {
       if (!params['tab']) {
-        this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'opening-hours' } });
+        this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'info' } });
       }
     });
   }

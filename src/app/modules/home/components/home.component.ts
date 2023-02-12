@@ -256,7 +256,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.isRestaurantOpened = startTime < today && today < endTime;
 
       let startOpeningPickupTime = startTime;
-      if (restaurant.openingPickupTime) {
+      if (
+        restaurant.openingPickupTime &&
+        restaurant.openingPickupTime[cwday] &&
+        restaurant.openingPickupTime[cwday].startTime
+      ) {
         const openingPickupHoursMinutes = restaurant.openingPickupTime[cwday].startTime.split(':');
         const startTime = new Date();
         startTime.setHours(+openingPickupHoursMinutes[0], +openingPickupHoursMinutes[1], 0, 0);
@@ -265,8 +269,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       this.pickUpTimeAvailable = !!(
-        restaurant.openingPickupTime &&
-        restaurant.openingPickupTime[cwday] &&
         today < endTime &&
         today >= startOpeningPickupTime
       );
