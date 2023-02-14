@@ -17,6 +17,7 @@ export class OrderNameModalComponent implements OnInit {
   takeAwayValue = false;
   pickUpTimeAvailable = false;
   needPickUpTimeValue = false;
+  pickUpTimeMandatory = false;
   pickUpTimeValue: Date | null = null;
 
   constructor() { }
@@ -51,7 +52,13 @@ export class OrderNameModalComponent implements OnInit {
         today >= startOpeningPickupTime;
 
       if (this.pickUpTimeAvailable) {
-        this.pickUpTimeValue = today < startTime ? startTime : today;
+        if (today < startTime) {
+          this.pickUpTimeMandatory = true;
+          this.needPickUpTimeValue = true;
+          this.pickUpTimeValue = startTime;
+        } else {
+          this.pickUpTimeValue = today;
+        }
       }
     }
   }
@@ -63,13 +70,15 @@ export class OrderNameModalComponent implements OnInit {
     if (this.restaurant.openingTime && this.restaurant.openingTime[cwday]
       && this.restaurant.openingTime[cwday].startTime) {
       const openingHour: number = +this.restaurant.openingTime[cwday].startTime.split(':')[0];
-      const closingTime = [...Array(openingHour).keys()];
+      const closingTime = [...Array(openingHour - 1).keys()];
       const pastHours = [...Array(today.getHours()).keys()];
       const closingHour: number = +this.restaurant.openingTime[cwday].endTime.split(':')[0];
 
       const lastClosingHour = [];
-      for (let i = closingHour + 1; i < 24; ++i) {
-        lastClosingHour.push(i);
+      if (closingHour !== 0) {
+        for (let i = closingHour + 1; i < 24; ++i) {
+          lastClosingHour.push(i);
+        }
       }
 
       return [...new Set(closingTime.concat(pastHours).concat(lastClosingHour))];

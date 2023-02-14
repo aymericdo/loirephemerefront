@@ -23,7 +23,9 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
   weekDayNumbers: number[] = [];
   weekDays: string[] = [];
   validateForm!: UntypedFormGroup;
+  isDirty: boolean = false;
 
+  private initialFormValue = {};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -95,6 +97,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
           this.validateForm.disable();
         } else {
           this.validateForm.enable();
+          this.initialFormValue = JSON.stringify(this.validateForm.value);
         }
       });
 
@@ -107,6 +110,8 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
           weekDayOpeningTime.setErrors({ bothOrNothingValidator: true });
         }
       });
+
+      this.isDirty = this.initialFormValue !== JSON.stringify(this.validateForm.value);
     });
   }
 

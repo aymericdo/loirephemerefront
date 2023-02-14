@@ -23,7 +23,9 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
   weekDayNumbers: number[] = [];
   weekDays: string[] = [];
   validateForm!: UntypedFormGroup;
+  isDirty: boolean = false;
 
+  private initialFormValue = {};
   private restaurant!: Restaurant;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -102,8 +104,14 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
               this.validateForm.controls[weekDay].disable();
             }
           });
+
+          this.initialFormValue = JSON.stringify(this.validateForm.value);
         }
       });
+
+    this.validateForm.valueChanges.subscribe(() => {
+      this.isDirty = this.initialFormValue !== JSON.stringify(this.validateForm.value);
+    });
   }
 
   ngOnDestroy() {

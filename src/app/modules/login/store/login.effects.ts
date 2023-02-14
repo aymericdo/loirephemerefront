@@ -182,7 +182,7 @@ export class LoginEffects {
           catchError((error) => {
             if (error.status === 401) {
               localStorage.removeItem('access_token');
-              return [setAuthError({ error: true }), stopLoading()];
+              return [stopLoading(), setAuthError({ error: true })]; // order is important
             }
 
             return [stopLoading()];

@@ -1,4 +1,13 @@
+
 <form nz-form [formGroup]="validateForm" nz-row nzJustify="center">
+  <div *ngIf="isDirty" class="info-dirty" nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-alert
+      nzType="info"
+      nzMessage="Modification en cours"
+      nzDescription="Cliquer sur enregistrer pour sauvegarder les informations."
+      nzShowIcon
+    ></nz-alert>
+  </div>
   <nz-form-item *ngFor="let weekDayNumber of weekDayNumbers" nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24"
     [formGroupName]="weekDayNumber">
     <nz-form-label class="week-day">{{ weekDays[weekDayNumber] }}</nz-form-label>
