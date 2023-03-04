@@ -59,6 +59,16 @@ export class PastryFormComponent implements OnInit {
     this.validateForm.controls.ingredients.setValue(ingredients.filter((tag: string) => tag !== removedTag));
   }
 
+  handleInfiniteStock(infiniteStock: boolean): void {
+    if (infiniteStock) {
+      this.validateForm.controls.stock.setValue(null);
+      this.validateForm.controls.stock.disable();
+    } else {
+      this.validateForm.controls.stock.setValue(10);
+      this.validateForm.controls.stock.enable();
+    }
+  }
+
   showInput(): void {
     this.ingredientsInputVisible = true;
     setTimeout(() => {
