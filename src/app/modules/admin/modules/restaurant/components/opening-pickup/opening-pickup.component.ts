@@ -88,6 +88,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
         });
       });
 
+      this.initialFormValue = JSON.stringify(this.validateForm.getRawValue());
       this.store.dispatch(stopLoading());
     });
 
@@ -104,13 +105,11 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
               this.validateForm.controls[weekDay].disable();
             }
           });
-
-          this.initialFormValue = JSON.stringify(this.validateForm.value);
         }
       });
 
     this.validateForm.valueChanges.subscribe(() => {
-      this.isDirty = this.initialFormValue !== JSON.stringify(this.validateForm.value);
+      this.isDirty = this.initialFormValue !== JSON.stringify(this.validateForm.getRawValue());
     });
   }
 

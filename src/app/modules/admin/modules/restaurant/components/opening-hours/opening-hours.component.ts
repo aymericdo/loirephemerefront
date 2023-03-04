@@ -86,6 +86,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
         });
       });
 
+      this.initialFormValue = JSON.stringify(this.validateForm.getRawValue());
       this.store.dispatch(stopLoading());
     });
 
@@ -97,7 +98,6 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
           this.validateForm.disable();
         } else {
           this.validateForm.enable();
-          this.initialFormValue = JSON.stringify(this.validateForm.value);
         }
       });
 
@@ -111,7 +111,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.isDirty = this.initialFormValue !== JSON.stringify(this.validateForm.value);
+      this.isDirty = this.initialFormValue !== JSON.stringify(this.validateForm.getRawValue());
     });
   }
 

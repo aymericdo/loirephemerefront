@@ -49,7 +49,7 @@
                 </nz-form-item>
 
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-                  <nz-form-label>Stock affiché</nz-form-label>
+                  <nz-form-label>Stock affiché côté client</nz-form-label>
                   <nz-form-control>
                     <nz-switch
                       [ngModel]="!!(restaurant$ | async)?.displayStock" (ngModelChange)="handleDisplayStock($event)" [nzCheckedChildren]="checkedTemplate"

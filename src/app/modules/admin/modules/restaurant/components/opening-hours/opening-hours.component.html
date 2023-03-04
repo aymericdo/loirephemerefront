@@ -35,7 +35,7 @@
       <div nz-row nzJustify="end">
         <nz-space nzWrap>
           <button *nzSpaceItem nz-button (click)="submitForm()" nzType="primary"
-            [disabled]="!validateForm.valid || (isLoading$ | async)">Enregistrer</button>
+            [disabled]="!validateForm.valid || (isLoading$ | async) || !isDirty">Enregistrer</button>
         </nz-space>
       </div>
     </nz-form-control>
