@@ -21,6 +21,11 @@ export class OrderErrorModalComponent implements OnInit {
       this.pastriesList = (this.errors as { outOfStock: Pastry[] }).outOfStock
         .map((p) => p.name)
         .join(', ');
+    } else if (this.errors.hasOwnProperty('deactivated')) {
+      this.errorType = 'deactivated';
+      this.pastriesList = (this.errors as { deactivated: Pastry[] }).deactivated
+        .map((p) => p.name)
+        .join(', ');
     }
   }
 }

@@ -18,6 +18,23 @@
         </div>
       </nz-result>
     </ng-container>
+    <ng-container *ngIf="errorType === 'deactivated'">
+      <nz-result nzStatus="warning">
+        <div nz-result-title>Problème</div>
+        <div nz-result-subtitle>
+          Les choix suivants sont désactivés par le restaurant :
+          <div>
+            <b>{{ pastriesList }}</b>
+          </div>
+          Merci de votre compréhension.
+        </div>
+        <div nz-result-extra>
+          <button nz-button nzType="primary" (click)="clickCancel.emit()">
+            Retour à la page principale
+          </button>
+        </div>
+      </nz-result>
+    </ng-container>
     <ng-container *ngIf="!errorType">
       <nz-result nzStatus="warning">
         <div nz-result-title>Une erreur est survenue</div>
