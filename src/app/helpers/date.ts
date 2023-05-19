@@ -22,3 +22,7 @@ export const getCwday = (): number => {
   const currentDay = today.getDay();
   return ((currentDay - 1 + 7) % 7);
 };
+
+export const getYesterday = (): number => {
+  return ((getCwday() - 1 + 7) % 7);
+};

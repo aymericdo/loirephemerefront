@@ -13,7 +13,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
-import { getCwday, hourMinuteToDate } from 'src/app/helpers/date';
+import { getCwday, getYesterday, hourMinuteToDate } from 'src/app/helpers/date';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
@@ -237,6 +237,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private setIsRestaurantOpened(restaurant: Restaurant): void {
     const today = new Date();
+    const yesterday = getYesterday();
     const cwday = getCwday();
 
     if (restaurant.openingTime && restaurant.openingTime[cwday] && restaurant.openingTime[cwday].startTime) {
@@ -245,10 +246,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       const startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
       const endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
-
-      if (startTime >= endTime) {
-        endTime.setDate(endTime.getDate() + 1);
-      }
 
       this.isRestaurantOpened = startTime < today && today < endTime;
 
@@ -271,6 +268,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       this.isRestaurantOpened = false;
       this.pickUpTimeAvailable = false;
+    }
+
+    if (!this.isRestaurantOpened
+      && restaurant.openingTime
+      && restaurant.openingTime[yesterday]
+      && restaurant.openingTime[yesterday].startTime) {
+      const openingHoursMinutes = restaurant.openingTime[yesterday].startTime.split(':');
+      const closingHoursMinutes = restaurant.openingTime[yesterday].endTime.split(':');
+
+      const startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
+      const endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
+
+      startTime.setDate(startTime.getDate() - 1);
+      endTime.setDate(endTime.getDate() - 1);
+
+      if (startTime >= endTime) {
+        endTime.setDate(endTime.getDate() + 1);
+        this.isRestaurantOpened = startTime < today && today < endTime;
+      }
     }
   }
 
