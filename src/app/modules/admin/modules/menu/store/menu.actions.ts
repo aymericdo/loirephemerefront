@@ -11,7 +11,7 @@ export const setAllPastries = createAction(
 );
 export const validatingPastryName = createAction(
   '[Menu page] Validate pastry name',
-  props<{ pastryName: string }>()
+  props<{ pastryName: string, pastryId?: string }>()
 );
 export const setPastryNameError = createAction(
   '[Menu page] Set name error',

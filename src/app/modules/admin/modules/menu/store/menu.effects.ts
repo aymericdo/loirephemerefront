@@ -79,7 +79,7 @@ export class MenuEffects {
         this.store$.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
-        return this.adminApiService.validatePastryName(restaurant.code, action.pastryName).pipe(
+        return this.adminApiService.validatePastryName(restaurant.code, action.pastryName, action.pastryId).pipe(
           switchMap((isValid: boolean) => {
             if (isValid) {
               return [setPastryNoNameError()];

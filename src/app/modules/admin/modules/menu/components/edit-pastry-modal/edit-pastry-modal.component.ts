@@ -5,7 +5,7 @@ import { Observable, ReplaySubject, filter, take, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { editingPastry, setPastryNoNameError, validatingPastryName } from 'src/app/modules/admin/modules/menu/store/menu.actions';
+import { editingPastry, validatingPastryName } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectIsSavingPastry, selectPastryNameDeactivated, selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -89,11 +89,7 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
   }
 
   pastryNameAsyncValidator = (control: UntypedFormControl) => {
-    if (this.prevPastryName === control.value) {
-      this.store.dispatch(setPastryNoNameError());
-    } else {
-      this.store.dispatch(validatingPastryName({ pastryName: control.value }));
-    }
+    this.store.dispatch(validatingPastryName({ pastryName: control.value, pastryId: this.pastry.id }));
 
     return this.restaurantNameError$.pipe(
       filter((value) => value !== undefined),

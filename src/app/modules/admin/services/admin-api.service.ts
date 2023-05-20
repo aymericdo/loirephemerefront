@@ -43,10 +43,12 @@ export class AdminApiService {
     return `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/upload-image`;
   }
 
-  validatePastryName(code: string, pastryName: string): Observable<boolean> {
-    return this.http.get(
-      `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/not-exists?name=${pastryName}`,
-    ) as Observable<boolean>;
+  validatePastryName(code: string, pastryName: string, pastryId?: string): Observable<boolean> {
+    let url = `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/not-exists?name=${pastryName}`;
+    if (pastryId) {
+      url += `&id=${pastryId}`;
+    }
+    return this.http.get(url) as Observable<boolean>;
   }
 
   validatePastryIsAlreadyOrdered(code: string, pastryId: string): Observable<boolean> {
