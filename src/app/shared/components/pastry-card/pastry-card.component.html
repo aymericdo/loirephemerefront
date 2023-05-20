@@ -12,7 +12,7 @@
       </ng-container>
     </nz-badge>
 
-    <nz-badge *ngIf="isAdmin" class="display-sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+    <nz-badge *ngIf="isAdmin" class="display-sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence + 1"
       [nzTitle]="'displaySequence'"></nz-badge>
 
     <nz-card-meta [nzTitle]="pastry.name + ' (' + pastry.price + '€)'" [nzDescription]="pastry.description">

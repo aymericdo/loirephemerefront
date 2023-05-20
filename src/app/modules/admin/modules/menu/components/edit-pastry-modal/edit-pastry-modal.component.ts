@@ -24,7 +24,6 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
   pastryNameDeactivated$!: Observable<boolean>;
 
-  private prevPastryName: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
@@ -33,7 +32,6 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
     this.restaurantNameError$ = this.store.select(selectPastryNameError);
     this.isLoading$ = this.store.select(selectIsSavingPastry);
     this.pastryNameDeactivated$ = this.store.select(selectPastryNameDeactivated);
-    this.prevPastryName = this.pastry.name;
 
     this.validateForm = this.fb.group({
       name: [

@@ -9,7 +9,7 @@
     <span>{{ pastry.name }}</span>
     <nz-space class="badges-section" nzAlign="center">
       <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
-      <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+      <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence + 1"
         [nzTitle]="'displaySequence'"></nz-badge>
     </nz-space>
     <ng-template #iconHidden>

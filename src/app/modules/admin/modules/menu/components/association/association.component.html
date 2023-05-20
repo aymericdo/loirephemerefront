@@ -10,7 +10,7 @@
     <nz-space class="badges-section" nzAlign="center">
       <nz-badge *ngIf="pastry.commonStock" [nzColor]="colorByCommonStock[pastry.commonStock]"></nz-badge>
       <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
-      <nz-badge *nzSpaceItem class="association-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence"
+      <nz-badge *nzSpaceItem class="association-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence + 1"
         [nzTitle]="'displaySequence'"></nz-badge>
     </nz-space>
     <ng-template #iconHidden>
