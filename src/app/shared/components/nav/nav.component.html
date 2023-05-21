@@ -64,7 +64,7 @@
               <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['stats']" nz-menu-item [nzMatchRouter]="true">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'stats']">
                   <i nz-icon nzType="pie-chart"></i>
-                  <span>Stats</span>
+                  <span>Statistiques</span>
                 </a>
               </li>
               <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['users']" nz-menu-item [nzMatchRouter]="true">

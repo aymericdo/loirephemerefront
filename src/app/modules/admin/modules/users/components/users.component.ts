@@ -109,7 +109,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     const labels = {
       menu: 'Menu',
       commands: 'Commandes',
-      stats: 'Stats',
+      stats: 'Statistiques',
       users: 'Utilisateurs',
     };
 
