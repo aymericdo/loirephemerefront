@@ -9,7 +9,7 @@ import {
   setPasswordAsChanged, setRestaurant, setUser, setUserAccess, setUserEmailError, setUserNoEmailError,
   setUserRestaurants, signInUser, startFirstNavigation,
   stopDemoRestoFetching, stopFirstNavigation, stopLoading, stopRestaurantFetching,
-  stopUserFetching, validatingUserEmail
+  stopUserFetching, toggleDisplayDemoResto, validatingUserEmail
 } from './login.actions';
 
 export const loginFeatureKey = 'login';
@@ -185,6 +185,13 @@ const loginReducer = createReducer(
   on(setIsSiderCollapsed, (state, { isCollapsed }) => ({
     ...state,
     isSiderCollapsed: isCollapsed,
+  })),
+  on(toggleDisplayDemoResto, (state, { displayDemoResto }) => ({
+    ...state,
+    user: {
+      ...state.user,
+      displayDemoResto,
+    } as User,
   })),
 );
 

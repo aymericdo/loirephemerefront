@@ -18,3 +18,8 @@ export const setChangePasswordError = createAction(
   '[Profile page] Set change password error',
   props<{ error: boolean }>()
 );
+
+export const updatingDisplayDemoResto = createAction(
+  '[Profile page] Updating display demo resto',
+  props<{ displayDemoResto: boolean }>()
+);

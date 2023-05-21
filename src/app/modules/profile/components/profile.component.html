@@ -9,6 +9,19 @@
               <input nz-input [value]="(user$ | async)?.email" disabled placeholder="mail@mail.com" />
             </nz-form-control>
           </nz-form-item>
+          <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+            <nz-form-label>Afficher le {{ (demoResto$ | async)?.name }}</nz-form-label>
+            <nz-form-control>
+              <nz-switch
+                [ngModel]="!!(user$ | async)?.displayDemoResto"
+                (ngModelChange)="handleDisplayDemoResto($event)"
+                [nzCheckedChildren]="checkedTemplate"
+                [nzUnCheckedChildren]="unCheckedTemplate">
+              </nz-switch>
+              <ng-template #checkedTemplate><span nz-icon nzType="eye"></span></ng-template>
+              <ng-template #unCheckedTemplate><span nz-icon nzType="eye-invisible"></span></ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
     </div>

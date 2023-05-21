@@ -1,6 +1,8 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { LoginState } from './login.reducer';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { User } from 'src/app/interfaces/user.interface';
 
 export const selectFeature = (state: AppState) => state.login;
 
@@ -24,9 +26,18 @@ export const selectUser = createSelector(
   (state: LoginState) => state.user
 );
 
+export const selectDemoResto = createSelector(
+  selectFeature,
+  (state: LoginState) => state.demoResto
+);
+
 export const selectUserRestaurants = createSelector(
   selectFeature,
-  (state: LoginState) => state.userRestaurants
+  selectDemoResto,
+  selectUser,
+  (state: LoginState, demoResto: Restaurant | null, user: User | null) => state.userRestaurants?.filter((resto) => {
+    return resto.code != demoResto?.code || user?.displayDemoResto;
+  }) || []
 );
 
 export const selectLoading = createSelector(
@@ -52,11 +63,6 @@ export const selectRecoverModalOpened = createSelector(
 export const selectPasswordChanged = createSelector(
   selectFeature,
   (state: LoginState) => state.passwordChanged
-);
-
-export const selectDemoResto = createSelector(
-  selectFeature,
-  (state: LoginState) => state.demoResto
 );
 
 export const selectUserFetching = createSelector(

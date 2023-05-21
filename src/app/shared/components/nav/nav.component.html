@@ -34,7 +34,7 @@
           </a>
         </li>
 
-        <ng-container *ngFor="let restaurant of (userRestaurants$ | async)">
+        <ng-container *ngFor="let restaurant of (userRestaurants$ | async); trackBy: trackById">
           <ng-template #titleNameTpl>
             <span (click)="clickToggleRestaurant(restaurant.code, $event)" class="restaurant-name-tooltip"
               [class.-restaurant-title-selected]="routeName === 'admin-restaurant' && restaurant.code === (restaurant$ | async)?.code"

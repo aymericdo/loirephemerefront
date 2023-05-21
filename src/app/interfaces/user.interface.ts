@@ -7,6 +7,7 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   access: Access[] | { [restaurantId: string]: Access[] };
+  displayDemoResto: boolean;
 }
 
 export interface CoreUser {

@@ -236,4 +236,8 @@ export class NavComponent implements OnInit, OnDestroy {
 
     return null;
   }
+
+  trackById(_index: any, restaurant: Restaurant): string {
+    return restaurant.id;
+  }
 }

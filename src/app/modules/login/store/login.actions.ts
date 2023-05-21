@@ -163,3 +163,8 @@ export const startFirstNavigation = createAction(
 export const stopFirstNavigation = createAction(
   '[Login page] Stop First Navigation',
 );
+
+export const toggleDisplayDemoResto = createAction(
+  '[Login page] Toggle display demo resto',
+  props<{ displayDemoResto: boolean }>()
+);

@@ -21,4 +21,12 @@ export class ProfileApiService {
       { oldPassword, password }
     ) as Observable<boolean>;
   }
+
+  patchDisplayDemoResto(
+    displayDemoResto: boolean): Observable<boolean> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/users/display-demo-resto`,
+      { displayDemoResto }
+    ) as Observable<boolean>;
+  }
 }
