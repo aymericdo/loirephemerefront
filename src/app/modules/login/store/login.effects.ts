@@ -22,6 +22,7 @@ import {
   validateRecoverEmailCode,
   validatingUserEmail
 } from './login.actions';
+import { startLoading } from 'src/app/modules/home/store/home.actions';
 
 @Injectable()
 export class LoginEffects {
@@ -214,6 +215,7 @@ export class LoginEffects {
     this.actions$.pipe(
       ofType(fetchingDemoResto),
       mergeMap(() => {
+        this.store$.dispatch(startLoading());
         return this.restaurantApiService.getDemoResto().pipe(
           switchMap((restaurant: Restaurant) => {
             return [
