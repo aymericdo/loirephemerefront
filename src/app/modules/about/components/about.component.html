@@ -1,89 +1,124 @@
-<nz-tabset nzLinkRouter>
-  <nz-tab>
-    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'context' }" queryParamsHandling="merge">
-      Contexte
-    </a>
-    <div class="content">
-      <div class="sub-content">
-        <p>
-          Salut ! Moi c'est Aymeric, je suis <a href="https://www.linkedin.com/in/aymeric-dominique/"
-            target="blank">développeur
-            web</a> et
-          <a href="https://www.instagram.com/aymericdo/" target="blank">j'aime faire de la pâtisserie</a>
-          à mes heures perdues.
-        </p>
-        <p>
-          Il se trouve que j'ai ouvert, deux étés de suite, une pâtisserie éphèmere, dans le village de mon enfance, et qu'à
-          cette occasion, j'ai créé cette application pour gérer les commandes.
-        </p>
-        <p>
-          Je me doute bien que je suis pas le premier, et sans doute pas le dernier à créer ce genre de système. Cependant,
-          j'aimerais le rendre accessible au plus grand nombre.
-        </p>
-        <p>
-          <a href="https://www.larep.fr/saint-hilaire-saint-mesmin-45160/loisirs/un-rendez-vous-patissier-gourmand-plebiscite_13995077/"
-            target="blank">La pâtisserie éphèmere</a> était à but non lucratif et nous a permis de reverser quelque milliers
-          d'euros à <a href="https://www.instagram.com/p/CQfi_pboxwM/" target="blank">Pâtisserie Solidaire</a>, une
-          association qui distribue des invendus sucrés à des associations
-          comme les Restos du Cœur.
-        </p>
-        <p>
-          Vous l'aurez compris, l'idée ici n'est toujours pas de devenir millionnaire mais juste de
-          donner accès à un outil au plus grand nombre.
-        </p>
-        <p>
-          <b>L'accès est actuellement gratuit, et si cela ne devient pas soutenable, son prix ne dépassera jamais 5€ par
-            mois.</b>
-        </p>
-      </div>
+<div class="full-page">
+  <img class="logo" src="/assets/icons/icon-512x512.png" alt="logo">
+  <div class="middle-row">
+    <div class="title">
+      <h1>Oresto</h1>
+      <h2 class="sub-title">L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.</h2>
     </div>
-  </nz-tab>
-  <nz-tab>
-    <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'docs' }" queryParamsHandling="merge">
-      Documentation
-    </a>
-    <div class="content">
-      <div class="sub-content">
-        <h2>Documentation</h2>
-        <p>
-          <a href="https://docs.google.com/document/d/1C97h2TNcN-6HKMsBDqwLoKYQWX4n3JBHNJ2HYMPF2Vk" target="_blank">Documentation complète</a>
-        </p>
-        <p>
-          L'application possède déjà plusieurs fonctionnalités :
-        </p>
-        <ul>
-          <li>Création d'un menu en ligne</li>
-          <li>Gestion de commandes</li>
-          <li>Gestion des horaires d'ouverture</li>
-          <li>Réservation de commande</li>
-          <li>Notification pour avertir que la commande est prête</li>
-          <li>Gestion de stocks</li>
-          <li>Statistiques</li>
-          <li>Gestion d'utilisateurs</li>
-        </ul>
-        <p>
-          L'application peut donc être utilisée de 2 manières différentes :
-        </p>
-        <ul>
-          <li>Les serveur⸱euse⸱s prennent les commandes via l'app</li>
-          <li>Les client⸱e⸱s prennent directement les commandes via l'app</li>
-        </ul>
-        <p>
-          Ces deux options sont évidemment fonctionnelles simultanément.
-        </p>
-        <p>
-          Pour que les client⸱e⸱s puissent accéder au menu, il leur suffira d'avoir accès au lien de votre restaurant
-          (<a  href="https://oresto.app/demo-resto" target="_blank">https://oresto.app/demo-resto</a>).
-        </p>
-        <p>
-          On peut même imaginer générer un QRCode pour simplifier l'accès à cette url 🤩
-          (<a  href="https://support.google.com/chrome/answer/9979877?hl=fr&co=GENIE.Platform%3DDesktop&oco=1" target="_blank">générer un QRCode pour une page web</a>).
-        </p>
-        <div class="footer">
-          Si vous avez des questions ou des idées de fonctionnalités, n'hésitez pas à me contacter
-          <a  href="mailto:contact@oresto.app" target="_blank">contact@oresto.app</a> et je vous répondrai avec plaisir !
+    <nz-timeline [nzMode]="'right'">
+      <nz-timeline-item nzLabel="03/05/2021">Première ligne de code afin de gérer les commandes de ma pâtisserie éphèmere</nz-timeline-item>
+      <nz-timeline-item nzLabel="07/08/2021">Ouverture de ma boutique éphèmere de patisseries</nz-timeline-item>
+      <nz-timeline-item nzLabel="30/10/2022">Création de Oresto afin de rendre cet outil accessible à tous</nz-timeline-item>
+      <nz-timeline-item nzLabel="15/05/2023">Oresto fonctionnel 🎉</nz-timeline-item>
+    </nz-timeline>
+  </div>
+  <div class="bottom-row">
+    <div class="feature">
+      <button [nzBlock]="true" nz-button nzType="default" nzShape="circle"><span nz-icon nzType="shopping-cart"></span></button>
+      <h3>Gestion du menu</h3>
+    </div>
+    <div class="feature">
+      <button [nzBlock]="true" nz-button nzType="default" nzShape="circle"><span nz-icon nzType="alert"></span></button>
+      <h3>Gestion des commandes</h3>
+    </div>
+    <div class="feature">
+      <button [nzBlock]="true" nz-button nzType="default" nzShape="circle"><span nz-icon nzType="pie-chart"></span></button>
+      <h3>Affichage des statistiques</h3>
+    </div>
+    <div class="feature">
+      <button [nzBlock]="true" nz-button nzType="default" nzShape="circle"><span nz-icon nzType="user"></span></button>
+      <h3>Gestion des utilisateurs</h3>
+    </div>
+  </div>
+</div>
+
+<div class="more-info">
+  <nz-tabset nzLinkRouter>
+    <nz-tab>
+      <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'context' }" queryParamsHandling="merge">
+        Contexte
+      </a>
+      <div class="content">
+        <div class="sub-content">
+          <p>
+            Salut ! Moi c'est Aymeric, je suis <a href="https://www.linkedin.com/in/aymeric-dominique/"
+              target="blank">développeur
+              web</a> et j'aime faire de la pâtisserie
+            à mes heures perdues.
+          </p>
+          <p>
+            Il se trouve que j'ai ouvert, deux étés de suite, une pâtisserie éphèmere, dans le village de mon enfance, et qu'à
+            cette occasion, j'ai créé cette application pour gérer les commandes.
+          </p>
+          <p>
+            Je me doute bien que je suis pas le premier, et sans doute pas le dernier à créer ce genre de système. Cependant,
+            j'aimerais le rendre accessible au plus grand nombre.
+          </p>
+          <p>
+            <a href="https://www.larep.fr/saint-hilaire-saint-mesmin-45160/loisirs/un-rendez-vous-patissier-gourmand-plebiscite_13995077/"
+              target="blank">La pâtisserie éphèmere</a> était à but non lucratif et nous a permis de reverser quelque milliers
+            d'euros à <a href="https://www.instagram.com/p/CQfi_pboxwM/" target="blank">Pâtisserie Solidaire</a>, une
+            association qui distribue des invendus sucrés à des associations
+            comme les Restos du Cœur.
+          </p>
+          <p>
+            Vous l'aurez compris, l'idée ici n'est toujours pas de devenir millionnaire mais juste de
+            donner accès à un outil au plus grand nombre.
+          </p>
+          <p>
+            <b>L'accès est actuellement gratuit, et si cela ne devient pas soutenable, son prix ne dépassera jamais 5€ par
+              mois.</b>
+          </p>
         </div>
       </div>
-    </div>
-  </nz-tab>
-</nz-tabset>
+    </nz-tab>
+    <nz-tab>
+      <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'docs' }" queryParamsHandling="merge">
+        Documentation
+      </a>
+      <div class="content">
+        <div class="sub-content">
+          <h2>Documentation</h2>
+          <p>
+            <a href="https://docs.google.com/document/d/1C97h2TNcN-6HKMsBDqwLoKYQWX4n3JBHNJ2HYMPF2Vk" target="_blank">Documentation complète</a>
+          </p>
+          <p>
+            L'application possède déjà plusieurs fonctionnalités :
+          </p>
+          <ul>
+            <li>Création d'un menu en ligne</li>
+            <li>Gestion de commandes</li>
+            <li>Gestion des horaires d'ouverture</li>
+            <li>Réservation de commande</li>
+            <li>Notification pour avertir que la commande est prête</li>
+            <li>Gestion de stocks</li>
+            <li>Statistiques</li>
+            <li>Gestion d'utilisateurs</li>
+          </ul>
+          <p>
+            L'application peut donc être utilisée de 2 manières différentes :
+          </p>
+          <ul>
+            <li>Les serveur⸱euse⸱s prennent les commandes via l'app</li>
+            <li>Les client⸱e⸱s prennent directement les commandes via l'app</li>
+          </ul>
+          <p>
+            Ces deux options sont évidemment fonctionnelles simultanément.
+          </p>
+          <p>
+            Pour que les client⸱e⸱s puissent accéder au menu, il leur suffira d'avoir accès au lien de votre restaurant
+            (<a  href="https://oresto.app/demo-resto" target="_blank">https://oresto.app/demo-resto</a>).
+          </p>
+          <p>
+            On peut même imaginer générer un QRCode pour simplifier l'accès à cette url 🤩
+            (<a  href="https://support.google.com/chrome/answer/9979877?hl=fr&co=GENIE.Platform%3DDesktop&oco=1" target="_blank">générer un QRCode pour une page web</a>).
+          </p>
+          <div class="footer">
+            Si vous avez des questions ou des idées de fonctionnalités, n'hésitez pas à me contacter
+            <a  href="mailto:contact@oresto.app" target="_blank">contact@oresto.app</a> et je vous répondrai avec plaisir !
+          </div>
+        </div>
+      </div>
+    </nz-tab>
+  </nz-tabset>
+</div>
