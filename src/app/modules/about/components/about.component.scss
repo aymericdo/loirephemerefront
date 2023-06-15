@@ -9,7 +9,7 @@
   background: white;
 
   .full-page {
-    height: 100vh;
+    height: calc(100vh - 2rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,6 +26,7 @@
   .middle-row {
     display: flex;
     justify-content: space-evenly;
+    margin-top: 5rem;
   }
 
   .bottom-row {
@@ -47,9 +48,34 @@
         }
       }
 
+      > a > button.social {
+        width: 50px;
+        height: 50px;
+
+        > span {
+          font-size: 2rem;
+        }
+      }
+
       > h3 {
         font-weight: 500;
         margin-top: 1rem;
+      }
+    }
+  }
+
+  .bottom-row.social {
+    display: flex;
+    justify-content: space-evenly;
+
+    > .feature {
+      > a > button.social {
+        width: 50px;
+        height: 50px;
+
+        > span {
+          font-size: 1.6rem;
+        }
       }
     }
   }
