@@ -10,6 +10,7 @@
 
   .full-page {
     height: calc(100vh - 2rem);
+    padding-top: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -119,6 +120,28 @@
 
     .sub-content {
       width: 100%;
+    }
+
+    .middle-row {
+      flex-direction: column;
+    }
+
+    .bottom-row {
+      padding-top: 0;
+      > .feature {
+        > button {
+          width: 60px;
+          height: 60px;
+
+          > span {
+            font-size: 1.4rem;
+          }
+        }
+
+        > h3 {
+          display: none;
+        }
+      }
     }
   }
 }
