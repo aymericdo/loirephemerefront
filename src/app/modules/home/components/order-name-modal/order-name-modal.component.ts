@@ -70,7 +70,7 @@ export class OrderNameModalComponent implements OnInit {
     if (this.restaurant.openingTime && this.restaurant.openingTime[cwday]
       && this.restaurant.openingTime[cwday].startTime) {
       const openingHour: number = +this.restaurant.openingTime[cwday].startTime.split(':')[0];
-      const closingTime = [...Array(openingHour - 1).keys()];
+      const closingTime = [...Array(openingHour > 0 ? openingHour - 1 : 0).keys()];
       const pastHours = [...Array(today.getHours()).keys()];
       const closingHour: number = +this.restaurant.openingTime[cwday].endTime.split(':')[0];
 
