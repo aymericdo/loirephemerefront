@@ -37,7 +37,7 @@ export const selectUserRestaurants = createSelector(
   selectUser,
   (state: LoginState, demoResto: Restaurant | null, user: User | null) => state.userRestaurants?.filter((resto) => {
     return resto.code != demoResto?.code || user?.displayDemoResto;
-  }) || []
+  }) || null
 );
 
 export const selectLoading = createSelector(
