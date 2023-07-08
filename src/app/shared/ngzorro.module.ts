@@ -40,6 +40,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
 
 @NgModule({
   exports: [
@@ -83,6 +84,7 @@ import { NzTimelineModule } from 'ng-zorro-antd/timeline';
     NzCheckboxModule,
     NzAlertModule,
     NzTimelineModule,
+    NzAffixModule,
   ],
   declarations: [],
 })

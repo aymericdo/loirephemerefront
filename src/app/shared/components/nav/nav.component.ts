@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivationEnd, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, ActivationEnd, NavigationEnd, Router } from '@angular/router';
 import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, combineLatest, filter, map, takeUntil, withLatestFrom } from 'rxjs';
@@ -32,16 +32,18 @@ export class NavComponent implements OnInit, OnDestroy {
   currentOpenedRestaurant = '';
   restaurantCode: string | null = null;
   routeName: string | null = null;
+  routeWithoutNavBar: boolean | null = false;
   hasAccessByRestaurantIdBySection: { [restaurantId: string]: { [access: string]: boolean } } = {};
+  isFirstLoad = true;
 
   APP_VERSION = APP_VERSION;
 
-  private isFirstLoad = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private store: Store<AppState>,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
@@ -100,26 +102,38 @@ export class NavComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(
         filter(e => (e instanceof NavigationEnd)),
-        withLatestFrom(this.router.events
-          .pipe(
-            filter(e => (e instanceof ActivationEnd)),
-          )
-        ),
-        map(([_navigationEnd, activationEnd]) => activationEnd)
+        map(() => this.activatedRoute),
+        map((route) => {
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
+          return route;
+        }),
+        withLatestFrom(this.isSiderCollapsed$)
       )
-      .subscribe((activationEnd) => {
-        if ((activationEnd as ActivationEnd).snapshot.params?.hasOwnProperty('code') &&
-          (activationEnd as ActivationEnd).snapshot.params['code']) {
-          const code = (activationEnd as ActivationEnd).snapshot.params['code'];
+      .subscribe(([route, isSiderCollapsed]) => {
+        const data = route.snapshot.data;
+        if (route.snapshot.params?.hasOwnProperty('code') &&
+          route.snapshot.params['code']) {
+          const code = route.snapshot.params['code'];
 
           if (this.restaurantCode !== code) {
             this.store.dispatch(fetchingRestaurant({ code }));
           }
+
+          if (data?.isAdmin && this.isFirstLoad) {
+            this.openChangeDropdownRestaurantAdmin(code);
+          }
         }
 
-        this.store.dispatch(stopFirstNavigation());
-        this.routeName = this.getRouteName(this.router.url);
+
+        this.routeWithoutNavBar = data?.routeWithoutNavBar || false;
+        this.routeName = data?.routeName || null;
+
+        this.siderCollapseChange(this.isSmallScreen() ? isSiderCollapsed : false);
+
         this.isFirstLoad = false;
+        this.store.dispatch(stopFirstNavigation());
       });
 
     this.restaurant$
@@ -161,11 +175,11 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   siderCollapseChange(isCollapsed: boolean): void {
-    this.store.dispatch(setIsSiderCollapsed({ isCollapsed }));
+    this.store.dispatch(setIsSiderCollapsed({ isCollapsed: this.routeWithoutNavBar ? true : isCollapsed }));
   }
 
   manuallyCollapse(): void {
-    if (window.matchMedia("(max-width: 992px)").matches) {
+    if (this.isSmallScreen()) {
       this.store.dispatch(setIsSiderCollapsed({ isCollapsed: true }));
     }
   }
@@ -207,37 +221,11 @@ export class NavComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getRouteName(url: string): string | null {
-    const urlArray = url.split('/');
-    if (urlArray.length > 1 && urlArray[2]?.startsWith('admin')) {
-
-      if (this.isFirstLoad) {
-        this.openChangeDropdownRestaurantAdmin(urlArray[1]);
-      }
-
-      if (urlArray.length > 2 && urlArray[3]?.startsWith('commands')) {
-        return 'commands';
-      } else if (urlArray.length > 2 && urlArray[3]?.startsWith('stats')) {
-        return 'stats';
-      } else if (urlArray.length > 2 && urlArray[3]?.startsWith('users')) {
-        return 'users';
-      } else if (urlArray.length > 2 && urlArray[3]?.startsWith('menu')) {
-        return 'menu';
-      } else {
-        return 'admin-restaurant';
-      }
-    } else if (urlArray.length > 1 && urlArray[2] === 'restaurant') {
-      if (urlArray.length > 2 && urlArray[3]?.includes('new')) {
-        return 'new-restaurant';
-      }
-    } else if (urlArray.length === 2) {
-      return 'home';
-    }
-
-    return null;
-  }
-
   trackById(_index: any, restaurant: Restaurant): string {
     return restaurant.id;
+  }
+
+  isSmallScreen(): boolean {
+    return window.matchMedia("(max-width: 992px)").matches;
   }
 }

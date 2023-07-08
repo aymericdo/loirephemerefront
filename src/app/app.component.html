@@ -1,7 +1,7 @@
 <nz-layout class="layout">
   <app-nav></app-nav>
 
-  <nz-layout class="right-layout">
+  <nz-layout class="right-layout" [class.-is-sider-collapsed]="(isSiderCollapsed$ | async)">
     <nz-content>
       <div class="inner-content">
         <router-outlet></router-outlet>

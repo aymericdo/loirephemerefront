@@ -5,16 +5,21 @@
   overflow: auto;
   height: 100%;
   min-width: 200px;
-  padding: 1rem;
   background: white;
+  font-family: PT Sans Narrow;
 
   .full-page {
-    height: calc(100vh - 2rem);
-    padding-top: 100px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+
+  .full-page,
+  .more-info,
+  .footer {
     position: relative;
+    z-index: 1;
   }
 
   .title {
@@ -24,16 +29,31 @@
     margin-top: -5rem;
   }
 
+  .sub-title {
+    margin-top: 1rem;
+    font-weight: 500;
+  }
+
+  .wave-separation {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+
   .middle-row {
     display: flex;
     justify-content: space-evenly;
-    margin-top: 5rem;
+    padding: 1rem;
   }
 
   .bottom-row {
+    padding-top: 5rem;
+  }
+
+  .button-line {
     display: flex;
     justify-content: space-evenly;
-    padding-top: 5rem;
+    padding-bottom: 1rem;
 
     > .feature {
       display: flex;
@@ -65,10 +85,7 @@
     }
   }
 
-  .bottom-row.social {
-    display: flex;
-    justify-content: space-evenly;
-
+  .footer {
     > .feature {
       > a > button.social {
         width: 50px;
@@ -81,16 +98,47 @@
     }
   }
 
-  h1 {
-    font-size: 4rem;
-  }
+  .affix-section {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    transition: background-color 0s;
 
-  .logo {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    top: 0;
-    position: absolute;
+    h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 0;
+      margin-left: 0.625rem;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      top: 0;
+    }
+
+    &.-has-scrolled {
+      width: 100%;
+      position: fixed;
+      background-color: white;
+      transition: background-color 250ms ease-in;
+      left: 0;
+      top: 0;
+      padding: 0.875rem;
+      padding-left: 10rem;
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        top: 0;
+      }
+    }
   }
 
   nz-timeline {
@@ -99,6 +147,9 @@
 
   .more-info {
     padding: 2rem;
+    width: 50%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .content {
@@ -114,30 +165,25 @@
   }
 
   @media screen and (max-width: $lg) {
-    .logo {
-      position: relative;
-    }
-
     .full-page {
-      height: auto;
-      padding-top: 0;
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
-      position: relative;
-    }
-
-    h1 {
-      display: none;
     }
 
     .title {
       max-width: inherit;
+      margin-bottom: 1rem;
     }
 
     .more-info {
-      padding-left: 0;
-      padding-right: 0;
+      padding: 2rem;
+      width: 100%;
+      left: 0;
+      transform: none;
+    }
+
+    .affix-section.-has-scrolled {
+      padding-left: 0.875rem;
     }
 
     .sub-content {

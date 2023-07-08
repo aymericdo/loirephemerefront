@@ -14,6 +14,7 @@ const routes: Routes = [
     }, {
       path: 'new',
       component: NewRestaurantComponent,
+      data: { routeName: "new-restaurant" }
     }]
   },
   { path: '**', redirectTo: '/page/404' },

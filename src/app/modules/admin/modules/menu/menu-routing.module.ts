@@ -6,6 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: MenuComponent,
+    data: { routeName: "menu" }
   },
   { path: '**', redirectTo: '/page/404' },
 ];

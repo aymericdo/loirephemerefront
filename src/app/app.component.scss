@@ -17,6 +17,10 @@
     margin-left: 200px;
   }
 
+  .right-layout.-is-sider-collapsed {
+    margin-left: 0;
+  }
+
   @media screen and (max-width: $lg) {
     .right-layout {
       margin-left: inherit;

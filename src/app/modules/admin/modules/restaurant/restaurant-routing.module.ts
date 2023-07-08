@@ -7,6 +7,7 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     component: RestaurantComponent,
+    data: { routeName: "admin-restaurant" },
   },
   { path: '**', redirectTo: '/page/404' },
 ];

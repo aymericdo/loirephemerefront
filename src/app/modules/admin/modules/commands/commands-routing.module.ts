@@ -6,6 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: CommandsComponent,
+    data: { routeName: "commands" }
   },
   { path: '**', redirectTo: '/page/404' },
 ];

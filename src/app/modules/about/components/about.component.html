@@ -1,9 +1,20 @@
+<div class="wave-separation">
+  <svg width="100%" height="100%" id="svg" viewBox="0 0 1440 690" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><defs><linearGradient id="gradient" x1="1%" y1="38%" x2="99%" y2="62%"><stop offset="5%" stop-color="#fadb14"></stop><stop offset="95%" stop-color="#1890ff"></stop></linearGradient></defs><path d="M 0,700 C 0,700 0,233 0,233 C 83.44497607655498,243.19138755980862 166.88995215310996,253.38277511961724 277,240 C 387.11004784689004,226.61722488038276 523.8851674641149,189.66028708133973 627,186 C 730.1148325358851,182.33971291866027 799.5693779904306,211.97607655502395 879,212 C 958.4306220095694,212.02392344497605 1047.8373205741627,182.43540669856458 1143,181 C 1238.1626794258373,179.56459330143542 1339.0813397129186,206.2822966507177 1440,233 C 1440,233 1440,700 1440,700 Z" stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="0.53" class="transition-all duration-300 ease-in-out delay-150 path-0" transform="rotate(-180 720 350)"></path><defs><linearGradient id="gradient" x1="1%" y1="38%" x2="99%" y2="62%"><stop offset="5%" stop-color="#fadb14"></stop><stop offset="95%" stop-color="#1890ff"></stop></linearGradient></defs><path d="M 0,700 C 0,700 0,466 0,466 C 80.14354066985646,458.71770334928226 160.28708133971293,451.4354066985646 252,462 C 343.7129186602871,472.5645933014354 446.9952153110047,500.97607655502395 558,498 C 669.0047846889953,495.02392344497605 787.7320574162679,460.66028708133973 886,471 C 984.2679425837321,481.33971291866027 1062.0765550239234,536.3827751196172 1151,543 C 1239.9234449760766,549.6172248803828 1339.9617224880383,507.8086124401914 1440,466 C 1440,466 1440,700 1440,700 Z" stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-1" transform="rotate(-180 720 350)"></path></svg>
+</div>
+
 <div class="full-page">
-  <img class="logo" src="/assets/icons/icon-512x512.png" alt="logo">
   <div class="middle-row">
     <div class="title">
-      <h1>Oresto</h1>
-      <h2 class="sub-title">L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.</h2>
+      <nz-affix [nzOffsetTop]="10" (nzChange)="onChange($event)">
+        <div class="affix-section" [class.-has-scrolled]="hasScrolled">
+          <img class="logo" src="/assets/icons/icon-512x512.png" alt="logo">
+          <h1>Oresto</h1>
+        </div>
+      </nz-affix>
+      <h2 *ngIf="!hasScrolled" class="sub-title">L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.</h2>
+      <a [routerLink]="['/', 'page', 'restaurant', 'new']">
+        <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Créer son resto</button>
+      </a>
     </div>
     <nz-timeline [nzMode]="'right'">
       <nz-timeline-item nzLabel="03/05/2021">Première ligne de code afin de gérer les commandes de ma pâtisserie éphèmere</nz-timeline-item>
@@ -12,7 +23,7 @@
       <nz-timeline-item nzLabel="15/05/2023">Oresto fonctionnel 🎉</nz-timeline-item>
     </nz-timeline>
   </div>
-  <div class="bottom-row">
+  <div class="bottom-row button-line">
     <div class="feature">
       <button [nzBlock]="true" nz-button nzType="default" nzShape="circle"
         nzTooltipTitle="Gestion du menu" nzTooltipPlacement="top" nz-tooltip>
@@ -78,8 +89,7 @@
             donner accès à un outil au plus grand nombre.
           </p>
           <p>
-            <b>L'accès est actuellement gratuit, et si cela ne devient pas soutenable, son prix ne dépassera jamais 5€ par
-              mois.</b>
+            <b>L'accès est totalement gratuit.</b>
           </p>
         </div>
       </div>
@@ -135,7 +145,7 @@
   </nz-tabset>
 </div>
 
-<div class="bottom-row social">
+<div class="footer button-line">
   <div class="feature">
     <a href="https://www.instagram.com/oresto.app/" target="_blank">
       <button class="social" [nzBlock]="true" nz-button nzType="default" nzShape="circle"><span nz-icon nzType="instagram" nzTheme="fill"></span></button>
