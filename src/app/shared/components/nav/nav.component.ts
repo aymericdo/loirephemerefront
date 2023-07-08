@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute, ActivationEnd, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, combineLatest, filter, map, takeUntil, withLatestFrom } from 'rxjs';
