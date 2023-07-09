@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   protocolHttp: 'https://',
   protocolWs: 'wss://',
-  apiWs: 'localhost:3000',
-  api: 'localhost:3000',
+  apiWs: 'backend.aymericdo.ovh/wsloirephemereback',
+  api: 'backend.aymericdo.ovh/loirephemereback',
 };
 
 /*
