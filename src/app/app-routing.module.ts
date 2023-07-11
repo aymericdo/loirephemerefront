@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from 'src/app/auth/auth-guard.service';
+import { AboutComponent } from 'src/app/modules/about/components/about.component';
 import { AdminComponent } from 'src/app/modules/admin/components/admin.component';
 import { HomeComponent } from 'src/app/modules/home/components/home.component';
 import { FourOhFourComponent } from 'src/app/shared/components/four-oh-four/four-oh-four.component';
@@ -38,8 +39,8 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: HomeComponent,
-    data: { routeName: "home" }
+    component: AboutComponent,
+    data: { routeName: "about", routeWithoutNavBar: true }
   },
   {
     path: ':code',

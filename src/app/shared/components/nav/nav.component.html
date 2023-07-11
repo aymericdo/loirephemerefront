@@ -1,4 +1,5 @@
 <nz-sider [nzCollapsible]="!routeWithoutNavBar" nzBreakpoint="lg" [nzCollapsedWidth]="0" [nzCollapsed]="isSiderCollapsed$ | async" (nzCollapsedChange)="siderCollapseChange($event)">
+  {{ isSiderCollapsed$ | async }}
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
     <li *ngIf="(restaurantFetching$ | async) === false" nz-menu-item class="row-border-left"

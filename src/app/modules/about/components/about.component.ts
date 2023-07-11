@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { selectDemoResto } from 'src/app/modules/login/store/login.selectors';
+import { AppState } from 'src/app/store/app.state';
 
 @Component({
   templateUrl: './about.component.html',
@@ -9,6 +13,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 })
 export class AboutComponent implements OnInit, OnDestroy {
   hasScrolled = false;
+  demoResto$: Observable<Restaurant | null>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -16,7 +21,10 @@ export class AboutComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private changeDetectorRef: ChangeDetectorRef,
-  ) {}
+    private store: Store<AppState>,
+  ) {
+    this.demoResto$ = this.store.select(selectDemoResto);
+  }
 
   ngOnInit(): void {
     this.route.queryParams.pipe(

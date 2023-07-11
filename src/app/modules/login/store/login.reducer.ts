@@ -51,7 +51,7 @@ export const initialState: LoginState = {
   confirmationModalOpened: false,
   recoverModalOpened: false,
   passwordChanged: false,
-  isSiderCollapsed: true,
+  isSiderCollapsed: false,
 };
 
 const loginReducer = createReducer(

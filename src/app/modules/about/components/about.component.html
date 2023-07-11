@@ -12,9 +12,18 @@
         </div>
       </nz-affix>
       <h2 *ngIf="!hasScrolled" class="sub-title">L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.</h2>
-      <a [routerLink]="['/', 'page', 'restaurant', 'new']">
-        <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Créer son resto</button>
-      </a>
+      <nz-space nzDirection="vertical">
+        <ng-container *nzSpaceItem>
+          <a [routerLink]="['/', 'page', 'restaurant', 'new']">
+            <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Créer son resto</button>
+          </a>
+        </ng-container>
+        <ng-container *nzSpaceItem>
+          <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
+            <button nz-button nzType="default" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Tester le restaurant démo</button>
+          </a>
+        </ng-container>
+      </nz-space>
     </div>
     <nz-timeline [nzMode]="'right'">
       <nz-timeline-item nzLabel="03/05/2021">Première ligne de code afin de gérer les commandes de ma pâtisserie éphèmere</nz-timeline-item>
@@ -127,17 +136,17 @@
           <p>
             Ces deux options sont évidemment fonctionnelles simultanément.
           </p>
-          <p>
+          <p *ngIf="(demoResto$ | async)?.code">
             Pour que les client⸱e⸱s puissent accéder au menu, il leur suffira d'avoir accès au lien de votre restaurant
-            (<a  href="https://oresto.app/demo-resto" target="_blank">https://oresto.app/demo-resto</a>).
+            (<a ù [href]="'https://oresto.app/' + (demoResto$ | async)?.code" target="_blank">https://oresto.app/{{ (demoResto$ | async)?.code }}</a>).
           </p>
-          <p>
+          <p *ngIf="(demoResto$ | async)?.code">
             On peut même imaginer générer un QRCode pour simplifier l'accès à cette url 🤩
-            (<a  href="https://oresto.app/demo-resto/admin?tab=qrcode" target="_blank">https://oresto.app/demo-resto/admin?tab=qrcode</a>).
+            (<a [href]="'https://oresto.app/'+ (demoResto$ | async)?.code + '/admin?tab=qrcode'" target="_blank">https://oresto.app/{{ (demoResto$ | async)?.code }}/admin?tab=qrcode</a>).
           </p>
           <div class="footer">
             Si vous avez des questions ou des idées de fonctionnalités, n'hésitez pas à me contacter
-            <a  href="mailto:contact@oresto.app" target="_blank">contact@oresto.app</a> et je vous répondrai avec plaisir !
+            <a href="mailto:contact@oresto.app" target="_blank">contact@oresto.app</a> et je vous répondrai avec plaisir !
           </div>
         </div>
       </div>
