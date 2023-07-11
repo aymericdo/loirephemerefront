@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { environment as prodEnvironment } from 'src/environments/environment.prod';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Access, User } from 'src/app/interfaces/user.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
@@ -99,9 +99,9 @@ export class AdminApiService {
     );
   }
 
-  payedCommand(code: string, commandId: string): Observable<any> {
+  payedCommand(code: string, commandId: string, payments: PaymentPossibility[]): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, null
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, { payments }
     );
   }
 

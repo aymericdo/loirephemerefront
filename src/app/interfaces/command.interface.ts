@@ -1,6 +1,14 @@
 import { Pastry } from './pastry.interface';
 import { Restaurant } from './restaurant.interface';
 
+export const PAYMENT_TYPES = ['creditCart', 'cash', 'bankCheque'] as const;
+export type PaymentType = typeof PAYMENT_TYPES[number];
+
+export interface PaymentPossibility {
+  key: PaymentType;
+  value: number;
+}
+
 export interface Command extends CoreCommand {
   id: string;
   reference: string;
@@ -11,6 +19,7 @@ export interface Command extends CoreCommand {
   restaurant: Restaurant;
   pastries: Pastry[];
   totalPrice: number;
+  payments?: PaymentPossibility[];
 }
 
 export interface CoreCommand {

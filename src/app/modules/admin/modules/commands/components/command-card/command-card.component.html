@@ -29,3 +29,6 @@
     <i nz-icon nzType="euro-circle" (click)="!isLoading && showValidationPopup('toPayed')"></i>
   </ng-container>
 </ng-template>
+
+<app-payment-modal *ngIf="isPaymentModalVisible" (clickCancel)="isPaymentModalVisible = false;" (clickOk)="isPaymentModalVisible = false; clickPayed.emit($event);"
+  [command]="command"></app-payment-modal>

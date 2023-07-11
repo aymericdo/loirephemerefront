@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 
 export const fetchingRestaurantCommands = createAction(
   '[Commands page] Fetch commands for a restaurant',
@@ -19,7 +19,7 @@ export const closingCommand = createAction(
 );
 export const payingCommand = createAction(
   '[Commands page] Payed command',
-  props<{ command: Command }>()
+  props<{ command: Command, payments: PaymentPossibility[] }>()
 );
 export const editCommand = createAction(
   '[Commands page] Edit command',

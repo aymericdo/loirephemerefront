@@ -9,7 +9,7 @@ import {
   Output,
 } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 
 const SECONDS_HIGHLIGHT = 20;
@@ -27,11 +27,12 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   @Input() isLoading: boolean = false;
 
   @Output() clickDone = new EventEmitter<string>();
-  @Output() clickPayed = new EventEmitter<string>();
+  @Output() clickPayed = new EventEmitter<PaymentPossibility[]>();
   @Output() clickWizz = new EventEmitter<string>();
 
   pastries: [Pastry, number][] = [];
 
+  isPaymentModalVisible = false;
   isNew = false;
   isJustUpdated = false;
 
@@ -78,16 +79,7 @@ export class CommandCardComponent implements OnInit, OnDestroy {
         nzCancelText: 'Annuler',
       });
     } else if (type === 'toPayed') {
-      this.modal.confirm({
-        nzTitle: `Commande #${this.command.reference}`,
-        nzContent: `Cette commande a bien été payée ?`,
-        nzOkText: 'OK',
-        nzOkType: 'primary',
-        nzOnOk: () => {
-          this.clickPayed.emit();
-        },
-        nzCancelText: 'Annuler',
-      });
+      this.isPaymentModalVisible = true;
     }
   }
 

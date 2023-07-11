@@ -36,7 +36,7 @@
             <div *ngFor="let command of deliveredCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
               <div class="inner-box">
                 <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isDone]="true"
-                  [isPayed]="!!command.isPayed" (clickPayed)="handleClickPayed(command)"
+                  [isPayed]="!!command.isPayed" (clickPayed)="handleClickPayed(command, $event)"
                   (clickWizz)="handleClickWizz(command)"></app-command-card>
               </div>
             </div>
@@ -60,7 +60,7 @@
               <div *ngFor="let command of payedCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
                 <div class="inner-box">
                   <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isDone]="true"
-                    [isPayed]="!!command.isPayed" (clickPayed)="handleClickPayed(command)"
+                    [isPayed]="!!command.isPayed" (clickPayed)="handleClickPayed(command, $event)"
                     (clickWizz)="handleClickWizz(command)"></app-command-card>
                 </div>
               </div>

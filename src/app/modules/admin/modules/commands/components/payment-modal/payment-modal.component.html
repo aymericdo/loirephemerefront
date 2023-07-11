@@ -1,0 +1,39 @@
+<nz-modal [nzVisible]="true" nzCentered [nzMaskClosable]="true" (nzOnCancel)="clickCancel.emit()">
+  <ng-container *nzModalTitle>
+    Payment de la commande #{{ command.reference }}
+  </ng-container>
+
+  <ng-container *nzModalContent>
+    <p>Cette commande a bien été payée ? ({{ command.totalPrice }}€)</p>
+    <nz-space nzDirection="vertical" style="width: 100%">
+      <ng-container *ngFor="let paymentPossibility of paymentPossibilities; trackBy: trackByKey">
+        <nz-input-number-group *nzSpaceItem nzCompact>
+          <button nz-button disabled style="width: 100px; pointer-events: none;">
+            {{ paymentPossibility.label }}
+          </button>
+
+          <nz-input-number [(ngModel)]="paymentPossibility.value" (ngModelChange)="onChange()" [nzStep]="0.01" [nzMin]="0" style="width: calc(100% - 150px)"></nz-input-number>
+
+          <button nz-button nzType="primary" style="width: 50px" (click)="setTotal(paymentPossibility.key)">
+            <span nz-icon nzType="euro" nzTheme="outline"></span>
+          </button>
+        </nz-input-number-group>
+      </ng-container>
+
+      <ng-container *ngIf="isTooMuch">
+        <nz-alert
+          *nzSpaceItem
+          nzType="error"
+          nzMessage="Erreur"
+          nzDescription="Le montant renseigné dépasse le montant de la commande."
+          nzShowIcon
+        ></nz-alert>
+      </ng-container>
+    </nz-space>
+  </ng-container>
+
+  <ng-container *nzModalFooter>
+    <button nz-button nzType="default" (click)="clickCancel.emit()">Annuler</button>
+    <button nz-button nzType="primary" (click)="payCommand()" [disabled]="!isOk">OK</button>
+  </ng-container>
+</nz-modal>

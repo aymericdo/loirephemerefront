@@ -6,7 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { addCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
 import { selectDeliveredCommands, selectIsLoading, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
@@ -100,8 +100,8 @@ export class CommandsComponent implements OnInit, OnDestroy {
     this.store.dispatch(closingCommand({ command }));
   }
 
-  handleClickPayed(command: Command): void {
-    this.store.dispatch(payingCommand({ command }));
+  handleClickPayed(command: Command, payments: PaymentPossibility[]): void {
+    this.store.dispatch(payingCommand({ command, payments }));
   }
 
   handleClickWizz(command: Command): void {
