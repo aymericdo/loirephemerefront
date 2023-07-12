@@ -132,6 +132,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
         const openingPickupHoursMinutes = restaurant.openingPickupTime[weekDay].startTime.split(':');
         const pickupStartTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1]);
+        pickupStartTime.setSeconds(0, 0);
 
         return pickupStartTime > openingStartTime;
       }
