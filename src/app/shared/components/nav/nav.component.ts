@@ -128,7 +128,6 @@ export class NavComponent implements OnInit, OnDestroy {
 
 
         this.routeWithoutNavBar = data?.routeWithoutNavBar || false;
-        console.log(this.routeWithoutNavBar);
         this.routeName = data?.routeName || null;
 
         this.siderCollapseChange(this.isSmallScreen() ? isSiderCollapsed : false);
