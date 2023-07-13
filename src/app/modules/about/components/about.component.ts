@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, fromEvent, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { selectDemoResto } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -12,8 +12,12 @@ import { AppState } from 'src/app/store/app.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AboutComponent implements OnInit, OnDestroy {
+  @ViewChildren('sectionImg') sectionImgs!: QueryList<ElementRef<HTMLDivElement>>;
+
   hasScrolled = false;
   demoResto$: Observable<Restaurant | null>;
+
+  waveSeparationStyle: { transform: string } = { transform: `translateY(0)` };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -24,6 +28,12 @@ export class AboutComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
   ) {
     this.demoResto$ = this.store.select(selectDemoResto);
+
+    fromEvent(window, 'scroll')
+      .pipe(takeUntil(this.destroyed$))
+			.subscribe((_e: Event) => {
+        this.movingElements();
+      });
   }
 
   ngOnInit(): void {
@@ -44,5 +54,33 @@ export class AboutComponent implements OnInit, OnDestroy {
   onChange(status: boolean): void {
     this.hasScrolled = status;
     this.changeDetectorRef.detectChanges();
+  }
+
+  getWaveSeparationStyle(): { transform: string } {
+    return this.waveSeparationStyle;
+  }
+
+  scroll(el: HTMLElement): void {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  private movingElements(): void {
+    this.setWaveSeparationStyle();
+    this.sectionImgs.forEach((sectionImg) => {
+      const bodyRect = sectionImg.nativeElement.getBoundingClientRect();
+      const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+      if (!(bodyRect.top - viewHeight >= -500)) {
+        sectionImg.nativeElement.classList.add('-visible');
+      }
+    });
+    this.changeDetectorRef.detectChanges();
+  }
+
+  private setWaveSeparationStyle(): void {
+    const triggerPosition = 200;
+    const move = (window.scrollY > triggerPosition) ?
+      0 - ((window.scrollY - triggerPosition) / 2) :
+      0;
+    this.waveSeparationStyle = { transform: `translateY(${move}px)` };
   }
 }
