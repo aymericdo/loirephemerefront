@@ -34,7 +34,6 @@
     display: flex;
     flex-direction: column;
     max-width: 50%;
-    margin-top: -5rem;
   }
 
   .sub-title {
@@ -152,6 +151,10 @@
     }
   }
 
+  .timeline-section {
+    padding-top: 150px;
+  }
+
   ::ng-deep nz-timeline .ant-timeline .ant-timeline-item  {
     font-size: 1rem;
   }
@@ -230,14 +233,14 @@
       height: auto;
     }
 
-    .middle-row {
-      padding-top: 20rem;
-    }
-
     .title {
       max-width: inherit;
-      margin-bottom: 2rem;
       height: 100vh;
+      justify-content: center;
+    }
+
+    .timeline-section {
+      padding-top: 0;
     }
 
     .more-info {

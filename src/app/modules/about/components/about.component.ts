@@ -69,7 +69,7 @@ export class AboutComponent implements OnInit, OnDestroy {
     this.sectionImgs.forEach((sectionImg) => {
       const bodyRect = sectionImg.nativeElement.getBoundingClientRect();
       const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-      if (!(bodyRect.top - viewHeight >= -500)) {
+      if (!(bodyRect.top - viewHeight >= -250)) {
         sectionImg.nativeElement.classList.add('-visible');
       }
     });
