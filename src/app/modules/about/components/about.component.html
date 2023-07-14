@@ -11,7 +11,7 @@
           <h1>Oresto</h1>
         </div>
       </nz-affix>
-      <h2 *ngIf="!hasScrolled" class="sub-title">L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.</h2>
+      <h2 [class.-has-scrolled]="hasScrolled" class="sub-title">L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.</h2>
       <nz-space nzDirection="vertical">
         <ng-container *nzSpaceItem>
           <a [routerLink]="['/', 'page', 'restaurant', 'new']">

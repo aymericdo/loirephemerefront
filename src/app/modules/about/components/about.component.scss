@@ -39,6 +39,11 @@
   .sub-title {
     margin-top: 1rem;
     font-weight: 500;
+    transition: opacity ease-in 500ms;
+
+    &.-has-scrolled {
+      opacity: 0;
+    }
   }
 
   .wave-separation {
@@ -235,7 +240,8 @@
 
     .title {
       max-width: inherit;
-      height: 100vh;
+      padding-top: 50%;
+      padding-bottom: 50%;
       justify-content: center;
     }
 
