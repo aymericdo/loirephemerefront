@@ -201,6 +201,13 @@
       font-weight: 600;
     }
 
+    &.-swap {
+      flex-direction: row-reverse;
+      .image {
+        transform: translate(-200px, -200px);
+      }
+    }
+
     .image {
       display: flex;
       justify-content: center;
@@ -217,10 +224,6 @@
       img {
         width: 500px;
       }
-    }
-
-    &.-swap {
-      flex-direction: row-reverse;
     }
   }
 
