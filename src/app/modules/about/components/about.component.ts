@@ -3,7 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, fromEvent, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { selectDemoResto } from 'src/app/modules/login/store/login.selectors';
+import { User } from 'src/app/interfaces/user.interface';
+import { selectDemoResto, selectUser } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -16,6 +17,7 @@ export class AboutComponent implements OnInit, OnDestroy {
 
   hasScrolled = false;
   demoResto$: Observable<Restaurant | null>;
+  user$: Observable<User | null>;
 
   waveSeparationStyle: { transform: string } = { transform: `translateY(0)` };
 
@@ -28,6 +30,7 @@ export class AboutComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
   ) {
     this.demoResto$ = this.store.select(selectDemoResto);
+    this.user$ = this.store.select(selectUser);
 
     fromEvent(window, 'scroll')
       .pipe(takeUntil(this.destroyed$))

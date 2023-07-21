@@ -13,14 +13,23 @@
       </nz-affix>
       <h2 [class.-has-scrolled]="hasScrolled" class="sub-title">L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.</h2>
       <nz-space nzDirection="vertical">
-        <ng-container *nzSpaceItem>
-          <a [routerLink]="['/', 'page', 'restaurant', 'new']">
-            <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Créer son resto</button>
-          </a>
+        <ng-container *ngIf="(user$ | async) === null">
+          <ng-container *nzSpaceItem>
+            <a [routerLink]="['/', 'page', 'restaurant', 'new']">
+              <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Créer son resto</button>
+            </a>
+          </ng-container>
+          <ng-container *nzSpaceItem>
+            <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
+              <button nz-button nzType="default" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Tester le restaurant démo</button>
+            </a>
+          </ng-container>
         </ng-container>
         <ng-container *nzSpaceItem>
-          <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
-            <button nz-button nzType="default" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Tester le restaurant démo</button>
+          <a [routerLink]="['/', 'page', 'login']">
+            <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>
+              {{ !!(user$ | async) ? 'Accéder à l\'app' : 'Se connecter' }}
+            </button>
           </a>
         </ng-container>
         <ng-container *nzSpaceItem>
