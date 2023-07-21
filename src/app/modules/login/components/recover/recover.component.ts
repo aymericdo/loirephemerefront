@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
 })
 export class RecoverComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
-  confirmationModalOpened$!: Observable<boolean>;
+  confirmationModalOpened$!: Observable<string>;
   recoverModalOpened$!: Observable<boolean>;
   passwordChanged$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;

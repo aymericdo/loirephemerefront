@@ -35,7 +35,7 @@
   </div>
 </div>
 
-<app-confirmation-modal *ngIf="(confirmationModalOpened$ | async) === true" (clickConfirm)="handleClickConfirm($event)">
+<app-confirmation-modal *ngIf="(confirmationModalOpened$ | async) === 'recover'" (clickConfirm)="handleClickConfirm($event)">
 </app-confirmation-modal>
 <app-recover-modal *ngIf="(recoverModalOpened$ | async) === true" [email]="validateForm.value.email"
   [emailCode]="emailCode">

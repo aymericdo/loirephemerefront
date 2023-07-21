@@ -99,5 +99,5 @@
   </div>
 </div>
 
-<app-confirmation-modal *ngIf="(confirmationModalOpened$ | async) === true" [submitButton]="'Créer le compte'"
+<app-confirmation-modal *ngIf="(confirmationModalOpened$ | async) === 'register'" [submitButton]="'Créer le compte'"
   (clickConfirm)="handleClickConfirm($event)"></app-confirmation-modal>

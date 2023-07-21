@@ -5,7 +5,7 @@ import { Observable, ReplaySubject, filter, of, takeUntil } from 'rxjs';
 import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
-import { selectConfirmationModalOpened, selectLoading } from 'src/app/modules/login/store/login.selectors';
+import { selectLoading } from 'src/app/modules/login/store/login.selectors';
 import { changingPassword } from 'src/app/modules/profile/store/profile.actions';
 import { selectChangePasswordError, selectPasswordChanged } from 'src/app/modules/profile/store/profile.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -16,7 +16,6 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
-  confirmationModalOpened$!: Observable<boolean>;
   isLoading$!: Observable<boolean>;
   changePasswordError$!: Observable<{ error: boolean } | null | undefined>;
   passwordChanged$!: Observable<boolean | undefined>;
@@ -33,7 +32,6 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading$ = this.store.select(selectLoading);
-    this.confirmationModalOpened$ = this.store.select(selectConfirmationModalOpened);
     this.changePasswordError$ = this.store.select(selectChangePasswordError);
     this.passwordChanged$ = this.store.select(selectPasswordChanged);
 

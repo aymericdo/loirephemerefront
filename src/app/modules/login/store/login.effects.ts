@@ -77,7 +77,7 @@ export class LoginEffects {
       mergeMap((action: { email: string, captchaToken: string }) => {
         return this.loginApiService.postConfirmEmailUser(action.email, action.captchaToken).pipe(
           switchMap((code2: string) => {
-            return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
+            return [setCode2({ code2 }), openConfirmationModal({ modal: 'register' }), stopLoading()];
           }),
           catchError(() => {
             return [stopLoading()];
@@ -93,7 +93,7 @@ export class LoginEffects {
       mergeMap((action: { email: string, captchaToken: string }) => {
         return this.loginApiService.postConfirmRecoverEmailUser(action.email, action.captchaToken).pipe(
           switchMap((code2: string) => {
-            return [setCode2({ code2 }), openConfirmationModal({ modal: true }), stopLoading()];
+            return [setCode2({ code2 }), openConfirmationModal({ modal: 'recover' }), stopLoading()];
           }),
           catchError(() => {
             return [stopLoading()];
@@ -113,7 +113,7 @@ export class LoginEffects {
         return this.loginApiService.postValidateRecoverEmailCode(email, emailCode, code2!).pipe(
           switchMap((isValid: boolean) => {
             if (isValid) {
-              return [openConfirmationModal({ modal: false }), openRecoverModal({ modal: true }), stopLoading()];
+              return [openConfirmationModal({ modal: 'recover' }), openRecoverModal({ modal: true }), stopLoading()];
             } else {
               return [stopLoading()];
             }
@@ -160,7 +160,7 @@ export class LoginEffects {
             return [
               setUser({ user: userRes }),
               signInUser({ user: { email: userRes.email, password: user.password } }),
-              openConfirmationModal({ modal: false })
+              openConfirmationModal({ modal: 'register' })
             ];
           }),
           catchError(() => {

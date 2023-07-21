@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  confirmationModalOpened$!: Observable<boolean>;
+  confirmationModalOpened$!: Observable<string>;
   isLoading$!: Observable<boolean>;
   validateForm!: UntypedFormGroup;
   userEmailError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;

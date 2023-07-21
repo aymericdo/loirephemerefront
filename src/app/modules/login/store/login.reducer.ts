@@ -28,7 +28,7 @@ export interface LoginState {
   userFetching: boolean,
   loading: boolean;
   code2: string | null;
-  confirmationModalOpened: boolean;
+  confirmationModalOpened: string;
   recoverModalOpened: boolean;
   passwordChanged: boolean;
   isSiderCollapsed: boolean;
@@ -48,7 +48,7 @@ export const initialState: LoginState = {
   userFetching: false,
   loading: false,
   code2: null,
-  confirmationModalOpened: false,
+  confirmationModalOpened: '',
   recoverModalOpened: false,
   passwordChanged: false,
   isSiderCollapsed: false,

@@ -83,7 +83,7 @@ export const setCode2 = createAction(
 
 export const openConfirmationModal = createAction(
   '[Login page] Open confirmation modal',
-  props<{ modal: boolean }>()
+  props<{ modal: 'register' | 'recover' }>()
 );
 
 export const openRecoverModal = createAction(
