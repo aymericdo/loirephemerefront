@@ -280,7 +280,8 @@ export class StatsComponent implements OnInit, OnDestroy {
       }, {} as { [attribute: string]: (string | number) });
 
       let historicalDateIndex = 0;
-      while (new Date(pastry.historical[historicalDateIndex].date) <= new Date(commandDate)) {
+      while (historicalDateIndex < pastry.historical.length - 1
+        && new Date(pastry.historical[historicalDateIndex].date) <= new Date(commandDate)) {
         const currentHistorical: Historical = pastry.historical[historicalDateIndex];
         this.statsAttributes.forEach((attr: string) => {
           if (currentHistorical.hasOwnProperty(attr)) {
