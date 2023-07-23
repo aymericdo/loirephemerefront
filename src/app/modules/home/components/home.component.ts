@@ -10,7 +10,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, timer } from 'rxjs';
 import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { getCwday, getYesterday, hourMinuteToDate } from 'src/app/helpers/date';
@@ -131,6 +131,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     ).subscribe((restaurant) => {
       this.titleService.setTitle(restaurant.name);
       this.setIsRestaurantOpened(restaurant);
+      this.watchIsOpened(restaurant);
     });
 
     this.personalCommand$
@@ -233,6 +234,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
+  }
+
+  private watchIsOpened(restaurant: Restaurant): void {
+    const source = timer(1000, 1000);
+    source.pipe(takeUntil(this.destroyed$))
+      .subscribe((_i) => {
+        this.setIsRestaurantOpened(restaurant);
+      });
   }
 
   private setIsRestaurantOpened(restaurant: Restaurant): void {

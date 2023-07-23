@@ -8,7 +8,7 @@ import {
 import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { formatYYYYMMDD } from 'src/app/helpers/date';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, PaymentType } from 'src/app/interfaces/command.interface';
 import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
@@ -48,6 +48,16 @@ export class StatsComponent implements OnInit, OnDestroy {
       labels: [],
       datasets: []
     }
+  };
+
+  countByPaymentPieChartData: ChartData<'pie', number[], string | string[]> = {
+    labels: [],
+    datasets: []
+  };
+
+  valueByPaymentPieChartData: ChartData<'pie', number[], string | string[]> = {
+    labels: [],
+    datasets: []
   };
 
   pastriesByTypeByDateBarChartData: { [key in PastryType]: ChartData<'bar'> } = {
@@ -93,6 +103,11 @@ export class StatsComponent implements OnInit, OnDestroy {
   dateRange: Date[] | null = null;
 
   private statsAttributes = ['price', 'type'];
+  private paymentMethodLabel = {
+    cash: 'Cash',
+    creditCart: 'Carte bancaire',
+    bankCheque: 'Chèque',
+  }
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -185,6 +200,18 @@ export class StatsComponent implements OnInit, OnDestroy {
         this.commandsCount = commands.length;
         this.totalCash = 0;
 
+        let countByPayment: { [key in PaymentType]: number } = {
+          cash: 0,
+          creditCart: 0,
+          bankCheque: 0,
+        }
+
+        let valueByPayment: { [key in PaymentType]: number } = {
+          cash: 0,
+          creditCart: 0,
+          bankCheque: 0,
+        }
+
         let countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } } = {
           pastry: {},
           drink: {},
@@ -211,6 +238,9 @@ export class StatsComponent implements OnInit, OnDestroy {
         commands.forEach((command: Command) => {
           const day = this.getFormattedDate(new Date(command.createdAt as string), timeInterval);
 
+          this.setCountByPayment(countByPayment, command);
+          this.setValueByPayment(valueByPayment, command);
+
           command.pastries.forEach((pastry: Pastry) => {
             const realPastry = this.checkHistoricalPastry(pastry, command);
             this.setPastriesByTypeByDate(pastriesByTypeByDate, realPastry, day);
@@ -222,7 +252,7 @@ export class StatsComponent implements OnInit, OnDestroy {
         });
 
         if (pastries.length && Object.keys(pastriesByTypeByDate).length) {
-          this.buildPieChartDate(countByTypeByPastry);
+          this.buildPieChartData(countByTypeByPastry, countByPayment, valueByPayment);
           this.buildBarChartData(pastriesByTypeByDate, countByTypeByPastry, pastries, timeInterval);
           this.buildGlobalBarChartData(pastriesByTypeByDate, cashByDate, timeInterval);
           this.setTotalByType(countByTypeByPastry);
@@ -299,6 +329,30 @@ export class StatsComponent implements OnInit, OnDestroy {
     } else {
       return pastry;
     }
+  }
+
+  private setCountByPayment(
+    countByPayment: { [key in PaymentType]: number },
+    command: Command
+  ): void {
+    if (!command.payment?.length) return;
+
+    console.log(command.payment);
+
+    command.payment.forEach((payment) => {
+      countByPayment[payment.key] += 1;
+    })
+  }
+
+  private setValueByPayment(
+    valueByPayment: { [key in PaymentType]: number },
+    command: Command
+  ): void {
+    if (!command.payment?.length) return;
+
+    command.payment.forEach((payment) => {
+      valueByPayment[payment.key] += payment.value;
+    })
   }
 
   private setPastriesByTypeByDate(
@@ -431,8 +485,10 @@ export class StatsComponent implements OnInit, OnDestroy {
     };
   }
 
-  private buildPieChartDate(
+  private buildPieChartData(
     countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } },
+    countByPayment: { [key in PaymentType]: number },
+    valueByPayment: { [key in PaymentType]: number },
   ): void {
     (Object.keys(countByTypeByPastry) as PastryType[]).forEach((type: PastryType) => {
       if (Object.keys(countByTypeByPastry[type]).length) {
@@ -449,6 +505,24 @@ export class StatsComponent implements OnInit, OnDestroy {
         };
       }
     });
+
+    this.countByPaymentPieChartData = {
+      labels: (Object.keys(countByPayment) as PaymentType[])
+        .filter((key: PaymentType) => countByPayment[key] > 0)
+        .map((key: PaymentType) => this.paymentMethodLabel[key]),
+      datasets: [{
+        data: (Object.values(countByPayment) as number[]).filter((value: number) => value > 0),
+      }],
+    };
+
+    this.valueByPaymentPieChartData = {
+      labels: (Object.keys(valueByPayment) as PaymentType[])
+        .filter((key: PaymentType) => valueByPayment[key] > 0)
+        .map((key: PaymentType) => this.paymentMethodLabel[key]),
+      datasets: [{
+        data: (Object.values(valueByPayment) as number[]).filter((value: number) => value > 0),
+      }],
+    };
   }
 
   private setTotalByType(

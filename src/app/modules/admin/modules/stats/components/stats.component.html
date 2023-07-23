@@ -155,6 +155,30 @@
             </div>
           </ng-template>
         </nz-tab>
+        <nz-tab>
+          <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'payment' }" queryParamsHandling="merge">
+            Paiement
+          </a>
+          <div *ngIf="countByPaymentPieChartData.datasets.length === 0; else someDataPayment" class="row">
+            <nz-empty></nz-empty>
+          </div>
+          <ng-template #someDataPayment>
+            <div class="row">
+              <div class="chart">
+                <div>
+                  <app-pie-chart [pieChartData]="countByPaymentPieChartData"></app-pie-chart>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="chart">
+                <div>
+                  <app-pie-chart [pieChartData]="valueByPaymentPieChartData"></app-pie-chart>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </nz-tab>
       </nz-tabset>
     </ng-container>
   </div>

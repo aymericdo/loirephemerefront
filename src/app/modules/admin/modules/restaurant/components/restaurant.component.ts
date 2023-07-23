@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { updateDisplayStock } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 
@@ -13,6 +13,8 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./restaurant.component.scss'],
 })
 export class RestaurantComponent implements OnInit, OnDestroy {
+  @ViewChild('download', { static: false }) download!: ElementRef;
+
   restaurant$: Observable<Restaurant | null>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -42,5 +44,17 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   handleDisplayStock(displayStock: boolean): void {
     this.store.dispatch(updateDisplayStock({ displayStock }));
+  }
+
+  downloadImg(): void {
+    const canvas = document.getElementById('download')?.querySelector<HTMLCanvasElement>('canvas');
+    let code = null;
+    this.restaurant$.pipe(take(1)).subscribe((resto) => code = resto?.code);
+    if (canvas && code) {
+      this.download.nativeElement.href = canvas.toDataURL('image/png');
+      this.download.nativeElement.download = `${code}-qr-code`;
+      const event = new MouseEvent('click');
+      this.download.nativeElement.dispatchEvent(event);
+    }
   }
 }

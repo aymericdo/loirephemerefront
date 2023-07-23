@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 
 interface DisplayablePaymentPossibility extends PaymentPossibility {
@@ -34,6 +35,8 @@ export class PaymentModalComponent {
   isOk: boolean = false;
   isTooMuch: boolean = false;
 
+  constructor(private modal: NzModalService) {}
+
   setTotal(key: string): void {
     this.paymentPossibilities.forEach((p) => {
       if (p.key === key) {
@@ -50,7 +53,7 @@ export class PaymentModalComponent {
   }
 
   payCommand() {
-    this.clickOk.emit(this.paymentPossibilities.reduce((prev, p) => {
+    const result = this.paymentPossibilities.reduce((prev, p) => {
       if (p.value !== 0) {
         prev.push({
           key: p.key,
@@ -59,7 +62,19 @@ export class PaymentModalComponent {
       }
 
       return prev;
-    }, [] as PaymentPossibility[]));
+    }, [] as PaymentPossibility[])
+
+    this.modal.confirm({
+      nzTitle: 'Confirmation',
+      nzContent: `Cette commande a bien été payée avec les moyens de paiement suivant ?
+        <ul>${result.map((res) => `<li>${res.key} -> ${res.value}€</li>`)}</ul>`,
+      nzOkText: 'OK',
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.clickOk.emit(result);
+      },
+      nzCancelText: 'Annuler',
+    });
   }
 
   trackByKey(_index: any, paymentPossibility: PaymentPossibility): string {

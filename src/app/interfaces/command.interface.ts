@@ -19,7 +19,7 @@ export interface Command extends CoreCommand {
   restaurant: Restaurant;
   pastries: Pastry[];
   totalPrice: number;
-  payments?: PaymentPossibility[];
+  payment?: PaymentPossibility[];
 }
 
 export interface CoreCommand {
