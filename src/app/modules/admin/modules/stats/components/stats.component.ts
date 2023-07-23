@@ -16,6 +16,12 @@ import { selectAllPastries, selectIsLoading, selectPayedCommands } from 'src/app
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
+export const PAYMENT_METHOD_LABEL = {
+  cash: 'Espèce',
+  creditCart: 'Carte bancaire',
+  bankCheque: 'Chèque',
+}
+
 @Component({
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.scss'],
@@ -103,11 +109,6 @@ export class StatsComponent implements OnInit, OnDestroy {
   dateRange: Date[] | null = null;
 
   private statsAttributes = ['price', 'type'];
-  private paymentMethodLabel = {
-    cash: 'Cash',
-    creditCart: 'Carte bancaire',
-    bankCheque: 'Chèque',
-  }
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -507,7 +508,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.countByPaymentPieChartData = {
       labels: (Object.keys(countByPayment) as PaymentType[])
         .filter((key: PaymentType) => countByPayment[key] > 0)
-        .map((key: PaymentType) => this.paymentMethodLabel[key]),
+        .map((key: PaymentType) => PAYMENT_METHOD_LABEL[key]),
       datasets: [{
         data: (Object.values(countByPayment) as number[]).filter((value: number) => value > 0),
       }],
@@ -516,7 +517,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.valueByPaymentPieChartData = {
       labels: (Object.keys(valueByPayment) as PaymentType[])
         .filter((key: PaymentType) => valueByPayment[key] > 0)
-        .map((key: PaymentType) => this.paymentMethodLabel[key]),
+        .map((key: PaymentType) => PAYMENT_METHOD_LABEL[key]),
       datasets: [{
         data: (Object.values(valueByPayment) as number[]).filter((value: number) => value > 0),
       }],

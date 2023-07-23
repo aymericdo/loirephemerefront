@@ -11,6 +11,7 @@ import {
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { PAYMENT_METHOD_LABEL } from 'src/app/modules/admin/modules/stats/components/stats.component';
 
 const SECONDS_HIGHLIGHT = 20;
 
@@ -35,6 +36,8 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   isPaymentModalVisible = false;
   isNew = false;
   isJustUpdated = false;
+
+  PAYMENT_METHOD_LABEL = PAYMENT_METHOD_LABEL;
 
   private isNewTimeout: ReturnType<typeof setTimeout> | null = null;
   private isJustUpdatedTimeout: ReturnType<typeof setTimeout> | null = null;

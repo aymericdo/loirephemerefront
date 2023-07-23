@@ -18,7 +18,7 @@
       <p>Paiements :</p>
       <ul>
         <li *ngFor="let payment of command.payment">
-          {{ payment.key + " (" + payment.value + "€)" }}
+          {{ PAYMENT_METHOD_LABEL[payment.key] + " (" + payment.value + "€)" }}
         </li>
       </ul>
     </nz-skeleton>

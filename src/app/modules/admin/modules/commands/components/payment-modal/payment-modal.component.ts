@@ -1,11 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
-
-interface DisplayablePaymentPossibility extends PaymentPossibility {
-  label: string;
-}
-
+import { PAYMENT_METHOD_LABEL } from 'src/app/modules/admin/modules/stats/components/stats.component';
 
 @Component({
   selector: 'app-payment-modal',
@@ -17,23 +13,21 @@ export class PaymentModalComponent {
   @Output() clickOk = new EventEmitter<PaymentPossibility[]>();
   @Output() clickCancel = new EventEmitter<string>();
 
-  paymentPossibilities: DisplayablePaymentPossibility[] = [
+  paymentPossibilities: PaymentPossibility[] = [
     {
       key: 'creditCart',
-      label: 'CB',
       value: 0,
     }, {
       key: 'cash',
-      label: 'Cash',
       value: 0,
     }, {
       key: 'bankCheque',
-      label: 'Chèque',
       value: 0,
     }];
 
   isOk: boolean = false;
   isTooMuch: boolean = false;
+  PAYMENT_METHOD_LABEL = PAYMENT_METHOD_LABEL;
 
   constructor(private modal: NzModalService) {}
 
@@ -67,7 +61,7 @@ export class PaymentModalComponent {
     this.modal.confirm({
       nzTitle: 'Confirmation',
       nzContent: `Cette commande a bien été payée avec les moyens de paiement suivant ?
-        <ul>${result.map((res) => `<li>${res.key} -> ${res.value}€</li>`)}</ul>`,
+        <ul>${result.map((res) => `<li><b>${PAYMENT_METHOD_LABEL[res.key]}</b> -> ${res.value}€</li>`)}</ul>`,
       nzOkText: 'OK',
       nzOkType: 'primary',
       nzOnOk: () => {
