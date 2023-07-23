@@ -337,8 +337,6 @@ export class StatsComponent implements OnInit, OnDestroy {
   ): void {
     if (!command.payment?.length) return;
 
-    console.log(command.payment);
-
     command.payment.forEach((payment) => {
       countByPayment[payment.key] += 1;
     })
