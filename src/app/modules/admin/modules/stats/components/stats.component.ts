@@ -1,6 +1,7 @@
 import { DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
 import {
   ChartData
@@ -499,21 +500,22 @@ export class StatsComponent implements OnInit, OnDestroy {
       }
     });
 
+    const validKeys = (Object.keys(valueByPayment) as PaymentType[])
+      .filter((key: PaymentType) => valueByPayment[key] > 0)
+
     this.countByPaymentPieChartData = {
-      labels: (Object.keys(countByPayment) as PaymentType[])
-        .filter((key: PaymentType) => countByPayment[key] > 0)
-        .map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
+      labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
       datasets: [{
-        data: (Object.values(countByPayment) as number[]).filter((value: number) => value > 0),
+        data: validKeys.map((key: PaymentType) => valueByPayment[key]),
+        backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
       }],
     };
 
     this.valueByPaymentPieChartData = {
-      labels: (Object.keys(valueByPayment) as PaymentType[])
-        .filter((key: PaymentType) => valueByPayment[key] > 0)
-        .map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
+      labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
       datasets: [{
-        data: (Object.values(valueByPayment) as number[]).filter((value: number) => value > 0),
+        data: validKeys.map((key: PaymentType) => valueByPayment[key]),
+        backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
       }],
     };
   }
