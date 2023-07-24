@@ -5,6 +5,10 @@
   justify-content: center;
 }
 
+.payment-modal-content nz-input-number {
+  flex: 1;
+}
+
 .payment-modal-content .label-pre-btn {
   min-width: 130px;
   pointer-events: none;
