@@ -6,6 +6,7 @@ import { selectAllPastries, selectIsMovingPastry } from 'src/app/modules/admin/m
 import { AppState } from 'src/app/store/app.state';
 import { generate, presetPalettes } from '@ant-design/colors';
 import { settingCommonStock } from 'src/app/modules/admin/modules/menu/store/menu.actions';
+import { COLORS } from 'src/app/helpers/colors';
 
 @Component({
   selector: 'app-association',
@@ -21,22 +22,6 @@ export class AssociationComponent implements OnInit, OnDestroy {
 
   pastriesByCommonStock: { [commonStock: string]: Pastry[] } = {};
   colorByCommonStock: { [commonStock: string]: string } = {};
-
-  private colors = [
-    'volcano',
-    'yellow',
-    'gold',
-    'orange',
-    'lime',
-    'red',
-    'green',
-    'cyan',
-    'blue',
-    'geekblue',
-    'purple',
-    'magenta',
-    'grey'
-  ];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -56,10 +41,10 @@ export class AssociationComponent implements OnInit, OnDestroy {
       pastries.forEach((pastry) => {
         if (pastry.commonStock) {
           if (!this.colorByCommonStock.hasOwnProperty(pastry.commonStock)) {
-            if (colorIndex > this.colors.length - 1) {
+            if (colorIndex > COLORS.length - 1) {
               this.colorByCommonStock[pastry.commonStock] = this.getRandomColor();
             } else {
-              this.colorByCommonStock[pastry.commonStock] = presetPalettes[this.colors[colorIndex]].primary as string;
+              this.colorByCommonStock[pastry.commonStock] = presetPalettes[COLORS[colorIndex]].primary as string;
             }
             colorIndex += 1;
           }

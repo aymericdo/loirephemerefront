@@ -8,19 +8,13 @@ import {
 import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { formatYYYYMMDD } from 'src/app/helpers/date';
-import { Command, PaymentType } from 'src/app/interfaces/command.interface';
+import { Command, PAYMENT_METHOD_LABEL, PaymentType } from 'src/app/interfaces/command.interface';
 import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
 import { selectAllPastries, selectIsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
-
-export const PAYMENT_METHOD_LABEL = {
-  cash: 'Espèce',
-  creditCart: 'Carte bancaire',
-  bankCheque: 'Chèque',
-}
 
 @Component({
   templateUrl: './stats.component.html',
@@ -508,7 +502,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.countByPaymentPieChartData = {
       labels: (Object.keys(countByPayment) as PaymentType[])
         .filter((key: PaymentType) => countByPayment[key] > 0)
-        .map((key: PaymentType) => PAYMENT_METHOD_LABEL[key]),
+        .map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
       datasets: [{
         data: (Object.values(countByPayment) as number[]).filter((value: number) => value > 0),
       }],
@@ -517,7 +511,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.valueByPaymentPieChartData = {
       labels: (Object.keys(valueByPayment) as PaymentType[])
         .filter((key: PaymentType) => valueByPayment[key] > 0)
-        .map((key: PaymentType) => PAYMENT_METHOD_LABEL[key]),
+        .map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
       datasets: [{
         data: (Object.values(valueByPayment) as number[]).filter((value: number) => value > 0),
       }],

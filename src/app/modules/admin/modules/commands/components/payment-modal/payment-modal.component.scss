@@ -1,2 +1,30 @@
-:host {
+@import 'src/vars.scss';
+
+.payment-modal-content nz-input-number-group.ant-input-number-group.ant-input-number-group-compact {
+  display: flex;
+  justify-content: center;
+}
+
+.payment-modal-content .label-pre-btn {
+  min-width: 130px;
+  pointer-events: none;
+  font-weight: 500;
+}
+
+.payment-modal-content .shortcut-btn {
+  width: 50px;
+}
+
+::ng-deep .payment-label {
+  &.-creditCart {
+    color: $blue;
+  }
+
+  &.-cash {
+    color: $green;
+  }
+
+  &.-bankCheque {
+    color: $magenta;
+  }
 }

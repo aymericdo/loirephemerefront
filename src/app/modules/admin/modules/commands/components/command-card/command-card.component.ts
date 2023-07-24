@@ -9,9 +9,8 @@ import {
   Output,
 } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
+import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { PAYMENT_METHOD_LABEL } from 'src/app/modules/admin/modules/stats/components/stats.component';
 
 const SECONDS_HIGHLIGHT = 20;
 

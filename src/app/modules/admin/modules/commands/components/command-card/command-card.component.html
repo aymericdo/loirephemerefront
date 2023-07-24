@@ -15,12 +15,15 @@
       <p>Prix total : {{ command.totalPrice }}€</p>
       <p>Créée le : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
       <p>Modifiée le : {{ command.updatedAt | date: "dd/MM/YYYY HH:mm" }}</p>
-      <p>Paiements :</p>
-      <ul>
-        <li *ngFor="let payment of command.payment">
-          {{ PAYMENT_METHOD_LABEL[payment.key] + " (" + payment.value + "€)" }}
-        </li>
-      </ul>
+      <ng-container *ngIf="command.payment?.length">
+        <p>Paiements :</p>
+        <ul>
+          <li *ngFor="let payment of command.payment">
+            <span class="key" [ngStyle]="{ color: PAYMENT_METHOD_LABEL[payment.key].color }">{{ PAYMENT_METHOD_LABEL[payment.key].label }}</span>
+            {{ " (" + payment.value + "€)" }}
+          </li>
+        </ul>
+      </ng-container>
     </nz-skeleton>
   </nz-card>
 </nz-ribbon>

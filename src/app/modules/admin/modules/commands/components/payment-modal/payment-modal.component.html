@@ -4,32 +4,41 @@
   </ng-container>
 
   <ng-container *nzModalContent>
-    <p>Cette commande a bien été payée ? ({{ command.totalPrice }}€)</p>
-    <nz-space nzDirection="vertical" style="width: 100%">
-      <ng-container *ngFor="let paymentPossibility of paymentPossibilities; trackBy: trackByKey">
-        <nz-input-number-group *nzSpaceItem nzCompact>
-          <button nz-button disabled style="width: 130px; pointer-events: none;">
-            {{ PAYMENT_METHOD_LABEL[paymentPossibility.key] }}
-          </button>
+    <div class="payment-modal-content">
+      <p>Cette commande a bien été payée ? ({{ command.totalPrice }}€)</p>
+      <nz-space nzDirection="vertical" style="width: 100%">
+        <ng-container *ngFor="let paymentPossibility of paymentPossibilities; trackBy: trackByKey">
+          <nz-input-number-group *nzSpaceItem nzCompact>
+            <button nz-button disabled
+              class="label-pre-btn"
+              [ngStyle]="{ 'border-left': '2px solid ' + PAYMENT_METHOD_LABEL[paymentPossibility.key].color }"
+            >
+              {{ PAYMENT_METHOD_LABEL[paymentPossibility.key].label }}
+            </button>
 
-          <nz-input-number [(ngModel)]="paymentPossibility.value" (ngModelChange)="onChange()" [nzStep]="0.01" [nzMin]="0" style="width: calc(100% - 250px)"></nz-input-number>
+            <nz-input-number [(ngModel)]="paymentPossibility.value" (ngModelChange)="onChange()" [nzStep]="0.01" [nzMin]="0" style="width: calc(100% - 250px)"></nz-input-number>
 
-          <button nz-button nzType="primary" style="width: 50px" (click)="setTotal(paymentPossibility.key)">
-            <span nz-icon nzType="euro" nzTheme="outline"></span>
-          </button>
-        </nz-input-number-group>
-      </ng-container>
+            <button nz-button
+              nzType="primary"
+              class="shortcut-btn"
+              [ngStyle]="{ 'background-color': PAYMENT_METHOD_LABEL[paymentPossibility.key].color, 'border-color': PAYMENT_METHOD_LABEL[paymentPossibility.key].color }"
+              (click)="setTotal(paymentPossibility.key)">
+              <span nz-icon nzType="euro" nzTheme="outline"></span>
+            </button>
+          </nz-input-number-group>
+        </ng-container>
 
-      <ng-container *ngIf="isTooMuch">
-        <nz-alert
-          *nzSpaceItem
-          nzType="error"
-          nzMessage="Erreur"
-          nzDescription="Le montant renseigné dépasse le montant de la commande."
-          nzShowIcon
-        ></nz-alert>
-      </ng-container>
-    </nz-space>
+        <ng-container *ngIf="isTooMuch">
+          <nz-alert
+            *nzSpaceItem
+            nzType="error"
+            nzMessage="Erreur"
+            nzDescription="Le montant renseigné dépasse le montant de la commande."
+            nzShowIcon
+          ></nz-alert>
+        </ng-container>
+      </nz-space>
+    </div>
   </ng-container>
 
   <ng-container *nzModalFooter>

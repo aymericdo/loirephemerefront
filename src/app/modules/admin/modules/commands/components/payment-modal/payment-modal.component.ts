@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
-import { PAYMENT_METHOD_LABEL } from 'src/app/modules/admin/modules/stats/components/stats.component';
+import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/interfaces/command.interface';
 
 @Component({
   selector: 'app-payment-modal',
@@ -58,10 +57,12 @@ export class PaymentModalComponent {
       return prev;
     }, [] as PaymentPossibility[])
 
+    console.log(result.map((res) => `<li><b><span class="payment-label -${res.key}">${PAYMENT_METHOD_LABEL[res.key].label}</span></b> -> ${res.value}€</li>`));
+
     this.modal.confirm({
       nzTitle: 'Confirmation',
-      nzContent: `Cette commande a bien été payée avec les moyens de paiement suivant ?
-        <ul>${result.map((res) => `<li><b>${PAYMENT_METHOD_LABEL[res.key]}</b> -> ${res.value}€</li>`)}</ul>`,
+      nzContent: `Cette commande <b>a bien été payée</b> avec les moyens de paiement suivant ?
+        <ul>${result.map((res) => `<li><b><span class="payment-label -${res.key}">${PAYMENT_METHOD_LABEL[res.key].label}</span></b> -> ${res.value}€</li>`).join('')}</ul>`,
       nzOkText: 'OK',
       nzOkType: 'primary',
       nzOnOk: () => {
