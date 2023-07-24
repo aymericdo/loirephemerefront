@@ -1,8 +1,8 @@
 <nz-ribbon [class.-is-loading]="isLoading" nzText="€" [nzColor]="isPayed ? 'green' : 'red'">
   <nz-card style="width: 300px" [class.-is-new]="isNew" [class.-is-just-updated]="isJustUpdated"
-    [nzActions]="isPayed ? [actionWizz] : [actionWizz, actionDone]" [nzTitle]="'Commande #' + command.reference">
+    [nzActions]="isDone && isPayed ? [actionWizz] : isDone ? [actionWizz, actionPayed] : isPayed ? [actionWizz, actionDone] : [actionWizz, actionPayed, actionDone]" [nzTitle]="'Commande #' + command.reference">
     <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
-      <p class="take-away">{{ command.takeAway ? 'À emporter' : 'Sur place' }}</p>
+      <p class="take-away">{{ command.takeAway ? 'À emporter 🚚' : 'Sur place ⛱️' }}</p>
       <nz-divider></nz-divider>
       <p>Nom : {{ command.name }}</p>
       <p>Récupération : {{ command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
@@ -34,10 +34,12 @@
   <ng-container *ngIf="!isDone">
     <i nz-icon nzType="check" (click)="!isLoading && showValidationPopup('toDone')"></i>
   </ng-container>
-  <ng-container *ngIf="isDone">
+</ng-template>
+<ng-template #actionPayed>
+  <ng-container *ngIf="!isPayed">
     <i nz-icon nzType="euro-circle" (click)="!isLoading && showValidationPopup('toPayed')"></i>
   </ng-container>
 </ng-template>
 
-<app-payment-modal *ngIf="isPaymentModalVisible" (clickCancel)="isPaymentModalVisible = false;" (clickOk)="isPaymentModalVisible = false; clickPayed.emit($event);"
+<app-payment-modal *ngIf="isPaymentModalVisible" (clickCancel)="isPaymentModalVisible = false;" (clickOk)="payingCommand($event);"
   [command]="command"></app-payment-modal>

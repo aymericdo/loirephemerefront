@@ -57,8 +57,6 @@ export class PaymentModalComponent {
       return prev;
     }, [] as PaymentPossibility[])
 
-    console.log(result.map((res) => `<li><b><span class="payment-label -${res.key}">${PAYMENT_METHOD_LABEL[res.key].label}</span></b> -> ${res.value}€</li>`));
-
     this.modal.confirm({
       nzTitle: 'Confirmation',
       nzContent: `Cette commande <b>a bien été payée</b> avec les moyens de paiement suivant ?

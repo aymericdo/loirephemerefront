@@ -17,8 +17,8 @@
           <div class="data-section" nz-row [nzGutter]="[0, 24]" nzJustify="center">
             <div *ngFor="let command of onGoingCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
               <div class="inner-box">
-                <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!"
-                  (clickDone)="handleClickDone(command)" (clickWizz)="handleClickWizz(command)"></app-command-card>
+                <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isPayed]="!!command.isPayed"
+                  (clickDone)="handleClickDone(command)" (clickWizz)="handleClickWizz(command)" (clickPayed)="handleClickPayed(command, $event)"></app-command-card>
               </div>
             </div>
           </div>

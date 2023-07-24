@@ -89,6 +89,11 @@ export class CommandCardComponent implements OnInit, OnDestroy {
     this.clickWizz.emit();
   }
 
+  payingCommand(payments: PaymentPossibility[]): void {
+    this.isPaymentModalVisible = false;
+    this.clickPayed.emit(payments);
+  }
+
   private setIsNew(): void {
     const today = new Date().getTime();
     const createdDate = new Date(this.command.createdAt!).getTime();
