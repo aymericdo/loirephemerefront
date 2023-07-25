@@ -243,8 +243,8 @@
 
     .title {
       max-width: inherit;
-      padding-top: 50%;
-      padding-bottom: 50%;
+      padding-top: calc(50% + 1.25rem);
+      padding-bottom: calc(50% + 1.25rem);
       justify-content: center;
     }
 

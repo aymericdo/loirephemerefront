@@ -515,7 +515,6 @@ export class StatsComponent implements OnInit, OnDestroy {
     cashByDateByPayment: { [date: string]: { [payment: string]: number } },
     timeInterval: 'day' | 'month',
   ): void {
-    console.log(cashByDateByPayment);
     this.paymentGlobalBarChartData = {
       labels: Object.keys(cashByDateByPayment)
         .reverse()
