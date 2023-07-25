@@ -4,14 +4,6 @@
   display: flex;
   z-index: 5;
 
-  .overlay {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    z-index: 1000;
-    backdrop-filter: blur(6px);
-  }
-
   .main-link {
     display: flex;
     align-items: center;
@@ -102,6 +94,14 @@
   @media screen and (max-width: $lg) {
     nz-sider {
       overflow: inherit;
+    }
+
+    .overlay {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(6px);
     }
   }
 }
