@@ -103,7 +103,7 @@
         </nz-tab>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'tip' }" queryParamsHandling="merge">
-            Pourboire
+            Pourboires
           </a>
           <div *ngIf="pastriesByTypeByDatePieChartData.tip.datasets.length === 0; else someDataTip" class="row">
             <nz-empty></nz-empty>

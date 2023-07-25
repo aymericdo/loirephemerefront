@@ -6,12 +6,15 @@
       <nz-divider></nz-divider>
       <p>Nom : {{ command.name }}</p>
       <p>Récupération : {{ command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
-      <p>Pâtisseries :</p>
-      <ul>
-        <li *ngFor="let pastryObj of pastries">
-          {{ pastryObj[0].name + " (x" + pastryObj[1] + ")" }}
-        </li>
-      </ul>
+      <p>Commande :</p>
+      <ng-container *ngFor="let pastryType of pastries">
+        <span class="pastry-type">{{ PASTRY_TYPE_LABEL[pastryType[0]].label }}</span>
+        <ul>
+          <li *ngFor="let pastry of pastryType[1]">
+            {{ pastry[0].name + " (x" + pastry[1] + ")" }}
+          </li>
+        </ul>
+      </ng-container>
       <p>Prix total : {{ command.totalPrice }}€</p>
       <p>Créée le : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
       <p>Modifiée le : {{ command.updatedAt | date: "dd/MM/YYYY HH:mm" }}</p>
@@ -19,7 +22,7 @@
         <p>Paiements :</p>
         <ul>
           <li *ngFor="let payment of command.payment">
-            <span class="key" [ngStyle]="{ color: PAYMENT_METHOD_LABEL[payment.key].color }">{{ PAYMENT_METHOD_LABEL[payment.key].label }}</span>
+            <span [ngStyle]="{ color: PAYMENT_METHOD_LABEL[payment.key].color, 'font-weight': 500 }">{{ PAYMENT_METHOD_LABEL[payment.key].label }}</span>
             {{ " (" + payment.value + "€)" }}
           </li>
         </ul>

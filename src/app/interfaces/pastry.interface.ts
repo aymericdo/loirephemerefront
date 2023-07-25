@@ -8,6 +8,21 @@ export interface Historical {
 
 export type PastryType = 'pastry' | 'drink' | 'tip' | 'other';
 
+export const PASTRY_TYPE_LABEL = {
+  pastry: {
+    label: 'Nourritures',
+  },
+  drink: {
+    label: 'Boissons',
+  },
+  tip: {
+    label: 'Pourboires',
+  },
+  other: {
+    label: 'Autres',
+  }
+}
+
 export interface Pastry extends CorePastry {
   id: string;
   restaurant?: Restaurant;

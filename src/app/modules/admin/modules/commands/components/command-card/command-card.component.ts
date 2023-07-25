@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/interfaces/command.interface';
+import { PASTRY_TYPE_LABEL, PastryType } from 'src/app/interfaces/pastry.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 
 const SECONDS_HIGHLIGHT = 20;
@@ -30,13 +31,14 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   @Output() clickPayed = new EventEmitter<PaymentPossibility[]>();
   @Output() clickWizz = new EventEmitter<string>();
 
-  pastries: [Pastry, number][] = [];
+  pastries: [PastryType, [Pastry, number][]][] = [];
 
   isPaymentModalVisible = false;
   isNew = false;
   isJustUpdated = false;
 
   PAYMENT_METHOD_LABEL = PAYMENT_METHOD_LABEL;
+  PASTRY_TYPE_LABEL = PASTRY_TYPE_LABEL;
 
   private isNewTimeout: ReturnType<typeof setTimeout> | null = null;
   private isJustUpdatedTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -45,18 +47,28 @@ export class CommandCardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const pastriesGroupedBy = this.command.pastries.reduce((prev, pastry) => {
-      if (prev.hasOwnProperty(pastry.id)) {
-        prev[pastry.id] = [pastry, prev[pastry.id][1] + 1];
+      if (prev.hasOwnProperty(pastry.type)) {
+        if (prev[pastry.type].hasOwnProperty(pastry.id)) {
+          prev[pastry.type][pastry.id] = [pastry, prev[pastry.type][pastry.id][1] + 1];
+        } else {
+          prev[pastry.type][pastry.id] = [pastry, 1];
+        }
       } else {
-        prev[pastry.id] = [pastry, 1];
+        prev[pastry.type] = {};
+        prev[pastry.type][pastry.id] = [pastry, 1];
       }
 
       return prev;
-    }, {} as { [pastryId: string]: [Pastry, number] });
+    }, {} as { [pastryType: string]: { [pastryId: string]: [Pastry, number] } });
 
-    this.pastries = Object.keys(pastriesGroupedBy).map((pastryId) => [
-      pastriesGroupedBy[pastryId][0],
-      pastriesGroupedBy[pastryId][1],
+    console.log(pastriesGroupedBy);
+
+    this.pastries = Object.keys(pastriesGroupedBy).map((pastryType) => [
+      pastryType as PastryType,
+      Object.keys(pastriesGroupedBy[pastryType]).map((pastryId) => {
+        const elem = pastriesGroupedBy[pastryType][pastryId];
+        return [elem[0] as Pastry, elem[1] as number]
+      })
     ]);
 
     this.setIsNew();

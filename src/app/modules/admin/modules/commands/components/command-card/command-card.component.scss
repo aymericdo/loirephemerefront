@@ -10,6 +10,14 @@
     font-weight: 500;
   }
 
+  .pastry-type {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    border-radius: 8px;
+    background-color: $grey;
+  }
+
   nz-card {
     transition: box-shadow 250ms;
     max-width: 100%;
