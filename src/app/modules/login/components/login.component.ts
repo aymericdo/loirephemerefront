@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ReplaySubject, filter, takeUntil, withLatestFrom } from 'rxjs';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { stopLoading } from 'src/app/modules/login/store/login.actions';
-import { selectDemoResto, selectUser } from 'src/app/modules/login/store/login.selectors';
+import { selectDemoResto, selectRestaurant, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
@@ -26,11 +27,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.store.select(selectUser).pipe(
       filter(Boolean),
-      withLatestFrom(this.store.select(selectDemoResto).pipe(filter(Boolean))),
+      withLatestFrom(
+        this.store.select(selectDemoResto).pipe(filter(Boolean)),
+        this.store.select(selectUserRestaurants).pipe(filter(Boolean)),
+      ),
       takeUntil(this.destroyed$),
-    ).subscribe(([user, demoResto]) => {
-      if (user) {
-        this.router.navigate([demoResto.code, 'admin']);
+    ).subscribe(([user, demoResto, restaurants]) => {
+      if (user && restaurants) {
+        const restoList = restaurants.filter((resto: Restaurant) => resto.code !== demoResto.code);
+        this.router.navigate([restoList[0].code, 'admin']);
       } else {
         this.router.navigate(['page', 'restaurant', 'new']);
       }

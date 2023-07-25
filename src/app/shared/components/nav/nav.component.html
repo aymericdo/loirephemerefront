@@ -104,7 +104,7 @@
       [nzTitle]="titleUserTpl" nzIcon="user">
       <ul>
         <li *ngIf="isLoggedIn" nz-menu-item [nzMatchRouter]="true">
-          <a [routerLink]="['page', 'profile']">
+          <a (click)="manuallyCollapse()" [routerLink]="['page', 'profile']">
             <i nz-icon nzType="profile"></i>
             <span>Mon compte</span>
           </a>
