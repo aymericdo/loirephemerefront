@@ -502,21 +502,23 @@ export class StatsComponent implements OnInit, OnDestroy {
     const validKeys = (Object.keys(valueByPayment) as PaymentType[])
       .filter((key: PaymentType) => valueByPayment[key] > 0)
 
-    this.countByPaymentPieChartData = {
-      labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
-      datasets: [{
-        data: validKeys.map((key: PaymentType) => countByPayment[key]),
-        backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
-      }],
-    };
+    if (validKeys.length) {
+      this.countByPaymentPieChartData = {
+        labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
+        datasets: [{
+          data: validKeys.map((key: PaymentType) => countByPayment[key]),
+          backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
+        }],
+      };
 
-    this.valueByPaymentPieChartData = {
-      labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
-      datasets: [{
-        data: validKeys.map((key: PaymentType) => valueByPayment[key]),
-        backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
-      }],
-    };
+      this.valueByPaymentPieChartData = {
+        labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
+        datasets: [{
+          data: validKeys.map((key: PaymentType) => valueByPayment[key]),
+          backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
+        }],
+      };
+    }
   }
 
   private setTotalByType(
