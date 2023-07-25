@@ -1,7 +1,6 @@
 import { DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
 import {
   ChartData
@@ -506,7 +505,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.countByPaymentPieChartData = {
       labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
       datasets: [{
-        data: validKeys.map((key: PaymentType) => valueByPayment[key]),
+        data: validKeys.map((key: PaymentType) => countByPayment[key]),
         backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
       }],
     };
