@@ -51,7 +51,7 @@
         </nz-tab>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'pastry' }" queryParamsHandling="merge">
-            Nourritures
+            Plats
           </a>
           <div *ngIf="pastriesByTypeByDatePieChartData.pastry.datasets.length === 0; else someDataPastry" class="row">
             <nz-empty></nz-empty>
@@ -63,7 +63,7 @@
                   <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
                 </div>
                 <span *ngIf="totalByType.pastry" class="total">
-                  <div>Total de nourritures : {{ totalByType.pastry }}</div>
+                  <div>Total de plats : {{ totalByType.pastry }}</div>
                 </span>
               </div>
             </div>

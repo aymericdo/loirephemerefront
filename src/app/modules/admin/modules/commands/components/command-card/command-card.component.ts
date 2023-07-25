@@ -61,15 +61,15 @@ export class CommandCardComponent implements OnInit, OnDestroy {
       return prev;
     }, {} as { [pastryType: string]: { [pastryId: string]: [Pastry, number] } });
 
-    console.log(pastriesGroupedBy);
-
     this.pastries = Object.keys(pastriesGroupedBy).map((pastryType) => [
       pastryType as PastryType,
       Object.keys(pastriesGroupedBy[pastryType]).map((pastryId) => {
         const elem = pastriesGroupedBy[pastryType][pastryId];
         return [elem[0] as Pastry, elem[1] as number]
       })
-    ]);
+    ]).sort((a, b) => {
+      return PASTRY_TYPE_LABEL[a[0] as PastryType].sequence - PASTRY_TYPE_LABEL[b[0] as PastryType].sequence;
+    }) as [PastryType, [Pastry, number][]][];
 
     this.setIsNew();
     this.setIsJustUpdated();

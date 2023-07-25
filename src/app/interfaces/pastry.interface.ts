@@ -10,16 +10,20 @@ export type PastryType = 'pastry' | 'drink' | 'tip' | 'other';
 
 export const PASTRY_TYPE_LABEL = {
   pastry: {
-    label: 'Nourritures',
+    label: 'Plats',
+    sequence: 0,
   },
   drink: {
     label: 'Boissons',
+    sequence: 1,
   },
   tip: {
     label: 'Pourboires',
+    sequence: 2,
   },
   other: {
     label: 'Autres',
+    sequence: 3,
   }
 }
 
