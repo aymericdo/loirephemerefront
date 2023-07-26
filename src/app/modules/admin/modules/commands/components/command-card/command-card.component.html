@@ -1,6 +1,6 @@
 <nz-ribbon [class.-is-loading]="isLoading" nzText="€" [nzColor]="isPayed ? 'green' : 'red'">
   <nz-card style="width: 300px" [class.-is-new]="isNew" [class.-is-just-updated]="isJustUpdated"
-    [nzActions]="isDone && isPayed ? [actionWizz] : isDone ? [actionWizz, actionPayed] : isPayed ? [actionWizz, actionDone] : [actionWizz, actionPayed, actionDone]" [nzTitle]="'Commande #' + command.reference">
+    [nzActions]="noAction ? [] : isDone && isPayed ? [actionWizz] : isDone ? [actionWizz, actionPayed] : isPayed ? [actionWizz, actionDone] : [actionWizz, actionPayed, actionDone]" [nzTitle]="'Commande #' + command.reference">
     <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
       <p class="take-away">{{ command.takeAway ? 'À emporter 🚚' : 'Sur place ⛱️' }}</p>
       <nz-divider></nz-divider>

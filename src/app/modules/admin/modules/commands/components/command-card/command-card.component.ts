@@ -26,6 +26,7 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   @Input() isDone: boolean = false;
   @Input() isPayed: boolean = false;
   @Input() isLoading: boolean = false;
+  @Input() noAction: boolean = false;
 
   @Output() clickDone = new EventEmitter<string>();
   @Output() clickPayed = new EventEmitter<PaymentPossibility[]>();

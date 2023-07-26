@@ -186,6 +186,25 @@
             </div>
           </ng-template>
         </nz-tab>
+        <nz-tab>
+          <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'commands' }" queryParamsHandling="merge">
+            Commandes
+          </a>
+          <ng-container *ngIf="(payedCommands$ | async)?.length === 0; else someDataCommands">
+            <nz-empty></nz-empty>
+          </ng-container>
+          <ng-template #someDataCommands>
+            <div class="data-section">
+              <div nz-row [nzGutter]="[0, 24]">
+                <div *ngFor="let command of payedCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
+                  <div class="inner-box">
+                    <app-command-card [command]="command" [isDone]="true" [isPayed]="true" [noAction]="true"></app-command-card>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </nz-tab>
       </nz-tabset>
     </ng-container>
   </div>
