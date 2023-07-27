@@ -5,7 +5,7 @@
       <p class="take-away">{{ command.takeAway ? 'À emporter 🚚' : 'Sur place ⛱️' }}</p>
       <nz-divider></nz-divider>
       <p>Nom : {{ command.name }}</p>
-      <p>Récupération : {{ command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
+      <p [class.-pick-up-time]="command.pickUpTime">Récupération : {{ !!command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
       <p>Commande :</p>
       <ng-container *ngFor="let pastryType of pastries">
         <span class="pastry-type">{{ PASTRY_TYPE_LABEL[pastryType[0]].label }}</span>

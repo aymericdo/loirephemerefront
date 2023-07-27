@@ -4,10 +4,19 @@
   display: flex;
   justify-content: center;
 
-  .take-away {
+  p.take-away {
     display: flex;
     justify-content: center;
     font-weight: 500;
+  }
+
+  p.-pick-up-time {
+    background: $orange-light;
+    color: white;
+    padding: 0 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    border-radius: 6px;
   }
 
   .pastry-type {
