@@ -11,8 +11,9 @@ import { formatYYYYMMDD } from 'src/app/helpers/date';
 import { Command, PAYMENT_METHOD_LABEL, PAYMENT_TYPES, PaymentPossibility, PaymentType } from 'src/app/interfaces/command.interface';
 import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
-import { selectAllPastries, selectIsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
+import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, resetTimeInterval, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
+import { statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
+import { selectAllPastries, selectIsLoading, selectPayedCommands, selectTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -25,8 +26,10 @@ export class StatsComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   pastries$: Observable<Pastry[]>;
   restaurant$: Observable<Restaurant | null>;
+  timeInterval$: Observable<'day' | 'month'>;
 
   totallyEmpty: boolean = false;
+  isTimeIntervalChangeable: boolean = false;
 
   pastryTotal: number = 0;
   drinkTotal: number = 0;
@@ -121,6 +124,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.isLoading$ = this.store.select(selectIsLoading);
     this.pastries$ = this.store.select(selectAllPastries);
     this.restaurant$ = this.store.select(selectRestaurant);
+    this.timeInterval$ = this.store.select(selectTimeInterval);
   }
 
   ngOnInit(): void {
@@ -190,12 +194,12 @@ export class StatsComponent implements OnInit, OnDestroy {
         this.onDateRangeChange();
       });
 
-    combineLatest([this.payedCommands$, this.pastries$, this.isLoading$])
+    combineLatest([this.payedCommands$, this.pastries$, this.timeInterval$, this.isLoading$])
       .pipe(
-        filter(([_commands, _pastries, isLoading]) => !isLoading),
+        filter(([_commands, _pastries, _timeInterval, isLoading]) => !isLoading),
         takeUntil(this.destroyed$)
       )
-      .subscribe(([commands, pastries]) => {
+      .subscribe(([commands, pastries, timeInterval]) => {
         this.totallyEmpty = commands.length === 0;
         this.commandsCount = commands.length;
         this.totalCash = 0;
@@ -236,8 +240,16 @@ export class StatsComponent implements OnInit, OnDestroy {
           [date: string]: { [payment: string]: number };
         } = {};
 
-        const timeInterval = this.daysBetweenTwoDates(this.dateRange![0], this.dateRange![1]) > 60 &&
-          commands.length > 100 ? 'month' : 'day';
+        const firstCommandDate = commands[0].createdAt;
+        const lastCommandDate = commands[commands.length - 1].createdAt;
+        this.isTimeIntervalChangeable = this.daysBetweenTwoDates(
+          new Date(firstCommandDate as string),
+          new Date(lastCommandDate as string)) > 60 &&
+          commands.length > 100;
+
+        if (!this.isTimeIntervalChangeable && timeInterval !== statsInitialState.timeInterval) {
+          this.store.dispatch(resetTimeInterval())
+        }
 
         commands.forEach((command: Command) => {
           const day = this.getFormattedDate(new Date(command.createdAt as string), timeInterval);

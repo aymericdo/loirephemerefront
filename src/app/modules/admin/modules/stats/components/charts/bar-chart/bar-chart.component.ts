@@ -1,5 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { ChartData, ChartOptions } from 'chart.js';
+import { Observable } from 'rxjs';
+import { setTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.actions';
+import { selectTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
+import { AppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-bar-chart',
@@ -7,10 +12,17 @@ import { ChartData, ChartOptions } from 'chart.js';
   styleUrls: ['./bar-chart.component.scss']
 })
 export class BarChartComponent {
+  @Input() isTimeIntervalChangeable = false;
   @Input() barChartData: ChartData<'bar' | 'line'> = {
     labels: [],
     datasets: [],
   };
+
+  timeInterval$: Observable<'day' | 'month'>;
+
+  constructor(private store: Store<AppState>) {
+    this.timeInterval$ = this.store.select(selectTimeInterval);
+  }
 
   barChartOptions: ChartOptions = {
     responsive: true,
@@ -32,4 +44,8 @@ export class BarChartComponent {
       },
     },
   };
+
+  changingTimeInterval(timeIntervalChecked: boolean): void {
+    this.store.dispatch(setTimeInterval({ timeInterval: (timeIntervalChecked ? 'day' : 'month') }));
+  }
 }

@@ -43,7 +43,7 @@
             <div class="row">
               <div class="chart bar">
                 <div>
-                  <app-bar-chart [barChartData]="globalBarChartData"></app-bar-chart>
+                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="globalBarChartData"></app-bar-chart>
                 </div>
               </div>
             </div>
@@ -70,7 +70,7 @@
             <div class="row">
               <div class="chart bar">
                 <div>
-                  <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.pastry"></app-bar-chart>
+                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.pastry"></app-bar-chart>
                 </div>
               </div>
             </div>
@@ -96,7 +96,7 @@
 
             <div class="chart bar">
               <div>
-                <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.drink"></app-bar-chart>
+                <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.drink"></app-bar-chart>
               </div>
             </div>
           </ng-template>
@@ -122,7 +122,7 @@
             <div class="row">
               <div class="chart bar">
                 <div>
-                  <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.tip"></app-bar-chart>
+                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.tip"></app-bar-chart>
                 </div>
               </div>
             </div>
@@ -149,7 +149,7 @@
             <div class="row">
               <div class="chart bar">
                 <div>
-                  <app-bar-chart [barChartData]="pastriesByTypeByDateBarChartData.other"></app-bar-chart>
+                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.other"></app-bar-chart>
                 </div>
               </div>
             </div>
@@ -180,7 +180,7 @@
             <div class="row">
               <div class="chart bar">
                 <div>
-                  <app-bar-chart [barChartData]="paymentGlobalBarChartData"></app-bar-chart>
+                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="paymentGlobalBarChartData"></app-bar-chart>
                 </div>
               </div>
             </div>

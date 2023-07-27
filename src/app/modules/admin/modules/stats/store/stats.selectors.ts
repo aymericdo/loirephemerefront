@@ -16,6 +16,11 @@ export const selectPayedCommands = createSelector(
       })
 );
 
+export const selectTimeInterval = createSelector(
+  selectFeature,
+  (state: StatsState) => state.timeInterval
+);
+
 export const selectIsLoading = createSelector(
   selectFeature,
   (state: StatsState) => state.loading

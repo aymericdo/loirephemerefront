@@ -6,8 +6,10 @@ import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   fetchingAllRestaurantPastries,
   fetchingRestaurantCommands,
+  resetTimeInterval,
   setAllPastries,
   setCommands,
+  setTimeInterval,
   startLoading,
   stopLoading,
 } from './stats.actions';
@@ -18,12 +20,14 @@ export interface StatsState {
   allPastries: Pastry[];
   commands: Command[];
   loading: boolean;
+  timeInterval: 'day' | 'month';
 }
 
 export const statsInitialState: StatsState = {
   allPastries: [...pastriesMock],
   commands: [...commandsMock],
   loading: false,
+  timeInterval: 'day',
 };
 
 const statsReducer = createReducer(
@@ -47,6 +51,14 @@ const statsReducer = createReducer(
   on(setCommands, (state, { commands }) => ({
     ...state,
     commands: [...commands],
+  })),
+  on(setTimeInterval, (state, { timeInterval }) => ({
+    ...state,
+    timeInterval,
+  })),
+  on(resetTimeInterval, (state) => ({
+    ...state,
+    timeInterval: statsInitialState.timeInterval,
   })),
   on(stopLoading, (state) => ({
     ...state,
