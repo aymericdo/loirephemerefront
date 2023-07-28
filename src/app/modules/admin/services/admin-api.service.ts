@@ -99,6 +99,12 @@ export class AdminApiService {
     );
   }
 
+  deletingCommand(code: string, commandId: string): Observable<any> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/cancel/${commandId}`, null
+    );
+  }
+
   payedCommand(code: string, commandId: string, payments: PaymentPossibility[]): Observable<any> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, { payments }

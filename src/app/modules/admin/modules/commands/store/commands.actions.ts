@@ -17,6 +17,10 @@ export const closingCommand = createAction(
   '[Commands page] Close command',
   props<{ command: Command }>()
 );
+export const cancellingCommand = createAction(
+  '[Commands page] Cancelling command',
+  props<{ command: Command }>()
+);
 export const payingCommand = createAction(
   '[Commands page] Payed command',
   props<{ command: Command, payments: PaymentPossibility[] }>()

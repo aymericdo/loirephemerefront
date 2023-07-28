@@ -8,6 +8,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { presetPalettes } from '@ant-design/colors';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { PASTRY_TYPE_LABEL, PastryType } from 'src/app/interfaces/pastry.interface';
@@ -29,6 +30,7 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   @Input() noAction: boolean = false;
 
   @Output() clickDone = new EventEmitter<string>();
+  @Output() clickCancelled = new EventEmitter<string>();
   @Output() clickPayed = new EventEmitter<PaymentPossibility[]>();
   @Output() clickWizz = new EventEmitter<string>();
 
@@ -40,6 +42,8 @@ export class CommandCardComponent implements OnInit, OnDestroy {
 
   PAYMENT_METHOD_LABEL = PAYMENT_METHOD_LABEL;
   PASTRY_TYPE_LABEL = PASTRY_TYPE_LABEL;
+
+  redColor: string = presetPalettes['red'].primary as string;
 
   private isNewTimeout: ReturnType<typeof setTimeout> | null = null;
   private isJustUpdatedTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -81,7 +85,7 @@ export class CommandCardComponent implements OnInit, OnDestroy {
     clearTimeout(this.isJustUpdatedTimeout!);
   }
 
-  showValidationPopup(type: 'toDone' | 'toPayed'): void {
+  showValidationPopup(type: 'toDone' | 'toPayed' | 'toCancelled'): void {
     if (type === 'toDone') {
       this.modal.confirm({
         nzTitle: `Commande #${this.command.reference}`,
@@ -95,6 +99,17 @@ export class CommandCardComponent implements OnInit, OnDestroy {
       });
     } else if (type === 'toPayed') {
       this.isPaymentModalVisible = true;
+    } else if (type === 'toCancelled') {
+      this.modal.confirm({
+        nzTitle: `Commande #${this.command.reference}`,
+        nzContent: `Voulez-vous vraiment annuler cette commande ?`,
+        nzOkText: 'OK',
+        nzOkType: 'primary',
+        nzOnOk: () => {
+          this.clickCancelled.emit();
+        },
+        nzCancelText: 'Annuler',
+      });
     }
   }
 

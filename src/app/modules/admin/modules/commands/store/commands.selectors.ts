@@ -7,17 +7,19 @@ export const selectFeature = (state: AppState) => state.admin.commands;
 
 export const selectOnGoingCommands = createSelector(
   selectFeature,
-  (state: CommandsState) => state.commands.filter((c) => !c.isDone).sort((a, b) => {
-    const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
-    const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
-    return dateA - dateB;
-  }),
+  (state: CommandsState) => state.commands
+    .filter((c) => !c.isDone && !c.isCancelled)
+    .sort((a, b) => {
+      const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
+      const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
+      return dateA - dateB;
+    }),
 );
 
 export const selectDeliveredCommands = createSelector(
   selectFeature,
   (state: CommandsState) => state.commands
-    .filter((c) => c.isDone && !c.isPayed)
+    .filter((c) => c.isDone && !c.isPayed && !c.isCancelled)
     .sort((a, b) => {
       const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
       const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
@@ -29,7 +31,19 @@ export const selectPayedCommands = createSelector(
   selectFeature,
   (state: CommandsState) =>
     state.commands
-      .filter((c: Command) => c.isPayed)
+      .filter((c: Command) => c.isPayed && !c.isCancelled)
+      .sort((a, b) => {
+        const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
+        const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
+        return dateB - dateA;
+      })
+);
+
+export const selectCancelledCommands = createSelector(
+  selectFeature,
+  (state: CommandsState) =>
+    state.commands
+      .filter((c: Command) => c.isCancelled)
       .sort((a, b) => {
         const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
         const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();

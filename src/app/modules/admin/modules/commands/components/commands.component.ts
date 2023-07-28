@@ -8,8 +8,8 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { addCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
-import { selectDeliveredCommands, selectIsLoading, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
+import { addCommand, cancellingCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
+import { selectCancelledCommands, selectDeliveredCommands, selectIsLoading, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
 import {
   CommandWebSocketService,
   WebSocketData
@@ -27,6 +27,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
   onGoingCommands$: Observable<Command[]>;
   deliveredCommands$: Observable<Command[]>;
   payedCommands$: Observable<Command[]>;
+  cancelledCommands$: Observable<Command[]>;
   totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
   restaurant$: Observable<Restaurant | null>;
@@ -46,6 +47,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
   ) {
     this.onGoingCommands$ = this.store.select(selectOnGoingCommands);
     this.deliveredCommands$ = this.store.select(selectDeliveredCommands);
+    this.cancelledCommands$ = this.store.select(selectCancelledCommands);
     this.payedCommands$ = this.store.select(selectPayedCommands);
     this.totalPayedCommands$ = this.store.select(selectTotalPayedCommands);
     this.isLoading$ = this.store.select(selectIsLoading);
@@ -102,6 +104,10 @@ export class CommandsComponent implements OnInit, OnDestroy {
 
   handleClickPayed(command: Command, payments: PaymentPossibility[]): void {
     this.store.dispatch(payingCommand({ command, payments }));
+  }
+
+  handleClickCancelled(command: Command): void {
+    this.store.dispatch(cancellingCommand({ command }));
   }
 
   handleClickWizz(command: Command): void {
