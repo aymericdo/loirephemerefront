@@ -71,7 +71,7 @@
           </div>
         </ng-container>
       </nz-tab>
-      <nz-tab>
+      <nz-tab *ngIf="(cancelledCommands$ | async)?.length !== 0">
         <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'cancelled' }" queryParamsHandling="merge">
           Annulées
         </a>
