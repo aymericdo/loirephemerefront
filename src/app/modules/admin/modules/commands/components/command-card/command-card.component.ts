@@ -13,6 +13,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { PASTRY_TYPE_LABEL, PastryType } from 'src/app/interfaces/pastry.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
 
 const SECONDS_HIGHLIGHT = 20;
 
@@ -31,10 +32,10 @@ export class CommandCardComponent implements OnInit, OnDestroy {
 
   @Output() clickDone = new EventEmitter<string>();
   @Output() clickCancelled = new EventEmitter<string>();
-  @Output() clickPayed = new EventEmitter<PaymentPossibility[]>();
+  @Output() clickPayed = new EventEmitter<{ payments: PaymentPossibility[], discount: Discount }>();
   @Output() clickWizz = new EventEmitter<string>();
 
-  pastries: [PastryType, [Pastry, number][]][] = [];
+  pastries: [PastryType, [Pastry, number, number][]][] = [];
 
   isPaymentModalVisible = false;
   isNew = false;
@@ -51,30 +52,48 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   constructor(private modal: NzModalService, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+    const manageGifts = (gifts: string[], pastryId: string, currentCount: number): [string[], number] => {
+      if (gifts.some((p) => p === pastryId)) {
+        gifts.splice(gifts.indexOf(pastryId), 1)
+        currentCount -= 1;
+      }
+
+      return [gifts, currentCount];
+    }
+
+    let gifts = this.command.discount ? [...this.command.discount.gifts] : [];
     const pastriesGroupedBy = this.command.pastries.reduce((prev, pastry) => {
       if (prev.hasOwnProperty(pastry.type)) {
         if (prev[pastry.type].hasOwnProperty(pastry.id)) {
-          prev[pastry.type][pastry.id] = [pastry, prev[pastry.type][pastry.id][1] + 1];
+          const count = prev[pastry.type][pastry.id][1] + 1;
+          let currentCount = prev[pastry.type][pastry.id][2] + 1;
+
+          [gifts, currentCount] = manageGifts(gifts, pastry.id, currentCount);
+          prev[pastry.type][pastry.id] = [pastry, count, currentCount];
         } else {
-          prev[pastry.type][pastry.id] = [pastry, 1];
+          let currentCount = 1;
+          [gifts, currentCount] = manageGifts(gifts, pastry.id, currentCount);
+          prev[pastry.type][pastry.id] = [pastry, 1, currentCount];
         }
       } else {
         prev[pastry.type] = {};
-        prev[pastry.type][pastry.id] = [pastry, 1];
+        let currentCount = 1;
+        [gifts, currentCount] = manageGifts(gifts, pastry.id, currentCount);
+        prev[pastry.type][pastry.id] = [pastry, 1, currentCount];
       }
 
       return prev;
-    }, {} as { [pastryType: string]: { [pastryId: string]: [Pastry, number] } });
+    }, {} as { [pastryType: string]: { [pastryId: string]: [Pastry, number, number] } });
 
     this.pastries = Object.keys(pastriesGroupedBy).map((pastryType) => [
       pastryType as PastryType,
       Object.keys(pastriesGroupedBy[pastryType]).map((pastryId) => {
         const elem = pastriesGroupedBy[pastryType][pastryId];
-        return [elem[0] as Pastry, elem[1] as number]
+        return [elem[0] as Pastry, elem[1] as number, elem[2] as number]
       })
     ]).sort((a, b) => {
       return PASTRY_TYPE_LABEL[a[0] as PastryType].sequence - PASTRY_TYPE_LABEL[b[0] as PastryType].sequence;
-    }) as [PastryType, [Pastry, number][]][];
+    }) as [PastryType, [Pastry, number, number][]][];
 
     this.setIsNew();
     this.setIsJustUpdated();
@@ -117,9 +136,9 @@ export class CommandCardComponent implements OnInit, OnDestroy {
     this.clickWizz.emit();
   }
 
-  payingCommand(payments: PaymentPossibility[]): void {
+  payingCommand(event: { payments: PaymentPossibility[], discount: Discount }): void {
     this.isPaymentModalVisible = false;
-    this.clickPayed.emit(payments);
+    this.clickPayed.emit(event);
   }
 
   private setIsNew(): void {

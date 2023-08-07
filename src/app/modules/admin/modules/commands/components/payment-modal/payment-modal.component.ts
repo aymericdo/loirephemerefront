@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/interfaces/command.interface';
+import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
 
 @Component({
   selector: 'app-payment-modal',
@@ -9,8 +10,11 @@ import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/inter
 })
 export class PaymentModalComponent {
   @Input() command!: Command;
-  @Output() clickOk = new EventEmitter<PaymentPossibility[]>();
+  @Output() clickOk = new EventEmitter<{ payments: PaymentPossibility[], discount: Discount }>();
   @Output() clickCancel = new EventEmitter<string>();
+
+  isPromoModalVisible = false;
+  discount: Discount = null!;
 
   paymentPossibilities: PaymentPossibility[] = [
     {
@@ -33,7 +37,7 @@ export class PaymentModalComponent {
   setTotal(key: string): void {
     this.paymentPossibilities.forEach((p) => {
       if (p.key === key) {
-        p.value = this.command.totalPrice;
+        p.value = this.discount ? this.discount.newPrice : this.command.totalPrice;
       } else {
         p.value = 0;
       }
@@ -64,19 +68,29 @@ export class PaymentModalComponent {
       nzOkText: 'OK',
       nzOkType: 'primary',
       nzOnOk: () => {
-        this.clickOk.emit(result);
+        this.clickOk.emit({ payments: result, discount: this.discount });
       },
       nzCancelText: 'Annuler',
     });
   }
 
-  trackByKey(_index: any, paymentPossibility: PaymentPossibility): string {
+  openPromoModal(): void {
+    this.isPromoModalVisible = true;
+  }
+
+  reducingPrice(event: Discount): void {
+    this.discount = event;
+    this.isPromoModalVisible = false;
+    this.analyze();
+  }
+
+  trackByKey(_index: number, paymentPossibility: PaymentPossibility): string {
     return paymentPossibility.key;
   }
 
   private analyze(): void {
     const currentTotal = this.paymentPossibilities.reduce((prev, p) => p.value + prev, 0);
-    this.isTooMuch = currentTotal > this.command.totalPrice;
-    this.isOk = currentTotal === this.command.totalPrice;
+    this.isTooMuch = this.discount ? currentTotal > this.discount.newPrice : currentTotal > this.command.totalPrice;
+    this.isOk = this.discount ? currentTotal === this.discount.newPrice : currentTotal === this.command.totalPrice;
   }
 }

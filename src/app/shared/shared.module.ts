@@ -12,6 +12,7 @@ import { PastryCardComponent } from './components/pastry-card/pastry-card.compon
 import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 import { CommandCardComponent } from 'src/app/modules/admin/modules/commands/components/command-card/command-card.component';
 import { PaymentModalComponent } from 'src/app/modules/admin/modules/commands/components/payment-modal/payment-modal.component';
+import { PromoModalComponent } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { PaymentModalComponent } from 'src/app/modules/admin/modules/commands/co
     NavComponent,
     CommandCardComponent,
     PaymentModalComponent,
+    PromoModalComponent,
     FooterComponent,
     PastryCardComponent,
   ],
@@ -34,6 +36,7 @@ import { PaymentModalComponent } from 'src/app/modules/admin/modules/commands/co
     NavComponent,
     CommandCardComponent,
     PaymentModalComponent,
+    PromoModalComponent,
     FooterComponent,
     PastryCardComponent,
     NgZorroModule,

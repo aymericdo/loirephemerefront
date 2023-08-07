@@ -1,0 +1,31 @@
+@import 'src/vars.scss';
+
+.promo-modal-content > div {
+  display: flex;
+  justify-content: center;
+}
+
+.promo-modal-content p .-line-through {
+  text-decoration : line-through;
+}
+
+.promo-modal-content p .new-price {
+  font-weight: 500;
+}
+
+.promo-modal-content .gift-section,
+.promo-modal-content .percentage-section {
+  flex: 1;
+  padding: 0 0.625rem;
+}
+
+.promo-modal-content .gift-section nz-checkbox-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.promo-modal-content .percentage-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       filter(Boolean),
       withLatestFrom(
         this.store.select(selectDemoResto).pipe(filter(Boolean)),
-        this.store.select(selectUserRestaurants).pipe(filter(Boolean)),
+        this.store.select(selectUserRestaurants).pipe(filter((restaurants) => !!restaurants?.length)),
       ),
       takeUntil(this.destroyed$),
     ).subscribe(([user, demoResto, restaurants]) => {

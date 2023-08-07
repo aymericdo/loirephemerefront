@@ -20,6 +20,12 @@ export const PAYMENT_METHOD_LABEL = {
   }
 }
 
+export interface Discount {
+  gifts: string[];
+  percentage: number;
+  newPrice: number;
+}
+
 export interface PaymentPossibility {
   key: PaymentType;
   value: number;
@@ -37,6 +43,7 @@ export interface Command extends CoreCommand {
   pastries: Pastry[];
   totalPrice: number;
   payment?: PaymentPossibility[];
+  discount?: Discount;
 }
 
 export interface CoreCommand {

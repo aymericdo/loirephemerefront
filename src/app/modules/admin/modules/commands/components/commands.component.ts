@@ -8,6 +8,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
 import { addCommand, cancellingCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
 import { selectCancelledCommands, selectDeliveredCommands, selectIsLoading, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
 import {
@@ -102,8 +103,8 @@ export class CommandsComponent implements OnInit, OnDestroy {
     this.store.dispatch(closingCommand({ command }));
   }
 
-  handleClickPayed(command: Command, payments: PaymentPossibility[]): void {
-    this.store.dispatch(payingCommand({ command, payments }));
+  handleClickPayed(command: Command, event: { payments: PaymentPossibility[], discount: Discount }): void {
+    this.store.dispatch(payingCommand({ command, payments: event.payments, discount: event.discount }));
   }
 
   handleClickCancelled(command: Command): void {

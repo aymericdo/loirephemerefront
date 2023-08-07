@@ -76,7 +76,7 @@ export class CommandsEffects {
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
-          .payedCommand(restaurant.code, action.command.id!, action.payments)
+          .payedCommand(restaurant.code, action.command.id!, action.payments, action.discount)
           .pipe(
             map((command) => editCommand({ command })),
           );

@@ -5,7 +5,9 @@
 
   <ng-container *nzModalContent>
     <div class="payment-modal-content">
-      <p>Cette commande a bien été payée ? ({{ command.totalPrice }}€)</p>
+      <p>Cette commande a bien été payée ? (<span [class.-line-through]="!!discount">{{ command.totalPrice }}€</span>)
+        <span *ngIf="discount" class="new-price">({{ (discount.newPrice) | number : '1.0-2' }}€)</span>
+      </p>
       <nz-space nzDirection="vertical" style="width: 100%">
         <ng-container *ngFor="let paymentPossibility of paymentPossibilities; trackBy: trackByKey">
           <nz-input-number-group *nzSpaceItem nzCompact>
@@ -42,7 +44,16 @@
   </ng-container>
 
   <ng-container *nzModalFooter>
-    <button nz-button nzType="default" (click)="clickCancel.emit()">Annuler</button>
-    <button nz-button nzType="primary" (click)="payCommand()" [disabled]="!isOk">OK</button>
+    <div class="payment-modal-footer">
+      <button nz-button nzType="dashed" (click)="openPromoModal()">Promo</button>
+      <div>
+        <button nz-button nzType="default" (click)="clickCancel.emit()">Annuler</button>
+        <button nz-button nzType="primary" (click)="payCommand()" [disabled]="!isOk">OK</button>
+      </div>
+    </div>
   </ng-container>
 </nz-modal>
+
+<app-promo-modal *ngIf="isPromoModalVisible" (clickCancel)="isPromoModalVisible = false;" (clickOk)="reducingPrice($event);"
+  [command]="command" [discount]="discount"></app-promo-modal>
+

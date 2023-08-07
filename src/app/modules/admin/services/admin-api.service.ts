@@ -7,6 +7,7 @@ import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Access, User } from 'src/app/interfaces/user.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
 
 @Injectable({
   providedIn: 'root',
@@ -105,9 +106,9 @@ export class AdminApiService {
     );
   }
 
-  payedCommand(code: string, commandId: string, payments: PaymentPossibility[]): Observable<any> {
+  payedCommand(code: string, commandId: string, payments: PaymentPossibility[], discount: Discount): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, { payments }
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, { payments, discount }
     );
   }
 
