@@ -141,6 +141,12 @@ export class CommandCardComponent implements OnInit, OnDestroy {
     this.clickPayed.emit(event);
   }
 
+  pastryTypeHasDiscount(pastryType: PastryType): boolean {
+    return this.command.discount?.gifts.some((pastryId) => {
+      return this.command.pastries.find(p => p.id === pastryId)?.type === pastryType;
+    }) || false;
+  }
+
   private setIsNew(): void {
     const today = new Date().getTime();
     const createdDate = new Date(this.command.createdAt!).getTime();

@@ -12,14 +12,32 @@
         <span class="pastry-type">{{ PASTRY_TYPE_LABEL[pastryType[0]].label }}</span>
         <ul>
           <li *ngFor="let pastry of pastryType[1]">
-            <span class="pastry-name" [class.-discount]="pastry[1] !== pastry[2] && pastry[2] === 0">{{ pastry[0].name + ' ' }}</span>
-            <span class="count" [class.-discount]="pastry[1] !== pastry[2]">{{"(x" + pastry[1] + ")" }}</span>
-            <span class="discount-new-count" *ngIf="pastry[1] !== pastry[2]">{{" (x" + pastry[2] + ")" }}</span>
+            <span class="pastry-name">{{ pastry[0].name + ' ' }}</span>
+            <span class="count">{{"(x" + pastry[1] + ")" }}</span>
           </li>
         </ul>
       </ng-container>
       <p><span class="price" [class.-discount]="!!command.discount">Prix total : {{ command.totalPrice }}€</span><span *ngIf="!!command.discount?.percentage">{{ ' (-' + command.discount?.percentage + '%)'}}</span></p>
-      <p class="final-price" *ngIf="!!command.discount">Prix définitif : {{ command.discount.newPrice }}€</p>
+      <ng-container *ngIf="!!command.discount">
+        <p><b>Ristourne :</b></p>
+        <ng-container *ngFor="let pastryType of pastries">
+          <ng-container *ngIf="pastryTypeHasDiscount(pastryType[0])">
+            <span class="pastry-type">{{ PASTRY_TYPE_LABEL[pastryType[0]].label }}</span>
+            <ul>
+              <ng-container *ngFor="let pastry of pastryType[1]">
+                <ng-container *ngIf="pastry[1] !== pastry[2]">
+                  <li>
+                    <span class="pastry-name" [class.-discount]="pastry[1] !== pastry[2] && pastry[2] === 0">{{ pastry[0].name + ' ' }}</span>
+                    <span class="count" [class.-discount]="pastry[1] !== pastry[2]">{{"(x" + pastry[1] + ")" }}</span>
+                    <span class="discount-new-count" *ngIf="pastry[1] !== pastry[2]">{{" (x" + pastry[2] + ")" }}</span>
+                  </li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </ng-container>
+        </ng-container>
+        <p class="final-price">Prix définitif : {{ command.discount.newPrice }}€</p>
+      </ng-container>
       <p>Créée le : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
       <p>Modifiée le : {{ command.updatedAt | date: "dd/MM/YYYY HH:mm" }}</p>
       <ng-container *ngIf="command.payment?.length">

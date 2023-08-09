@@ -233,7 +233,7 @@ export class StatsComponent implements OnInit, OnDestroy {
         };
 
         let cashByDate: {
-          [date: string]: { [pastryName: string]: number };
+          [date: string]: number
         } = {};
 
         let cashByDateByPayment: {
@@ -256,6 +256,7 @@ export class StatsComponent implements OnInit, OnDestroy {
 
           this.setCountByPayment(countByPayment, command);
           this.setValueByPayment(valueByPayment, command);
+          this.setCashByDate(cashByDate, command, day);
 
           if (command.payment?.length) {
             command.payment.forEach((payment) => {
@@ -267,10 +268,9 @@ export class StatsComponent implements OnInit, OnDestroy {
             const realPastry = this.checkHistoricalPastry(pastry, command);
             this.setPastriesByTypeByDate(pastriesByTypeByDate, realPastry, day);
             this.setCountByTypeByPastry(countByTypeByPastry, realPastry);
-            this.setCashByDate(cashByDate, realPastry, day);
-
-            this.totalCash += +realPastry.price;
           });
+
+          this.totalCash += command.discount ? command.discount.newPrice : command.totalPrice;
         });
 
         if (pastries.length && Object.keys(pastriesByTypeByDate).length) {
@@ -418,19 +418,15 @@ export class StatsComponent implements OnInit, OnDestroy {
   }
 
   private setCashByDate(
-    cashByDate: { [date: string]: { [pastryName: string]: number } },
-    pastry: Pastry,
+    cashByDate: { [date: string]: number },
+    command: Command,
     day: string,
   ): void {
+    const price = command.discount ? command.discount.newPrice : command.totalPrice;
     if (cashByDate.hasOwnProperty(day)) {
-      if (cashByDate[day].hasOwnProperty(pastry.name)) {
-        cashByDate[day][pastry.name] += +pastry.price;
-      } else {
-        cashByDate[day][pastry.name] = +pastry.price;
-      }
+      cashByDate[day] += price;
     } else {
-      cashByDate[day] = {};
-      cashByDate[day][pastry.name] = +pastry.price;
+      cashByDate[day] = price;
     }
   }
 
@@ -478,7 +474,7 @@ export class StatsComponent implements OnInit, OnDestroy {
 
   private buildGlobalBarChartData(
     pastriesByTypeByDate: { [key in PastryType]: { [date: string]: { [pastryName: string]: number } } },
-    cashByDate: { [date: string]: { [pastryName: string]: number } },
+    cashByDate: { [date: string]: number },
     timeInterval: 'day' | 'month',
   ): void {
     this.globalBarChartData = {
@@ -504,16 +500,14 @@ export class StatsComponent implements OnInit, OnDestroy {
         label: 'Argent',
         data: Object.keys(cashByDate)
           .reverse()
-          .map((date) => {
-            return Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
-          }),
+          .map((date) => cashByDate[date]),
       }, {
         type: 'line',
         label: 'Argent cumulé',
         data: Object.keys(cashByDate)
           .reverse()
           .reduce((prev: number[], date) => {
-            const dayTotal: number = Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
+            const dayTotal: number = cashByDate[date]
             const last: number = prev.length ? +prev[prev.length - 1] : 0;
             prev.push(last + dayTotal);
 
