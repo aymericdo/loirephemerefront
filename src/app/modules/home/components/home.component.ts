@@ -181,7 +181,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           top:
             window.pageYOffset +
             cardToScroll.elem.nativeElement.getBoundingClientRect().top -
-            50,
+            10,
           behavior: 'smooth',
         });
       }
