@@ -1,3 +1,5 @@
+<nz-alert *ngIf="(demoResto$ | async)?.id && (demoResto$ | async)?.id === (restaurant$ | async)?.id"
+  nzBanner nzType="info" nzMessage="Restaurant de test : amusez-vous !"></nz-alert>
 <div class="home-section" [class.-has-order-footer]="hasSelectedPastries$ | async">
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
