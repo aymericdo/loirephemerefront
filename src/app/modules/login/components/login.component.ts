@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ReplaySubject, filter, takeUntil, withLatestFrom } from 'rxjs';
+import { ReplaySubject, combineLatest, filter, takeUntil, withLatestFrom } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { stopLoading } from 'src/app/modules/login/store/login.actions';
 import { selectDemoResto, selectRestaurant, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
@@ -25,12 +25,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isOnRecover = this.router.url === '/page/login/recover';
 
-    this.store.select(selectUser).pipe(
-      filter(Boolean),
-      withLatestFrom(
-        this.store.select(selectDemoResto).pipe(filter(Boolean)),
-        this.store.select(selectUserRestaurants).pipe(filter((restaurants) => !!restaurants?.length)),
-      ),
+    combineLatest([
+      this.store.select(selectUser).pipe(filter(Boolean)),
+      this.store.select(selectDemoResto).pipe(filter(Boolean)),
+      this.store.select(selectUserRestaurants).pipe(filter((restaurants) => !!restaurants?.length)),
+    ]).pipe(
       takeUntil(this.destroyed$),
     ).subscribe(([user, demoResto, restaurants]) => {
       if (user && restaurants) {

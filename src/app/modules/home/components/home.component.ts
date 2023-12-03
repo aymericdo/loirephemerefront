@@ -11,7 +11,7 @@ import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject, timer } from 'rxjs';
-import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { getCwday, getYesterday, hourMinuteToDate } from 'src/app/helpers/date';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
@@ -108,21 +108,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     ).subscribe(code => {
       this.subscribeToWS(code);
       this.store.dispatch(fetchRestaurantPastries({ code }));
-    });
-
-    this.demoResto$.pipe(
-      filter(Boolean),
-      withLatestFrom(
-        this.route.paramMap.pipe(
-          map((params: ParamMap) => params.get('code')),
-        ),
-      ),
-      takeUntil(this.destroyed$),
-    ).subscribe(([demoResto, code]) => {
-      if (!code) {
-        const saveCode = localStorage.getItem('current_code');
-        this.router.navigate(['/', saveCode || demoResto.code]);
-      }
     });
 
     this.restaurant$.pipe(
