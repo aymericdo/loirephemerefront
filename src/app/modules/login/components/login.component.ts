@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { ReplaySubject, combineLatest, filter, takeUntil, withLatestFrom } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { stopLoading } from 'src/app/modules/login/store/login.actions';
-import { selectDemoResto, selectRestaurant, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { selectDemoResto, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
