@@ -157,19 +157,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     if (count === 0) {
-      const cardToScroll = this.itemElements.find(
-        (item) => item.pastry.id === pastry.id
-      );
+      // const cardToScroll = this.itemElements.find(
+      //   (item) => item.pastry.id === pastry.id
+      // );
 
-      if (cardToScroll) {
-        window.scroll({
-          top:
-            window.pageYOffset +
-            cardToScroll.elem.nativeElement.getBoundingClientRect().top -
-            10,
-          behavior: 'smooth',
-        });
-      }
+      // if (cardToScroll) {
+      //   window.scroll({
+      //     top:
+      //       window.pageYOffset +
+      //       cardToScroll.elem.nativeElement.getBoundingClientRect().top -
+      //       10,
+      //     behavior: 'smooth',
+      //   });
+      // }
     }
     this.store.dispatch(incrementPastry({ pastry }));
   }
