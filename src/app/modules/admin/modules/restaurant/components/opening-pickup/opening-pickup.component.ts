@@ -175,7 +175,9 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
         this.weekDayNumbers
           .filter((wd) => wd !== weekDayNumber &&
             !this.disabledHours(wd)
-              .includes(this.validateForm.controls[weekDayNumber].value.startTime.getHours())
+              .includes(this.validateForm.controls[weekDayNumber].value.startTime.getHours()) &&
+            !this.disabledMinutes(wd, this.validateForm.controls[weekDayNumber].value.startTime.getHours())
+              .includes(this.validateForm.controls[weekDayNumber].value.startTime.getMinutes())
           )
           .forEach((wd) => {
           this.validateForm.controls[wd].setValue(this.validateForm.controls[weekDayNumber].value);
