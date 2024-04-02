@@ -1,0 +1,47 @@
+<nz-modal [nzVisible]="true" nzCentered [nzMaskClosable]="true" (nzOnCancel)="clickCancel.emit()">
+  <ng-container *nzModalTitle>
+    Ristourne sur la commande : #{{ command.reference }}
+  </ng-container>
+
+  <ng-container *nzModalContent>
+    <div class="promo-modal-content">
+      <p>Prix total de la commande : (<span [class.-line-through]="promotionPrice > 0">{{ command.totalPrice }}€</span>)
+        <span *ngIf="promotionPrice > 0" class="new-price">({{ (command.totalPrice - promotionPrice) | number : '1.0-2' }}€)</span>
+      </p>
+      <div>
+        <div class="gift-section">
+          <div style="border-bottom: 1px solid rgb(233, 233, 233);">
+            <label
+              nz-checkbox
+              [(ngModel)]="allChecked"
+              (ngModelChange)="updateAllChecked()"
+              [nzIndeterminate]="indeterminate"
+            >
+              Tout cocher
+            </label>
+          </div>
+          <br />
+          <nz-checkbox-group [(ngModel)]="pastryList" (ngModelChange)="updateSingleChecked()"></nz-checkbox-group>
+        </div>
+
+        <div class="percentage-section">
+          <nz-input-number-group nzAddOnAfterIcon="percentage">
+            <nz-input-number
+              [(ngModel)]="percentagePromoValue"
+              (ngModelChange)="handlePromoChanged()"
+              [nzStep]="1"
+              [nzMax]="100"
+              [nzMin]="0"
+              [nzPrecisionMode]="'toFixed'"
+            ></nz-input-number>
+          </nz-input-number-group>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *nzModalFooter>
+    <button nz-button nzType="default" (click)="clickCancel.emit()">Annuler</button>
+    <button nz-button nzType="primary" (click)="validatingCommandPrice()" [disabled]="!promotionPrice">OK</button>
+  </ng-container>
+</nz-modal>

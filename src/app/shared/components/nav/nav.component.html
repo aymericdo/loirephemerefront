@@ -1,5 +1,6 @@
+<div *ngIf="(isSiderCollapsed$ | async) === false" class="overlay" (click)="manuallyCollapse()"></div>
+
 <nz-sider [nzCollapsible]="!routeWithoutNavBar" nzBreakpoint="lg" [nzCollapsedWidth]="0" [nzCollapsed]="isSiderCollapsed$ | async" (nzCollapsedChange)="siderCollapseChange($event)">
-  {{ isSiderCollapsed$ | async }}
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
     <li *ngIf="(restaurantFetching$ | async) === false" nz-menu-item class="row-border-left"
@@ -104,7 +105,7 @@
       [nzTitle]="titleUserTpl" nzIcon="user">
       <ul>
         <li *ngIf="isLoggedIn" nz-menu-item [nzMatchRouter]="true">
-          <a [routerLink]="['page', 'profile']">
+          <a (click)="manuallyCollapse()" [routerLink]="['page', 'profile']">
             <i nz-icon nzType="profile"></i>
             <span>Mon compte</span>
           </a>

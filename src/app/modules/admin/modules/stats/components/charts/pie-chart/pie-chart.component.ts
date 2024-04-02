@@ -8,6 +8,7 @@ import DatalabelsPlugin from 'chartjs-plugin-datalabels';
   styleUrls: ['./pie-chart.component.scss']
 })
 export class PieChartComponent {
+  @Input() unit: string = '';
   @Input() pieChartData: ChartData<'pie', number[], string | string[]> = {
     labels: [],
     datasets: []
@@ -25,9 +26,9 @@ export class PieChartComponent {
         formatter: (value: string, ctx: any) => {
           if (ctx.chart.data.labels) {
             if (window.matchMedia("(max-width: 992px)").matches && +value > 15) {
-              return `${ctx.chart.data.labels[ctx.dataIndex]}\n(${value})`;
+              return `${ctx.chart.data.labels[ctx.dataIndex]}\n(${value}${this.unit})`;
             } else {
-              return value;
+              return `${value}${this.unit}`;
             }
           }
         },

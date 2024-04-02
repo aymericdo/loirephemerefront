@@ -95,5 +95,13 @@
     nz-sider {
       overflow: inherit;
     }
+
+    .overlay {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(6px);
+    }
   }
 }

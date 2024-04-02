@@ -4,10 +4,38 @@
   display: flex;
   justify-content: center;
 
-  .take-away {
+  p.take-away {
     display: flex;
     justify-content: center;
     font-weight: 500;
+  }
+
+  p.-pick-up-time {
+    background: $orange-light;
+    color: white;
+    padding: 0 0.625rem;
+    margin-left: -0.625rem;
+    margin-right: -0.625rem;
+    border-radius: 6px;
+  }
+
+  span.price.-discount,
+  span.pastry-name.-discount,
+  span.count.-discount {
+    text-decoration : line-through;
+  }
+
+  .final-price,
+  .discount-new-count {
+    font-weight: 500;
+  }
+
+  .pastry-type {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    border-radius: 4px;
+    background-color: $grey;
   }
 
   nz-card {

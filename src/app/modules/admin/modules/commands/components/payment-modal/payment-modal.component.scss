@@ -1,2 +1,47 @@
-:host {
+@import 'src/vars.scss';
+
+.payment-modal-content nz-input-number-group.ant-input-number-group.ant-input-number-group-compact {
+  display: flex;
+  justify-content: center;
+}
+
+.payment-modal-content nz-input-number {
+  flex: 1;
+}
+
+.payment-modal-content p .-line-through {
+  text-decoration : line-through;
+}
+
+.payment-modal-content p .new-price {
+  font-weight: 500;
+}
+
+.payment-modal-content .label-pre-btn {
+  min-width: 130px;
+  pointer-events: none;
+  font-weight: 500;
+}
+
+.payment-modal-content .shortcut-btn {
+  width: 50px;
+}
+
+::ng-deep .payment-modal-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+::ng-deep .payment-label {
+  &.-creditCart {
+    color: $blue;
+  }
+
+  &.-cash {
+    color: $green;
+  }
+
+  &.-bankCheque {
+    color: $magenta;
+  }
 }

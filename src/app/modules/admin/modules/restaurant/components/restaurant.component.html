@@ -80,8 +80,10 @@
         <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'qrcode' }" queryParamsHandling="merge">
           QRCode
         </a>
-        <div class="qrcode-section">
-          <qrcode [qrdata]="'https://oresto.app/' + (restaurant$ | async)?.code" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+        <div id="download" class="qrcode-section">
+          <nz-qrcode [nzValue]="'https://oresto.app/' + (restaurant$ | async)?.code" [nzLevel]="'M'" [nzSize]="200"></nz-qrcode>
+          <a #download></a>
+          <button nz-button class="button" nzType="primary" (click)="downloadImg()">Télécharger</button>
           <span class="url"><a [href]="'https://oresto.app/' + (restaurant$ | async)?.code" target="_blank">{{ 'https://oresto.app/' + (restaurant$ | async)?.code }}</a></span>
         </div>
       </nz-tab>

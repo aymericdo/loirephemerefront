@@ -8,6 +8,7 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 
 import { AppState } from 'src/app/store/app.state';
 import {
+  cancellingCommand,
   closingCommand,
   editCommand,
   fetchingRestaurantCommands,
@@ -51,6 +52,22 @@ export class CommandsEffects {
     )
   );
 
+  cancellingCommand$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(cancellingCommand),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService
+          .deletingCommand(restaurant.code, action.command.id!)
+          .pipe(
+            map((command) => editCommand({ command })),
+          );
+      })
+    )
+  );
+
   payingCommand$ = createEffect(() =>
     this.actions$.pipe(
       ofType(payingCommand),
@@ -59,7 +76,7 @@ export class CommandsEffects {
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
-          .payedCommand(restaurant.code, action.command.id!, action.payments)
+          .payedCommand(restaurant.code, action.command.id!, action.payments, action.discount)
           .pipe(
             map((command) => editCommand({ command })),
           );

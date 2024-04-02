@@ -126,7 +126,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
     const badPickupConfig = this.weekDayNumbers.filter((weekDay: number) => {
       if (this.validateForm.value[weekDay].startTime &&
-        restaurant.openingPickupTime && restaurant.openingPickupTime[weekDay].startTime) {
+        restaurant.openingPickupTime && restaurant.openingPickupTime[weekDay]?.startTime) {
         const openingStartTime: Date = this.validateForm.value[weekDay].startTime;
         openingStartTime.setSeconds(0, 0);
 

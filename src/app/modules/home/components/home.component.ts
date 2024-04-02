@@ -10,8 +10,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Observable, ReplaySubject } from 'rxjs';
-import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { Observable, ReplaySubject, timer } from 'rxjs';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { getCwday, getYesterday, hourMinuteToDate } from 'src/app/helpers/date';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
@@ -110,27 +110,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.store.dispatch(fetchRestaurantPastries({ code }));
     });
 
-    this.demoResto$.pipe(
-      filter(Boolean),
-      withLatestFrom(
-        this.route.paramMap.pipe(
-          map((params: ParamMap) => params.get('code')),
-        ),
-      ),
-      takeUntil(this.destroyed$),
-    ).subscribe(([demoResto, code]) => {
-      if (!code) {
-        const saveCode = localStorage.getItem('current_code');
-        this.router.navigate(['/', saveCode || demoResto.code]);
-      }
-    });
-
     this.restaurant$.pipe(
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant) => {
       this.titleService.setTitle(restaurant.name);
       this.setIsRestaurantOpened(restaurant);
+      this.watchIsOpened(restaurant);
     });
 
     this.personalCommand$
@@ -171,19 +157,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     if (count === 0) {
-      const cardToScroll = this.itemElements.find(
-        (item) => item.pastry.id === pastry.id
-      );
+      // const cardToScroll = this.itemElements.find(
+      //   (item) => item.pastry.id === pastry.id
+      // );
 
-      if (cardToScroll) {
-        window.scroll({
-          top:
-            window.pageYOffset +
-            cardToScroll.elem.nativeElement.getBoundingClientRect().top -
-            50,
-          behavior: 'smooth',
-        });
-      }
+      // if (cardToScroll) {
+      //   window.scroll({
+      //     top:
+      //       window.pageYOffset +
+      //       cardToScroll.elem.nativeElement.getBoundingClientRect().top -
+      //       10,
+      //     behavior: 'smooth',
+      //   });
+      // }
     }
     this.store.dispatch(incrementPastry({ pastry }));
   }
@@ -233,6 +219,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
+  }
+
+  private watchIsOpened(restaurant: Restaurant): void {
+    const source = timer(1000, 1000);
+    source.pipe(takeUntil(this.destroyed$))
+      .subscribe((_i) => {
+        this.setIsRestaurantOpened(restaurant);
+      });
   }
 
   private setIsRestaurantOpened(restaurant: Restaurant): void {

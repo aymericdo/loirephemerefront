@@ -1,20 +1,54 @@
 <nz-ribbon [class.-is-loading]="isLoading" nzText="€" [nzColor]="isPayed ? 'green' : 'red'">
   <nz-card style="width: 300px" [class.-is-new]="isNew" [class.-is-just-updated]="isJustUpdated"
-    [nzActions]="isPayed ? [actionWizz] : [actionWizz, actionDone]" [nzTitle]="'Commande #' + command.reference">
+    [nzActions]="noAction ? [] : isDone && isPayed ? [actionWizz] : isDone ? [actionWizz, actionPayed] : isPayed ? [actionWizz, actionDone] : [actionWizz, actionPayed, actionDone, actionClose]"
+    [nzTitle]="'Commande #' + command.reference">
     <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
-      <p class="take-away">{{ command.takeAway ? 'À emporter' : 'Sur place' }}</p>
+      <p class="take-away">{{ command.takeAway ? 'À emporter 🚚' : 'Sur place ⛱️' }}</p>
       <nz-divider></nz-divider>
       <p>Nom : {{ command.name }}</p>
-      <p>Récupération : {{ command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
-      <p>Pâtisseries :</p>
-      <ul>
-        <li *ngFor="let pastryObj of pastries">
-          {{ pastryObj[0].name + " (x" + pastryObj[1] + ")" }}
-        </li>
-      </ul>
-      <p>Prix total : {{ command.totalPrice }}€</p>
+      <p [class.-pick-up-time]="command.pickUpTime">Récupération : {{ !!command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
+      <p>Commande :</p>
+      <ng-container *ngFor="let pastryType of pastries">
+        <span class="pastry-type">{{ PASTRY_TYPE_LABEL[pastryType[0]].label }}</span>
+        <ul>
+          <li *ngFor="let pastry of pastryType[1]">
+            <span class="pastry-name">{{ pastry[0].name + ' ' }}</span>
+            <span class="count">{{"(x" + pastry[1] + ")" }}</span>
+          </li>
+        </ul>
+      </ng-container>
+      <p><span class="price" [class.-discount]="!!command.discount">Prix total : {{ command.totalPrice }}€</span><span *ngIf="!!command.discount?.percentage">{{ ' (-' + command.discount?.percentage + '%)'}}</span></p>
+      <ng-container *ngIf="!!command.discount">
+        <p><b>Ristourne :</b></p>
+        <ng-container *ngFor="let pastryType of pastries">
+          <ng-container *ngIf="pastryTypeHasDiscount(pastryType[0])">
+            <span class="pastry-type">{{ PASTRY_TYPE_LABEL[pastryType[0]].label }}</span>
+            <ul>
+              <ng-container *ngFor="let pastry of pastryType[1]">
+                <ng-container *ngIf="pastry[1] !== pastry[2]">
+                  <li>
+                    <span class="pastry-name" [class.-discount]="pastry[1] !== pastry[2] && pastry[2] === 0">{{ pastry[0].name + ' ' }}</span>
+                    <span class="count" [class.-discount]="pastry[1] !== pastry[2]">{{"(x" + pastry[1] + ")" }}</span>
+                    <span class="discount-new-count" *ngIf="pastry[1] !== pastry[2]">{{" (x" + pastry[2] + ")" }}</span>
+                  </li>
+                </ng-container>
+              </ng-container>
+            </ul>
+          </ng-container>
+        </ng-container>
+        <p class="final-price">Prix définitif : {{ command.discount.newPrice }}€</p>
+      </ng-container>
       <p>Créée le : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
       <p>Modifiée le : {{ command.updatedAt | date: "dd/MM/YYYY HH:mm" }}</p>
+      <ng-container *ngIf="command.payment?.length">
+        <p>Paiements :</p>
+        <ul>
+          <li *ngFor="let payment of command.payment">
+            <span [ngStyle]="{ color: PAYMENT_METHOD_LABEL[payment.key].color, 'font-weight': 500 }">{{ PAYMENT_METHOD_LABEL[payment.key].label }}</span>
+            {{ " (" + payment.value + "€)" }}
+          </li>
+        </ul>
+      </ng-container>
     </nz-skeleton>
   </nz-card>
 </nz-ribbon>
@@ -22,13 +56,20 @@
   <i nz-icon nzType="bell" (click)="!isLoading && wizzClient()"></i>
 </ng-template>
 <ng-template #actionDone>
-  <ng-container *ngIf="!isDone">
+  <ng-container>
     <i nz-icon nzType="check" (click)="!isLoading && showValidationPopup('toDone')"></i>
   </ng-container>
-  <ng-container *ngIf="isDone">
+</ng-template>
+<ng-template #actionPayed>
+  <ng-container>
     <i nz-icon nzType="euro-circle" (click)="!isLoading && showValidationPopup('toPayed')"></i>
   </ng-container>
 </ng-template>
+<ng-template #actionClose>
+  <ng-container>
+    <i nz-icon nzType="close-circle" [nzTheme]="'twotone'" [nzTwotoneColor]="redColor" (click)="!isLoading && showValidationPopup('toCancelled')"></i>
+  </ng-container>
+</ng-template>
 
-<app-payment-modal *ngIf="isPaymentModalVisible" (clickCancel)="isPaymentModalVisible = false;" (clickOk)="isPaymentModalVisible = false; clickPayed.emit($event);"
+<app-payment-modal *ngIf="isPaymentModalVisible" (clickCancel)="isPaymentModalVisible = false;" (clickOk)="payingCommand($event);"
   [command]="command"></app-payment-modal>

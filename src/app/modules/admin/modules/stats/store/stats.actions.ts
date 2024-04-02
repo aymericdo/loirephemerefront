@@ -18,6 +18,13 @@ export const setCommands = createAction(
   '[Stats page] Set commands',
   props<{ commands: Command[] }>()
 );
+export const setTimeInterval = createAction(
+  '[Stats page] Set Time Interval',
+  props<{ timeInterval: 'day' | 'month' }>()
+);
+export const resetTimeInterval = createAction(
+  '[Stats page] Reset Time Interval',
+);
 export const stopLoading = createAction(
   '[Stats page] Stop stats loading',
 );

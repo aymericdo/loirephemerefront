@@ -8,11 +8,12 @@ import {
 import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { formatYYYYMMDD } from 'src/app/helpers/date';
-import { Command } from 'src/app/interfaces/command.interface';
+import { Command, PAYMENT_METHOD_LABEL, PAYMENT_TYPES, PaymentPossibility, PaymentType } from 'src/app/interfaces/command.interface';
 import { Historical, Pastry, PastryType } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
-import { selectAllPastries, selectIsLoading, selectPayedCommands } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
+import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, resetTimeInterval, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
+import { statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
+import { selectAllPastries, selectIsLoading, selectPayedCommands, selectTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
@@ -25,8 +26,10 @@ export class StatsComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   pastries$: Observable<Pastry[]>;
   restaurant$: Observable<Restaurant | null>;
+  timeInterval$: Observable<'day' | 'month'>;
 
   totallyEmpty: boolean = false;
+  isTimeIntervalChangeable: boolean = false;
 
   pastryTotal: number = 0;
   drinkTotal: number = 0;
@@ -50,6 +53,16 @@ export class StatsComponent implements OnInit, OnDestroy {
     }
   };
 
+  countByPaymentPieChartData: ChartData<'pie', number[], string | string[]> = {
+    labels: [],
+    datasets: []
+  };
+
+  valueByPaymentPieChartData: ChartData<'pie', number[], string | string[]> = {
+    labels: [],
+    datasets: []
+  };
+
   pastriesByTypeByDateBarChartData: { [key in PastryType]: ChartData<'bar'> } = {
     pastry: {
       labels: [],
@@ -70,6 +83,11 @@ export class StatsComponent implements OnInit, OnDestroy {
   };
 
   globalBarChartData: ChartData<'bar' | 'line'> = {
+    labels: [],
+    datasets: []
+  };
+
+  paymentGlobalBarChartData: ChartData<'bar' | 'line'> = {
     labels: [],
     datasets: []
   };
@@ -106,6 +124,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.isLoading$ = this.store.select(selectIsLoading);
     this.pastries$ = this.store.select(selectAllPastries);
     this.restaurant$ = this.store.select(selectRestaurant);
+    this.timeInterval$ = this.store.select(selectTimeInterval);
   }
 
   ngOnInit(): void {
@@ -175,15 +194,27 @@ export class StatsComponent implements OnInit, OnDestroy {
         this.onDateRangeChange();
       });
 
-    combineLatest([this.payedCommands$, this.pastries$, this.isLoading$])
+    combineLatest([this.payedCommands$, this.pastries$, this.timeInterval$, this.isLoading$])
       .pipe(
-        filter(([_commands, _pastries, isLoading]) => !isLoading),
+        filter(([_commands, _pastries, _timeInterval, isLoading]) => !isLoading),
         takeUntil(this.destroyed$)
       )
-      .subscribe(([commands, pastries]) => {
+      .subscribe(([commands, pastries, timeInterval]) => {
         this.totallyEmpty = commands.length === 0;
         this.commandsCount = commands.length;
         this.totalCash = 0;
+
+        let countByPayment: { [key in PaymentType]: number } = {
+          cash: 0,
+          creditCart: 0,
+          bankCheque: 0,
+        }
+
+        let valueByPayment: { [key in PaymentType]: number } = {
+          cash: 0,
+          creditCart: 0,
+          bankCheque: 0,
+        }
 
         let countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } } = {
           pastry: {},
@@ -202,28 +233,50 @@ export class StatsComponent implements OnInit, OnDestroy {
         };
 
         let cashByDate: {
-          [date: string]: { [pastryName: string]: number };
+          [date: string]: number
         } = {};
 
-        const timeInterval = this.daysBetweenTwoDates(this.dateRange![0], this.dateRange![1]) > 60 &&
-          commands.length > 100 ? 'month' : 'day';
+        let cashByDateByPayment: {
+          [date: string]: { [payment: string]: number };
+        } = {};
+
+        const firstCommandDate = commands[0].createdAt;
+        const lastCommandDate = commands[commands.length - 1].createdAt;
+        this.isTimeIntervalChangeable = this.daysBetweenTwoDates(
+          new Date(firstCommandDate as string),
+          new Date(lastCommandDate as string)) > 60 &&
+          commands.length > 100;
+
+        if (!this.isTimeIntervalChangeable && timeInterval !== statsInitialState.timeInterval) {
+          this.store.dispatch(resetTimeInterval())
+        }
 
         commands.forEach((command: Command) => {
           const day = this.getFormattedDate(new Date(command.createdAt as string), timeInterval);
+
+          this.setCountByPayment(countByPayment, command);
+          this.setValueByPayment(valueByPayment, command);
+          this.setCashByDate(cashByDate, command, day);
+
+          if (command.payment?.length) {
+            command.payment.forEach((payment) => {
+              this.setCashByDateByPayment(cashByDateByPayment, day, payment);
+            });
+          }
 
           command.pastries.forEach((pastry: Pastry) => {
             const realPastry = this.checkHistoricalPastry(pastry, command);
             this.setPastriesByTypeByDate(pastriesByTypeByDate, realPastry, day);
             this.setCountByTypeByPastry(countByTypeByPastry, realPastry);
-            this.setCashByDate(cashByDate, realPastry, day);
-
-            this.totalCash += +realPastry.price;
           });
+
+          this.totalCash += command.discount ? command.discount.newPrice : command.totalPrice;
         });
 
         if (pastries.length && Object.keys(pastriesByTypeByDate).length) {
-          this.buildPieChartDate(countByTypeByPastry);
+          this.buildPieChartData(countByTypeByPastry, countByPayment, valueByPayment);
           this.buildBarChartData(pastriesByTypeByDate, countByTypeByPastry, pastries, timeInterval);
+          this.buildPaymentGlobalBarChartData(cashByDateByPayment, timeInterval);
           this.buildGlobalBarChartData(pastriesByTypeByDate, cashByDate, timeInterval);
           this.setTotalByType(countByTypeByPastry);
         }
@@ -280,7 +333,8 @@ export class StatsComponent implements OnInit, OnDestroy {
       }, {} as { [attribute: string]: (string | number) });
 
       let historicalDateIndex = 0;
-      while (new Date(pastry.historical[historicalDateIndex].date) <= new Date(commandDate)) {
+      while (historicalDateIndex < pastry.historical.length - 1
+        && new Date(pastry.historical[historicalDateIndex].date) <= new Date(commandDate)) {
         const currentHistorical: Historical = pastry.historical[historicalDateIndex];
         this.statsAttributes.forEach((attr: string) => {
           if (currentHistorical.hasOwnProperty(attr)) {
@@ -298,6 +352,28 @@ export class StatsComponent implements OnInit, OnDestroy {
     } else {
       return pastry;
     }
+  }
+
+  private setCountByPayment(
+    countByPayment: { [key in PaymentType]: number },
+    command: Command
+  ): void {
+    if (!command.payment?.length) return;
+
+    command.payment.forEach((payment) => {
+      countByPayment[payment.key] += 1;
+    })
+  }
+
+  private setValueByPayment(
+    valueByPayment: { [key in PaymentType]: number },
+    command: Command
+  ): void {
+    if (!command.payment?.length) return;
+
+    command.payment.forEach((payment) => {
+      valueByPayment[payment.key] += payment.value;
+    })
   }
 
   private setPastriesByTypeByDate(
@@ -342,19 +418,32 @@ export class StatsComponent implements OnInit, OnDestroy {
   }
 
   private setCashByDate(
-    cashByDate: { [date: string]: { [pastryName: string]: number } },
-    pastry: Pastry,
+    cashByDate: { [date: string]: number },
+    command: Command,
     day: string,
   ): void {
+    const price = command.discount ? command.discount.newPrice : command.totalPrice;
     if (cashByDate.hasOwnProperty(day)) {
-      if (cashByDate[day].hasOwnProperty(pastry.name)) {
-        cashByDate[day][pastry.name] += +pastry.price;
+      cashByDate[day] += price;
+    } else {
+      cashByDate[day] = price;
+    }
+  }
+
+  private setCashByDateByPayment(
+    cashByDateByPayment: { [date: string]: { [payment: string]: number } },
+    day: string,
+    payment: PaymentPossibility,
+  ): void {
+    if (cashByDateByPayment.hasOwnProperty(day)) {
+      if (cashByDateByPayment[day].hasOwnProperty(payment.key)) {
+        cashByDateByPayment[day][payment.key] += +payment.value;
       } else {
-        cashByDate[day][pastry.name] = +pastry.price;
+        cashByDateByPayment[day][payment.key] = +payment.value;
       }
     } else {
-      cashByDate[day] = {};
-      cashByDate[day][pastry.name] = +pastry.price;
+      cashByDateByPayment[day] = {};
+      cashByDateByPayment[day][payment.key] = +payment.value;
     }
   }
 
@@ -385,7 +474,7 @@ export class StatsComponent implements OnInit, OnDestroy {
 
   private buildGlobalBarChartData(
     pastriesByTypeByDate: { [key in PastryType]: { [date: string]: { [pastryName: string]: number } } },
-    cashByDate: { [date: string]: { [pastryName: string]: number } },
+    cashByDate: { [date: string]: number },
     timeInterval: 'day' | 'month',
   ): void {
     this.globalBarChartData = {
@@ -411,16 +500,14 @@ export class StatsComponent implements OnInit, OnDestroy {
         label: 'Argent',
         data: Object.keys(cashByDate)
           .reverse()
-          .map((date) => {
-            return Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
-          }),
+          .map((date) => cashByDate[date]),
       }, {
         type: 'line',
         label: 'Argent cumulé',
         data: Object.keys(cashByDate)
           .reverse()
           .reduce((prev: number[], date) => {
-            const dayTotal: number = Object.values(cashByDate[date]).reduce((prev, value) => prev + value, 0);
+            const dayTotal: number = cashByDate[date]
             const last: number = prev.length ? +prev[prev.length - 1] : 0;
             prev.push(last + dayTotal);
 
@@ -430,8 +517,37 @@ export class StatsComponent implements OnInit, OnDestroy {
     };
   }
 
-  private buildPieChartDate(
+  private buildPaymentGlobalBarChartData(
+    cashByDateByPayment: { [date: string]: { [payment: string]: number } },
+    timeInterval: 'day' | 'month',
+  ): void {
+    this.paymentGlobalBarChartData = {
+      labels: Object.keys(cashByDateByPayment)
+        .reverse()
+        .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'MMM YYYY', DATE_PIPE_DEFAULT_OPTIONS.toString(), 'fr')),
+      datasets: PAYMENT_TYPES.map((key) => {
+        return {
+          type: 'line',
+          label: PAYMENT_METHOD_LABEL[key].label,
+          backgroundColor: 'white',
+          borderColor: PAYMENT_METHOD_LABEL[key].color,
+          pointBackgroundColor: PAYMENT_METHOD_LABEL[key].color,
+          pointBorderColor: 'white',
+          data: Object.keys(cashByDateByPayment)
+            .reverse()
+            .map((date) => {
+              if (!cashByDateByPayment[date].hasOwnProperty(key)) return;
+              return cashByDateByPayment[date][key] as number;
+            }) as number[],
+        }
+      }),
+    };
+  }
+
+  private buildPieChartData(
     countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } },
+    countByPayment: { [key in PaymentType]: number },
+    valueByPayment: { [key in PaymentType]: number },
   ): void {
     (Object.keys(countByTypeByPastry) as PastryType[]).forEach((type: PastryType) => {
       if (Object.keys(countByTypeByPastry[type]).length) {
@@ -448,6 +564,27 @@ export class StatsComponent implements OnInit, OnDestroy {
         };
       }
     });
+
+    const validKeys = (Object.keys(valueByPayment) as PaymentType[])
+      .filter((key: PaymentType) => valueByPayment[key] > 0)
+
+    if (validKeys.length) {
+      this.countByPaymentPieChartData = {
+        labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
+        datasets: [{
+          data: validKeys.map((key: PaymentType) => countByPayment[key]),
+          backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
+        }],
+      };
+
+      this.valueByPaymentPieChartData = {
+        labels: validKeys.map((key: PaymentType) => PAYMENT_METHOD_LABEL[key].label),
+        datasets: [{
+          data: validKeys.map((key: PaymentType) => valueByPayment[key]),
+          backgroundColor: validKeys.map((key) => PAYMENT_METHOD_LABEL[key].color),
+        }],
+      };
+    }
   }
 
   private setTotalByType(

@@ -1,4 +1,11 @@
 :host {
-  display: block;
+  position: relative;
+  display: flex;
   flex: 1;
+
+  .switch {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
