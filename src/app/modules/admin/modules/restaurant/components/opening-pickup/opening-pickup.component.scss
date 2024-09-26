@@ -31,8 +31,14 @@
   .opening-hint {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     font-weight: 400;
-    font-style: italic;
     max-width: 500px;
+    margin-top: 0.625rem;
+    line-height: 1.25;
+
+    & > .info-icon {
+      margin-right: 0.625rem;
+    }
   }
 }

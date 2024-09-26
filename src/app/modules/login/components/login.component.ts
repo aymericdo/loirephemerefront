@@ -34,7 +34,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     ).subscribe(([user, demoResto, restaurants]) => {
       if (user && restaurants) {
         const restoList = restaurants.filter((resto: Restaurant) => resto.code !== demoResto.code);
-        this.router.navigate([restoList[0].code, 'admin']);
+
+        if (restoList.length) {
+          this.router.navigate([restoList[0].code, 'admin']);
+        }
       } else {
         this.router.navigate(['page', 'restaurant', 'new']);
       }

@@ -27,7 +27,7 @@
   </nz-skeleton>
 </nz-card>
 <ng-template #coverTemplate>
-  <img class="card-image" *ngIf="!isLoading && imageUrl" [alt]="'example-' + pastry.name" [src]="imageUrl"
+  <img class="card-image" *ngIf="!isLoading && imageUrl" [alt]="pastry.name" [src]="imageUrl"
     (error)="onImgError($event)" />
   <div *ngIf="isAdmin && !isLoading && imageUrl" class="card-actions-btn">
     <div class="block-btn">

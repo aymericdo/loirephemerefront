@@ -73,11 +73,10 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
 
         if (restaurant.openingPickupTime) {
           const weekdayOpeningPickupTime = restaurant.openingPickupTime![weekDay];
-          const weekdayOpeningTime = this.restaurant.openingTime![weekDay];
 
           if (!this.isDayClosed(weekDay)) {
-            if (weekdayOpeningPickupTime?.startTime || weekdayOpeningTime.startTime) {
-              const openingHoursMinutes = weekdayOpeningPickupTime?.startTime?.split(':') || weekdayOpeningTime.startTime.split(':');
+            if (weekdayOpeningPickupTime?.startTime) {
+              const openingHoursMinutes = weekdayOpeningPickupTime?.startTime?.split(':');
               startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
             }
           }
@@ -175,9 +174,9 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
         this.weekDayNumbers
           .filter((wd) => wd !== weekDayNumber &&
             !this.disabledHours(wd)
-              .includes(this.validateForm.controls[weekDayNumber].value.startTime.getHours()) &&
-            !this.disabledMinutes(wd, this.validateForm.controls[weekDayNumber].value.startTime.getHours())
-              .includes(this.validateForm.controls[weekDayNumber].value.startTime.getMinutes())
+              .includes(this.validateForm.controls[weekDayNumber].value.startTime?.getHours()) &&
+            !this.disabledMinutes(wd, this.validateForm.controls[weekDayNumber].value.startTime?.getHours())
+              .includes(this.validateForm.controls[weekDayNumber].value.startTime?.getMinutes())
           )
           .forEach((wd) => {
           this.validateForm.controls[wd].setValue(this.validateForm.controls[weekDayNumber].value);
@@ -208,11 +207,14 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
 
     const startTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].startTime, 'HH:mm') as string;
     const endTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].endTime, 'HH:mm') as string;
+
     return (!startTime && !endTime) ?
       `Commande impossible en dehors des horaires d'ouverture le ${this.weekDays[weekDayNumber]}` :
       (startTime && endTime) ?
         `Le ${this.weekDays[weekDayNumber]}, le restaurant accepte que les commandes soient passées entre ${startTime} et ${endTime}.`
-        : '';
+        : (startTime) ?
+          `Le ${this.weekDays[weekDayNumber]}, le restaurant accepte que les commandes soient passées à partir de ${startTime}.`
+          : '';
   }
 
   private getFirstDayOfTheWeek(d: Date): Date {
