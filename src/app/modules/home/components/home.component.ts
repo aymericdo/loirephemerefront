@@ -230,18 +230,26 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private setIsRestaurantOpened(restaurant: Restaurant): void {
-    const today = new Date();
+    const now = new Date();
     const yesterday = getYesterday();
     const cwday = getCwday();
 
-    if (restaurant.openingTime && restaurant.openingTime[cwday] && restaurant.openingTime[cwday].startTime) {
+    if (
+      restaurant.openingTime &&
+      restaurant.openingTime[cwday] &&
+      restaurant.openingTime[cwday].startTime
+    ) {
       const openingHoursMinutes = restaurant.openingTime[cwday].startTime.split(':');
       const closingHoursMinutes = restaurant.openingTime[cwday].endTime.split(':');
 
       const startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
       const endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
 
-      this.isRestaurantOpened = startTime < today && today < endTime;
+      if (startTime >= endTime) {
+        endTime.setDate(endTime.getDate() + 1);
+      }
+
+      this.isRestaurantOpened = startTime < now && now < endTime;
 
       let startOpeningPickupTime = startTime;
       if (
@@ -256,8 +264,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       this.pickUpTimeAvailable = !!(
-        today < endTime &&
-        today >= startOpeningPickupTime
+        now < endTime &&
+        now >= startOpeningPickupTime
       );
     } else {
       this.isRestaurantOpened = false;
@@ -267,7 +275,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (!this.isRestaurantOpened
       && restaurant.openingTime
       && restaurant.openingTime[yesterday]
-      && restaurant.openingTime[yesterday].startTime) {
+      && restaurant.openingTime[yesterday].startTime
+    ) {
       const openingHoursMinutes = restaurant.openingTime[yesterday].startTime.split(':');
       const closingHoursMinutes = restaurant.openingTime[yesterday].endTime.split(':');
 
@@ -279,7 +288,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       if (startTime >= endTime) {
         endTime.setDate(endTime.getDate() + 1);
-        this.isRestaurantOpened = startTime < today && today < endTime;
+        this.isRestaurantOpened = startTime < now && now < endTime;
       }
     }
   }
