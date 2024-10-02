@@ -189,10 +189,17 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
   }
 
   generateHint(weekDayNumber: number): string {
+    let isOnTwoDays = false;
+    if (this.validateForm.value[weekDayNumber].startTime > this.validateForm.value[weekDayNumber].endTime) {
+      isOnTwoDays = true;
+    }
+
     const startTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].startTime, 'HH:mm') as string;
     const endTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].endTime, 'HH:mm') as string;
     return (!startTime && !endTime) ?
       `Fermé le ${this.weekDays[weekDayNumber]}` :
+      isOnTwoDays ?
+      `Le restaurant est ouvert entre le ${this.weekDays[weekDayNumber]} ${startTime} et le ${this.weekDays[weekDayNumber + 1 % this.weekDays.length]} ${endTime}` :
       '';
   }
 

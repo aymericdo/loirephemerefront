@@ -21,7 +21,7 @@
         </button>
       </nz-space>
     </nz-form-control>
-    <div *ngIf="(isLoading$ | async) === false" class="opening-hint">
+    <div *ngIf="(isLoading$ | async) === false && generateHint(weekDayNumber)?.length" class="opening-hint">
       <span class="info-icon" nz-icon nzType="info-circle"></span>
       <span>{{ generateHint(weekDayNumber) }}</span>
     </div>
