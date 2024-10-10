@@ -1,15 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { getCwday, hourMinuteToDate } from 'src/app/helpers/date';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Restaurant } from 'src/app/classes/restaurant';
+import { ReplaySubject, takeUntil, timer } from 'rxjs';
+import { addMinutes, getNumberListBetweenTwoNumbers } from 'src/app/helpers/date';
 import { CoreCommand } from 'src/app/interfaces/command.interface';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
   selector: 'app-order-name-modal',
   templateUrl: './order-name-modal.component.html',
   styleUrls: ['./order-name-modal.component.scss'],
 })
-export class OrderNameModalComponent implements OnInit {
-  @Input() restaurant!: Restaurant;
+export class OrderNameModalComponent implements OnInit, OnDestroy {
+  @Input() restaurant!: RestaurantInterface;
   @Output() clickOk = new EventEmitter<CoreCommand>();
   @Output() clickCancel = new EventEmitter<string>();
 
@@ -20,108 +22,54 @@ export class OrderNameModalComponent implements OnInit {
   pickUpTimeMandatory = false;
   pickUpTimeValue: Date | null = null;
 
+  selectableHours: number[] = [];
+  selectableMinutesByHour: { [hour: string]: number[] } = {};
+
+  MINUTE_STEP = 10;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor() { }
 
   ngOnInit(): void {
+    const restaurant = new Restaurant(this.restaurant);
+    this.pickUpTimeMandatory = !restaurant.isOpen();
+    this.needPickUpTimeValue = this.pickUpTimeMandatory;
+    this.pickUpTimeAvailable = restaurant.isPickupOpen();
+
     const today = new Date();
-    const cwday = getCwday();
 
-    if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
-      this.restaurant.openingTime[cwday].startTime) {
-      const openingHoursMinutes = this.restaurant.openingTime[cwday].startTime.split(':');
-      const startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
+    this.pickUpTimeValue = today;
 
-      const closingHoursMinutes = this.restaurant.openingTime[cwday].endTime.split(':');
-      const endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
-
-      if (startTime >= endTime) {
-        endTime.setDate(endTime.getDate() + 1);
-      }
-
-      let startOpeningPickupTime = startTime;
-      if (this.restaurant.openingPickupTime && this.restaurant.openingPickupTime[cwday] &&
-        this.restaurant.openingPickupTime[cwday].startTime) {
-        const openingPickupHoursMinutes = this.restaurant.openingPickupTime[cwday].startTime.split(':');
-        const startTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1]);
-
-        startOpeningPickupTime = startTime;
-      }
-
-      this.pickUpTimeAvailable =
-        today < endTime &&
-        today >= startOpeningPickupTime;
-
-      if (this.pickUpTimeAvailable) {
-        if (today < startTime) {
-          this.pickUpTimeMandatory = true;
-          this.needPickUpTimeValue = true;
-          this.pickUpTimeValue = startTime;
-        } else {
-          this.pickUpTimeValue = today;
-        }
-      }
+    if (this.pickUpTimeMandatory) {
+      const { start: startTime } = restaurant.getTodayOpeningTimes();
+      this.pickUpTimeValue = startTime;
     }
+
+    this.watchIsOpened();
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   disabledHours(): number[] {
-    const today = new Date();
-    const cwday = getCwday();
+    const allHours = getNumberListBetweenTwoNumbers(0, 23);
 
-    if (this.restaurant.openingTime && this.restaurant.openingTime[cwday]
-      && this.restaurant.openingTime[cwday].startTime) {
-      const openingHour: number = +this.restaurant.openingTime[cwday].startTime.split(':')[0];
-      const closingTime = [...Array(openingHour > 0 ? openingHour - 1 : 0).keys()];
-      const pastHours = [...Array(today.getHours()).keys()];
-      const closingHour: number = +this.restaurant.openingTime[cwday].endTime.split(':')[0];
-
-      const lastClosingHour = [];
-      if (closingHour !== 0) {
-        for (let i = closingHour + 1; i < 24; ++i) {
-          lastClosingHour.push(i);
-        }
-      }
-
-      return [...new Set(closingTime.concat(pastHours).concat(lastClosingHour))];
-    } else {
-      return [];
-    }
+    const disableHours = allHours.filter(x => !this.selectableHours.includes(x));
+    return disableHours;
   };
 
   disabledMinutes(hour: number): number[] {
-    const today = new Date();
-    const cwday = getCwday();
+    const selectableMinutes: number[] = hour && this.selectableMinutesByHour.hasOwnProperty(hour) ?
+    this.selectableMinutesByHour[hour] :
+      Object.values(this.selectableMinutesByHour).flat();
 
-    let disabledMinutes: number[] = [];
+    const allMinutes: number[] = getNumberListBetweenTwoNumbers(0, 59);
+    const disableMinutes = allMinutes.filter(x => !selectableMinutes.includes(x));
 
-    const minutesInThePast = today.getHours() === hour ? [...Array(today.getMinutes()).keys()] : [];
-    disabledMinutes = disabledMinutes.concat(minutesInThePast);
-
-    if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
-      this.restaurant.openingTime[cwday].startTime &&
-      hour === +this.restaurant.openingTime[cwday].startTime.split(':')[0]) {
-        const openingMinute: number = +this.restaurant.openingTime[cwday].startTime.split(':')[1];
-        const closedMinutes = [...Array(openingMinute).keys()];
-
-        disabledMinutes = disabledMinutes.concat(closedMinutes);
-    }
-
-    if (this.restaurant.openingTime && this.restaurant.openingTime[cwday] &&
-      this.restaurant.openingTime[cwday].endTime &&
-      hour === +this.restaurant.openingTime[cwday].endTime.split(':')[0]) {
-        let closingMinute = 1;
-        if (+this.restaurant.openingTime[cwday].endTime.split(':')[1] !== 0) {
-          closingMinute = +this.restaurant.openingTime[cwday].endTime.split(':')[1];
-        }
-
-        let closedMinutes = [];
-        for (let i = closingMinute; i < 60; ++i) {
-          closedMinutes.push(i);
-        }
-
-        disabledMinutes = disabledMinutes.concat(closedMinutes);
-    }
-
-    return disabledMinutes;
+    return disableMinutes;
   };
 
   handleOnOk(): void {
@@ -130,5 +78,104 @@ export class OrderNameModalComponent implements OnInit {
       takeAway: this.takeAwayValue,
       pickUpTime: this.needPickUpTimeValue ? this.pickUpTimeValue : null
     });
+  }
+
+  handlePickUpTimeAvailable(value: boolean): void {
+    if (value) {
+      this.handleTimePickerOpen(value);
+    } else {
+      this.pickUpTimeValue = new Date();
+    }
+  }
+
+  handleTimePickerOpen(value: boolean): void {
+    if (value) {
+      const { selectableHours, selectableMinutesByHour } = this.getSelectableHoursMinutes();
+      this.selectableHours = [...selectableHours];
+      this.selectableMinutesByHour = { ...selectableMinutesByHour };
+
+      this.updatePickUpTime();
+    }
+  }
+
+  private watchIsOpened(): void {
+    const source = timer(1000, 1000);
+    source.pipe(
+      takeUntil(this.destroyed$))
+      .subscribe((_i) => {
+        const restaurant = new Restaurant(this.restaurant);
+        this.pickUpTimeMandatory = !restaurant.isOpen();
+        if (this.pickUpTimeMandatory) {
+          this.needPickUpTimeValue = true;
+        }
+        this.pickUpTimeAvailable = restaurant.isPickupOpen();
+
+        if (!this.needPickUpTimeValue) {
+          this.updatePickUpTime();
+        }
+      });
+  }
+
+  private updatePickUpTime(): void {
+    const today = new Date();
+    let newPickUpTimeValue = today;
+
+    if (this.pickUpTimeMandatory) {
+      const restaurant = new Restaurant(this.restaurant);
+      const { start: startTime } = restaurant.getTodayOpeningTimes();
+      newPickUpTimeValue = startTime!;
+    }
+
+    if (!this.pickUpTimeValue || this.pickUpTimeValue < today) {
+      this.pickUpTimeValue = newPickUpTimeValue;
+    }
+  }
+
+  private getSelectableHoursMinutes(): {
+    selectableHours: number[], selectableMinutesByHour: { [hour: string]: number[] },
+  } {
+    const restaurant = new Restaurant(this.restaurant);
+    if (restaurant.alwaysOpen) {
+      return {
+        selectableHours: getNumberListBetweenTwoNumbers(0, 23),
+        selectableMinutesByHour: getNumberListBetweenTwoNumbers(0, 23).reduce((prev, hour) => {
+          prev[hour] = getNumberListBetweenTwoNumbers(0, 59);
+          return prev;
+        }, {} as { [hour: string]: number[] }),
+      };
+    }
+
+    const today = new Date();
+    let selectableHours: number[] = [];
+    let selectableMinutesByHour: { [hour: string]: number[] } = {};
+
+    let cursor = addMinutes(today, 10);
+    cursor.setSeconds(0);
+
+    const endRange: Date = restaurant.getTodayClosingTime();
+
+      while(cursor < endRange) {
+      if (restaurant.isOpen(cursor) && cursor.getMinutes() <= 50) {
+        const cursorHour = cursor.getHours();
+        if (!selectableHours.includes(cursorHour)) {
+          selectableHours.push(cursorHour);
+        }
+
+        if (selectableMinutesByHour.hasOwnProperty(cursorHour)) {
+          if (!selectableMinutesByHour[cursorHour].includes(cursor.getMinutes())) {
+            selectableMinutesByHour[cursorHour].push(cursor.getMinutes());
+          }
+        } else {
+          selectableMinutesByHour[cursorHour] = [cursor.getMinutes()];
+        }
+      }
+
+      cursor = addMinutes(cursor, 1);
+    }
+
+    return {
+      selectableHours,
+      selectableMinutesByHour,
+    };
   }
 }

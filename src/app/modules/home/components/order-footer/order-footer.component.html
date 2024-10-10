@@ -2,7 +2,7 @@
   <button nz-button nzType="default" nzSize="default" nzShape="round" (click)="showResetConfirm()">
     <i nz-icon nzType="stop"></i>Annuler
   </button>
-  <button nz-button [disabled]="stockIssue" nzType="primary" nzSize="default" nzShape="round"
+  <button nz-button [disabled]="disabled" nzType="primary" nzSize="default" nzShape="round"
     (click)="clickConfirm.emit()">
     <i nz-icon nzType="check"></i>Commander
   </button>

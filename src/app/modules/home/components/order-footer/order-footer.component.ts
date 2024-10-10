@@ -7,7 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   styleUrls: ['./order-footer.component.scss'],
 })
 export class OrderFooterComponent {
-  @Input() stockIssue: boolean = false;
+  @Input() disabled: boolean = false;
   @Output() clickReset = new EventEmitter<string>();
   @Output() clickConfirm = new EventEmitter<string>();
 

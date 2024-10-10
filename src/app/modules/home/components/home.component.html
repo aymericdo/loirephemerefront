@@ -1,10 +1,13 @@
 <nz-alert *ngIf="(demoResto$ | async)?.id && (demoResto$ | async)?.id === (restaurant$ | async)?.id"
   nzBanner nzType="info" nzMessage="Restaurant de test : amusez-vous !"></nz-alert>
 <div class="home-section" [class.-has-order-footer]="hasSelectedPastries$ | async">
-  <nz-page-header>
+  <nz-page-header *ngIf="(restaurant$ | async) !== null">
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
-    <nz-page-header-tags *ngIf="(restaurant$ | async) !== null && !isRestaurantOpened">
+    <nz-page-header-tags *ngIf="!isRestaurantOpened">
       Fermé pour le moment ⛔
+      <span *ngIf="pickUpTimeAvailable">
+        - Pré-commande disponible ✅
+      </span>
     </nz-page-header-tags>
   </nz-page-header>
   <div class="container-section">
@@ -34,7 +37,7 @@
   (clickCancel)="isSuccessModalVisible = false"></app-order-error-modal>
 
 <app-order-footer *ngIf="hasSelectedPastries$ | async" (clickReset)="handleClickReset()"
-  (clickConfirm)="isOrderModalVisible = true" [stockIssue]="(isStockIssue$ | async)!"></app-order-footer>
+  (clickConfirm)="isOrderModalVisible = true" [disabled]="(isStockIssue$ | async)! || !pickUpTimeAvailable"></app-order-footer>
 
 <app-order-modal *ngIf="isOrderModalVisible" [allPastries]="(pastries$ | async)!" [selectedPastries]="(selectedPastries$ | async)!"
   [totalPrice]="(totalPrice$ | async)!" (clickCancel)="isOrderModalVisible = false" (clickOk)="isOrderModalVisible = false; isUltimateConfirmationVisible = true"></app-order-modal>
@@ -44,7 +47,7 @@
 
 <div *ngIf="hasSelectedPastries$ | async" class="shopping-cart">
   <nz-badge [nzCount]="(totalCount$ | async)!">
-    <button nz-button nzType="primary" nzSize="large" nzShape="circle" (click)="isOrderModalVisible = true">
+    <button nz-button nzType="primary" nzSize="large" nzShape="circle" (click)="isOrderModalVisible = true" [disabled]="!pickUpTimeAvailable">
       <span nz-icon nzType="shopping-cart"></span>
     </button>
   </nz-badge>

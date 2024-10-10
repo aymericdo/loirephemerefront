@@ -22,6 +22,7 @@ export const hourMinuteToDate = (hour: string, minute: string): Date => {
 
   return new Date(dateTime.toString());
 };
+
 export const getCwday = (): number => {
   const today = new Date();
   const currentDay = today.getDay();
@@ -30,4 +31,33 @@ export const getCwday = (): number => {
 
 export const getYesterday = (): number => {
   return ((getCwday() - 1 + 7) % 7);
+};
+
+export const getBeginningOfDay = (day: Date): Date => {
+  const beginningOfToday = new Date(day.getTime());
+  beginningOfToday.setUTCHours(0, 0, 0, 0);
+  return beginningOfToday;
+};
+
+export const addHours = (date: Date, hours: number): Date => {
+  const hoursToAdd = hours * 60 * 60 * 1000;
+  const newDate = new Date(date.getTime());
+  newDate.setTime(newDate.getTime() + hoursToAdd);
+  return newDate;
+};
+
+export const addMinutes = (date: Date, minutes: number): Date => {
+  const minutesToAdd = minutes * 60 * 1000;
+  const newDate = new Date(date.getTime());
+  newDate.setTime(newDate.getTime() + minutesToAdd);
+  return newDate;
+};
+
+export const getNumberListBetweenTwoNumbers = (h1: number, h2: number): number[] => {
+  const list = [];
+  for (let i = h1; i <= h2; i++) {
+    list.push(i);
+  }
+
+  return list;
 };

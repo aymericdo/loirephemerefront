@@ -12,6 +12,10 @@ export const updateDisplayStock = createAction(
   '[Admin Restaurant page] Update Display Stock',
   props<{ displayStock: boolean }>()
 );
+export const updateAlwaysOpen = createAction(
+  '[Admin Restaurant page] Update Always Open',
+  props<{ alwaysOpen: boolean }>()
+);
 export const stopLoading = createAction(
   '[Admin Restaurant page] Stop loading',
 );

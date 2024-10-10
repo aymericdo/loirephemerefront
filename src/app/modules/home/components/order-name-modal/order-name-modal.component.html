@@ -8,20 +8,20 @@
       </nz-radio-group>
       <nz-space *nzSpaceItem nzAlign="center">
         <span *nzSpaceItem>Heure de retrait</span>
-        <nz-switch *nzSpaceItem [(ngModel)]="needPickUpTimeValue" [nzCheckedChildren]="checkedTemplate"
+        <nz-switch *nzSpaceItem [(ngModel)]="needPickUpTimeValue" (ngModelChange)="handlePickUpTimeAvailable($event)" [nzCheckedChildren]="checkedTemplate"
           [nzUnCheckedChildren]="unCheckedTemplate" [disabled]="pickUpTimeMandatory || !pickUpTimeAvailable">
         </nz-switch>
         <ng-template #checkedTemplate><span nz-icon nzType="check"></span></ng-template>
         <ng-template #unCheckedTemplate><span nz-icon nzType="close"></span></ng-template>
-        <nz-time-picker *nzSpaceItem [nzAllowEmpty]="false" [nzDisabled]="!needPickUpTimeValue" [nzMinuteStep]="10"
-          [nzHideDisabledOptions]="true" [(ngModel)]="pickUpTimeValue"
+        <nz-time-picker *nzSpaceItem [nzAllowEmpty]="false" [nzDisabled]="!needPickUpTimeValue || !pickUpTimeAvailable || selectableHours.length === 0" [nzMinuteStep]="MINUTE_STEP"
+          [nzHideDisabledOptions]="true" [(ngModel)]="pickUpTimeValue" (nzOpenChange)="handleTimePickerOpen($event)"
           [nzDisabledHours]="disabledHours.bind(this)" [nzDisabledMinutes]="disabledMinutes.bind(this)" nzFormat="HH:mm">
         </nz-time-picker>
       </nz-space>
     </nz-space>
   </ng-container>
   <ng-container *nzModalFooter>
-    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="currentFirstName.trim().length < 2">
+    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="currentFirstName.trim().length < 2 || !pickUpTimeAvailable">
       Envoyer
     </button>
   </ng-container>

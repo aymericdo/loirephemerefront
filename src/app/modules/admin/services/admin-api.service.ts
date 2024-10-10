@@ -179,4 +179,13 @@ export class AdminApiService {
       { displayStock }
     ) as Observable<Restaurant>;
   }
+
+  patchAlwaysOpen(
+    code: string,
+    alwaysOpen: boolean): Observable<Restaurant> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/always-open`,
+      { alwaysOpen }
+    ) as Observable<Restaurant>;
+  }
 }

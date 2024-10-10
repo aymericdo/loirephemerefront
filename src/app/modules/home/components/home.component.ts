@@ -11,12 +11,12 @@ import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject, timer } from 'rxjs';
-import { filter, map, take, takeUntil } from 'rxjs/operators';
+import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
-import { getCwday, getYesterday, hourMinuteToDate } from 'src/app/helpers/date';
+import { Restaurant } from 'src/app/classes/restaurant';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 import {
   HomeWebSocketService,
   WebSocketData
@@ -54,7 +54,7 @@ import { environment } from 'src/environments/environment';
 export class HomeComponent implements OnInit, OnDestroy {
   @ViewChildren('item') itemElements!: QueryList<any>;
 
-  restaurant$: Observable<Restaurant | null>;
+  restaurant$: Observable<RestaurantInterface | null>;
   pastries$: Observable<Pastry[]>;
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
   hasSelectedPastries$: Observable<boolean>;
@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   isStockIssue$: Observable<boolean>;
   personalCommand$: Observable<Command | null>;
   errorCommand$: Observable<Object | null>;
-  demoResto$: Observable<Restaurant | null>;
+  demoResto$: Observable<RestaurantInterface | null>;
 
   isSuccessModalVisible = false;
   isOrderModalVisible: boolean = false;
@@ -113,10 +113,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.restaurant$.pipe(
       filter(Boolean),
       takeUntil(this.destroyed$),
-    ).subscribe((restaurant) => {
+    ).subscribe((restaurant: RestaurantInterface) => {
       this.titleService.setTitle(restaurant.name);
       this.setIsRestaurantOpened(restaurant);
-      this.watchIsOpened(restaurant);
     });
 
     this.personalCommand$
@@ -148,6 +147,8 @@ export class HomeComponent implements OnInit, OnDestroy {
           })
         );
       });
+
+    this.watchIsOpened();
   }
 
   handleClickPlus(pastry: Pastry): void {
@@ -221,76 +222,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     return pastry.id;
   }
 
-  private watchIsOpened(restaurant: Restaurant): void {
+  private watchIsOpened(): void {
     const source = timer(1000, 1000);
-    source.pipe(takeUntil(this.destroyed$))
-      .subscribe((_i) => {
+    source.pipe(
+      withLatestFrom(this.restaurant$.pipe(filter(Boolean))),
+      takeUntil(this.destroyed$))
+      .subscribe(([_i, restaurant]) => {
         this.setIsRestaurantOpened(restaurant);
       });
   }
 
-  private setIsRestaurantOpened(restaurant: Restaurant): void {
-    const now = new Date();
-    const yesterday = getYesterday();
-    const cwday = getCwday();
-
-    if (
-      restaurant.openingTime &&
-      restaurant.openingTime[cwday] &&
-      restaurant.openingTime[cwday].startTime
-    ) {
-      const openingHoursMinutes = restaurant.openingTime[cwday].startTime.split(':');
-      const closingHoursMinutes = restaurant.openingTime[cwday].endTime.split(':');
-
-      const startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
-      const endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
-
-      if (startTime >= endTime) {
-        endTime.setDate(endTime.getDate() + 1);
-      }
-
-      this.isRestaurantOpened = startTime < now && now < endTime;
-
-      let startOpeningPickupTime = startTime;
-      if (
-        restaurant.openingPickupTime &&
-        restaurant.openingPickupTime[cwday] &&
-        restaurant.openingPickupTime[cwday].startTime
-      ) {
-        const openingPickupHoursMinutes = restaurant.openingPickupTime[cwday].startTime.split(':');
-        const startTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1]);
-
-        startOpeningPickupTime = startTime;
-      }
-
-      this.pickUpTimeAvailable = !!(
-        now < endTime &&
-        now >= startOpeningPickupTime
-      );
-    } else {
-      this.isRestaurantOpened = false;
-      this.pickUpTimeAvailable = false;
-    }
-
-    if (!this.isRestaurantOpened
-      && restaurant.openingTime
-      && restaurant.openingTime[yesterday]
-      && restaurant.openingTime[yesterday].startTime
-    ) {
-      const openingHoursMinutes = restaurant.openingTime[yesterday].startTime.split(':');
-      const closingHoursMinutes = restaurant.openingTime[yesterday].endTime.split(':');
-
-      const startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
-      const endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
-
-      startTime.setDate(startTime.getDate() - 1);
-      endTime.setDate(endTime.getDate() - 1);
-
-      if (startTime >= endTime) {
-        endTime.setDate(endTime.getDate() + 1);
-        this.isRestaurantOpened = startTime < now && now < endTime;
-      }
-    }
+  private setIsRestaurantOpened(restaurant: RestaurantInterface): void {
+    const resto = new Restaurant(restaurant);
+    this.isRestaurantOpened = resto.isOpen();
+    this.pickUpTimeAvailable = resto.isPickupOpen();
   }
 
   private subscribeToWS(code: string) {

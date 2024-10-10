@@ -20,7 +20,16 @@
 </nz-list>
 
 <app-information-popover>
-  <div>Vous pouvez faire en sorte que les stocks de certaines pâtisseries diminuent conjointement.</div>
-  <div>Il vous suffit de cliquer sur les pâtisseries afin de leur associer la même couleur.</div>
-  <div>Les stocks des pâtisseries nouvellement associées seront réinitialisés à 0.</div>
+  <nz-space nzDirection="vertical">
+    <div *nzSpaceItem>
+      <div>Vous pouvez faire en sorte que les stocks de certaines pâtisseries diminuent conjointement.</div>
+      <div>Il vous suffit de cliquer sur les pâtisseries afin de leur associer la même couleur.</div>
+    </div>
+    <div *nzSpaceItem>
+      <div>Un exemple d'utilisation serait d'assembler plusieurs types de gaufres qui partageraient la même pâte, dont le stock serait de fait, commun.</div>
+    </div>
+    <div *nzSpaceItem>
+      <div>Attention, Les stocks des pâtisseries nouvellement associées seront réinitialisés à 0.</div>
+    </div>
+  </nz-space>
 </app-information-popover>
