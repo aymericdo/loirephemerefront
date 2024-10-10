@@ -87,18 +87,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "loirephemerefront:build"
+            "buildTarget": "loirephemerefront:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "loirephemerefront:build:production"
+              "buildTarget": "loirephemerefront:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "loirephemerefront:build"
+            "buildTarget": "loirephemerefront:build"
           }
         },
         "test": {
