@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { updateDisplayStock } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
+import { selectIsDisplayStockLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
 
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -16,6 +17,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   @ViewChild('download', { static: false }) download!: ElementRef;
 
   restaurant$: Observable<Restaurant | null>;
+  isDisplayStockLoading$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -25,6 +27,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
+    this.isDisplayStockLoading$ = this.store.select(selectIsDisplayStockLoading);
   }
 
   ngOnInit(): void {

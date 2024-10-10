@@ -9,6 +9,11 @@ export const selectIsAlwaysOpenLoading = createSelector(
   (state: RestaurantState) => state.isAlwaysOpenLoading
 );
 
+export const selectIsDisplayStockLoading = createSelector(
+  selectFeature,
+  (state: RestaurantState) => state.isDisplayStockLoading
+);
+
 export const selectIsLoading = createSelector(
   selectFeature,
   (state: RestaurantState) => state.loading || state.isAlwaysOpenLoading

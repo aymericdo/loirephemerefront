@@ -36,7 +36,7 @@
     "chart.js": "^4.2.0",
     "chartjs-plugin-datalabels": "^2.2.0",
     "luxon": "^3.3.0",
-    "ng-hcaptcha": "^2.2.0",
+    "ng-hcaptcha": "^2.3.1",
     "ng-zorro-antd": "^16.1.0",
     "ng2-charts": "^4.1.1",
     "rxjs": "^7.8.0",

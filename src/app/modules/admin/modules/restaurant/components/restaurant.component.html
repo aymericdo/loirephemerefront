@@ -53,7 +53,7 @@
                   <nz-form-control>
                     <nz-switch
                       [ngModel]="!!(restaurant$ | async)?.displayStock" (ngModelChange)="handleDisplayStock($event)" [nzCheckedChildren]="checkedTemplate"
-                      [nzUnCheckedChildren]="unCheckedTemplate">
+                      [nzUnCheckedChildren]="unCheckedTemplate" [nzLoading]="isDisplayStockLoading$ | async">
                     </nz-switch>
                     <ng-template #checkedTemplate><span nz-icon nzType="eye"></span></ng-template>
                     <ng-template #unCheckedTemplate><span nz-icon nzType="eye-invisible"></span></ng-template>
