@@ -137,8 +137,18 @@ export class HomeComponent implements OnInit, OnDestroy {
               console.error('Could not subscribe to notifications', err)
             );
 
-          this.swPush.notificationClicks.subscribe((event) => {
-            this.router.navigate(event.notification.data.url);
+          this.swPush.notificationClicks.subscribe(({ action, notification }) => {
+            if (action === 'close') {
+              (notification as any).close();
+            }
+
+            if (notification?.data?.url) {
+              this.router.navigate(notification.data.url);
+            } else {
+              this.router.navigate(['/toto.fr']);
+              // event.waitUntil(clients.openWindow(event.notification.data.url));
+              // self.clients.openWindow(event.notification.data.clickActionUrl);
+            }
           });
         }
 
