@@ -142,10 +142,10 @@ export class HomeComponent implements OnInit, OnDestroy {
               (notification as any).close();
             }
 
-            if (notification?.data?.url) {
-              this.router.navigate(notification.data.url);
+            if (notification?.data?.restaurantCode) {
+              this.router.navigate(['/', notification?.data?.restaurantCode]);
             } else {
-              this.router.navigate(['/toto.fr']);
+              this.router.navigate(['page', 'about']);
               // event.waitUntil(clients.openWindow(event.notification.data.url));
               // self.clients.openWindow(event.notification.data.clickActionUrl);
             }
