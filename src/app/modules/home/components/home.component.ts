@@ -66,7 +66,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   errorCommand$: Observable<Object | null>;
   demoResto$: Observable<RestaurantInterface | null>;
 
-  restaurant: RestaurantInterface | null = null;
   isSuccessModalVisible = false;
   isOrderModalVisible: boolean = false;
   isUltimateConfirmationVisible: boolean = false;
@@ -117,7 +116,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant: RestaurantInterface) => {
-      this.restaurant = restaurant;
       this.titleService.setTitle(restaurant.name);
       this.setIsRestaurantOpened(restaurant);
     });
@@ -140,7 +138,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             );
 
           this.swPush.notificationClicks.subscribe((_event) => {
-            this.router.navigate([this.restaurant?.code]);
+            this.router.navigate([command.restaurant.code]);
           });
         }
 
