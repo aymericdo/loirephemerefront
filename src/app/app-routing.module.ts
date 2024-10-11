@@ -45,7 +45,7 @@ const routes: Routes = [
   {
     path: ':code',
     component: HomeComponent,
-    data: { routeName: "home" }
+    data: { routeName: "home" },
   },
   {
     path: ':code/admin',

@@ -66,6 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   errorCommand$: Observable<Object | null>;
   demoResto$: Observable<RestaurantInterface | null>;
 
+  restaurant: RestaurantInterface | null = null;
   isSuccessModalVisible = false;
   isOrderModalVisible: boolean = false;
   isUltimateConfirmationVisible: boolean = false;
@@ -101,6 +102,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(resetCommand());
+
     this.route.paramMap.pipe(
       map((params: ParamMap) => params.get('code')),
       filter(Boolean),
@@ -114,6 +117,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant: RestaurantInterface) => {
+      this.restaurant = restaurant;
       this.titleService.setTitle(restaurant.name);
       this.setIsRestaurantOpened(restaurant);
     });
@@ -136,7 +140,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             );
 
           this.swPush.notificationClicks.subscribe((_event) => {
-            this.router.navigate(['/']);
+            this.router.navigate([this.restaurant?.code]);
           });
         }
 
@@ -183,12 +187,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isUltimateConfirmationVisible = false;
     this.isSuccessModalVisible = true;
     this.store.dispatch(sendCommand({ name, takeAway, pickUpTime }));
-
-    // Hack for safari
-    this.audio = new Audio('assets/sounds/french.mp3');
-    this.audio.play();
-    this.audio.pause();
-    this.audio.currentTime = 0;
   }
 
   handleClickReset(): void {
@@ -277,6 +275,9 @@ export class HomeComponent implements OnInit, OnDestroy {
             const canVibrate = window.navigator.vibrate;
             if (canVibrate!) window.navigator.vibrate([2000, 10, 2000]);
 
+            this.audio = new Audio('assets/sounds/french.mp3');
+            this.audio.pause();
+            this.audio.currentTime = 0;
             this.audio.play();
           }
         },
