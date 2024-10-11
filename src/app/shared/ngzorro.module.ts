@@ -42,6 +42,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzTimelineModule } from 'ng-zorro-antd/timeline';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzQRCodeModule } from 'ng-zorro-antd/qr-code';
+import { NzFlexModule } from 'ng-zorro-antd/flex';
 
 @NgModule({
   exports: [
@@ -87,6 +88,7 @@ import { NzQRCodeModule } from 'ng-zorro-antd/qr-code';
     NzTimelineModule,
     NzAffixModule,
     NzQRCodeModule,
+    NzFlexModule,
   ],
   declarations: [],
 })
