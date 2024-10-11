@@ -137,8 +137,8 @@ export class HomeComponent implements OnInit, OnDestroy {
               console.error('Could not subscribe to notifications', err)
             );
 
-          this.swPush.notificationClicks.subscribe((_event) => {
-            this.router.navigate([command.restaurant.code]);
+          this.swPush.notificationClicks.subscribe((event) => {
+            this.router.navigate(event.notification.data.url);
           });
         }
 
