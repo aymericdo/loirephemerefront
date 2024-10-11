@@ -110,6 +110,8 @@ export class StatsComponent implements OnInit, OnDestroy {
 
   dateRange: Date[] | null = null;
 
+  currentTab = '';
+
   private statsAttributes = ['price', 'type'];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -153,6 +155,8 @@ export class StatsComponent implements OnInit, OnDestroy {
       if (!params.get('year')) {
         defaultQueryParam['year'] = this.currentYear;
       }
+
+      this.currentTab = params.get('tab')!;
 
       if (Object.keys(defaultQueryParam).length) {
         this.router.navigate([], { relativeTo: this.route, queryParams: defaultQueryParam, queryParamsHandling: 'merge' });
@@ -208,13 +212,13 @@ export class StatsComponent implements OnInit, OnDestroy {
           cash: 0,
           creditCart: 0,
           bankCheque: 0,
-        }
+        };
 
         let valueByPayment: { [key in PaymentType]: number } = {
           cash: 0,
           creditCart: 0,
           bankCheque: 0,
-        }
+        };
 
         let countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } } = {
           pastry: {},
@@ -240,6 +244,8 @@ export class StatsComponent implements OnInit, OnDestroy {
           [date: string]: { [payment: string]: number };
         } = {};
 
+        if (!commands.length) return;
+
         const firstCommandDate = commands[0].createdAt;
         const lastCommandDate = commands[commands.length - 1].createdAt;
         this.isTimeIntervalChangeable = this.daysBetweenTwoDates(
@@ -248,7 +254,7 @@ export class StatsComponent implements OnInit, OnDestroy {
           commands.length > 100;
 
         if (!this.isTimeIntervalChangeable && timeInterval !== statsInitialState.timeInterval) {
-          this.store.dispatch(resetTimeInterval())
+          this.store.dispatch(resetTimeInterval());
         }
 
         commands.forEach((command: Command) => {
@@ -362,7 +368,7 @@ export class StatsComponent implements OnInit, OnDestroy {
 
     command.payment.forEach((payment) => {
       countByPayment[payment.key] += 1;
-    })
+    });
   }
 
   private setValueByPayment(
@@ -373,7 +379,7 @@ export class StatsComponent implements OnInit, OnDestroy {
 
     command.payment.forEach((payment) => {
       valueByPayment[payment.key] += payment.value;
-    })
+    });
   }
 
   private setPastriesByTypeByDate(
@@ -507,7 +513,7 @@ export class StatsComponent implements OnInit, OnDestroy {
         data: Object.keys(cashByDate)
           .reverse()
           .reduce((prev: number[], date) => {
-            const dayTotal: number = cashByDate[date]
+            const dayTotal: number = cashByDate[date];
             const last: number = prev.length ? +prev[prev.length - 1] : 0;
             prev.push(last + dayTotal);
 
@@ -539,7 +545,7 @@ export class StatsComponent implements OnInit, OnDestroy {
               if (!cashByDateByPayment[date].hasOwnProperty(key)) return;
               return cashByDateByPayment[date][key] as number;
             }) as number[],
-        }
+        };
       }),
     };
   }
@@ -566,7 +572,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     });
 
     const validKeys = (Object.keys(valueByPayment) as PaymentType[])
-      .filter((key: PaymentType) => valueByPayment[key] > 0)
+      .filter((key: PaymentType) => valueByPayment[key] > 0);
 
     if (validKeys.length) {
       this.countByPaymentPieChartData = {

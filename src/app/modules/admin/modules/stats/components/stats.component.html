@@ -20,190 +20,200 @@
       <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
 
-    <!-- happy hack  -->
-    <app-pie-chart class="hidden" [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
-    <!-- / happy hack  -->
-
     <ng-container *ngIf="(isLoading$ | async) === false && !totallyEmpty">
       <nz-tabset nzLinkRouter>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'global' }" queryParamsHandling="merge">
             Global
           </a>
-          <div *ngIf="globalBarChartData.datasets.length === 0; else someDataGlobal" class="row">
-            <nz-empty></nz-empty>
-          </div>
-          <ng-template #someDataGlobal>
-            <div class="row">
-              <div class="chart global">
-                <nz-statistic [nzValue]="commandsCount" [nzTitle]="'Nombre de commandes totales'"></nz-statistic>
-                <nz-statistic [nzValue]="totalCash" [nzSuffix]="'€'" [nzTitle]="'Argent total'"></nz-statistic>
-              </div>
+          <ng-container *ngIf="currentTab === 'global'">
+            <div *ngIf="globalBarChartData.datasets.length === 0; else someDataGlobal" class="row">
+              <nz-empty></nz-empty>
             </div>
-            <div class="row">
-              <div class="chart bar">
-                <div>
-                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="globalBarChartData"></app-bar-chart>
+            <ng-template #someDataGlobal>
+              <div class="row">
+                <div class="chart global">
+                  <nz-statistic [nzValue]="commandsCount" [nzTitle]="'Nombre de commandes totales'"></nz-statistic>
+                  <nz-statistic [nzValue]="totalCash" [nzSuffix]="'€'" [nzTitle]="'Argent total'"></nz-statistic>
                 </div>
               </div>
-            </div>
-          </ng-template>
+              <div class="row">
+                <div class="chart bar">
+                  <div>
+                    <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="globalBarChartData"></app-bar-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
         </nz-tab>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'pastry' }" queryParamsHandling="merge">
             Plats
           </a>
-          <div *ngIf="pastriesByTypeByDatePieChartData.pastry.datasets.length === 0; else someDataPastry" class="row">
-            <nz-empty></nz-empty>
-          </div>
-          <ng-template #someDataPastry>
-            <div class="row">
-              <div class="chart">
-                <div>
-                  <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
-                </div>
-                <span *ngIf="totalByType.pastry" class="total">
-                  <div>Total de plats : {{ totalByType.pastry }}</div>
-                </span>
-              </div>
+          <ng-container *ngIf="currentTab === 'pastry'">
+            <div *ngIf="pastriesByTypeByDatePieChartData.pastry.datasets.length === 0; else someDataPastry" class="row">
+              <nz-empty></nz-empty>
             </div>
-            <div class="row">
-              <div class="chart bar">
-                <div>
-                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.pastry"></app-bar-chart>
+            <ng-template #someDataPastry>
+              <div class="row">
+                <div class="chart">
+                  <div>
+                    <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
+                  </div>
+                  <span *ngIf="totalByType.pastry" class="total">
+                    <div>Total de plats : {{ totalByType.pastry }}</div>
+                  </span>
                 </div>
               </div>
-            </div>
-          </ng-template>
+              <div class="row">
+                <div class="chart bar">
+                  <div>
+                    <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.pastry"></app-bar-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
         </nz-tab>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'drink' }" queryParamsHandling="merge">
             Boissons
           </a>
-          <div *ngIf="pastriesByTypeByDatePieChartData.drink.datasets.length === 0; else someDataDrink" class="row">
-            <nz-empty></nz-empty>
-          </div>
-          <ng-template #someDataDrink>
-            <div class="chart">
-              <div>
-                <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.drink"></app-pie-chart>
+          <ng-container *ngIf="currentTab === 'drink'">
+            <div *ngIf="pastriesByTypeByDatePieChartData.drink.datasets.length === 0; else someDataDrink" class="row">
+              <nz-empty></nz-empty>
+            </div>
+            <ng-template #someDataDrink>
+              <div class="chart">
+                <div>
+                  <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.drink"></app-pie-chart>
+                </div>
+
+                <span *ngIf="totalByType.drink" class="total">
+                  <div>Total de boissons : {{ totalByType.drink }}</div>
+                </span>
               </div>
 
-              <span *ngIf="totalByType.drink" class="total">
-                <div>Total de boissons : {{ totalByType.drink }}</div>
-              </span>
-            </div>
-
-            <div class="chart bar">
-              <div>
-                <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.drink"></app-bar-chart>
+              <div class="chart bar">
+                <div>
+                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.drink"></app-bar-chart>
+                </div>
               </div>
-            </div>
-          </ng-template>
+            </ng-template>
+          </ng-container>
         </nz-tab>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'tip' }" queryParamsHandling="merge">
             Pourboires
           </a>
-          <div *ngIf="pastriesByTypeByDatePieChartData.tip.datasets.length === 0; else someDataTip" class="row">
-            <nz-empty></nz-empty>
-          </div>
-          <ng-template #someDataTip>
-            <div class="row">
-              <div class="chart">
-                <div>
-                  <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.tip"></app-pie-chart>
-                </div>
-                <span *ngIf="totalByType.tip" class="total">
-                  <div>Total de pourboires : {{ totalByType.tip }}</div>
-                </span>
-              </div>
+          <ng-container *ngIf="currentTab === 'tip'">
+            <div *ngIf="pastriesByTypeByDatePieChartData.tip.datasets.length === 0; else someDataTip" class="row">
+              <nz-empty></nz-empty>
             </div>
-            <div class="row">
-              <div class="chart bar">
-                <div>
-                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.tip"></app-bar-chart>
+            <ng-template #someDataTip>
+              <div class="row">
+                <div class="chart">
+                  <div>
+                    <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.tip"></app-pie-chart>
+                  </div>
+                  <span *ngIf="totalByType.tip" class="total">
+                    <div>Total de pourboires : {{ totalByType.tip }}</div>
+                  </span>
                 </div>
               </div>
-            </div>
-          </ng-template>
+              <div class="row">
+                <div class="chart bar">
+                  <div>
+                    <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.tip"></app-bar-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
         </nz-tab>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'other' }" queryParamsHandling="merge">
             Autres
           </a>
-          <div *ngIf="pastriesByTypeByDatePieChartData.other.datasets.length === 0; else someDataOther" class="row">
-            <nz-empty></nz-empty>
-          </div>
-          <ng-template #someDataOther>
-            <div class="row">
-              <div class="chart">
-                <div>
-                  <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.other"></app-pie-chart>
-                </div>
-                <span *ngIf="totalByType.other" class="total">
-                  <div>Total autres : {{ totalByType.other }}</div>
-                </span>
-              </div>
+          <ng-container *ngIf="currentTab === 'other'">
+            <div *ngIf="pastriesByTypeByDatePieChartData.other.datasets.length === 0; else someDataOther" class="row">
+              <nz-empty></nz-empty>
             </div>
-            <div class="row">
-              <div class="chart bar">
-                <div>
-                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.other"></app-bar-chart>
+            <ng-template #someDataOther>
+              <div class="row">
+                <div class="chart">
+                  <div>
+                    <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.other"></app-pie-chart>
+                  </div>
+                  <span *ngIf="totalByType.other" class="total">
+                    <div>Total autres : {{ totalByType.other }}</div>
+                  </span>
                 </div>
               </div>
-            </div>
-          </ng-template>
+              <div class="row">
+                <div class="chart bar">
+                  <div>
+                    <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="pastriesByTypeByDateBarChartData.other"></app-bar-chart>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
         </nz-tab>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'payment' }" queryParamsHandling="merge">
             Paiement
           </a>
-          <div *ngIf="countByPaymentPieChartData.datasets.length === 0; else someDataPayment" class="row">
-            <nz-empty></nz-empty>
-          </div>
-          <ng-template #someDataPayment>
-            <div class="row">
-              <div class="chart">
-                <div>
-                  <app-pie-chart [pieChartData]="countByPaymentPieChartData"></app-pie-chart>
+          <ng-container *ngIf="currentTab === 'payment'">
+            <div *ngIf="countByPaymentPieChartData.datasets.length === 0; else someDataPayment" class="row">
+              <nz-empty></nz-empty>
+            </div>
+            <ng-template #someDataPayment>
+              <div class="row">
+                <div class="chart">
+                  <div>
+                    <app-pie-chart [pieChartData]="countByPaymentPieChartData"></app-pie-chart>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="chart">
-                <div>
-                  <app-pie-chart [pieChartData]="valueByPaymentPieChartData" [unit]="'€'"></app-pie-chart>
+              <div class="row">
+                <div class="chart">
+                  <div>
+                    <app-pie-chart [pieChartData]="valueByPaymentPieChartData" [unit]="'€'"></app-pie-chart>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="chart bar">
-                <div>
-                  <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="paymentGlobalBarChartData"></app-bar-chart>
+              <div class="row">
+                <div class="chart bar">
+                  <div>
+                    <app-bar-chart [isTimeIntervalChangeable]="isTimeIntervalChangeable" [barChartData]="paymentGlobalBarChartData"></app-bar-chart>
+                  </div>
                 </div>
               </div>
-            </div>
-          </ng-template>
+            </ng-template>
+          </ng-container>
         </nz-tab>
         <nz-tab>
           <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'commands' }" queryParamsHandling="merge">
             Commandes
           </a>
-          <ng-container *ngIf="(payedCommands$ | async)?.length === 0; else someDataCommands">
-            <nz-empty></nz-empty>
-          </ng-container>
-          <ng-template #someDataCommands>
-            <div class="data-section">
-              <div nz-row [nzGutter]="[0, 24]">
-                <div *ngFor="let command of payedCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
-                  <div class="inner-box">
-                    <app-command-card [command]="command" [isDone]="true" [isPayed]="true" [noAction]="true"></app-command-card>
+          <ng-container *ngIf="currentTab === 'commands'">
+            <ng-container *ngIf="(payedCommands$ | async)?.length === 0; else someDataCommands">
+              <nz-empty></nz-empty>
+            </ng-container>
+            <ng-template #someDataCommands>
+              <div class="data-section">
+                <div nz-row [nzGutter]="[0, 24]">
+                  <div *ngFor="let command of payedCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
+                    <div class="inner-box">
+                      <app-command-card [command]="command" [isDone]="true" [isPayed]="true" [noAction]="true"></app-command-card>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </ng-template>
+            </ng-template>
+          </ng-container>
         </nz-tab>
       </nz-tabset>
     </ng-container>
