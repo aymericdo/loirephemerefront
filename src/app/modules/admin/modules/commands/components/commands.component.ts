@@ -85,12 +85,17 @@ export class CommandsComponent implements OnInit, OnDestroy {
             serverPublicKey: VAPID_PUBLIC_KEY,
           })
           .then((sub: PushSubscription) => {
+            console.log(sub);
             this.sub = sub;
             this.store.dispatch(sendNotificationSub({ sub, code: restaurant.code }));
           })
           .catch((err) =>
             console.error('Could not subscribe to notifications', err)
           );
+
+        this.swPush.notificationClicks.subscribe((result) => {
+          console.log('clicked', result);
+        });
 
         this.swPush.notificationClicks.subscribe((_event) => {
           this.router.navigate(['/']);
