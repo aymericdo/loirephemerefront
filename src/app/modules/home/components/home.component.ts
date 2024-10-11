@@ -138,20 +138,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             );
 
           this.swPush.notificationClicks.subscribe(({ action, notification }) => {
-            this.router.navigate(['page', 'about']);
-            // if (action === 'close') {
-            //   (notification as any).close();
-            // }
-
-            // this.router.navigate(['page', 'about']);
-
-            // if (notification?.data?.restaurantCode) {
-            //   this.router.navigate(['/', notification?.data?.restaurantCode]);
-            // } else {
-            //   this.router.navigate(['page', 'about']);
-            //   // event.waitUntil(clients.openWindow(event.notification.data.url));
-            //   // self.clients.openWindow(event.notification.data.clickActionUrl);
-            // }
           });
         }
 
