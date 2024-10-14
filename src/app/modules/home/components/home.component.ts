@@ -6,7 +6,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -81,7 +81,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
-    private router: Router,
     private wsService: HomeWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush,
@@ -120,14 +119,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setIsRestaurantOpened(restaurant);
     });
 
-    this.swPush.notificationClicks.subscribe((event) => {
-      console.log(event);
-    });
+    if (this.swPush.isEnabled) {
+      this.swPush.notificationClicks.subscribe((event) => {
+        console.log(event);
+      });
+      alert('test');
+    }
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
       .subscribe((command: Command | any) => {
-        if (environment.production) {
+        if (this.swPush.isEnabled) {
           this.swPush
             .requestSubscription({
               serverPublicKey: VAPID_PUBLIC_KEY,
