@@ -125,6 +125,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((event) => {
           console.log("event", event);
+          console.log(this.router.navigate);
           this.router.navigate(event.notification.data.onActionClick[event.action]);
         });
 
