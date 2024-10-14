@@ -125,7 +125,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((event) => {
           console.log("event", event);
-          console.log(event.notification.data.onActionClick[event.action]);
         });
 
       this.swPush.messages
