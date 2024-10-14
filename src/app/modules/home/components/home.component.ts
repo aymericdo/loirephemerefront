@@ -125,13 +125,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.swPush.notificationClicks
         .pipe(takeUntil(this.destroyed$))
         .subscribe((event) => {
-          console.log(event);
+          console.log("event", event);
         });
 
       this.swPush.messages
         .pipe(takeUntil(this.destroyed$))
         .subscribe((message) => {
-          console.log(message);
+          console.log("message:", message);
         });
     }
 
@@ -139,6 +139,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
       .subscribe((command: Command | any) => {
         if (this.swPush.isEnabled) {
+          this.swPush.unsubscribe();
+
           this.swPush
             .requestSubscription({
               serverPublicKey: VAPID_PUBLIC_KEY,
