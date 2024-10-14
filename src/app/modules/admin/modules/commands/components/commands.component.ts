@@ -138,8 +138,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
     }
     this.destroyed$.next(true);
     this.destroyed$.complete();
-
-    if (this.swPush.isEnabled) this.swPush.unsubscribe();
   }
 
   private fetchCommands(code: string): void {

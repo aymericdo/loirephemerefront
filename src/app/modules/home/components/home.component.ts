@@ -224,7 +224,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.titleService.setTitle(APP_NAME);
     this.destroyed$.next(true);
     this.destroyed$.complete();
-    if (this.swPush.isEnabled) this.swPush.unsubscribe();
   }
 
   trackById(_index: any, pastry: Pastry): string {
