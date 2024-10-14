@@ -139,8 +139,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
       .subscribe((command: Command | any) => {
         if (this.swPush.isEnabled) {
-          this.swPush.unsubscribe();
-
           this.swPush
             .requestSubscription({
               serverPublicKey: VAPID_PUBLIC_KEY,

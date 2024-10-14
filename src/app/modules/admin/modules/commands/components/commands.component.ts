@@ -95,8 +95,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
       this.fetchCommands(restaurant.code);
 
       if (this.swPush.isEnabled) {
-        this.swPush.unsubscribe();
-
         this.swPush
           .requestSubscription({
             serverPublicKey: VAPID_PUBLIC_KEY,
