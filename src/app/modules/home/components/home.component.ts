@@ -125,6 +125,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         console.log(event);
         alert(JSON.stringify(event));
       });
+
+      this.swPush.messages
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((message) => {
+          console.log(message);
+        });
     }
 
     this.personalCommand$
@@ -216,6 +222,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.titleService.setTitle(APP_NAME);
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    this.swPush.unsubscribe();
   }
 
   trackById(_index: any, pastry: Pastry): string {
