@@ -136,6 +136,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.store.dispatch(
                 sendNotificationSub({ commandId: command.id!, sub })
               );
+              console.log('Subscription to notifications ok');
             })
             .catch((err) =>
               console.error('Could not subscribe to notifications', err)
