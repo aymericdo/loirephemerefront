@@ -120,6 +120,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setIsRestaurantOpened(restaurant);
     });
 
+    this.swPush.notificationClicks.subscribe((event) => {
+      console.log(event);
+    });
+
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
       .subscribe((command: Command | any) => {
@@ -136,9 +140,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             .catch((err) =>
               console.error('Could not subscribe to notifications', err)
             );
-
-          this.swPush.notificationClicks.subscribe(({ action, notification }) => {
-          });
         }
 
         this.wsService.sendMessage(
