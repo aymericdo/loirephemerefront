@@ -119,12 +119,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setIsRestaurantOpened(restaurant);
     });
 
-    console.log(this.swPush);
     if (this.swPush.isEnabled) {
+      console.log(this.swPush);
       this.swPush.notificationClicks.subscribe((event) => {
         console.log(event);
+        alert(JSON.stringify(event));
       });
-      alert('test');
     }
 
     this.personalCommand$
