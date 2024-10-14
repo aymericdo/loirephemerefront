@@ -119,6 +119,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setIsRestaurantOpened(restaurant);
     });
 
+    console.log(this.swPush);
     if (this.swPush.isEnabled) {
       this.swPush.notificationClicks.subscribe((event) => {
         console.log(event);
