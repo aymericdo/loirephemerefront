@@ -14,6 +14,7 @@ import { Observable, ReplaySubject, timer } from 'rxjs';
 import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { Restaurant } from 'src/app/classes/restaurant';
+import { canVibrate } from 'src/app/helpers/vibrate';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
@@ -125,7 +126,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((event) => {
           console.log(event);
-          alert(JSON.stringify(event));
         });
 
       this.swPush.messages
@@ -283,8 +283,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                   );
                 });
 
-            const canVibrate = window.navigator.vibrate;
-            if (canVibrate!) window.navigator.vibrate([2000, 10, 2000]);
+            if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
 
             this.audio = new Audio('assets/sounds/french.mp3');
             this.audio.pause();

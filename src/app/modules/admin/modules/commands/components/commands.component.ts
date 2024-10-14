@@ -6,6 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
+import { canVibrate } from 'src/app/helpers/vibrate';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
@@ -17,7 +18,6 @@ import {
 } from 'src/app/modules/admin/services/command-socket.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
-import { environment } from 'src/environments/environment';
 
 @Component({
   templateUrl: './commands.component.html',
@@ -78,7 +78,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroyed$))
         .subscribe((event) => {
           console.log(event);
-          alert(JSON.stringify(event));
         });
 
       this.swPush.messages
@@ -103,7 +102,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
           .then((sub: PushSubscription) => {
             this.sub = sub;
             console.log(sub);
-            alert(sub);
             this.store.dispatch(sendNotificationSub({ sub, code: restaurant.code }));
           })
           .catch((err) =>
@@ -168,7 +166,9 @@ export class CommandsComponent implements OnInit, OnDestroy {
             this.store.dispatch(
               addCommand({ command: data.addCommand as Command })
             );
-            window.navigator.vibrate(2000);
+
+            if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
+
             this.notification.create(
               'info',
               'Une nouvelle commande est arrivée',
