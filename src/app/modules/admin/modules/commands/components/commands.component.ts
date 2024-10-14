@@ -125,7 +125,10 @@ export class CommandsComponent implements OnInit, OnDestroy {
     this.wsService.sendMessage(
       JSON.stringify({
         event: 'wizzer',
-        data: command,
+        data: {
+          ...command,
+          restaurant: this.restaurant.code,
+        }
       })
     );
   }
