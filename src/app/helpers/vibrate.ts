@@ -1,1 +1,1 @@
-export const canVibrate = () => window.navigator.vibrate;
+export const canVibrate = () => !!window.navigator.vibrate;
