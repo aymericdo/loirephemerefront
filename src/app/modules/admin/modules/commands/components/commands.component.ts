@@ -77,13 +77,13 @@ export class CommandsComponent implements OnInit, OnDestroy {
       this.swPush.notificationClicks
         .pipe(takeUntil(this.destroyed$))
         .subscribe((event) => {
-          console.log("event :", event);
+          console.log("event : ", event);
         });
 
       this.swPush.messages
         .pipe(takeUntil(this.destroyed$))
         .subscribe((message) => {
-          console.log("message:", message);
+          console.log("message : ", message);
         });
     }
 
@@ -103,7 +103,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
           })
           .then((sub: PushSubscription) => {
             this.sub = sub;
-            console.log(sub);
+            console.log("sub : ", sub);
             this.store.dispatch(sendNotificationSub({ sub, code: restaurant.code }));
           })
           .catch((err) =>
@@ -140,6 +140,8 @@ export class CommandsComponent implements OnInit, OnDestroy {
     }
     this.destroyed$.next(true);
     this.destroyed$.complete();
+
+    if (this.swPush.isEnabled) this.swPush.unsubscribe();
   }
 
   private fetchCommands(code: string): void {
