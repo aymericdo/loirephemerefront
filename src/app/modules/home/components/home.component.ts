@@ -121,10 +121,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (this.swPush.isEnabled) {
       console.log(this.swPush);
-      this.swPush.notificationClicks.subscribe((event) => {
-        console.log(event);
-        alert(JSON.stringify(event));
-      });
+      this.swPush.notificationClicks
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((event) => {
+          console.log(event);
+          alert(JSON.stringify(event));
+        });
 
       this.swPush.messages
         .pipe(takeUntil(this.destroyed$))

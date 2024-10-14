@@ -72,6 +72,22 @@ export class CommandsComponent implements OnInit, OnDestroy {
       }
     });
 
+    if (this.swPush.isEnabled) {
+      console.log(this.swPush);
+      this.swPush.notificationClicks
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((event) => {
+          console.log(event);
+          alert(JSON.stringify(event));
+        });
+
+      this.swPush.messages
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((message) => {
+          console.log(message);
+        });
+    }
+
     this.restaurant$.pipe(
       filter(Boolean),
       takeUntil(this.destroyed$),
@@ -79,7 +95,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
       this.restaurant = restaurant;
       this.fetchCommands(restaurant.code);
 
-      if (environment.production) {
+      if (this.swPush.isEnabled) {
         this.swPush
           .requestSubscription({
             serverPublicKey: VAPID_PUBLIC_KEY,
@@ -91,10 +107,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
           .catch((err) =>
             console.error('Could not subscribe to notifications', err)
           );
-
-        this.swPush.notificationClicks.subscribe((_event) => {
-          this.router.navigate([restaurant.code, 'admin', 'commands']);
-        });
       }
     });
   }
