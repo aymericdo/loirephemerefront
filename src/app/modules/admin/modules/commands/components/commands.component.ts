@@ -102,6 +102,8 @@ export class CommandsComponent implements OnInit, OnDestroy {
           })
           .then((sub: PushSubscription) => {
             this.sub = sub;
+            console.log(sub);
+            alert(sub);
             this.store.dispatch(sendNotificationSub({ sub, code: restaurant.code }));
           })
           .catch((err) =>
