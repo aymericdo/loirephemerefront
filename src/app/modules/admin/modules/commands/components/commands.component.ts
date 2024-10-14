@@ -73,7 +73,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
     });
 
     if (this.swPush.isEnabled) {
-      console.log(this.swPush);
       this.swPush.notificationClicks
         .pipe(takeUntil(this.destroyed$))
         .subscribe((event) => {
@@ -90,23 +89,22 @@ export class CommandsComponent implements OnInit, OnDestroy {
     this.restaurant$.pipe(
       filter(Boolean),
       takeUntil(this.destroyed$),
-    ).subscribe((restaurant) => {
+    ).subscribe(async (restaurant) => {
       this.restaurant = restaurant;
       this.fetchCommands(restaurant.code);
 
       if (this.swPush.isEnabled) {
-        this.swPush
-          .requestSubscription({
+        try {
+          const sub: PushSubscription = await this.swPush.requestSubscription({
             serverPublicKey: VAPID_PUBLIC_KEY,
-          })
-          .then((sub: PushSubscription) => {
-            this.sub = sub;
-            console.log("sub : ", sub);
-            this.store.dispatch(sendNotificationSub({ sub, code: restaurant.code }));
-          })
-          .catch((err) =>
-            console.error('Could not subscribe to notifications', err)
-          );
+          });
+
+          this.sub = sub;
+          this.store.dispatch(sendNotificationSub({ sub, code: restaurant.code }));
+          console.log('Subscription to notifications ok');
+        } catch (err) {
+          console.error('Could not subscribe to notifications', err);
+        }
       }
     });
   }
@@ -133,9 +131,9 @@ export class CommandsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub) {
-      this.store.dispatch(removeNotificationSub({ sub: this.sub, code: this.restaurant.code }));
-    }
+    // if (this.sub) {
+    //   this.store.dispatch(removeNotificationSub({ sub: this.sub, code: this.restaurant.code }));
+    // }
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

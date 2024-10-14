@@ -6,7 +6,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -45,7 +45,6 @@ import {
 } from 'src/app/modules/home/store/home.selectors';
 import { selectDemoResto, selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
-import { environment } from 'src/environments/environment';
 
 @Component({
   templateUrl: './home.component.html',
@@ -82,6 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
+    private router: Router,
     private wsService: HomeWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush,
@@ -121,11 +121,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     if (this.swPush.isEnabled) {
-      console.log(this.swPush);
       this.swPush.notificationClicks
         .pipe(takeUntil(this.destroyed$))
         .subscribe((event) => {
           console.log("event", event);
+          this.router.navigate(event.notification.data.onActionClick[event.action]);
         });
 
       this.swPush.messages
@@ -137,21 +137,20 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
-      .subscribe((command: Command | any) => {
+      .subscribe(async (command: Command | any) => {
         if (this.swPush.isEnabled) {
-          this.swPush
-            .requestSubscription({
+          try {
+            const sub = await this.swPush.requestSubscription({
               serverPublicKey: VAPID_PUBLIC_KEY,
-            })
-            .then((sub) => {
-              this.store.dispatch(
-                sendNotificationSub({ commandId: command.id!, sub })
-              );
-              console.log('Subscription to notifications ok');
-            })
-            .catch((err) =>
-              console.error('Could not subscribe to notifications', err)
+            });
+
+            this.store.dispatch(
+              sendNotificationSub({ commandId: command.id!, sub })
             );
+            console.log('Subscription to notifications ok');
+          } catch (err) {
+            console.error('Could not subscribe to notifications', err);
+          }
         }
 
         this.wsService.sendMessage(
