@@ -54,11 +54,6 @@ export class HttpResponseInterceptor implements HttpInterceptor {
               break;
             }
 
-            case 404: {
-              this.router.navigate(['page', '404']);
-              break;
-            }
-
             default: {
               this.message.create('error', 'Une erreur est survenue');
             }
