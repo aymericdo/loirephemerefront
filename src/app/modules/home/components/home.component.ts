@@ -120,19 +120,19 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setIsRestaurantOpened(restaurant);
     });
 
-    if (this.swPush.isEnabled) {
-      this.swPush.notificationClicks
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((event) => {
-          console.log("event", event);
-        });
+    // if (this.swPush.isEnabled) {
+    //   this.swPush.notificationClicks
+    //     .pipe(takeUntil(this.destroyed$))
+    //     .subscribe((event) => {
+    //       console.log("event", event);
+    //     });
 
-      this.swPush.messages
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((message) => {
-          console.log("message:", message);
-        });
-    }
+    //   this.swPush.messages
+    //     .pipe(takeUntil(this.destroyed$))
+    //     .subscribe((message) => {
+    //       console.log("message:", message);
+    //     });
+    // }
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
