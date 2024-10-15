@@ -72,20 +72,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
       }
     });
 
-    // if (this.swPush.isEnabled) {
-    //   this.swPush.notificationClicks
-    //     .pipe(takeUntil(this.destroyed$))
-    //     .subscribe((event) => {
-    //       console.log("event : ", event);
-    //     });
-
-    //   this.swPush.messages
-    //     .pipe(takeUntil(this.destroyed$))
-    //     .subscribe((message) => {
-    //       console.log("message : ", message);
-    //     });
-    // }
-
     this.restaurant$.pipe(
       filter(Boolean),
       takeUntil(this.destroyed$),
@@ -125,18 +111,12 @@ export class CommandsComponent implements OnInit, OnDestroy {
     this.wsService.sendMessage(
       JSON.stringify({
         event: 'wizzer',
-        data: {
-          ...command,
-          restaurant: this.restaurant.code,
-        }
+        data: command.id,
       })
     );
   }
 
   ngOnDestroy() {
-    // if (this.sub) {
-    //   this.store.dispatch(removeNotificationSub({ sub: this.sub, code: this.restaurant.code }));
-    // }
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

@@ -6,7 +6,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -81,7 +81,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
-    private router: Router,
     private wsService: HomeWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush,
@@ -152,16 +151,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         }
 
-        let restaurantCode = null;
-        this.restaurant$.pipe(filter(Boolean), take(1)).subscribe((restaurant) => restaurantCode = restaurant.code);
-
         this.wsService.sendMessage(
           JSON.stringify({
             event: 'addWaitingQueue',
-            data: {
-              ...command,
-              restaurant: restaurantCode,
-            }
+            data: command.id,
           })
         );
       });
@@ -170,26 +163,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   handleClickPlus(pastry: Pastry): void {
-    let count: number = 0;
-    this.selectedPastries$.pipe(take(1)).subscribe((selectedPastries: { [pastryId: string]: number }) => {
-      count = selectedPastries[pastry.id] || 0;
-    });
-
-    if (count === 0) {
-      // const cardToScroll = this.itemElements.find(
-      //   (item) => item.pastry.id === pastry.id
-      // );
-
-      // if (cardToScroll) {
-      //   window.scroll({
-      //     top:
-      //       window.pageYOffset +
-      //       cardToScroll.elem.nativeElement.getBoundingClientRect().top -
-      //       10,
-      //     behavior: 'smooth',
-      //   });
-      // }
-    }
     this.store.dispatch(incrementPastry({ pastry }));
   }
 
