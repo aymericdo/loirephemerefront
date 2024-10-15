@@ -152,10 +152,16 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         }
 
+        let restaurantCode = null;
+        this.restaurant$.pipe(filter(Boolean), take(1)).subscribe((restaurant) => restaurantCode = restaurant.code);
+
         this.wsService.sendMessage(
           JSON.stringify({
             event: 'addWaitingQueue',
-            data: command,
+            data: {
+              ...command,
+              restaurant: restaurantCode,
+            }
           })
         );
       });
