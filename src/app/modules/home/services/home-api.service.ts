@@ -21,6 +21,12 @@ export class HomeApiService {
     return this.http.get(`${this.protocolHttp}${this.baseUrl}/pastries/by-code/${restaurantCode}`) as Observable<Pastry[]>;
   }
 
+  getPersonalCommand(restaurantCode: string, commandId: string): Observable<Command> {
+    return this.http.get(
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}/${commandId}`,
+    ) as Observable<Command>;
+  }
+
   postCommand(restaurantCode: string, command: CoreCommand): Observable<Command> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}`,

@@ -11,7 +11,7 @@ import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject, timer } from 'rxjs';
-import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { filter, map, switchMap, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { Restaurant } from 'src/app/classes/restaurant';
 import { canVibrate } from 'src/app/helpers/vibrate';
@@ -25,6 +25,7 @@ import {
 import {
   decrementPastry,
   fetchRestaurantPastries,
+  getPersonalCommand,
   incrementPastry,
   resetCommand,
   sendCommand,
@@ -109,6 +110,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     ).subscribe(code => {
       this.subscribeToWS(code);
       this.store.dispatch(fetchRestaurantPastries({ code }));
+    });
+
+    this.restaurant$.pipe(
+      filter(Boolean),
+      switchMap(() => this.route.queryParamMap),
+      map((params: ParamMap) => params.get('commandId')),
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe((commandId) => {
+      this.store.dispatch(getPersonalCommand({ commandId }));
+
+      this.openSentCommandNotification(commandId);
     });
 
     this.restaurant$.pipe(
@@ -207,6 +220,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     return pastry.id;
   }
 
+  private openSentCommandNotification(commandId: string): void {
+    this.store.select(selectCurrentSentCommandFromCommandList({ commandId }))
+      .pipe(filter(Boolean), take(1))
+      .subscribe((command: Command) => {
+        this.notification
+          .create(
+            'info',
+            `Votre commande ${command.reference} est prête !`,
+            'Bonne dégustation ! 🥰', {
+              nzDuration: 0,
+              nzKey: commandId,
+            }
+          );
+        });
+  }
+
   private watchIsOpened(): void {
     const source = timer(1000, 1000);
     source.pipe(
@@ -245,19 +274,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
             this.notification.remove(this.commandNotificationIdByCommandId[commandId]);
 
-            this.store.select(selectCurrentSentCommandFromCommandList({ commandId }))
-              .pipe(filter(Boolean), take(1))
-              .subscribe((command: Command) => {
-                this.notification
-                  .create(
-                    'info',
-                    `Votre commande ${command.reference} est prête !`,
-                    'Bonne dégustation ! 🥰', {
-                      nzDuration: 0,
-                      nzKey: commandId,
-                    }
-                  );
-                });
+            this.openSentCommandNotification(commandId);
 
             if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
 

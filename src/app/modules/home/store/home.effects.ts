@@ -14,10 +14,9 @@ import { CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
-import { RestaurantApiService } from '../../restaurant/services/restaurant-api.service';
 import { HomeApiService } from '../services/home-api.service';
 import {
-  fetchRestaurantPastries, notificationSubSent,
+  fetchRestaurantPastries, getPersonalCommand, notificationSubSent,
   resetCommand,
   sendCommand,
   sendNotificationSub,
@@ -80,6 +79,21 @@ export class HomeEffects {
     )
   );
 
+  getPersonalCommand$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getPersonalCommand),
+      withLatestFrom(this.store$.select(selectRestaurant).pipe(filter(Boolean))),
+      mergeMap(([action, restaurant]) => {
+        return this.homeApiService.getPersonalCommand(restaurant?.code!, action.commandId).pipe(
+          switchMap((command) => {
+            return [setPersonalCommand({ command }), resetCommand()];
+          }),
+          catchError(() => EMPTY)
+        );
+      })
+    )
+  );
+
   sendNotificationSub$ = createEffect(() =>
     this.actions$.pipe(
       ofType(sendNotificationSub),
@@ -96,6 +110,5 @@ export class HomeEffects {
     private actions$: Actions,
     private store$: Store<AppState>,
     private homeApiService: HomeApiService,
-    private restaurantApiService: RestaurantApiService,
   ) { }
 }

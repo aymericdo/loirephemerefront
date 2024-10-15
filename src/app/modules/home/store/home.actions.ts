@@ -23,6 +23,10 @@ export const sendCommand = createAction(
   props<CoreCommand>()
 );
 export const resetCommand = createAction('[Home page] Reset command');
+export const getPersonalCommand = createAction(
+  '[Home page] Get personal command',
+  props<{ commandId: string }>()
+);
 export const setPersonalCommand = createAction(
   '[Home page] Set personal command',
   props<{ command: Command }>()
