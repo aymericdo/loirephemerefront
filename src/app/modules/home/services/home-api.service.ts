@@ -23,7 +23,7 @@ export class HomeApiService {
 
   getPersonalCommand(restaurantCode: string, commandId: string): Observable<Command> {
     return this.http.get(
-      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}/${commandId}`,
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}/personal-command/${commandId}`,
     ) as Observable<Command>;
   }
 
