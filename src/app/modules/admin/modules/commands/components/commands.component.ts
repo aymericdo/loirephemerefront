@@ -10,7 +10,7 @@ import { canVibrate } from 'src/app/helpers/vibrate';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
-import { addCommand, cancellingCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, removeNotificationSub, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
+import { addCommand, cancellingCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
 import { selectCancelledCommands, selectDeliveredCommands, selectIsLoading, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
 import {
   CommandWebSocketService,
@@ -32,9 +32,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
   totalPayedCommands$: Observable<number>;
   isLoading$: Observable<boolean>;
   restaurant$: Observable<Restaurant | null>;
-
-  private sub: PushSubscription = null!;
-  private restaurant: Restaurant = null!;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -76,7 +73,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe(async (restaurant) => {
-      this.restaurant = restaurant;
       this.fetchCommands(restaurant.code);
 
       if (this.swPush.isEnabled) {
@@ -85,7 +81,6 @@ export class CommandsComponent implements OnInit, OnDestroy {
             serverPublicKey: VAPID_PUBLIC_KEY,
           });
 
-          this.sub = sub;
           this.store.dispatch(sendNotificationSub({ sub, code: restaurant.code }));
           console.log('Subscription to notifications ok');
         } catch (err) {

@@ -4,9 +4,7 @@ import { MenuState, menuInitialState } from 'src/app/modules/admin/modules/menu/
 import { RestaurantState, restaurantInitialState } from 'src/app/modules/admin/modules/restaurant/store/restaurant.reducer';
 import { StatsState, statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
 import { UsersState, usersInitialState } from 'src/app/modules/admin/modules/users/store/users.reducer';
-import {
-  stopLoading
-} from './admin.actions';
+import { stopLoading } from './admin.actions';
 
 export const adminFeatureKey = 'admin';
 

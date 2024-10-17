@@ -18,6 +18,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   restaurant$: Observable<Restaurant | null>;
   isDisplayStockLoading$: Observable<boolean>;
+  currentTab = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -31,12 +32,13 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.pipe(
+    this.route.queryParamMap.pipe(
       takeUntil(this.destroyed$)
     ).subscribe((params) => {
-      if (!params['tab']) {
+      if (!params.get('tab')) {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'info' } });
       }
+      this.currentTab = params.get('tab')!;
     });
   }
 

@@ -34,15 +34,13 @@ export const sendNotificationSub = createAction(
   '[Commands page] Send notification sub',
   props<{ sub: PushSubscription, code: string }>()
 );
+export const setNotificationSub = createAction(
+  '[Admin page] Set admin sub',
+  props<{ sub: PushSubscription }>()
+);
 export const removeNotificationSub = createAction(
   '[Commands page] Remove notification sub',
-  props<{ sub: PushSubscription, code: string }>()
-);
-export const notificationSubSent = createAction(
-  '[Commands page] Notification sub sent'
-);
-export const removeNotificationSubSent = createAction(
-  '[Commands page] Remove notification sub sent'
+  props<{ code: string }>()
 );
 export const stopLoading = createAction(
   '[Commands page] Stop loading',

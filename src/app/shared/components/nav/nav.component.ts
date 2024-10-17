@@ -27,6 +27,7 @@ export class NavComponent implements OnInit, OnDestroy {
   demoResto$: Observable<Restaurant | null>;
   userFetching$: Observable<boolean>;
   restaurantFetching$: Observable<boolean>;
+  allRestaurantFetching$: Observable<boolean>;
 
   isUserCollapsed = true;
   currentOpenedRestaurant = '';
@@ -52,7 +53,8 @@ export class NavComponent implements OnInit, OnDestroy {
     this.isSiderCollapsed$ = this.store.select(selectIsSiderCollapsed);
     this.demoResto$ = this.store.select(selectDemoResto);
     this.userFetching$ = this.store.select(selectUserFetching);
-    this.restaurantFetching$ = combineLatest([
+    this.restaurantFetching$ = this.store.select(selectRestaurantFetching);
+    this.allRestaurantFetching$ = combineLatest([
       this.store.select(selectRestaurantFetching),
       this.store.select(selectDemoRestoFetching),
       this.store.select(selectFirstNavigationStarting),
@@ -109,15 +111,15 @@ export class NavComponent implements OnInit, OnDestroy {
           }
           return route;
         }),
-        withLatestFrom(this.isSiderCollapsed$)
+        withLatestFrom(this.isSiderCollapsed$, this.restaurantFetching$)
       )
-      .subscribe(([route, isSiderCollapsed]) => {
+      .subscribe(([route, isSiderCollapsed, restaurantFetching]) => {
         const data = route.snapshot.data;
         if (route.snapshot.params?.hasOwnProperty('code') &&
           route.snapshot.params['code']) {
           const code = route.snapshot.params['code'];
 
-          if (this.restaurantCode !== code) {
+          if (!restaurantFetching && this.restaurantCode !== code) {
             this.store.dispatch(fetchingRestaurant({ code }));
           }
 

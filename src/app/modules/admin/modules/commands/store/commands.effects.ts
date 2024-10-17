@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { EMPTY } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
@@ -12,12 +12,11 @@ import {
   closingCommand,
   editCommand,
   fetchingRestaurantCommands,
-  notificationSubSent,
   payingCommand,
   removeNotificationSub,
-  removeNotificationSubSent,
   sendNotificationSub,
   setCommands,
+  setNotificationSub,
   stopLoading
 } from './commands.actions';
 
@@ -89,7 +88,7 @@ export class CommandsEffects {
       ofType(sendNotificationSub),
       mergeMap((action) => {
         return this.adminApiService.postSub(action.sub, action.code).pipe(
-          map(() => notificationSubSent()),
+          map(() => setNotificationSub({ sub: action.sub })),
           catchError(() => EMPTY)
         );
       })
@@ -100,8 +99,8 @@ export class CommandsEffects {
     this.actions$.pipe(
       ofType(removeNotificationSub),
       mergeMap((action) => {
-        return this.adminApiService.deleteSub(action.sub, action.code).pipe(
-          map(() => removeNotificationSubSent()),
+        return this.adminApiService.deleteSub(action.code).pipe(
+          ofType('Subscription deleted'),
           catchError(() => EMPTY)
         );
       })

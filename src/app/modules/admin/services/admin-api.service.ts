@@ -146,10 +146,10 @@ export class AdminApiService {
     );
   }
 
-  deleteSub(sub: PushSubscription, code: string): Observable<any> {
+  deleteSub(code: string): Observable<any> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/notification/delete`,
-      { sub }
+      { }
     );
   }
 

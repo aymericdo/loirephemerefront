@@ -233,7 +233,22 @@ export class HomeComponent implements OnInit, OnDestroy {
               nzKey: commandId,
             }
           );
+
+          if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
+
+          this.audio = new Audio('assets/sounds/french.mp3');
+          this.audio.pause();
+          this.audio.currentTime = 0;
+          this.audio.play();
         });
+
+    if (this.swPush.isEnabled) {
+      try {
+        this.swPush.unsubscribe();
+      } catch (error) {
+        console.log('Impossible to unsubscribe', error);
+      }
+    }
   }
 
   private watchIsOpened(): void {
@@ -275,13 +290,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.notification.remove(this.commandNotificationIdByCommandId[commandId]);
 
             this.openSentCommandNotification(commandId);
-
-            if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
-
-            this.audio = new Audio('assets/sounds/french.mp3');
-            this.audio.pause();
-            this.audio.currentTime = 0;
-            this.audio.play();
           }
         },
         error: (err) => {

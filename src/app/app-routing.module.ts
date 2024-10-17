@@ -8,33 +8,38 @@ import { FourOhFourComponent } from 'src/app/shared/components/four-oh-four/four
 
 const routes: Routes = [
   {
-    path: 'page/404',
-    component: FourOhFourComponent,
-  },
-  {
-    path: 'page/about',
-    data: { routeName: "about" },
-    loadChildren: () =>
-      import('./modules/about/about.module').then((m) => m.AboutModule),
-  },
-  {
-    path: 'page/login',
-    data: { routeName: "login" },
-    loadChildren: () =>
-      import('./modules/login/login.module').then((m) => m.LoginModule),
-  },
-  {
-    path: 'page/restaurant',
-    data: { routeName: "restaurant" },
-    loadChildren: () =>
-      import('./modules/restaurant/restaurant.module').then((m) => m.RestaurantModule),
-  },
-  {
-    path: 'page/profile',
-    canActivate: [AuthGuardService],
-    data: { routeName: "profile" },
-    loadChildren: () =>
-      import('./modules/profile/profile.module').then((m) => m.ProfileModule),
+    path: 'page',
+    children: [
+      {
+        path: 'about',
+        data: { routeName: "about" },
+        loadChildren: () =>
+          import('./modules/about/about.module').then((m) => m.AboutModule),
+      },
+      {
+        path: 'login',
+        data: { routeName: "login" },
+        loadChildren: () =>
+          import('./modules/login/login.module').then((m) => m.LoginModule),
+      },
+      {
+        path: 'restaurant',
+        data: { routeName: "restaurant" },
+        loadChildren: () =>
+          import('./modules/restaurant/restaurant.module').then((m) => m.RestaurantModule),
+      },
+      {
+        path: 'profile',
+        canActivate: [AuthGuardService],
+        data: { routeName: "profile" },
+        loadChildren: () =>
+          import('./modules/profile/profile.module').then((m) => m.ProfileModule),
+      },
+      {
+        path: '404',
+        component: FourOhFourComponent,
+      },
+    ],
   },
   {
     path: '',
@@ -54,7 +59,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/admin/admin.module').then((m) => m.AdminModule),
   },
-  { path: '**', redirectTo: '/page/404' },
+  { path: '**', redirectTo: '/404' },
 ];
 
 @NgModule({

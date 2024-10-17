@@ -5,7 +5,9 @@ import {
   addCommand,
   editCommand,
   fetchingRestaurantCommands,
+  removeNotificationSub,
   setCommands,
+  setNotificationSub,
   startLoading,
   stopLoading,
 } from './commands.actions';
@@ -15,11 +17,13 @@ export const commandsFeatureKey = 'commands';
 export interface CommandsState {
   commands: Command[];
   loading: boolean;
+  sub: PushSubscription | null;
 }
 
 export const commandsInitialState: CommandsState = {
   commands: [...commandsMock],
   loading: false,
+  sub: null,
 };
 
 const adminReducer = createReducer(
@@ -51,7 +55,14 @@ const adminReducer = createReducer(
       commands: newList,
     };
   }),
-
+  on(setNotificationSub, (state, { sub }) => ({
+    ...state,
+    sub,
+  })),
+  on(removeNotificationSub, (state) => ({
+    ...state,
+    adminSub: null,
+  })),
 );
 
 export function reducer(state: CommandsState | undefined, action: Action) {
