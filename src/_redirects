@@ -1,4 +1,4 @@
-/           /fr/index.html   200!
+/  /fr     302  Country=fr
 /en-US/*    /en-US/index.html   200
 /fr/*       /fr/index.html   200
 /es/*       /es/index.html   200
