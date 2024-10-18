@@ -8,7 +8,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration production",
+    "build": "ng build --localize --configuration production",
     "start-pwa": "http-server -p 8080 -c-1 dist/loirephemerefront",
     "test": "ng test",
     "lint": "ng lint",
