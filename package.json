@@ -52,7 +52,6 @@
     "@angular-eslint/template-parser": "^17.5.3",
     "@angular/cli": "^17.3.10",
     "@angular/compiler-cli": "^17.3.12",
-    "@angular/localize": "^17.3.12",
     "@schematics/angular": "^17.3.10",
     "@types/jasmine": "^4.6.4",
     "@types/luxon": "^3.4.2",
