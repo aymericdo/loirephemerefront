@@ -8,7 +8,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --localize --configuration production",
+    "build": "ng build --localize --configuration production && npm run netlify",
+    "netlify": "cp src/_redirects dist/loirephemerefront/_redirects",
     "start-pwa": "http-server -p 8080 -c-1 dist/loirephemerefront",
     "test": "ng test",
     "lint": "ng lint",
