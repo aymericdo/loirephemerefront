@@ -37,6 +37,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         if (restoList.length) {
           this.router.navigate([restoList[0].code, 'admin']);
+        } else {
+          this.router.navigate(['page', 'restaurant', 'new']);
         }
       } else {
         this.router.navigate(['page', 'restaurant', 'new']);

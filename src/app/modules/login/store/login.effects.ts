@@ -32,7 +32,7 @@ export class LoginEffects {
       mergeMap(() => {
         return this.loginApiService.getUser().pipe(
           switchMap((user) => {
-            return [setUser({ user }), fetchingUserRestaurants()];
+            return [setUser({ user }), fetchingUserRestaurants(), stopLoading()];
           }),
           catchError(() => {
             return [stopUserFetching()];
@@ -159,8 +159,8 @@ export class LoginEffects {
           switchMap((userRes) => {
             return [
               setUser({ user: userRes }),
+              openConfirmationModal({ modal: '' }),
               signInUser({ user: { email: userRes.email, password: user.password } }),
-              openConfirmationModal({ modal: 'register' })
             ];
           }),
           catchError(() => {
