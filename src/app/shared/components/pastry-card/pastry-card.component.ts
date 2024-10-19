@@ -58,7 +58,7 @@ export class PastryCardComponent implements OnChanges {
         (event.target as HTMLImageElement).src = this.adminApiService.getImageUrl('default.jpg');
       }
     } else {
-      (event.target as HTMLImageElement).src = 'fr/assets/image/default.jpg';
+      (event.target as HTMLImageElement).src = 'assets/image/default.jpg';
     }
   }
 }

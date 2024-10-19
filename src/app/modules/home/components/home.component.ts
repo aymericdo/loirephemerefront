@@ -236,7 +236,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
 
-          this.audio = new Audio('fr/assets/sounds/french.mp3');
+          this.audio = new Audio('assets/sounds/french.mp3');
           this.audio.pause();
           this.audio.currentTime = 0;
           this.audio.play();
