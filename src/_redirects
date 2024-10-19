@@ -1,4 +1,10 @@
-/           /fr/index.html    200
-/en-US/*    /en-US/index.html   200
-/fr/*       /fr/index.html   200
-/es/*       /es/index.html   200
+/  /fr     302  Language=fr
+/  /en-US  302  Language=en
+/  /es     302  Language=es
+
+/           /fr/index.html      200
+
+
+/en-US/*    /en-us/index.html   200
+/fr/*       /fr/index.html      200
+/es/*       /es/index.html      200
