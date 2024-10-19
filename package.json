@@ -9,6 +9,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --localize --configuration production",
+    "netlify": "cp src/_redirects dist/loirephemerefront/",
     "start-pwa": "http-server -p 8080 -c-1 dist/loirephemerefront",
     "test": "ng test",
     "lint": "ng lint",
