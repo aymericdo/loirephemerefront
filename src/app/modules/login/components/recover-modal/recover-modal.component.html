@@ -1,8 +1,8 @@
-<nz-modal [nzVisible]="true" nzCentered nzTitle="Mot de passe oublié" [nzClosable]="false">
+<nz-modal [nzVisible]="true" nzCentered nzTitle="Mot de passe oublié" i18n-nzTitle [nzClosable]="false">
   <form nz-form [formGroup]="validateForm">
     <ng-container *nzModalContent>
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Mot de passe</nz-form-label>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired i18n>Mot de passe</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback [nzErrorTip]="userPasswordErrorTpl">
           <nz-input-group [nzSuffix]="suffixTemplate">
             <input [type]="passwordVisible ? 'text' : 'password'" nz-input formControlName="password"
@@ -14,16 +14,16 @@
           </ng-template>
 
           <ng-template #userPasswordErrorTpl let-control>
-            <ng-container *ngIf="control.hasError('required')">
+            <ng-container *ngIf="control.hasError('required')" i18n>
               Merci d'entrer un mot de passe
             </ng-container>
-            <ng-container *ngIf="control.hasError('minlength')">
+            <ng-container *ngIf="control.hasError('minlength')" i18n>
               Merci d'entrer un mot de passe de plus de {{ SIZE.MIN_PASSWORD }} caractères
             </ng-container>
-            <ng-container *ngIf="control.hasError('maxlength')">
+            <ng-container *ngIf="control.hasError('maxlength')" i18n>
               Merci d'entrer un mot de passe de moins de {{ SIZE.LARGE }} caractères
             </ng-container>
-            <ng-container *ngIf="!control.hasError('minlength') && control.hasError('pattern')">
+            <ng-container *ngIf="!control.hasError('minlength') && control.hasError('pattern')" i18n>
               Le mot de passe doit contenir au moins un chiffre, une majuscule et une lettre minuscule.
               Il doit aussi comporter au moins un caractère spécial parmi {{ PASSWORD_SPECIALS_CHARS }}
             </ng-container>
@@ -32,21 +32,21 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Confirmation</nz-form-label>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired i18n>Confirmation</nz-form-label>
         <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback [nzErrorTip]="userConfirmPasswordErrorTpl">
           <input [type]="'password'" nz-input formControlName="confirmPassword" placeholder="**********" />
 
           <ng-template #userConfirmPasswordErrorTpl let-control>
-            <ng-container *ngIf="control.hasError('required')">
+            <ng-container *ngIf="control.hasError('required')" i18n>
               Merci d'entrer la confirmation
             </ng-container>
-            <ng-container *ngIf="control.hasError('minlength')">
+            <ng-container *ngIf="control.hasError('minlength')" i18n>
               Merci d'entrer un mot de passe de plus de {{ SIZE.MIN_PASSWORD }} caractères
             </ng-container>
-            <ng-container *ngIf="control.hasError('maxlength')">
+            <ng-container *ngIf="control.hasError('maxlength')" i18n>
               Merci d'entrer un mot de passe de moins de {{ SIZE.LARGE }} caractères
             </ng-container>
-            <ng-container *ngIf="control.hasError('confirmedValidator')">
+            <ng-container *ngIf="control.hasError('confirmedValidator')" i18n>
               Merci de confirmer avec le même mot de passe
             </ng-container>
           </ng-template>
@@ -56,7 +56,7 @@
 
     <ng-container *nzModalFooter>
       <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!validateForm.valid"
-        [nzLoading]="isLoading$ | async">Réinitialiser le mot de passe</button>
+        [nzLoading]="isLoading$ | async" i18n>Réinitialiser le mot de passe</button>
     </ng-container>
   </form>
 </nz-modal>

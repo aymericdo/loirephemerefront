@@ -35,9 +35,14 @@
         </ng-container>
         <ng-container *nzSpaceItem>
           <a [routerLink]="['/', 'page', 'login']">
-            <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round" i18n>
+            <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
               <span nz-icon nzType="swap-right"></span>
-              {{ !!(user$ | async) ? 'Accéder à l\'app' : 'Se connecter' }}
+              <ng-container *ngIf="!!(user$ | async); login" i18n>
+                Accéder à l'app
+              </ng-container>
+              <ng-template #login i18n>
+                Se connecter
+              </ng-template>
             </button>
           </a>
         </ng-container>
@@ -220,11 +225,11 @@
           </p>
           <p *ngIf="(demoResto$ | async)?.code" i18n>
             Pour que les client⸱e⸱s puissent accéder au menu, il leur suffira d'avoir accès au lien de votre restaurant
-            (<a [href]="'https://oresto.app/' + (demoResto$ | async)?.code" target="_blank">https://oresto.app/{{ (demoResto$ | async)?.code }}</a>).
+            (<a [href]="'https://oresto.app/fr/' + (demoResto$ | async)?.code" target="_blank">https://oresto.app/fr/{{ (demoResto$ | async)?.code }}</a>).
           </p>
           <p *ngIf="(demoResto$ | async)?.code" i18n>
             On peut même imaginer générer un QRCode pour simplifier l'accès à cette url 🤩
-            (<a [href]="'https://oresto.app/'+ (demoResto$ | async)?.code + '/admin?tab=qrcode'" target="_blank">https://oresto.app/{{ (demoResto$ | async)?.code }}/admin?tab=qrcode</a>).
+            (<a [href]="'https://oresto.app/fr/'+ (demoResto$ | async)?.code + '/admin?tab=qrcode'" target="_blank">https://oresto.app/fr/{{ (demoResto$ | async)?.code }}/admin?tab=qrcode</a>).
           </p>
           <div class="footer" i18n>
             Si vous avez des questions ou des idées de fonctionnalités, n'hésitez pas à me contacter

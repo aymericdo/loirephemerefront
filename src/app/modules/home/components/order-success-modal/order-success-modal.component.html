@@ -1,15 +1,15 @@
-<nz-modal [nzVisible]="true" nzTitle="Confirmation" nzCentered [nzClosable]="false" [nzMaskClosable]="true"
+<nz-modal [nzVisible]="true" nzTitle="Confirmation" i18n-nzTitle nzCentered [nzClosable]="false" [nzMaskClosable]="true"
   [nzFooter]="null">
   <ng-container *nzModalContent>
-    <nz-result nzStatus="success" [nzTitle]="'Commande envoyée !'">
-      <div nz-result-subtitle>
+    <nz-result nzStatus="success" [nzTitle]="'Commande envoyée !'" i18n-nzTitle>
+      <div nz-result-subtitle i18n>
         Votre numéro de commande est le <b>{{ commandReference }}</b>.
       </div>
-      <div nz-result-subtitle>
+      <div nz-result-subtitle i18n>
         <b>Pour être averti que votre commande est prête, ne rafraichissez pas la page d'accueil. Une notification vous préviendra.</b>
       </div>
       <div nz-result-extra>
-        <button nz-button nzType="primary" (click)="clickCancel.emit()">
+        <button nz-button nzType="primary" (click)="clickCancel.emit()" i18n>
           Retour à la page d'accueil
         </button>
       </div>

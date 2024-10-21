@@ -2,19 +2,19 @@
   <div nz-col [nzXs]="24">
     <nz-tabset nzLinkRouter>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.', 'register']">
+        <a *nzTabLink nz-tab-link [routerLink]="['.', 'register']" i18n>
           Créer un compte
         </a>
         <app-register></app-register>
       </nz-tab>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" i18n>
           Se connecter
         </a>
         <app-sign-in></app-sign-in>
       </nz-tab>
       <nz-tab *ngIf="isOnRecover">
-        <a *nzTabLink nz-tab-link [routerLink]="['.', 'recover']">
+        <a *nzTabLink nz-tab-link [routerLink]="['.', 'recover']" i18n>
           Mot de passe oublié
         </a>
         <app-recover></app-recover>

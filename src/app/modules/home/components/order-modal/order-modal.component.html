@@ -1,6 +1,6 @@
-<nz-modal [nzVisible]="true" nzTitle="Récapitulatif" nzCentered [nzMaskClosable]="true"
+<nz-modal [nzVisible]="true" nzTitle="Récapitulatif" i18n-nzTitle nzCentered [nzMaskClosable]="true"
   (nzOnCancel)="clickCancel.emit()">
-  <ng-container *nzModalContent>
+  <ng-container *nzModalContent i18n>
     <p>Vous êtes sur le point de commander :</p>
     <ul>
       <li *ngFor="let pastry of pastriesStr">{{ pastry }}</li>

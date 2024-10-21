@@ -3,22 +3,22 @@
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
     <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock === 0"
       [class.-stock-issue]="isStockIssue" nzStandalone nzShowZero [nzCount]="pastry.stock" [nzOverflowCount]="99"
-      [nzTitle]="'stock'">
+      [nzTitle]="'stock'" i18n-nzTitle>
       <ng-container *ngIf="pastry.stock === 0">
-        <span>Rupture de stock</span>
+        <span i18n>Rupture de stock</span>
       </ng-container>
       <ng-container *ngIf="pastry.stock > 0">
-        <span>Stock</span>
+        <span i18n>Stock</span>
       </ng-container>
     </nz-badge>
 
     <nz-badge *ngIf="isAdmin" class="display-sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence + 1"
-      [nzTitle]="'displaySequence'"></nz-badge>
+      [nzTitle]="'Séquence d\'affichage'" i18n-nzTitle></nz-badge>
 
     <nz-card-meta [nzTitle]="pastry.name + ' (' + pastry.price + '€)'" [nzDescription]="pastry.description">
     </nz-card-meta>
     <nz-collapse *ngIf="pastry.ingredients?.length" class="ingredients-section" nzGhost>
-      <nz-collapse-panel nzHeader="Ingrédients">
+      <nz-collapse-panel nzHeader="Ingrédients" i18n-nzHeader>
         <p class="ingredients" style="margin: 0">
           {{ pastry.ingredients.join(', ') }}
         </p>

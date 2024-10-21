@@ -10,7 +10,7 @@
     <nz-space class="badges-section" nzAlign="center">
       <nz-badge *nzSpaceItem class="hidden-badge" [nzCount]="iconHidden" nzStandalone [nzTitle]="'hidden'"></nz-badge>
       <nz-badge *nzSpaceItem class="sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence + 1"
-        [nzTitle]="'displaySequence'"></nz-badge>
+        [nzTitle]="'Séquence d\'affichage'" i18n-nzTitle></nz-badge>
     </nz-space>
     <ng-template #iconHidden>
       <span *ngIf="pastry.hidden" nz-icon nzType="eye-invisible"></span>
@@ -23,6 +23,6 @@
 </nz-list>
 
 <app-information-popover>
-  <div>Vous pouvez ordonner les pâtisseries dans l'ordre que vous le souhaitez.</div>
-  <div>Il vous suffit de déplacer les lignes en les faisant glisser.</div>
+  <div i18n>Vous pouvez ordonner les pâtisseries dans l'ordre que vous le souhaitez.</div>
+  <div i18n>Il vous suffit de déplacer les lignes en les faisant glisser.</div>
 </app-information-popover>

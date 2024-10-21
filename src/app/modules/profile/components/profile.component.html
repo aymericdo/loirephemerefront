@@ -1,16 +1,16 @@
 <nz-tabset nzCentered>
-  <nz-tab nzTitle="Moi">
+  <nz-tab nzTitle="Moi" i18n-nzTitle>
     <div class="content" nz-row nzJustify="center">
       <div nz-col [nzLg]="20" [nzXs]="24">
         <div nz-row nzJustify="center">
           <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-            <nz-form-label nzRequired>Email</nz-form-label>
+            <nz-form-label nzRequired i18n>Email</nz-form-label>
             <nz-form-control>
               <input nz-input [value]="(user$ | async)?.email" disabled placeholder="mail@mail.com" />
             </nz-form-control>
           </nz-form-item>
           <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-            <nz-form-label>Afficher le {{ (demoResto$ | async)?.name }}</nz-form-label>
+            <nz-form-label i18n>Afficher le {{ (demoResto$ | async)?.name }}</nz-form-label>
             <nz-form-control>
               <nz-switch
                 [ngModel]="!!(user$ | async)?.displayDemoResto"
@@ -26,7 +26,7 @@
       </div>
     </div>
   </nz-tab>
-  <nz-tab nzTitle="Sécurité">
+  <nz-tab nzTitle="Sécurité" i18n-nzTitle>
     <div class="content" nz-row nzJustify="center">
       <div nz-col [nzSm]="20" [nzXs]="24">
         <app-change-password></app-change-password>

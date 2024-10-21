@@ -1,12 +1,12 @@
 <div class="users-section">
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
-    <nz-page-header-subtitle>Utilisateurs</nz-page-header-subtitle>
-    <nz-page-header-tags><nz-tag [nzColor]="'orange'">Admin</nz-tag></nz-page-header-tags>
+    <nz-page-header-subtitle i18n>Utilisateurs</nz-page-header-subtitle>
+    <nz-page-header-tags><nz-tag [nzColor]="'orange'" i18n>Admin</nz-tag></nz-page-header-tags>
     <nz-page-header-extra>
       <div class="actions-btn">
         <nz-space nzAlign="center">
-          <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="newUserModalOpened = true">
+          <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="newUserModalOpened = true" i18n>
             <span nz-icon nzType="plus"></span>
             Ajouter un utilisateur
           </button>
@@ -18,11 +18,11 @@
     <nz-table #basicTable [nzData]="(users$ | async)!" [nzLoading]="loading$ | async" [nzScroll]="{ x: '600px' }">
       <thead>
         <tr>
-          <th>Email</th>
-          <th>Créé le</th>
-          <th>Modifié le</th>
-          <th>Accès</th>
-          <th>Actions</th>
+          <th i18n>Email</th>
+          <th i18n>Créé le</th>
+          <th i18n>Modifié le</th>
+          <th i18n>Accès</th>
+          <th i18n>Actions</th>
         </tr>
       </thead>
       <tbody>

@@ -1,7 +1,7 @@
-<nz-result nzStatus="404" nzTitle="404" nzSubTitle="Désolé, la page que vous avez visitée n'existe pas.">
+<nz-result nzStatus="404" nzTitle="404" nzSubTitle="Désolé, la page que vous avez visitée n'existe pas." i18n-nzSubTitle>
   <div *ngIf="(demoResto$ | async)" nz-result-extra>
     <a [routerLink]="['/', (demoResto$ | async)?.code]">
-      <button nz-button nzType="primary">Retour vers le {{ (demoResto$ | async)?.name }}</button>
+      <button nz-button nzType="primary" i18n>Retour vers le {{ (demoResto$ | async)?.name }}</button>
     </a>
   </div>
 </nz-result>

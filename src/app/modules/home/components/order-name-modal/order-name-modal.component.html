@@ -1,13 +1,13 @@
-<nz-modal [nzVisible]="true" nzTitle="Votre commande" nzCentered (nzOnCancel)="clickCancel.emit()">
+<nz-modal [nzVisible]="true" nzTitle="Votre commande" i18n-nzTitle nzCentered (nzOnCancel)="clickCancel.emit()">
   <ng-container *nzModalContent>
     <nz-space nzDirection="vertical">
-      <input *nzSpaceItem nz-input placeholder="Votre prénom" [(ngModel)]="currentFirstName" />
+      <input *nzSpaceItem nz-input placeholder="Votre prénom" i18n-placeholder [(ngModel)]="currentFirstName" />
       <nz-radio-group *nzSpaceItem [(ngModel)]="takeAwayValue">
-        <label nz-radio-button [nzValue]="true">À emporter</label>
-        <label nz-radio-button [nzValue]="false">Sur place</label>
+        <label nz-radio-button [nzValue]="true" i18n>À emporter</label>
+        <label nz-radio-button [nzValue]="false" i18n>Sur place</label>
       </nz-radio-group>
       <nz-space *nzSpaceItem nzAlign="center">
-        <span *nzSpaceItem>Heure de retrait</span>
+        <span *nzSpaceItem i18n>Heure de retrait</span>
         <nz-switch *nzSpaceItem [(ngModel)]="needPickUpTimeValue" (ngModelChange)="handlePickUpTimeAvailable($event)" [nzCheckedChildren]="checkedTemplate"
           [nzUnCheckedChildren]="unCheckedTemplate" [disabled]="pickUpTimeMandatory || !pickUpTimeAvailable">
         </nz-switch>
@@ -21,7 +21,7 @@
     </nz-space>
   </ng-container>
   <ng-container *nzModalFooter>
-    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="currentFirstName.trim().length < 2 || !pickUpTimeAvailable">
+    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="currentFirstName.trim().length < 2 || !pickUpTimeAvailable" i18n>
       Envoyer
     </button>
   </ng-container>

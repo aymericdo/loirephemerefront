@@ -1,10 +1,10 @@
-<nz-modal [nzVisible]="true" nzTitle="Problème" nzCentered [nzClosable]="false" [nzMaskClosable]="true"
+<nz-modal [nzVisible]="true" nzTitle="Problème" i18n-nzTitle nzCentered [nzClosable]="false" [nzMaskClosable]="true"
   [nzFooter]="null">
   <ng-container *nzModalContent>
     <ng-container *ngIf="errorType === 'outOfStock'">
       <nz-result nzStatus="warning">
-        <div nz-result-title>Problème de stock</div>
-        <div nz-result-subtitle>
+        <div nz-result-title i18n>Problème de stock</div>
+        <div nz-result-subtitle i18n>
           Les choix suivants ne sont plus en stock :
           <div>
             <b>{{ pastriesList }}</b>
@@ -12,7 +12,7 @@
           Merci de votre compréhension.
         </div>
         <div nz-result-extra>
-          <button nz-button nzType="primary" (click)="clickCancel.emit()">
+          <button nz-button nzType="primary" (click)="clickCancel.emit()" i18n>
             Retour à la page principale
           </button>
         </div>
@@ -20,8 +20,8 @@
     </ng-container>
     <ng-container *ngIf="errorType === 'deactivated'">
       <nz-result nzStatus="warning">
-        <div nz-result-title>Problème</div>
-        <div nz-result-subtitle>
+        <div nz-result-title i18n>Problème</div>
+        <div nz-result-subtitle i18n>
           Les choix suivants sont désactivés par le restaurant :
           <div>
             <b>{{ pastriesList }}</b>
@@ -29,7 +29,7 @@
           Merci de votre compréhension.
         </div>
         <div nz-result-extra>
-          <button nz-button nzType="primary" (click)="clickCancel.emit()">
+          <button nz-button nzType="primary" (click)="clickCancel.emit()" i18n>
             Retour à la page principale
           </button>
         </div>
@@ -37,13 +37,13 @@
     </ng-container>
     <ng-container *ngIf="!errorType">
       <nz-result nzStatus="warning">
-        <div nz-result-title>Une erreur est survenue</div>
-        <div nz-result-subtitle>
+        <div nz-result-title i18n>Une erreur est survenue</div>
+        <div nz-result-subtitle i18n>
           Nous vous invitons à rafraichir la page et réessayer.
           Merci de votre compréhension.
         </div>
         <div nz-result-extra>
-          <button nz-button nzType="primary" (click)="clickCancel.emit()">
+          <button nz-button nzType="primary" (click)="clickCancel.emit()" i18n>
             Retour à la page principale
           </button>
         </div>

@@ -7,7 +7,7 @@
   <div class="container-section">
     <nz-tabset nzLinkRouter>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'ongoing' }" queryParamsHandling="merge">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'ongoing' }" queryParamsHandling="merge" i18n>
           En cours
         </a>
         <ng-container *ngIf="(onGoingCommands$ | async)?.length === 0">
@@ -29,7 +29,7 @@
         </ng-container>
       </nz-tab>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'delivered' }" queryParamsHandling="merge">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'delivered' }" queryParamsHandling="merge" i18n>
           Livrées
         </a>
         <ng-container *ngIf="(deliveredCommands$ | async)?.length === 0">
@@ -48,7 +48,7 @@
         </ng-container>
       </nz-tab>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'payed' }" queryParamsHandling="merge">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'payed' }" queryParamsHandling="merge" i18n>
           Payées
         </a>
         <ng-container *ngIf="(payedCommands$ | async)?.length === 0">
@@ -57,7 +57,7 @@
         <ng-container *ngIf="(payedCommands$ | async)?.length! > 0">
           <div class="data-section">
             <nz-page-header>
-              <nz-page-header-title *ngIf="(payedCommands$ | async)?.length">Total : {{ totalPayedCommands$ | async }}€
+              <nz-page-header-title *ngIf="(payedCommands$ | async)?.length" i18n>Total : {{ totalPayedCommands$ | async }}€
               </nz-page-header-title>
             </nz-page-header>
             <div nz-row [nzGutter]="[0, 24]">
@@ -72,7 +72,7 @@
         </ng-container>
       </nz-tab>
       <nz-tab *ngIf="(cancelledCommands$ | async)?.length !== 0">
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'cancelled' }" queryParamsHandling="merge">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'cancelled' }" queryParamsHandling="merge" i18n>
           Annulées
         </a>
         <ng-container *ngIf="(cancelledCommands$ | async)?.length === 0">

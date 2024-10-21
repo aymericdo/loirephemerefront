@@ -59,11 +59,11 @@ export class PaymentModalComponent {
       }
 
       return prev;
-    }, [] as PaymentPossibility[])
+    }, [] as PaymentPossibility[]);
 
     this.modal.confirm({
       nzTitle: 'Confirmation',
-      nzContent: `Cette commande <b>a bien été payée</b> avec les moyens de paiement suivant ?
+      nzContent: $localize`Cette commande <b>a bien été payée</b> avec les moyens de paiement suivant ?
         <ul>${result.map((res) => `<li><b><span class="payment-label -${res.key}">${PAYMENT_METHOD_LABEL[res.key].label}</span></b> -> ${res.value}€</li>`).join('')}</ul>`,
       nzOkText: 'OK',
       nzOkType: 'primary',

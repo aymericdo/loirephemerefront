@@ -42,14 +42,14 @@
                 </nz-form-item>
 
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-                  <nz-form-label>Fuseau horaire</nz-form-label>
+                  <nz-form-label i18n>Fuseau horaire</nz-form-label>
                   <nz-form-control>
                     <input nz-input [value]="'Europe/Paris'" disabled />
                   </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-                  <nz-form-label>Stock affiché côté client</nz-form-label>
+                  <nz-form-label i18n>Stock affiché côté client</nz-form-label>
                   <nz-form-control>
                     <nz-switch
                       [ngModel]="!!(restaurant$ | async)?.displayStock" (ngModelChange)="handleDisplayStock($event)" [nzCheckedChildren]="checkedTemplate"
@@ -65,26 +65,26 @@
         </div>
       </nz-tab>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-hours' }" queryParamsHandling="merge">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-hours' }" queryParamsHandling="merge" i18n>
           Ouverture
         </a>
         <app-opening-hours></app-opening-hours>
       </nz-tab>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-pickup-hours' }" queryParamsHandling="merge">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-pickup-hours' }" queryParamsHandling="merge" i18n>
           Prise de commande
         </a>
         <app-opening-pickup></app-opening-pickup>
       </nz-tab>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'qrcode' }" queryParamsHandling="merge">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'qrcode' }" queryParamsHandling="merge" i18n>
           QRCode
         </a>
         <div id="download" class="qrcode-section">
-          <nz-qrcode [nzValue]="'https://oresto.app/' + (restaurant$ | async)?.code" [nzLevel]="'M'" [nzSize]="200"></nz-qrcode>
+          <nz-qrcode [nzValue]="'https://oresto.app/fr/' + (restaurant$ | async)?.code" i18n-nzValue [nzLevel]="'M'" [nzSize]="200"></nz-qrcode>
           <a #download></a>
-          <button nz-button class="button" nzType="primary" (click)="downloadImg()">Télécharger</button>
-          <span class="url"><a [href]="'https://oresto.app/' + (restaurant$ | async)?.code" target="_blank">{{ 'https://oresto.app/' + (restaurant$ | async)?.code }}</a></span>
+          <button nz-button class="button" nzType="primary" (click)="downloadImg()" i18n>Télécharger</button>
+          <span class="url"><a [href]="'https://oresto.app/fr/' + (restaurant$ | async)?.code" target="_blank" i18n-href i18n>{{ 'https://oresto.app/fr/' + (restaurant$ | async)?.code }}</a></span>
         </div>
       </nz-tab>
     </nz-tabset>

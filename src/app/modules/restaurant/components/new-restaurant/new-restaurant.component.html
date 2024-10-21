@@ -1,9 +1,9 @@
 <div>
   <div class="steps-section">
     <nz-steps [nzCurrent]="currentStep">
-      <nz-step nzTitle="Restaurant" [nzIcon]="currentStep > 0 ? '' : 'coffee'" nzDescription="Étape 1"></nz-step>
-      <nz-step nzTitle="Utilisateur" [nzIcon]="currentStep > 1 ? '' : 'user'" nzDescription="Étape 2"></nz-step>
-      <nz-step nzTitle="Terminé" [nzIcon]="currentStep > 2 ? '' : 'check'" nzDescription="Étape 3"></nz-step>
+      <nz-step nzTitle="Restaurant" [nzIcon]="currentStep > 0 ? '' : 'coffee'" nzDescription="Étape 1" i18n-nzTitle i18n-nzDescription></nz-step>
+      <nz-step nzTitle="Utilisateur" [nzIcon]="currentStep > 1 ? '' : 'user'" nzDescription="Étape 2" i18n-nzTitle i18n-nzDescription></nz-step>
+      <nz-step nzTitle="Terminé" [nzIcon]="currentStep > 2 ? '' : 'check'" nzDescription="Étape 3" i18n-nzTitle i18n-nzDescription></nz-step>
     </nz-steps>
   </div>
 
@@ -12,19 +12,19 @@
       <ng-container *ngIf="currentStep === 0">
         <form nz-form [formGroup]="validateForm" (ngSubmit)="submitRestaurantForm()" nz-row nzJustify="center">
           <nz-form-item nz-col [nzLg]="16" [nzSm]="20" [nzXs]="24">
-            <nz-form-label nzRequired>Nom du restaurant</nz-form-label>
-            <nz-form-control nzHasFeedback nzValidatingTip="En cours de validation..."
+            <nz-form-label nzRequired i18n>Nom du restaurant</nz-form-label>
+            <nz-form-control nzHasFeedback nzValidatingTip="En cours de validation..." i18n-nzValidatingTip
               [nzErrorTip]="restaurantNameErrorTpl">
-              <input nz-input formControlName="name" placeholder="Gaufres et compagnie" />
+              <input nz-input formControlName="name" placeholder="Gaufres et compagnie" i18n-placeholder />
               <ng-template #restaurantNameErrorTpl let-control>
-                <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
-                <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }}
+                <ng-container *ngIf="control.hasError('required')" i18n>Merci d'entrer un nom</ng-container>
+                <ng-container *ngIf="control.hasError('minlength')" i18n>Merci d'entrer un nom de plus de {{ SIZE.MIN }}
                   caractères
                 </ng-container>
-                <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de {{ SIZE.SMALL }}
+                <ng-container *ngIf="control.hasError('maxlength')" i18n>Merci d'entrer un nom de moins de {{ SIZE.SMALL }}
                   caractères
                 </ng-container>
-                <ng-container *ngIf="control.hasError('duplicated')">Le nom est déjà pris</ng-container>
+                <ng-container *ngIf="control.hasError('duplicated')" i18n>Le nom est déjà pris</ng-container>
               </ng-template>
             </nz-form-control>
           </nz-form-item>
@@ -33,8 +33,8 @@
             <nz-form-control>
               <div nz-row nzJustify="end">
                 <nz-space nzWrap>
-                  <button *nzSpaceItem nz-button (click)="resetForm($event)">Effacer</button>
-                  <button *nzSpaceItem nz-button nzType="primary" [disabled]="!validateForm.valid">Suivant</button>
+                  <button *nzSpaceItem nz-button (click)="resetForm($event)" i18n>Effacer</button>
+                  <button *nzSpaceItem nz-button nzType="primary" [disabled]="!validateForm.valid" i18n>Suivant</button>
                 </nz-space>
               </div>
             </nz-form-control>
@@ -44,9 +44,9 @@
 
       <ng-container *ngIf="currentStep === 1">
         <nz-result *ngIf="(user$ | async) !== null" [nzIcon]="'smile-twotone'"
-          [nzTitle]="'Bonjour ' + (user$ | async)?.email">
+          [nzTitle]="'Bonjour ' + (user$ | async)?.email" i18n-nzTitle>
           <div nz-result-extra>
-            <button nz-button nzType="primary" (click)="currentStep = currentStep + 1">Suivant</button>
+            <button nz-button nzType="primary" (click)="currentStep = currentStep + 1" i18n>Suivant</button>
           </div>
         </nz-result>
 
@@ -54,10 +54,10 @@
           <div nz-row nzJustify="center">
             <div nz-col [nzXs]="24">
               <nz-tabset>
-                <nz-tab nzTitle="Créer un compte">
+                <nz-tab nzTitle="Créer un compte" i18n-nzTitle>
                   <app-register></app-register>
                 </nz-tab>
-                <nz-tab nzTitle="Se connecter">
+                <nz-tab nzTitle="Se connecter" i18n-nzTitle>
                   <app-sign-in></app-sign-in>
                 </nz-tab>
               </nz-tabset>
@@ -67,9 +67,9 @@
       </ng-container>
 
       <ng-container *ngIf="currentStep === 2">
-        <nz-result nzStatus="success" nzTitle="Bravo, c'est fini !">
+        <nz-result nzStatus="success" nzTitle="Bravo, c'est fini !" i18n-nzTitle>
           <div nz-result-extra>
-            <button nz-button nzType="primary" (click)="handleCreation()">Créer le resto</button>
+            <button nz-button nzType="primary" (click)="handleCreation()" i18n>Créer le resto</button>
           </div>
         </nz-result>
       </ng-container>

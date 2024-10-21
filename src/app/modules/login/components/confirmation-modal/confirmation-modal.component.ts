@@ -12,7 +12,7 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./confirmation-modal.component.scss']
 })
 export class ConfirmationModalComponent implements OnInit, OnDestroy {
-  @Input() submitButton = 'Suivant';
+  @Input() submitButton = $localize`Suivant`;
   @Output() clickConfirm = new EventEmitter<{ emailCode: string }>();
 
   @ViewChild('figure1') figure1Element!: NzInputNumberComponent;

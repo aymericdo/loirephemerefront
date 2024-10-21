@@ -107,27 +107,27 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   showValidationPopup(type: 'toDone' | 'toPayed' | 'toCancelled'): void {
     if (type === 'toDone') {
       this.modal.confirm({
-        nzTitle: `Commande #${this.command.reference}`,
-        nzContent: `Cette commande a bien été livrée ? <br> (N'oubliez pas d'encaisser par la suite dans l'onglet suivant)`,
+        nzTitle: $localize`Commande #${this.command.reference}`,
+        nzContent: $localize`Cette commande a bien été livrée ? <br> (N'oubliez pas d'encaisser par la suite dans l'onglet suivant)`,
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {
           this.clickDone.emit();
         },
-        nzCancelText: 'Annuler',
+        nzCancelText: $localize`Annuler`,
       });
     } else if (type === 'toPayed') {
       this.isPaymentModalVisible = true;
     } else if (type === 'toCancelled') {
       this.modal.confirm({
-        nzTitle: `Commande #${this.command.reference}`,
-        nzContent: `Voulez-vous vraiment annuler cette commande ?`,
+        nzTitle: $localize`Commande #${this.command.reference}`,
+        nzContent: $localize`Voulez-vous vraiment annuler cette commande ?`,
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {
           this.clickCancelled.emit();
         },
-        nzCancelText: 'Annuler',
+        nzCancelText: $localize`Annuler`,
       });
     }
   }
