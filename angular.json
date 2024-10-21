@@ -10,8 +10,8 @@
       "i18n": {
         "sourceLocale": "fr",
         "locales": {
-          "en": "src/locale/messages.en.xlf",
-          "es": "src/locale/messages.es.xlf"
+          "en": "src/locale/messages.en.json",
+          "es": "src/locale/messages.es.json"
         }
       },
       "projectType": "application",
@@ -85,8 +85,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "4kb",
+                  "maximumError": "5kb"
                 }
               ],
               "serviceWorker": true,

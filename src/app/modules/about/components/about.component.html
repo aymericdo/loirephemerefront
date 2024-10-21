@@ -11,23 +11,32 @@
           <h1>Oresto</h1>
         </div>
       </nz-affix>
-      <h2 [class.-has-scrolled]="hasScrolled" class="sub-title">L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.</h2>
+      <h2 [class.-has-scrolled]="hasScrolled" class="sub-title" i18n>
+        L'application de votre restaurant qui simplifie la prise de commande, et plein d'autres choses.
+      </h2>
       <nz-space nzDirection="vertical">
         <ng-container *ngIf="(user$ | async) === null">
           <ng-container *nzSpaceItem>
             <a [routerLink]="['/', 'page', 'restaurant', 'new']">
-              <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Créer son resto</button>
+              <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round" i18n>
+                <span nz-icon nzType="swap-right"></span>
+                Créer son resto
+              </button>
             </a>
           </ng-container>
           <ng-container *nzSpaceItem>
             <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
-              <button nz-button nzType="default" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>Tester le restaurant démo</button>
+              <button nz-button nzType="default" [nzSize]="'large'" nzShape="round" i18n>
+                <span nz-icon nzType="swap-right"></span>
+                Tester le restaurant démo
+              </button>
             </a>
           </ng-container>
         </ng-container>
         <ng-container *nzSpaceItem>
           <a [routerLink]="['/', 'page', 'login']">
-            <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round"><span nz-icon nzType="swap-right"></span>
+            <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round" i18n>
+              <span nz-icon nzType="swap-right"></span>
               {{ !!(user$ | async) ? 'Accéder à l\'app' : 'Se connecter' }}
             </button>
           </a>
@@ -43,10 +52,10 @@
     </div>
     <div class="timeline-section" #target>
       <nz-timeline [nzMode]="'alternate'">
-        <nz-timeline-item nzLabel="03/05/2021">Première ligne de code afin de gérer les commandes de ma pâtisserie éphèmere</nz-timeline-item>
-        <nz-timeline-item nzLabel="07/08/2021">Ouverture de ma boutique éphèmere de patisseries</nz-timeline-item>
-        <nz-timeline-item nzLabel="30/10/2022">Création de Oresto afin de rendre l'outil accessible à tous</nz-timeline-item>
-        <nz-timeline-item nzLabel="15/05/2023">Oresto est fonctionnel 🎉</nz-timeline-item>
+        <nz-timeline-item nzLabel="03/05/2021" i18n>Première ligne de code afin de gérer les commandes de ma pâtisserie éphèmere</nz-timeline-item>
+        <nz-timeline-item nzLabel="07/08/2021" i18n>Ouverture de ma boutique éphèmere de patisseries</nz-timeline-item>
+        <nz-timeline-item nzLabel="30/10/2022" i18n>Création de Oresto afin de rendre l'outil accessible à tous</nz-timeline-item>
+        <nz-timeline-item nzLabel="15/05/2023" i18n>Oresto est fonctionnel 🎉</nz-timeline-item>
       </nz-timeline>
     </div>
   </div>
@@ -54,19 +63,19 @@
 
 <div class="section">
   <div>
-    <h2>Gestion du menu</h2>
+    <h2 i18n>Gestion du menu</h2>
     <div class="description">
-      <p>Créer votre menu en quelques cliques, de manière simple et intuitive !</p>
+      <p i18n>Créer votre menu en quelques cliques, de manière simple et intuitive !</p>
       <ul>
-      <li>
-       Ajouter des produits à <b>l'infini</b>!
-      </li>
-      <li>
-       Configurer les horaires d'ouverture de votre restaurant
-      </li>
-      <li>
-        Gestion des stocks <b>en temps réel</b>
-      </li>
+        <li i18n>
+        Ajouter des produits à <b>l'infini</b>!
+        </li>
+        <li i18n>
+        Configurer les horaires d'ouverture de votre restaurant
+        </li>
+        <li i18n>
+          Gestion des stocks <b>en temps réel</b>
+        </li>
       </ul>
     </div>
   </div>
@@ -77,14 +86,14 @@
 
 <div class="section -swap">
   <div>
-    <h2>Gestion des commandes</h2>
+    <h2 i18n>Gestion des commandes</h2>
     <div class="description">
-      <p>Recevez les commandes directement sur votre téléphone !</p>
+      <p i18n>Recevez les commandes directement sur votre téléphone !</p>
       <ul>
-        <li>
+        <li i18n>
           Gérer vos commandes en les marquants comme livrées, puis payées
         </li>
-        <li>
+        <li i18n>
           Notifier le client que sa commande est prête grâce à un <b>système de bipeur</b> intégré à l'app
         </li>
       </ul>
@@ -97,14 +106,14 @@
 
 <div class="section">
   <div>
-    <h2>Affichage des statistiques</h2>
+    <h2 i18n>Affichage des statistiques</h2>
     <div class="description">
-      <p>Observer au cours du temps vos commandes !</p>
+      <p i18n>Observer au cours du temps vos commandes !</p>
       <ul>
-        <li>
+        <li i18n>
           Graphiques polyvalents qui vous permettent de filtrer selon les critères qui vous sembles pertinents
         </li>
-        <li>
+        <li i18n>
           Si il manque des informations, faites moi signe et je complèterai asap cette page 😉
         </li>
       </ul>
@@ -117,14 +126,14 @@
 
 <div class="section -swap">
   <div>
-    <h2>Gestion des utilisateurs</h2>
+    <h2 i18n>Gestion des utilisateurs</h2>
     <div class="description">
-      <p>Configurer votre restaurant afin d'ajouter tous vos collègues, avec les accès qui conviennent !</p>
+      <p i18n>Configurer votre restaurant afin d'ajouter tous vos collègues, avec les accès qui conviennent !</p>
       <ul>
-        <li>
+        <li i18n>
           Ajouter autant de personne que vous voulez dans votre restaurant
         </li>
-        <li>
+        <li i18n>
           Configurer l'accès aux différentes sections de l'app par utilisateur afin de garder le contrôle sur les onglets sensibles
         </li>
       </ul>
@@ -138,84 +147,86 @@
 <div class="more-info">
   <nz-tabset>
     <nz-tab>
-      <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'context' }" queryParamsHandling="merge">
+      <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'context' }" queryParamsHandling="merge" i18n>
         Manifeste
       </a>
       <div class="content">
         <div class="sub-content">
-          <p>
+          <p i18n>
             Salut ! Moi c'est Aymeric, je suis <a href="https://www.linkedin.com/in/aymeric-dominique/"
               target="blank">développeur
               web</a> et j'aime faire de la pâtisserie
             à mes heures perdues.
           </p>
-          <p>
+          <p i18n>
             Il se trouve que j'ai ouvert, deux étés de suite, une pâtisserie éphèmere, dans le village de mon enfance, et qu'à
             cette occasion, j'ai créé cette application pour gérer les commandes.
           </p>
-          <p>
+          <p i18n>
             Je me doute bien que je suis pas le premier, et sans doute pas le dernier à créer ce genre de système. Cependant,
             j'aimerais le rendre accessible au plus grand nombre.
           </p>
-          <p>
+          <p i18n>
             <a href="https://www.larep.saint-hilaire-saint-mesmin-45160/loisirs/un-rendez-vous-patissier-gourmand-plebiscite_13995077/"
               target="blank">La pâtisserie éphèmere</a> était à but non lucratif et nous a permis de reverser quelques milliers
             d'euros à <a href="https://www.instagram.com/p/CQfi_pboxwM/" target="blank">Pâtisserie Solidaire</a>, une
             association qui distribue des invendus sucrés à des associations
             comme les Restos du Cœur.
           </p>
-          <p>
+          <p i18n>
             Vous l'aurez compris, l'idée ici n'est toujours pas de devenir millionnaire mais juste de
             donner accès à un outil au plus grand nombre.
           </p>
-          <p>
+          <p i18n>
             <b>L'accès est totalement gratuit.</b>
           </p>
         </div>
       </div>
     </nz-tab>
     <nz-tab>
-      <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'docs' }" queryParamsHandling="merge">
+      <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'docs' }" queryParamsHandling="merge" i18n>
         Documentation
       </a>
       <div class="content">
         <div class="sub-content">
-          <h2>Documentation</h2>
+          <h2 i18n>Documentation</h2>
           <p>
-            <a href="https://docs.google.com/document/d/1C97h2TNcN-6HKMsBDqwLoKYQWX4n3JBHNJ2HYMPF2Vk" target="_blank">Documentation complète</a>
+            <a href="https://docs.google.com/document/d/1C97h2TNcN-6HKMsBDqwLoKYQWX4n3JBHNJ2HYMPF2Vk" target="_blank" i18n>
+              Documentation complète
+            </a>
           </p>
-          <p>
+          <p i18n>
             L'application possède déjà plusieurs fonctionnalités :
           </p>
           <ul>
-            <li>Création d'un menu en ligne</li>
-            <li>Gestion de commandes</li>
-            <li>Gestion des horaires d'ouverture</li>
-            <li>Réservation de commande</li>
-            <li>Notification pour avertir que la commande est prête</li>
-            <li>Gestion de stocks</li>
-            <li>Statistiques</li>
-            <li>Gestion d'utilisateurs</li>
+            <li i18n>Création d'un menu en ligne</li>
+            <li i18n>Gestion de commandes</li>
+            <li i18n>Gestion des horaires d'ouverture</li>
+            <li i18n>Réservation de commande</li>
+            <li i18n>Notification pour avertir que la commande est prête</li>
+            <li i18n>Gestion de stocks</li>
+            <li i18n>Statistiques</li>
+            <li i18n>Gestion d'utilisateurs</li>
           </ul>
-          <p>
+          <p i18n>
             L'application peut donc être utilisée de 2 manières différentes :
           </p>
           <ul>
-            <li>Les serveur⸱euse⸱s prennent les commandes via l'app</li>
-            <li>Les client⸱e⸱s prennent directement les commandes via l'app</li>
+            <li i18n>Les serveur⸱euse⸱s prennent les commandes via l'app</li>
+            <li i18n>Les client⸱e⸱s prennent directement les commandes via l'app</li>
           </ul>
-          <p>
+          <p i18n>
             Ces deux options sont évidemment fonctionnelles simultanément.
           </p>
-          <p *ngIf="(demoResto$ | async)?.code">
+          <p *ngIf="(demoResto$ | async)?.code" i18n>
             Pour que les client⸱e⸱s puissent accéder au menu, il leur suffira d'avoir accès au lien de votre restaurant
-            (<a ù [href]="'https://oresto.app/' + (demoResto$ | async)?.code" target="_blank">https://oresto.app/{{ (demoResto$ | async)?.code }}</a>).
+            (<a [href]="'https://oresto.app/' + (demoResto$ | async)?.code" target="_blank">https://oresto.app/{{ (demoResto$ | async)?.code }}</a>).
           </p>
-          <p *ngIf="(demoResto$ | async)?.code">
+          <p *ngIf="(demoResto$ | async)?.code" i18n>
             On peut même imaginer générer un QRCode pour simplifier l'accès à cette url 🤩
             (<a [href]="'https://oresto.app/'+ (demoResto$ | async)?.code + '/admin?tab=qrcode'" target="_blank">https://oresto.app/{{ (demoResto$ | async)?.code }}/admin?tab=qrcode</a>).
           </p>
-          <div class="footer">
+          <div class="footer" i18n>
             Si vous avez des questions ou des idées de fonctionnalités, n'hésitez pas à me contacter
             <a href="mailto:contact@oresto.app" target="_blank">contact&#64;oresto.app</a> et je vous répondrai avec plaisir !
           </div>
@@ -242,6 +253,6 @@
     <a href="https://docs.google.com/document/d/1C97h2TNcN-6HKMsBDqwLoKYQWX4n3JBHNJ2HYMPF2Vk" target="_blank">
       <button class="social" [nzBlock]="true" nz-button nzType="default" nzShape="circle"><span nz-icon nzType="file-text" nzTheme="fill"></span></button>
     </a>
-    <h3>Documentation</h3>
+    <h3 i18n>Documentation</h3>
   </div>
 </div>
