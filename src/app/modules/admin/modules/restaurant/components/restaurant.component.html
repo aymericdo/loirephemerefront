@@ -84,7 +84,11 @@
           <nz-qrcode [nzValue]="'https://oresto.app/fr/' + (restaurant$ | async)?.code" i18n-nzValue [nzLevel]="'M'" [nzSize]="200"></nz-qrcode>
           <a #download></a>
           <button nz-button class="button" nzType="primary" (click)="downloadImg()" i18n>Télécharger</button>
-          <span class="url"><a [href]="'https://oresto.app/fr/' + (restaurant$ | async)?.code" target="_blank" i18n-href i18n>{{ 'https://oresto.app/fr/' + (restaurant$ | async)?.code }}</a></span>
+          <span class="url">
+            <a [href]="'https://oresto.app/fr/' + (restaurant$ | async)?.code" target="_blank" i18n-href>
+              <span i18n>https://oresto.app/fr/</span>{{ (restaurant$ | async)?.code }}
+            </a>
+          </span>
         </div>
       </nz-tab>
     </nz-tabset>
