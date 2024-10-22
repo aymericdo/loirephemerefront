@@ -463,7 +463,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       this.pastriesByTypeByDateBarChartData[type] = {
         labels: Object.keys(pastriesByTypeByDate[type])
           .reverse()
-          .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'dd/MM', DATE_PIPE_DEFAULT_OPTIONS.toString(), 'fr')),
+          .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'dd/MM', DATE_PIPE_DEFAULT_OPTIONS.toString())),
         datasets: pastries
           .filter((p) => p.type === type && countByTypeByPastry[type][p.name] > 0)
           .map((p) => {
@@ -486,7 +486,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.globalBarChartData = {
       labels: Object.keys(cashByDate)
         .reverse()
-        .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'MMM YYYY', DATE_PIPE_DEFAULT_OPTIONS.toString(), 'fr')),
+        .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'MMM YYYY', DATE_PIPE_DEFAULT_OPTIONS.toString())),
       datasets: [{
         label: 'Total',
         data: Object.keys(cashByDate)
@@ -530,7 +530,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.paymentGlobalBarChartData = {
       labels: Object.keys(cashByDateByPayment)
         .reverse()
-        .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'MMM YYYY', DATE_PIPE_DEFAULT_OPTIONS.toString(), 'fr')),
+        .map((dateStr) => this.datepipe.transform(new Date(dateStr), timeInterval === 'day' ? 'EEEE dd/MM' : 'MMM YYYY', DATE_PIPE_DEFAULT_OPTIONS.toString())),
       datasets: PAYMENT_TYPES.map((key) => {
         return {
           type: 'line',
