@@ -166,9 +166,9 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
 
   duplicate(weekDayNumber: number): void {
     this.modal.confirm({
-      nzTitle: 'Duplication',
-      nzContent: `Voulez-vous dupliquer les horaires de la journée du <b>${this.weekDays[weekDayNumber]}</b> à tous les autres jours de la semaine ?`,
-      nzOkText: 'Oui',
+      nzTitle: $localize`Duplication`,
+      nzContent: $localize`Voulez-vous dupliquer les horaires de la journée du <b>${this.weekDays[weekDayNumber]}</b> à tous les autres jours de la semaine ?`,
+      nzOkText: $localize`Oui`,
       nzOkType: 'primary',
       nzOnOk: () => {
         this.weekDayNumbers
@@ -182,7 +182,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
           this.validateForm.controls[wd].setValue(this.validateForm.controls[weekDayNumber].value);
         });
       },
-      nzCancelText: 'Annuler',
+      nzCancelText: $localize`Annuler`,
     });
   }
 

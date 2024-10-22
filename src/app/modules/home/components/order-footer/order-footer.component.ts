@@ -15,15 +15,15 @@ export class OrderFooterComponent {
 
   showResetConfirm(): void {
     this.modal.confirm({
-      nzTitle: 'Supprimer votre panier ?',
-      nzContent: 'Votre panier sera réinitialisé.',
+      nzTitle: $localize`Supprimer votre panier ?`,
+      nzContent: $localize`Votre panier sera réinitialisé.`,
       nzOkText: 'OK',
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
         this.clickReset.emit();
       },
-      nzCancelText: 'Annuler',
+      nzCancelText: $localize`Annuler`,
     });
   }
 }

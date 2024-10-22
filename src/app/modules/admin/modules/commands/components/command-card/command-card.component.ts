@@ -54,12 +54,12 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const manageGifts = (gifts: string[], pastryId: string, currentCount: number): [string[], number] => {
       if (gifts.some((p) => p === pastryId)) {
-        gifts.splice(gifts.indexOf(pastryId), 1)
+        gifts.splice(gifts.indexOf(pastryId), 1);
         currentCount -= 1;
       }
 
       return [gifts, currentCount];
-    }
+    };
 
     let gifts = this.command.discount ? [...this.command.discount.gifts] : [];
     const pastriesGroupedBy = this.command.pastries.reduce((prev, pastry) => {
@@ -89,7 +89,7 @@ export class CommandCardComponent implements OnInit, OnDestroy {
       pastryType as PastryType,
       Object.keys(pastriesGroupedBy[pastryType]).map((pastryId) => {
         const elem = pastriesGroupedBy[pastryType][pastryId];
-        return [elem[0] as Pastry, elem[1] as number, elem[2] as number]
+        return [elem[0] as Pastry, elem[1] as number, elem[2] as number];
       })
     ]).sort((a, b) => {
       return PASTRY_TYPE_LABEL[a[0] as PastryType].sequence - PASTRY_TYPE_LABEL[b[0] as PastryType].sequence;

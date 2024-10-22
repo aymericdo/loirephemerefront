@@ -1,6 +1,6 @@
 <div nz-row nzJustify="center">
   <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-    <nz-form-label>Toujours ouvert</nz-form-label>
+    <nz-form-label i18n>Toujours ouvert</nz-form-label>
     <nz-form-control>
       <nz-switch
         [ngModel]="!!(restaurant$ | async)?.alwaysOpen" (ngModelChange)="handleAlwaysOpen($event)" [nzCheckedChildren]="checkedTemplate"
@@ -17,6 +17,8 @@
         nzType="info"
         nzMessage="Modification en cours"
         nzDescription="Cliquer sur enregistrer pour sauvegarder les informations."
+        i18n-nzMessage
+        i18n-nzDescription
         nzShowIcon
       ></nz-alert>
     </div>
@@ -61,6 +63,6 @@
 </div>
 
 <app-information-popover>
-  <div>Ces plages indiquent les horaires d'ouverture du restaurant.</div>
-  <div>Les commandes ne pourront être programmées que pour ces plages horaires.</div>
+  <div i18n>Ces plages indiquent les horaires d'ouverture du restaurant.</div>
+  <div i18n>Les commandes ne pourront être programmées que pour ces plages horaires.</div>
 </app-information-popover>

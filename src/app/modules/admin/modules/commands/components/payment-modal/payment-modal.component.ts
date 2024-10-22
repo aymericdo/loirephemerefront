@@ -62,7 +62,7 @@ export class PaymentModalComponent {
     }, [] as PaymentPossibility[]);
 
     this.modal.confirm({
-      nzTitle: 'Confirmation',
+      nzTitle: $localize`Confirmation`,
       nzContent: $localize`Cette commande <b>a bien été payée</b> avec les moyens de paiement suivant ?
         <ul>${result.map((res) => `<li><b><span class="payment-label -${res.key}">${PAYMENT_METHOD_LABEL[res.key].label}</span></b> -> ${res.value}€</li>`).join('')}</ul>`,
       nzOkText: 'OK',
@@ -70,7 +70,7 @@ export class PaymentModalComponent {
       nzOnOk: () => {
         this.clickOk.emit({ payments: result, discount: this.discount });
       },
-      nzCancelText: 'Annuler',
+      nzCancelText: $localize`Annuler`,
     });
   }
 

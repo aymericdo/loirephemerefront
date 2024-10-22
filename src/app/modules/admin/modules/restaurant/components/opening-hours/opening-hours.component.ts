@@ -154,15 +154,15 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
     if (badPickupConfig.length) {
       this.modal.confirm({
-        nzTitle: 'Attention',
-        nzContent: `En modifiant ces horaires d'ouverture, vous allez automatiquement réinitialiser l'horaire d'accès à la prise de commande pour les jours suivant :
+        nzTitle: $localize`Attention`,
+        nzContent: $localize`En modifiant ces horaires d'ouverture, vous allez automatiquement réinitialiser l'horaire d'accès à la prise de commande pour les jours suivant :
           <ul>${badPickupConfig.map((weekDayNumber) => `<li>${this.weekDays[weekDayNumber]}</li>`)}</ul>`,
         nzOkText: 'OK',
         nzOkType: 'primary',
         nzOnOk: () => {
           this.updateOpeningHours();
         },
-        nzCancelText: 'Annuler',
+        nzCancelText: $localize`Annuler`,
       });
     } else {
       this.updateOpeningHours();
@@ -171,8 +171,8 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
   duplicate(weekDayNumber: number): void {
     this.modal.confirm({
-      nzTitle: 'Duplication',
-      nzContent: `Voulez-vous dupliquer les horaires de la journée du <b>${this.weekDays[weekDayNumber]}</b> à tous les autres jours de la semaine ?`,
+      nzTitle: $localize`Duplication`,
+      nzContent: $localize`Voulez-vous dupliquer les horaires de la journée du <b>${this.weekDays[weekDayNumber]}</b> à tous les autres jours de la semaine ?`,
       nzOkText: 'OK',
       nzOkType: 'primary',
       nzOnOk: () => {
@@ -180,15 +180,15 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
           this.validateForm.controls[wd].setValue(this.validateForm.controls[weekDayNumber].value);
         });
       },
-      nzCancelText: 'Annuler',
+      nzCancelText: $localize`Annuler`,
     });
   }
 
   closeDay(weekDayNumber: number): void {
     this.modal.confirm({
-      nzTitle: 'Fermeture',
-      nzContent: `Voulez-vous indiquer que le restaurant est fermé le <b>${this.weekDays[weekDayNumber]}</b> ?`,
-      nzOkText: 'Oui',
+      nzTitle: $localize`Fermeture`,
+      nzContent: $localize`Voulez-vous indiquer que le restaurant est fermé le <b>${this.weekDays[weekDayNumber]}</b> ?`,
+      nzOkText: $localize`Oui`,
       nzOkType: 'primary',
       nzOnOk: () => {
         this.validateForm.controls[weekDayNumber].setValue({
@@ -196,7 +196,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
           endTime: null,
         });
       },
-      nzCancelText: 'Annuler',
+      nzCancelText: $localize`Annuler`,
     });
   }
 
@@ -212,9 +212,9 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
     const endTime = this.datepipe.transform(currentFormDayValue.endTime, 'HH:mm') as string;
 
     return (!startTime && !endTime) ?
-      `Fermé le ${this.weekDays[weekDayNumber]}` :
+      $localize`Fermé le ${this.weekDays[weekDayNumber]}` :
       isOnTwoDays ?
-      `Le restaurant est ouvert entre le ${this.weekDays[weekDayNumber]} ${startTime} et le ${this.weekDays[(weekDayNumber + 1) % this.weekDays.length]} ${endTime}` :
+      $localize`Le restaurant est ouvert entre le ${this.weekDays[weekDayNumber]} ${startTime} et le ${this.weekDays[(weekDayNumber + 1) % this.weekDays.length]} ${endTime}` :
       '';
   }
 

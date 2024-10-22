@@ -101,8 +101,8 @@ export class PromoModalComponent implements OnInit {
     }
 
     this.modal.confirm({
-      nzTitle: 'Confirmation',
-      nzContent: `Voulez-vous vraiment ${toGiveMessage}${toReduceMessage} ?`,
+      nzTitle: $localize`Confirmation`,
+      nzContent: $localize`Voulez-vous vraiment ${toGiveMessage}${toReduceMessage} ?`,
       nzOkText: 'OK',
       nzOkType: 'primary',
       nzOnOk: () => {
@@ -114,7 +114,7 @@ export class PromoModalComponent implements OnInit {
           newPrice: this.command.totalPrice - this.promotionPrice,
         });
       },
-      nzCancelText: 'Annuler',
+      nzCancelText: $localize`Annuler`,
     });
   }
 

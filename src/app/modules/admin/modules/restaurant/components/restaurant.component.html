@@ -1,12 +1,12 @@
 <div class="restaurant-section">
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
-    <nz-page-header-tags><nz-tag [nzColor]="'orange'">Admin</nz-tag></nz-page-header-tags>
+    <nz-page-header-tags><nz-tag [nzColor]="'orange'" i18n>Admin</nz-tag></nz-page-header-tags>
   </nz-page-header>
   <div class="container-section">
     <nz-tabset nzLinkRouter>
       <nz-tab>
-        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'info' }" queryParamsHandling="merge">
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'info' }" queryParamsHandling="merge" i18n>
           Informations
         </a>
         <div class="info-section">
@@ -14,28 +14,28 @@
             <div nz-col [nzLg]="20" [nzXs]="24">
               <div nz-row nzJustify="center">
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-                  <nz-form-label>Nom</nz-form-label>
+                  <nz-form-label i18n>Nom</nz-form-label>
                   <nz-form-control>
                     <input nz-input [value]="(restaurant$ | async)?.name" disabled />
                   </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-                  <nz-form-label>Code</nz-form-label>
+                  <nz-form-label i18n>Code</nz-form-label>
                   <nz-form-control>
                     <input nz-input [value]="(restaurant$ | async)?.code" disabled />
                   </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-                  <nz-form-label>Créé le</nz-form-label>
+                  <nz-form-label i18n>Créé le</nz-form-label>
                   <nz-form-control>
                     <input nz-input [value]="(restaurant$ | async)?.createdAt | date: 'dd/MM/YYYY HH:mm'" disabled />
                   </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
-                  <nz-form-label>Modifié le</nz-form-label>
+                  <nz-form-label i18n>Modifié le</nz-form-label>
                   <nz-form-control>
                     <input nz-input [value]="(restaurant$ | async)?.updatedAt | date: 'dd/MM/YYYY HH:mm'" disabled />
                   </nz-form-control>

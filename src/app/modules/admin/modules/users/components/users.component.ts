@@ -90,14 +90,14 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   openDeleteUserConfirmationModal(userId: string, email: string): void {
     this.modal.confirm({
-      nzTitle: "Supprimer l'utilisateur du restaurant",
-      nzContent: `Voulez-vous vraiment retirer ${email} du restaurant ?`,
-      nzOkText: 'Oui',
+      nzTitle: $localize`Supprimer l'utilisateur du restaurant`,
+      nzContent: $localize`Voulez-vous vraiment retirer ${email} du restaurant ?`,
+      nzOkText: $localize`Oui`,
       nzOkType: 'primary',
       nzOnOk: () => {
         this.store.dispatch(deletingUserToRestaurant({ userId }));
       },
-      nzCancelText: 'Annuler',
+      nzCancelText: $localize`Annuler`,
     });
   }
 
@@ -107,10 +107,10 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   private getAccessLabel(value: Access): string {
     const labels = {
-      menu: 'Menu',
-      commands: 'Commandes',
-      stats: 'Statistiques',
-      users: 'Utilisateurs',
+      menu: $localize`Menu`,
+      commands: $localize`Commandes`,
+      stats: $localize`Statistiques`,
+      users: $localize`Utilisateurs`,
     };
 
     return labels[value] || '';
