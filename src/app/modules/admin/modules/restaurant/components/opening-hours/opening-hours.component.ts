@@ -48,7 +48,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
     let currentDate = firstMondayOfWeek;
     this.weekDays = this.weekDayNumbers.map((_i) => {
-      const valEEEE = this.datepipe.transform(currentDate, 'EEEE', DATE_PIPE_DEFAULT_OPTIONS.toString(), 'fr') as string;
+      const valEEEE = this.datepipe.transform(currentDate, 'EEEE', DATE_PIPE_DEFAULT_OPTIONS.toString()) as string;
       currentDate.setDate(currentDate.getDate() + 1);
       return valEEEE;
     });

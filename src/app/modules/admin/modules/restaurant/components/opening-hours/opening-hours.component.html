@@ -28,9 +28,9 @@
       <nz-form-label class="week-day">{{ weekDays[weekDayNumber] }}</nz-form-label>
       <nz-form-control>
         <nz-space class="time-picker-section" nzWrap>
-          <nz-time-picker *nzSpaceItem formControlName="startTime" nzFormat="HH:mm" [nzMinuteStep]="15"></nz-time-picker>
+          <nz-time-picker *nzSpaceItem formControlName="startTime" nzFormat="HH:mm" [nzMinuteStep]="15" nzPlaceholder="Sélectionner l'heure" i18n-nzPlaceholder></nz-time-picker>
           <span *nzSpaceItem class="arrow-right" nz-icon nzType="swap-right" nzTheme="outline"></span>
-          <nz-time-picker *nzSpaceItem formControlName="endTime" nzFormat="HH:mm" [nzMinuteStep]="15"></nz-time-picker>
+          <nz-time-picker *nzSpaceItem formControlName="endTime" nzFormat="HH:mm" [nzMinuteStep]="15" nzPlaceholder="Sélectionner l'heure" i18n-nzPlaceholder></nz-time-picker>
           <button *nzSpaceItem class="action-btn" nz-button nzType="default" nzShape="circle"
             (click)="duplicate(weekDayNumber)" [disabled]="(isLoading$ | async) || (restaurant$ | async)?.alwaysOpen">
             <span nz-icon nzType="copy"></span>

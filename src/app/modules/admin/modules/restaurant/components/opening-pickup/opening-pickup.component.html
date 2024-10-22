@@ -4,6 +4,8 @@
       nzType="info"
       nzMessage="Modification en cours"
       nzDescription="Cliquer sur enregistrer pour sauvegarder les informations."
+      i18n-nzMessage
+      i18n-nzDescription
       nzShowIcon
     ></nz-alert>
   </div>
@@ -14,7 +16,8 @@
     <nz-form-control>
       <nz-space class="time-picker-section" nzWrap>
         <nz-time-picker *nzSpaceItem formControlName="startTime" nzFormat="HH:mm" [nzMinuteStep]="15"
-          [nzDisabledHours]="disabledHours.bind(this, weekDayNumber)" [nzDisabledMinutes]="disabledMinutes.bind(this, weekDayNumber)"></nz-time-picker>
+          [nzDisabledHours]="disabledHours.bind(this, weekDayNumber)" [nzDisabledMinutes]="disabledMinutes.bind(this, weekDayNumber)"
+          nzPlaceholder="Sélectionner l'heure" i18n-nzPlaceholder></nz-time-picker>
         <button *nzSpaceItem class="action-btn" nz-button nzType="default" nzShape="circle"
           (click)="duplicate(weekDayNumber)" [disabled]="(isLoading$ | async) || (isDayClosed(weekDayNumber))">
           <span nz-icon nzType="copy"></span>
