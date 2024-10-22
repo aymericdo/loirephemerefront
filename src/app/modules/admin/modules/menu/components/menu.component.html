@@ -1,21 +1,21 @@
 <div class="menu-section">
   <nz-page-header>
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
-    <nz-page-header-subtitle>
+    <nz-page-header-subtitle i18n>
       Menu
       <ng-container *ngIf="isInSequenceMode"> / Ordre d'affichage</ng-container>
       <ng-container *ngIf="isInAssociationMode"> / Association de stock</ng-container>
     </nz-page-header-subtitle>
-    <nz-page-header-tags><nz-tag [nzColor]="'orange'">Admin</nz-tag></nz-page-header-tags>
+    <nz-page-header-tags><nz-tag [nzColor]="'orange'" i18n>Admin</nz-tag></nz-page-header-tags>
     <nz-page-header-extra>
       <div *ngIf="(isLoading$ | async) === false" class="actions-btn">
         <nz-space nzAlign="center">
           <ng-container *ngIf="!isInSequenceMode && !isInAssociationMode">
             <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
-              nzBlock>Association de stock</button>
-            <button class="sequence-mode-btn" *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock>Ordre
+              nzBlock i18n>Association de stock</button>
+            <button class="sequence-mode-btn" *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock i18n>Ordre
               d'affichage</button>
-            <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="openNewPastryModal()">
+            <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="openNewPastryModal()" i18n>
               <span nz-icon nzType="plus"></span>
               Ajouter
             </button>
@@ -27,10 +27,10 @@
 
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu>
-                <li nz-menu-item (click)="isInSequenceMode = true">
+                <li nz-menu-item (click)="isInSequenceMode = true" i18n>
                   Ordre d'affichage
                 </li>
-                <li nz-menu-item (click)="isInAssociationMode = true">
+                <li nz-menu-item (click)="isInAssociationMode = true" i18n>
                   Association de stock
                 </li>
               </ul>
@@ -38,7 +38,7 @@
           </ng-container>
           <ng-container *ngIf="isInSequenceMode || isInAssociationMode">
             <button *nzSpaceItem nz-button nzType="primary" nzBlock
-              (click)="isInSequenceMode = false; isInAssociationMode = false">
+              (click)="isInSequenceMode = false; isInAssociationMode = false" i18n>
               <span nz-icon nzType="right"></span>
               Retour
             </button>

@@ -1,3 +1,4 @@
-<nz-switch *ngIf="isTimeIntervalChangeable" class="switch" [ngModel]="(timeInterval$ | async) === 'day'" (ngModelChange)="changingTimeInterval($event)" nzCheckedChildren="Jour" nzUnCheckedChildren="Mois"></nz-switch>
+<nz-switch *ngIf="isTimeIntervalChangeable" class="switch" [ngModel]="(timeInterval$ | async) === 'day'" (ngModelChange)="changingTimeInterval($event)"
+  nzCheckedChildren="Jour" nzUnCheckedChildren="Mois" i18n-nzCheckedChildren i18n-nzUnCheckedChildren></nz-switch>
 <canvas baseChart [data]="barChartData" [options]="barChartOptions" [legend]="true" [type]="'bar'">
 </canvas>

@@ -10,6 +10,7 @@
         <ng-template #onSite i18n>
           Sur place ⛱️
         </ng-template>
+      </p>
       <nz-divider></nz-divider>
       <p i18n>Nom : {{ command.name }}</p>
       <p [class.-pick-up-time]="command.pickUpTime" i18n>Récupération : {{ !!command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
