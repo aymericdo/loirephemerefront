@@ -200,7 +200,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
 
   generateHint(weekDayNumber: number): string {
     if (this.isDayClosed(weekDayNumber)) {
-      return `Fermé le ${this.weekDays[weekDayNumber]}`;
+      return $localize`Fermé le ${this.weekDays[weekDayNumber]}`;
     }
 
     if (!this.validateForm.value[weekDayNumber]) return '';
@@ -209,11 +209,11 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
     const endTime = this.datepipe.transform(this.validateForm.value[weekDayNumber].endTime, 'HH:mm') as string;
 
     return (!startTime && !endTime) ?
-      `Commande impossible en dehors des horaires d'ouverture le ${this.weekDays[weekDayNumber]}` :
+      $localize`Commande impossible en dehors des horaires d'ouverture le ${this.weekDays[weekDayNumber]}` :
       (startTime && endTime) ?
-        `Le ${this.weekDays[weekDayNumber]}, le restaurant accepte que les commandes soient passées entre ${startTime} et ${endTime}.`
+        $localize`Le ${this.weekDays[weekDayNumber]}, le restaurant accepte que les commandes soient passées entre ${startTime} et ${endTime}.`
         : (startTime) ?
-          `Le ${this.weekDays[weekDayNumber]}, le restaurant accepte que les commandes soient passées à partir de ${startTime}.`
+          $localize`Le ${this.weekDays[weekDayNumber]}, le restaurant accepte que les commandes soient passées à partir de ${startTime}.`
           : '';
   }
 
