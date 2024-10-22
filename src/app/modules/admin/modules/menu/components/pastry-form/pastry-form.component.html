@@ -1,25 +1,25 @@
 <form nz-form [formGroup]="validateForm">
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Nom</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired i18n>Nom</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
-      [nzErrorTip]="restaurantNameErrorTpl">
-      <input nz-input formControlName="name" placeholder="Gaufre choco fraise" />
+      [nzErrorTip]="restaurantNameErrorTpl" i18n-nzValidatingTip>
+      <input nz-input formControlName="name" placeholder="Gaufre choco fraise" i18n-placeholder />
       <ng-template #restaurantNameErrorTpl let-control>
-        <ng-container *ngIf="control.hasError('required')">Merci d'entrer un nom</ng-container>
-        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer un nom de plus de {{ SIZE.MIN }} caractères
+        <ng-container *ngIf="control.hasError('required')" i18n>Merci d'entrer un nom</ng-container>
+        <ng-container *ngIf="control.hasError('minlength')" i18n>Merci d'entrer un nom de plus de {{ SIZE.MIN }} caractères
         </ng-container>
-        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer un nom de moins de {{ SIZE.SMALL }}
+        <ng-container *ngIf="control.hasError('maxlength')" i18n>Merci d'entrer un nom de moins de {{ SIZE.SMALL }}
           caractères</ng-container>
-        <ng-container *ngIf="control.hasError('duplicated')">Le nom est déjà pris</ng-container>
+        <ng-container *ngIf="control.hasError('duplicated')" i18n>Le nom est déjà pris</ng-container>
       </ng-template>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Description</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired i18n>Description</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorTpl">
       <nz-textarea-count [nzMaxCharacterCount]="SIZE.LARGE">
         <textarea rows="4" nz-input formControlName="description"
-          placeholder="Le goût puissant d'une pâte à tartiner maison + coulis de fraise"></textarea>
+          placeholder="Le goût puissant d'une pâte à tartiner maison + coulis de fraise" i18n-placeholder></textarea>
       </nz-textarea-count>
       <ng-template #descriptionErrorTpl let-control>
         <ng-container *ngIf="control.hasError('required')">Merci d'entrer une description</ng-container>
@@ -37,18 +37,18 @@
         <nz-input-number formControlName="price" [nzStep]="0.5" [nzMin]="0" placeholder="3"></nz-input-number>
       </nz-input-number-group>
       <ng-template #priceErrorTpl let-control>
-        <ng-container *ngIf="control.hasError('required')">Merci d'entrer un prix (même 0)</ng-container>
+        <ng-container *ngIf="control.hasError('required')" i18n>Merci d'entrer un prix (même 0)</ng-container>
       </ng-template>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24">Ingrédients</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Ingrédients</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-tag *ngFor="let ingredient of validateForm.value.ingredients; let i = index"
         [nzMode]="'closeable'" (nzOnClose)="handleClose(ingredient)">
         {{ (ingredient.length > 20) ? (ingredient | slice:0:20) + '…' : ingredient }}
       </nz-tag>
-      <nz-tag *ngIf="!ingredientsInputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+      <nz-tag *ngIf="!ingredientsInputVisible" class="editable-tag" nzNoAnimation (click)="showInput()" i18n>
         <span nz-icon nzType="plus"></span>
         Ajouter
       </nz-tag>
@@ -58,12 +58,12 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24">Stock</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Stock</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-input-number formControlName="stock" (input)="handleStockChanges()" [nzStep]="1" [nzMin]="0"
       [nzPlaceHolder]="validateForm.getRawValue().stock === null ? '∞' : '50'"></nz-input-number>
     </nz-form-control>
-    <nz-form-label [nzSm]="8" [nzXs]="24">Stock infini</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Stock infini</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-switch [ngModel]="validateForm.getRawValue().stock === null" (ngModelChange)="handleInfiniteStock($event)"
         [ngModelOptions]="{ standalone: true }"
@@ -75,40 +75,40 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24">Visibilité</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Visibilité</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-radio-group formControlName="hidden">
-        <label nz-radio-button [nzValue]="true">Caché</label>
-        <label nz-radio-button [nzValue]="false">Visible</label>
+        <label nz-radio-button [nzValue]="true" i18n>Caché</label>
+        <label nz-radio-button [nzValue]="false" i18n>Visible</label>
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24">Type</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Type</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-radio-group formControlName="type">
-        <label nz-radio [nzValue]="'pastry'">Plat</label>
-        <label nz-radio [nzValue]="'drink'">Boisson</label>
-        <label nz-radio [nzValue]="'tip'">Pourboire</label>
-        <label nz-radio [nzValue]="'other'">Autre</label>
+        <label nz-radio [nzValue]="'pastry'" i18n>Plat</label>
+        <label nz-radio [nzValue]="'drink'" i18n>Boisson</label>
+        <label nz-radio [nzValue]="'tip'" i18n>Pourboire</label>
+        <label nz-radio [nzValue]="'other'" i18n>Autre</label>
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item *ngIf="isEditing">
-    <nz-form-label [nzSm]="8" [nzXs]="24">Ordre d'affichage</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Ordre d'affichage</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-input-number formControlName="displaySequence" [nzStep]="1" [nzMin]="0"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSm]="8" [nzXs]="24">Photo</nz-form-label>
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Photo</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <div class="clearfix">
         <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [(nzFileList)]="fileList" [nzAccept]="'image/jpeg'"
           (nzChange)="handleUpload($event)" [nzShowButton]="fileList.length === 0" [nzPreview]="handlePreview">
           <div>
             <span nz-icon nzType="plus"></span>
-            <div style="margin-top: 8px">Upload</div>
+            <div style="margin-top: 8px" i18n>Upload</div>
           </div>
         </nz-upload>
         <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
