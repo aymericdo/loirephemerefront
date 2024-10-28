@@ -37,7 +37,7 @@
           <a [routerLink]="['/', 'page', 'login']">
             <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
               <span nz-icon nzType="swap-right"></span>
-              <ng-container *ngIf="!!(user$ | async); login" i18n>
+              <ng-container *ngIf="!!(user$ | async); else login" i18n>
                 Accéder à l'app
               </ng-container>
               <ng-template #login i18n>

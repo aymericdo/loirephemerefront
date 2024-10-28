@@ -38,6 +38,7 @@
     "@types/resize-observer-browser": "^0.1.11",
     "chart.js": "^4.4.4",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "http-server": "^14.1.1",
     "luxon": "^3.5.0",
     "ng-hcaptcha": "^2.3.1",
     "ng-zorro-antd": "^17.4.1",

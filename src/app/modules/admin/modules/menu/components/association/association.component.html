@@ -1,5 +1,5 @@
 <button *ngIf="canAssociate()" nz-button nzType="default" nzBlock (click)="associate()">
-  <ng-container *ngIf="hasSelectedAssociatedPastries(); unLinked" i18n>
+  <ng-container *ngIf="hasSelectedAssociatedPastries(); else unLinked" i18n>
     Associer
   </ng-container>
   <ng-template #unLinked i18n>
