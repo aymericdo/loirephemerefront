@@ -1,9 +1,21 @@
 /  /fr     302  Language=fr
 /  /en     302  Language=en
 /  /es     302  Language=es
+/  /de     302  Language=de
+/  /pt     302  Language=pt
+/  /pl     302  Language=pl
+/  /nl     302  Language=nl
+/  /ru     302  Language=ru
+/  /ar     302  Language=ar
 
 /           /fr/index.html      200
 
 /en/*       /en/index.html      200
 /fr/*       /fr/index.html      200
 /es/*       /es/index.html      200
+/de/*       /de/index.html      200
+/pt/*       /pt/index.html      200
+/pl/*       /pl/index.html      200
+/nl/*       /nl/index.html      200
+/ru/*       /ru/index.html      200
+/ar/*       /ar/index.html      200

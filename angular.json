@@ -11,7 +11,13 @@
         "sourceLocale": "fr",
         "locales": {
           "en": "src/locale/messages.en.json",
-          "es": "src/locale/messages.es.json"
+          "es": "src/locale/messages.es.json",
+          "de": "src/locale/messages.de.json",
+          "pt": "src/locale/messages.pt.json",
+          "pl": "src/locale/messages.pl.json",
+          "nl": "src/locale/messages.nl.json",
+          "ru": "src/locale/messages.ru.json",
+          "ar": "src/locale/messages.ar.json"
         }
       },
       "projectType": "application",
@@ -43,6 +49,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/_redirects",
+              "src/robots.txt",
+              "src/sitemap.xml",
               "src/manifest.webmanifest",
               {
                 "glob": "**/*",
