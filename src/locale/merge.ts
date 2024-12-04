@@ -1,5 +1,8 @@
 const fs = require('fs');
 
+// helper :
+// https://translate.i18next.com/
+
 const base = JSON.parse(fs.readFileSync('./src/locale/messages.json').toString());
 
 const others = ['en', 'es', 'de', 'pt', 'pl', 'nl', 'ru', 'ar'];
