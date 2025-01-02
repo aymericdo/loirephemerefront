@@ -34,6 +34,7 @@ export class NavComponent implements OnInit, OnDestroy {
   restaurantCode: string | null = null;
   routeName: string | null = null;
   routeWithoutNavBar: boolean | null = false;
+  wannabeAdmin: boolean | null = false;
   hasAccessByRestaurantIdBySection: { [restaurantId: string]: { [access: string]: boolean } } = {};
   isFirstLoad = true;
 

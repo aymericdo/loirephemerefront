@@ -2,7 +2,7 @@
   nzBanner nzType="info" nzMessage="Restaurant de test : amusez-vous !" i18n-nzMessage></nz-alert>
 <div class="home-section" [class.-has-order-footer]="hasSelectedPastries$ | async">
   <nz-page-header *ngIf="(restaurant$ | async) !== null">
-    <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
+    <nz-page-header-title><h1>{{ (restaurant$ | async)?.name }}</h1></nz-page-header-title>
     <nz-page-header-tags *ngIf="!isRestaurantOpened" i18n>
       Fermé pour le moment ⛔
       <span *ngIf="pickUpTimeAvailable">

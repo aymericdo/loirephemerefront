@@ -26,7 +26,7 @@
       <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
 
-    <li *ngIf="(userFetching$ | async) === false" nz-submenu [nzOpen]="isUserCollapsed && !!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
+    <li *ngIf="(userFetching$ | async) === false && (isLoggedIn || wannabeAdmin)" nz-submenu [nzOpen]="isUserCollapsed && !!(userRestaurants$ | async)?.length || routeName === 'new-restaurant'"
       [nzTitle]="titleAdminSectionTpl" nzIcon="coffee" [nzMenuClassName]="'restaurant-section'" (nzOpenChange)="isUserCollapsed = true">
       <ul #list>
         <li nz-menu-item [nzMatchRouter]="true" class="row-border-left">
@@ -81,7 +81,7 @@
       </ul>
     </li>
 
-    <li nz-menu-item [nzMatchRouter]="true">
+    <li *ngIf="(isLoggedIn || wannabeAdmin)" nz-menu-item [nzMatchRouter]="true">
       <a (click)="manuallyCollapse()" [routerLink]="['page', 'about']">
         <i nz-icon nzType="question"></i>
         <span i18n>À propos</span>
@@ -116,7 +116,13 @@
             <span i18n>Se déconnecter</span>
           </a>
         </li>
-        <li *ngIf="!isLoggedIn" nz-menu-item [nzMatchRouter]="true">
+        <li *ngIf="!isLoggedIn && !wannabeAdmin" nz-menu-item>
+          <a (click)="wannabeAdmin = true">
+            <i nz-icon nzType="star"></i>
+            <span i18n>Admin</span>
+          </a>
+        </li>
+        <li *ngIf="!isLoggedIn && wannabeAdmin" nz-menu-item [nzMatchRouter]="true">
           <a [routerLink]="['page', 'login']">
             <i nz-icon nzType="login"></i>
             <span i18n>Connexion</span>

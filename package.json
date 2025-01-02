@@ -12,7 +12,7 @@
     "netlify": "cp src/_redirects dist/loirephemerefront/",
     "start-pwa": "http-server -p 8080 -c-1 dist/loirephemerefront",
     "i18n-extract": "ng extract-i18n --format=json --output-path src/locale && npm run i18n-merge",
-    "i18n-merge": "node src/locale/merge.ts",
+    "i18n-merge": "ts-node src/locale/merge.ts",
     "test": "ng test",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
