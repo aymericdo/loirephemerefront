@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, filter, map, take, takeUntil, timer } from 'rxjs';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
@@ -13,10 +13,10 @@ export class OrderPaymentModalComponent implements OnInit, OnDestroy {
   @Input() restaurant!: RestaurantInterface;
   @Output() clickOk = new EventEmitter<CoreCommand>();
   @Output() clickCancel = new EventEmitter<'human' | 'time'>();
-  @HostListener('window:beforeunload', ['$event'])
-  showMessage(event: BeforeUnloadEvent) {
-    event.preventDefault();
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // showMessage(event: BeforeUnloadEvent) {
+  //   event.preventDefault();
+  // }
 
   MINUTES_TO_WAIT = 5;
 
