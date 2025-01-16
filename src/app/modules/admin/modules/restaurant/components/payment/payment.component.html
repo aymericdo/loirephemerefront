@@ -1,0 +1,100 @@
+<form nz-form [formGroup]="validateForm" nz-row nzJustify="center">
+  <div *ngIf="validateForm.dirty" class="info-section" nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-alert
+      nzType="info"
+      nzMessage="Modification en cours"
+      nzDescription="Cliquer sur enregistrer pour sauvegarder les informations."
+      i18n-nzMessage
+      i18n-nzDescription
+      nzShowIcon
+    ></nz-alert>
+  </div>
+
+  <div *ngIf="restaurant?.paymentInformation" class="info-section" nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-alert
+      nzType="success"
+      nzMessage="Informations déjà enregistrées"
+      [nzDescription]="descriptionTemplate"
+      i18n-nzMessage
+      i18n-nzDescription
+      nzShowIcon
+    ></nz-alert>
+    <ng-template #descriptionTemplate>
+      Si vous souhaitez changer ces informations sensibles, merci de me contacter.
+      <a href='mailto:contact@oresto.app' target='_blank'>contact&#64;oresto.app</a>
+    </ng-template>
+  </div>
+
+  <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-form-label i18n>Paiment activé</nz-form-label>
+    <nz-form-control>
+      <nz-switch formControlName="paymentActivated" [nzCheckedChildren]="checkedTemplate"
+        [nzUnCheckedChildren]="unCheckedTemplate" [nzLoading]="isLoading$ | async">
+      </nz-switch>
+      <ng-template #checkedTemplate><span nz-icon nzType="euro"></span></ng-template>
+      <ng-template #unCheckedTemplate><span nz-icon nzType="close"></span></ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-form-label i18n>Paiment obligatoire&#160;<b>avant</b>&#160;commande</nz-form-label>
+    <nz-form-control>
+      <nz-switch formControlName="paymentRequired" [nzCheckedChildren]="checkedTemplate2"
+        [nzUnCheckedChildren]="unCheckedTemplate2" [nzLoading]="isLoading$ | async">
+      </nz-switch>
+      <ng-template #checkedTemplate2><span nz-icon nzType="check"></span></ng-template>
+      <ng-template #unCheckedTemplate2><span nz-icon nzType="double-right"></span></ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-form-label i18n>Clé publique</nz-form-label>
+    <nz-form-control>
+      <nz-input-group nzAddOnAfterIcon="lock" [nzSuffix]="suffixTemplate">
+        <input type="text" [type]="publicKeyVisible ? 'text' : 'password'" nz-input formControlName="publicKey" placeholder="Taper votre clé publique" i18n-placeholder />
+      </nz-input-group>
+      <ng-template #suffixTemplate>
+        <span
+          nz-icon
+          class="ant-input-password-icon"
+          [nzType]="publicKeyVisible ? 'eye-invisible' : 'eye'"
+          (click)="publicKeyVisible = !publicKeyVisible"
+        ></span>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-form-label i18n>Clé secrète</nz-form-label>
+    <nz-form-control>
+      <nz-input-group nzAddOnAfterIcon="lock" [nzSuffix]="suffixTemplate2">
+        <input type="text" [type]="secretKeyVisible ? 'text' : 'password'" nz-input formControlName="secretKey" placeholder="Taper votre clé secrète" i18n-placeholder />
+      </nz-input-group>
+      <ng-template #suffixTemplate2>
+        <span
+          nz-icon
+          class="ant-input-password-icon"
+          [nzType]="secretKeyVisible ? 'eye-invisible' : 'eye'"
+          (click)="secretKeyVisible = !secretKeyVisible"
+        ></span>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <a href="https://stripe.com/fr" target="blank">
+      <img class="logo" src="assets/image/stripe-logo.png" alt="stripe-logo">
+    </a>
+  </nz-form-item>
+
+  <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-form-control>
+      <div nz-row nzJustify="end">
+        <nz-space nzWrap>
+          <button *nzSpaceItem nz-button (click)="submitForm()" nzType="primary"
+            [disabled]="!validateForm.valid || (isLoading$ | async) || !validateForm.dirty" i18n>Enregistrer</button>
+        </nz-space>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+</form>

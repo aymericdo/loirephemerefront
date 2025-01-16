@@ -9,7 +9,7 @@
       <nz-space *nzSpaceItem nzAlign="center">
         <span *nzSpaceItem i18n>Heure de retrait</span>
         <nz-switch *nzSpaceItem [(ngModel)]="needPickUpTimeValue" (ngModelChange)="handlePickUpTimeAvailable($event)" [nzCheckedChildren]="checkedTemplate"
-          [nzUnCheckedChildren]="unCheckedTemplate" [disabled]="pickUpTimeMandatory || !pickUpTimeAvailable">
+          [nzUnCheckedChildren]="unCheckedTemplate" [disabled]="pickUpTimeRequired || !pickUpTimeAvailable">
         </nz-switch>
         <ng-template #checkedTemplate><span nz-icon nzType="check"></span></ng-template>
         <ng-template #unCheckedTemplate><span nz-icon nzType="close"></span></ng-template>
@@ -21,8 +21,13 @@
     </nz-space>
   </ng-container>
   <ng-container *nzModalFooter>
-    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="currentFirstName.trim().length < 2 || !pickUpTimeAvailable" i18n>
-      Envoyer
+    <button nz-button nzType="primary" (click)="handleOnOk()" [disabled]="currentFirstName.trim().length < 2 || !pickUpTimeAvailable">
+      <ng-container *ngIf="paymentRequired; else paymentNotRequired" i18n>
+        Suivant
+      </ng-container>
+      <ng-template #paymentNotRequired i18n>
+        Envoyer
+      </ng-template>
     </button>
   </ng-container>
 </nz-modal>

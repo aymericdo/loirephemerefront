@@ -4,4 +4,6 @@ export const SIZE = {
   SMALL: 35,
   MEDIUM: 50,
   LARGE: 250,
+
+  STRIPE_KEY: 107,
 };

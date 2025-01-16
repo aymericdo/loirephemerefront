@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { EMPTY, of } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { catchError, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';

@@ -26,6 +26,8 @@ export class OrderErrorModalComponent implements OnInit {
       this.pastriesList = (this.errors as { deactivated: Pastry[] }).deactivated
         .map((p) => p.name)
         .join(', ');
+    } else if (this.errors.hasOwnProperty('stripe')) {
+      this.errorType = 'stripe';
     }
   }
 }

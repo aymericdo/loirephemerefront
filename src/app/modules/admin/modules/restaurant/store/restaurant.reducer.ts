@@ -6,6 +6,7 @@ import {
   updateDisplayStock,
   updateOpeningPickupTime,
   updateOpeningTime,
+  updatePaymentInformation,
 } from './restaurant.actions';
 
 export const restaurantFeatureKey = 'restaurant';
@@ -24,7 +25,7 @@ export const restaurantInitialState: RestaurantState = {
 
 const adminRestaurantReducer = createReducer(
   restaurantInitialState,
-  on(updateOpeningPickupTime, updateOpeningTime, startLoading, (state) => ({
+  on(updatePaymentInformation, updateOpeningPickupTime, updateOpeningTime, startLoading, (state) => ({
     ...state,
     loading: true,
   })),

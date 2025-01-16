@@ -5,6 +5,8 @@ import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   decrementPastry, fetchRestaurantPastries, incrementPastry,
   resetCommand,
+  resetErrorCommand,
+  resetPersonalCommand,
   sendCommand,
   setErrorCommand,
   setPastries,
@@ -109,9 +111,18 @@ const homeReducer = createReducer(
     personalCommand: command,
     currentSentCommands: [...state.currentSentCommands, command]
   })),
+  on(resetPersonalCommand, (state) => ({
+    ...state,
+    personalCommand: null,
+    currentSentCommands: [],
+  })),
   on(setErrorCommand, (state, { error }) => ({
     ...state,
     errorCommand: error.error,
+  })),
+  on(resetErrorCommand, (state) => ({
+    ...state,
+    errorCommand: null,
   })),
 );
 

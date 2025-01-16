@@ -27,6 +27,20 @@ export class HomeApiService {
     ) as Observable<Command>;
   }
 
+  cancelPersonalCommand(restaurantCode: string, commandId: string): Observable<Command> {
+    return this.http.delete(
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}/personal-command/${commandId}`,
+    ) as Observable<Command>;
+  }
+
+  markPersonalCommandAsPayed(restaurantCode: string, commandId: string, sessionId: string): Observable<Command> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}/personal-command/${commandId}/mark-as-payed`, {
+        sessionId,
+      }
+    ) as Observable<Command>;
+  }
+
   postCommand(restaurantCode: string, command: CoreCommand): Observable<Command> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}`,

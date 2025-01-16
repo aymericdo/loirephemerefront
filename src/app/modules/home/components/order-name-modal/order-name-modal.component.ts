@@ -19,7 +19,8 @@ export class OrderNameModalComponent implements OnInit, OnDestroy {
   takeAwayValue = false;
   pickUpTimeAvailable = false;
   needPickUpTimeValue = false;
-  pickUpTimeMandatory = false;
+  pickUpTimeRequired = false;
+  paymentRequired = false;
   pickUpTimeValue: Date | null = null;
 
   selectableHours: number[] = [];
@@ -33,15 +34,17 @@ export class OrderNameModalComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const restaurant = new Restaurant(this.restaurant);
-    this.pickUpTimeMandatory = !restaurant.isOpen();
-    this.needPickUpTimeValue = this.pickUpTimeMandatory;
+    this.paymentRequired = !!(restaurant.paymentInformation?.paymentActivated &&
+      restaurant.paymentInformation?.paymentRequired);
+    this.pickUpTimeRequired = !restaurant.isOpen();
+    this.needPickUpTimeValue = this.pickUpTimeRequired;
     this.pickUpTimeAvailable = restaurant.isPickupOpen();
 
     const today = new Date();
 
     this.pickUpTimeValue = today;
 
-    if (this.pickUpTimeMandatory) {
+    if (this.pickUpTimeRequired) {
       const { start: startTime } = restaurant.getTodayOpeningTimes();
       this.pickUpTimeValue = startTime;
     }
@@ -104,8 +107,8 @@ export class OrderNameModalComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$))
       .subscribe((_i) => {
         const restaurant = new Restaurant(this.restaurant);
-        this.pickUpTimeMandatory = !restaurant.isOpen();
-        if (this.pickUpTimeMandatory) {
+        this.pickUpTimeRequired = !restaurant.isOpen();
+        if (this.pickUpTimeRequired) {
           this.needPickUpTimeValue = true;
         }
         this.pickUpTimeAvailable = restaurant.isPickupOpen();
@@ -120,7 +123,7 @@ export class OrderNameModalComponent implements OnInit, OnDestroy {
     const today = new Date();
     let newPickUpTimeValue = today;
 
-    if (this.pickUpTimeMandatory) {
+    if (this.pickUpTimeRequired) {
       const restaurant = new Restaurant(this.restaurant);
       const { start: startTime } = restaurant.getTodayOpeningTimes();
       newPickUpTimeValue = startTime!;

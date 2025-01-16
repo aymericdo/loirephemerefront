@@ -6,7 +6,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -23,11 +23,14 @@ import {
   WebSocketData
 } from 'src/app/modules/home/services/home-socket.service';
 import {
+  cancelPersonalCommand,
   decrementPastry,
   fetchRestaurantPastries,
   getPersonalCommand,
   incrementPastry,
+  markPersonalCommandAsPayed,
   resetCommand,
+  resetErrorCommand,
   sendCommand,
   sendNotificationSub,
   setStock
@@ -68,9 +71,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   demoResto$: Observable<RestaurantInterface | null>;
 
   isSuccessModalVisible = false;
+  isPaymentModalVisible = false;
   isOrderModalVisible: boolean = false;
   isUltimateConfirmationVisible: boolean = false;
 
+  paymentRequired: boolean = false;
   isRestaurantOpened: boolean = false;
   pickUpTimeAvailable: boolean = false;
 
@@ -82,6 +87,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
+    private router: Router,
     private wsService: HomeWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush,
@@ -126,8 +132,33 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.restaurant$.pipe(
       filter(Boolean),
+      switchMap(() => this.route.queryParamMap),
+      map((params: ParamMap) => (params.has('sessionCommandId') && params.has('sessionId')) ?
+        { sessionCommandId: params.get('sessionCommandId')!, sessionId: params.get('sessionId')! } :
+        null,
+      ),
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe(({ sessionCommandId, sessionId }: { sessionCommandId: string, sessionId: string }) => {
+      this.store.dispatch(markPersonalCommandAsPayed({ commandId: sessionCommandId, sessionId }));
+    });
+
+    this.restaurant$.pipe(
+      filter(Boolean),
+      switchMap(() => this.route.queryParamMap),
+      map((params: ParamMap) => params.get('payedCommandId')),
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe(() => {
+      this.isSuccessModalVisible = true;
+    });
+
+    this.restaurant$.pipe(
+      filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant: RestaurantInterface) => {
+      this.paymentRequired = !!(restaurant.paymentInformation?.paymentActivated &&
+        restaurant.paymentInformation?.paymentRequired);
       this.titleService.setTitle(restaurant.name);
       this.setIsRestaurantOpened(restaurant);
     });
@@ -183,17 +214,44 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.store.dispatch(decrementPastry({ pastry }));
   }
 
-  handleClickCommand({ name, takeAway, pickUpTime }: CoreCommand): void {
+  handleCommandClicked({ name, takeAway, pickUpTime }: CoreCommand): void {
     this.isUltimateConfirmationVisible = false;
-    this.isSuccessModalVisible = true;
     this.store.dispatch(sendCommand({ name, takeAway, pickUpTime }));
+
+    if (this.paymentRequired) {
+      this.isPaymentModalVisible = true;
+    } else {
+      this.isSuccessModalVisible = true;
+    }
+  }
+
+  handlePaymentDone(): void {
+    this.isPaymentModalVisible = false;
+    this.isSuccessModalVisible = true;
+  }
+
+  handleCommandCancelled(origin: 'human' | 'time'): void {
+    this.isPaymentModalVisible = false;
+
+    if (origin === 'human') {
+      this.personalCommand$.pipe(filter(Boolean), take(1)).subscribe((command: Command) => {
+        this.store.dispatch(cancelPersonalCommand({ commandId: command.id }));
+      });
+    }
   }
 
   handleClickReset(): void {
     this.store.dispatch(resetCommand());
   }
 
+  handleCloseErrorModal(): void {
+    this.router.navigate(['.'], { relativeTo: this.route });
+    this.isSuccessModalVisible = false;
+    this.store.dispatch(resetErrorCommand());
+  }
+
   handleCloseSuccessModal(): void {
+    this.router.navigate(['.'], { relativeTo: this.route });
     this.isSuccessModalVisible = false;
 
     this.personalCommand$.pipe(filter(Boolean), take(1))

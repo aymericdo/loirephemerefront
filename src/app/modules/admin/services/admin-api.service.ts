@@ -171,6 +171,19 @@ export class AdminApiService {
     ) as Observable<Restaurant>;
   }
 
+  postPaymentInformation(
+    code: string,
+    paymentActivated: boolean,
+    paymentRequired: boolean,
+    publicKey: string,
+    secretKey: string,
+  ): Observable<Restaurant> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/payment-information`,
+      { paymentActivated, paymentRequired, publicKey, secretKey }
+    ) as Observable<Restaurant>;
+  }
+
   patchDisplayStock(
     code: string,
     displayStock: boolean): Observable<Restaurant> {

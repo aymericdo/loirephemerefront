@@ -85,6 +85,11 @@ export const selectRestaurant = createSelector(
   (state: LoginState) => state.restaurant
 );
 
+export const selectRestaurantPublicKey = createSelector(
+  selectFeature,
+  (state: LoginState) => state.restaurant?.paymentInformationPublicKey
+);
+
 export const selectIsSiderCollapsed = createSelector(
   selectFeature,
   (state: LoginState) => state.isSiderCollapsed

@@ -12,7 +12,8 @@ import {
   updateAlwaysOpen,
   updateDisplayStock,
   updateOpeningPickupTime,
-  updateOpeningTime
+  updateOpeningTime,
+  updatePaymentInformation
 } from './restaurant.actions';
 
 @Injectable()
@@ -41,6 +42,24 @@ export class RestaurantEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
           .patchOpeningPickupTime(restaurant.code, action.openingTime)
+          .pipe(
+            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
+          );
+      })
+    )
+  );
+  updatePaymentInformation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updatePaymentInformation),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService
+          .postPaymentInformation(
+            restaurant.code, action.paymentActivated, action.paymentRequired,
+            action.publicKey, action.secretKey
+          )
           .pipe(
             switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
           );

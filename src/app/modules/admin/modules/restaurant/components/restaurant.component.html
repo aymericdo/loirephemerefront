@@ -65,6 +65,12 @@
         </div>
       </nz-tab>
       <nz-tab>
+        <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'payment' }" queryParamsHandling="merge" i18n>
+          Paiement
+        </a>
+        <app-payment></app-payment>
+      </nz-tab>
+      <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'opening-hours' }" queryParamsHandling="merge" i18n>
           Ouverture
         </a>

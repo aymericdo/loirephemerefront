@@ -29,21 +29,27 @@
   <app-footer *ngIf="(hasSelectedPastries$ | async) === false"></app-footer>
 </div>
 
-<app-order-success-modal *ngIf="isSuccessModalVisible && (personalCommand$ | async)"
-  [commandReference]="(personalCommand$ | async)?.reference!" (clickCancel)="handleCloseSuccessModal()">
-</app-order-success-modal>
-
-<app-order-error-modal *ngIf="isSuccessModalVisible && (errorCommand$ | async)" [errors]="(errorCommand$ | async)!"
-  (clickCancel)="isSuccessModalVisible = false"></app-order-error-modal>
-
 <app-order-footer *ngIf="hasSelectedPastries$ | async" (clickReset)="handleClickReset()"
   (clickConfirm)="isOrderModalVisible = true" [disabled]="(isStockIssue$ | async)! || !pickUpTimeAvailable"></app-order-footer>
+
+<app-order-error-modal *ngIf="(errorCommand$ | async)" [errors]="(errorCommand$ | async)!"
+  (clickCancel)="handleCloseErrorModal()"></app-order-error-modal>
 
 <app-order-modal *ngIf="isOrderModalVisible" [allPastries]="(pastries$ | async)!" [selectedPastries]="(selectedPastries$ | async)!"
   [totalPrice]="(totalPrice$ | async)!" (clickCancel)="isOrderModalVisible = false" (clickOk)="isOrderModalVisible = false; isUltimateConfirmationVisible = true"></app-order-modal>
 
 <app-order-name-modal *ngIf="isUltimateConfirmationVisible" (clickCancel)="isUltimateConfirmationVisible = false"
-  (clickOk)="handleClickCommand($event)" [restaurant]="(restaurant$ | async)!"></app-order-name-modal>
+  (clickOk)="handleCommandClicked($event)" [restaurant]="(restaurant$ | async)!"></app-order-name-modal>
+
+<ng-container *ngIf="(personalCommand$ | async)">
+  <app-order-payment-modal *ngIf="isPaymentModalVisible" (clickCancel)="handleCommandCancelled($event)"
+    [command]="(personalCommand$ | async)!" (clickOk)="handlePaymentDone()" [restaurant]="(restaurant$ | async)!">
+  </app-order-payment-modal>
+
+  <app-order-success-modal *ngIf="isSuccessModalVisible && (errorCommand$ | async) === null"
+    [commandReference]="(personalCommand$ | async)?.reference!" (clickCancel)="handleCloseSuccessModal()">
+</app-order-success-modal>
+</ng-container>
 
 <div *ngIf="hasSelectedPastries$ | async" class="shopping-cart">
   <nz-badge [nzCount]="(totalCount$ | async)!">

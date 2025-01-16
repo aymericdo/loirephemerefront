@@ -212,12 +212,14 @@ export class StatsComponent implements OnInit, OnDestroy {
           cash: 0,
           creditCart: 0,
           bankCheque: 0,
+          internet: 0,
         };
 
         let valueByPayment: { [key in PaymentType]: number } = {
           cash: 0,
           creditCart: 0,
           bankCheque: 0,
+          internet: 0,
         };
 
         let countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } } = {

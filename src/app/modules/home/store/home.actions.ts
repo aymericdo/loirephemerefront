@@ -27,6 +27,15 @@ export const getPersonalCommand = createAction(
   '[Home page] Get personal command',
   props<{ commandId: string }>()
 );
+export const cancelPersonalCommand = createAction(
+  '[Home page] Cancel personal command',
+  props<{ commandId: string }>()
+);
+export const markPersonalCommandAsPayed = createAction(
+  '[Home page] Mark personal command as payed',
+  props<{ commandId: string, sessionId: string }>()
+);
+export const resetPersonalCommand = createAction('[Home page] Reset personal command');
 export const setPersonalCommand = createAction(
   '[Home page] Set personal command',
   props<{ command: Command }>()
@@ -34,6 +43,9 @@ export const setPersonalCommand = createAction(
 export const setErrorCommand = createAction(
   '[Home page] Set error command',
   props<{ error: any }>()
+);
+export const resetErrorCommand = createAction(
+  '[Home page] Reset error command',
 );
 export const setStock = createAction(
   '[Home page] Set stock',

@@ -16,8 +16,10 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
-  fetchRestaurantPastries, getPersonalCommand, notificationSubSent,
+  cancelPersonalCommand,
+  fetchRestaurantPastries, getPersonalCommand, markPersonalCommandAsPayed, notificationSubSent,
   resetCommand,
+  resetPersonalCommand,
   sendCommand,
   sendNotificationSub,
   setErrorCommand,
@@ -26,6 +28,7 @@ import {
   stopLoading
 } from './home.actions';
 import { selectPastries, selectSelectedPastries } from './home.selectors';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class HomeEffects {
@@ -94,6 +97,41 @@ export class HomeEffects {
     )
   );
 
+  cancelPersonalCommand$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(cancelPersonalCommand),
+      withLatestFrom(this.store$.select(selectRestaurant).pipe(filter(Boolean))),
+      mergeMap(([action, restaurant]) => {
+        return this.homeApiService.cancelPersonalCommand(restaurant?.code!, action.commandId).pipe(
+          switchMap(() => {
+            return [resetPersonalCommand(), resetCommand()];
+          }),
+          catchError(() => EMPTY)
+        );
+      })
+    )
+  );
+
+  markPersonalCommandAsPayed$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(markPersonalCommandAsPayed),
+      withLatestFrom(this.store$.select(selectRestaurant).pipe(filter(Boolean))),
+      mergeMap(([action, restaurant]) => {
+        return this.homeApiService.markPersonalCommandAsPayed(
+          restaurant?.code!, action.commandId, action.sessionId,
+        ).pipe(
+          switchMap((command) => {
+            this.router.navigate([restaurant?.code!], { queryParams: { payedCommandId: command.id }});
+            return [setPersonalCommand({ command }), resetCommand()];
+          }),
+          catchError((error) => {
+            return [setErrorCommand({ error })];
+          })
+        );
+      })
+    )
+  );
+
   sendNotificationSub$ = createEffect(() =>
     this.actions$.pipe(
       ofType(sendNotificationSub),
@@ -109,6 +147,7 @@ export class HomeEffects {
   constructor(
     private actions$: Actions,
     private store$: Store<AppState>,
+    private router: Router,
     private homeApiService: HomeApiService,
   ) { }
 }
