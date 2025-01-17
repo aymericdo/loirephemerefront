@@ -41,6 +41,7 @@ export class OrderPaymentModalComponent implements OnInit, OnDestroy {
 
     this.timeRemaining$?.pipe(
       filter((timeRemaining) => timeRemaining <= 0),
+      takeUntil(this.destroyed$),
     ).subscribe(() => {
       this.clickCancel.emit('time');
     });
