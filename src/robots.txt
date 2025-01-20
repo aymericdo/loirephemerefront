@@ -1,1 +1,1 @@
-Sitemap: https://oresto.app/fr/sitemap.xml
+Sitemap: https://oresto.app/sitemap.xml
