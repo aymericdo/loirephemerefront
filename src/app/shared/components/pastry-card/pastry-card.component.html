@@ -1,10 +1,10 @@
 <nz-card style="width: 300px" [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]"
   [class.-is-admin]="isAdmin">
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
-    <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock === 0"
+    <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock <= 0"
       [class.-stock-issue]="isStockIssue" nzStandalone nzShowZero [nzCount]="pastry.stock" [nzOverflowCount]="99"
       [nzTitle]="'stock'" i18n-nzTitle>
-      <ng-container *ngIf="pastry.stock === 0">
+      <ng-container *ngIf="pastry.stock <= 0">
         <span i18n>Rupture de stock</span>
       </ng-container>
       <ng-container *ngIf="pastry.stock > 0">

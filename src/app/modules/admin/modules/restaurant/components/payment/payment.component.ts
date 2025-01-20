@@ -105,23 +105,34 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   submitForm(): void {
-    this.modal.confirm({
-      nzTitle: $localize`Avez-vous bien vérifié vos clés Stripe ?`,
-      nzContent: $localize`Ces clés seront enregistrées de manière sécurisée, il ne vous sera pas possible de les changer de manière autonome.`,
-      nzOkText: 'OK',
-      nzOkType: 'primary',
-      nzOnOk: () => {
-        this.store.dispatch(updatePaymentInformation({
-          paymentActivated: this.validateForm.value.paymentActivated,
-          paymentRequired: this.validateForm.value.paymentRequired,
-          publicKey: this.validateForm.value.publicKey,
-          secretKey: this.validateForm.value.secretKey,
-        }));
+    if (this.validateForm.value.publicKey?.length && this.validateForm.value.secretKey?.length) {
+      this.modal.confirm({
+        nzTitle: $localize`Avez-vous bien vérifié vos clés Stripe ?`,
+        nzContent: $localize`Ces clés seront enregistrées de manière sécurisée, il ne vous sera pas possible de les changer de manière autonome.`,
+        nzOkText: 'OK',
+        nzOkType: 'primary',
+        nzOnOk: () => {
+          this.store.dispatch(updatePaymentInformation({
+            paymentActivated: this.validateForm.value.paymentActivated,
+            paymentRequired: this.validateForm.value.paymentRequired,
+            publicKey: this.validateForm.value.publicKey,
+            secretKey: this.validateForm.value.secretKey,
+          }));
 
-        this.validateForm.markAsPristine();
-      },
-      nzCancelText: $localize`Annuler`,
-    });
+          this.validateForm.markAsPristine();
+        },
+        nzCancelText: $localize`Annuler`,
+      });
+    } else {
+      this.store.dispatch(updatePaymentInformation({
+        paymentActivated: this.validateForm.value.paymentActivated,
+        paymentRequired: this.validateForm.value.paymentRequired,
+        publicKey: this.validateForm.value.publicKey,
+        secretKey: this.validateForm.value.secretKey,
+      }));
+
+      this.validateForm.markAsPristine();
+    }
   }
 
   private manageFormDisabling(paymentActivated: boolean) {
