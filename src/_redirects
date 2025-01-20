@@ -19,3 +19,13 @@
 /nl/*       /nl/index.html      200
 /ru/*       /ru/index.html      200
 /ar/*       /ar/index.html      200
+
+/*  /fr/:splat     302  Language=fr
+/*  /en/:splat     302  Language=en
+/*  /es/:splat     302  Language=es
+/*  /de/:splat     302  Language=de
+/*  /pt/:splat     302  Language=pt
+/*  /pl/:splat     302  Language=pl
+/*  /nl/:splat     302  Language=nl
+/*  /ru/:splat     302  Language=ru
+/*  /ar/:splat     302  Language=ar
