@@ -1,4 +1,4 @@
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -12,7 +12,6 @@ export class PaymentElementApiService {
 
   constructor(
     private http: HttpClient,
-    @Inject(LOCALE_ID) private locale: string,
   ) {
     this.baseUrl = environment.api;
     this.protocolHttp = environment.protocolHttp;
@@ -21,7 +20,6 @@ export class PaymentElementApiService {
   createCheckoutSession(commandReference: string): Observable<{ clientSecret: string }> {
     return this.http.post(`${this.protocolHttp}${this.baseUrl}/payments/create-checkout-session`, {
       commandReference,
-      locale: this.locale,
     }) as Observable<{ clientSecret: string }>;
   }
 }
