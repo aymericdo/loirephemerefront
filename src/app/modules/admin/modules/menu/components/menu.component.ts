@@ -91,7 +91,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     const currentPastry = this.getCorePastry(pastry);
     this.store.dispatch(incrementPastry({ pastry: {
       ...currentPastry,
-      stock: currentPastry.stock + 1,
+      stock: (currentPastry.stock + 1 >= 0) ? currentPastry.stock + 1 : 0,
     }}));
   }
 
@@ -99,7 +99,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     const currentPastry = this.getCorePastry(pastry);
     this.store.dispatch(decrementPastry({ pastry: {
       ...currentPastry,
-      stock: currentPastry.stock - 1,
+      stock: (currentPastry.stock - 1 >= 0) ? currentPastry.stock - 1 : 0,
     }}));
   }
 
