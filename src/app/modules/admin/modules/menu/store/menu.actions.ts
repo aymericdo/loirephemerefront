@@ -23,6 +23,9 @@ export const setPastryNoNameError = createAction(
 export const reactivatePastryName = createAction(
   '[Menu page] Reactivate pastry name input',
 );
+export const deactivatePastryName = createAction(
+  '[Menu page] Deactivate pastry name input',
+);
 export const postingPastry = createAction(
   '[Menu page] Posting pastry',
   props<{ pastry: CorePastry }>()

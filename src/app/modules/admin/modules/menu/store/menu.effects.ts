@@ -11,6 +11,7 @@ import {
   activatingPastry,
   addPastry,
   closeMenuModal,
+  deactivatePastryName,
   deactivatingPastry,
   decrementPastry, editPastry, editingPastry, fetchingAllRestaurantPastries,
   incrementPastry,
@@ -58,10 +59,9 @@ export class MenuEffects {
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.validatePastryIsAlreadyOrdered(restaurant.code, action.pastry?.id!).pipe(
-          switchMap((isNotValid: boolean) => {
-            if (isNotValid) {
-              // By default, in edit mode, name is deactivated
-              return EMPTY;
+          switchMap((isAlreadyOrdered: boolean) => {
+            if (isAlreadyOrdered) {
+              return [deactivatePastryName()];
             }
 
             return [reactivatePastryName()];

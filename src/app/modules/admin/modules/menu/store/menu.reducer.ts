@@ -4,6 +4,7 @@ import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
   addPastry,
   closeMenuModal,
+  deactivatePastryName,
   editPastry,
   editingPastry,
   fetchingAllRestaurantPastries,
@@ -96,6 +97,10 @@ const menuReducer = createReducer(
     ...state,
     pastryNameDeactivated: false,
   })),
+  on(deactivatePastryName, (state) => ({
+    ...state,
+    pastryNameDeactivated: true,
+  })),
   on(validatingPastryName, (state) => ({
     ...state,
     pastryNameError: undefined,
@@ -137,6 +142,7 @@ const menuReducer = createReducer(
   })),
   on(openMenuModal, (state, { modal, pastry }) => ({
     ...state,
+    pastryNameDeactivated: true,
     menuModalOpened: modal,
     editingPastry: pastry ?? null,
   })),
