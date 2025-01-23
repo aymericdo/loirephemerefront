@@ -1,4 +1,4 @@
-<nz-card style="width: 300px" [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]"
+<nz-card [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]"
   [class.-is-admin]="isAdmin">
   <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
     <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock <= 0"
@@ -15,15 +15,40 @@
     <nz-badge *ngIf="isAdmin" class="display-sequence-badge" nzStandalone nzShowZero [nzCount]="pastry.displaySequence + 1"
       [nzTitle]="'Séquence d\'affichage'" i18n-nzTitle></nz-badge>
 
-    <nz-card-meta [nzTitle]="pastry.name + ' (' + pastry.price + '€)'" [nzDescription]="pastry.description">
+    <nz-card-meta
+      [nzTitle]="pastry.name + ' (' + pastry.price + '€)'"
+      [nzDescription]="descriptionTemplate">
     </nz-card-meta>
-    <nz-collapse *ngIf="pastry.ingredients?.length" class="ingredients-section" nzGhost>
-      <nz-collapse-panel nzHeader="Ingrédients" i18n-nzHeader>
-        <p class="ingredients" style="margin: 0">
-          {{ pastry.ingredients.join(', ') }}
-        </p>
-      </nz-collapse-panel>
-    </nz-collapse>
+
+    <ng-template #descriptionTemplate>
+      <div nzFlex nz-row>
+        <div nz-col nzFlex="1">
+          <p class="template-description -mobile" nz-tooltip [nzTooltipTitle]="tooltipTitleTemplate" nzTooltipPlacement="top" [nzTooltipMouseEnterDelay]="1">
+            {{ pastry.description.split(' ').splice(0, 20).join(' ') + (pastry.description.split(' ').length > 20 ? '...' : '') }}
+          </p>
+
+          <p class="template-description">
+            {{ pastry.description }}
+          </p>
+
+          <ng-template #tooltipTitleTemplate>
+            <ng-container *ngIf="pastry.description.split(' ').length > 20">
+              {{ pastry.description }}
+            </ng-container>
+          </ng-template>
+
+          <nz-collapse *ngIf="pastry.ingredients?.length" class="ingredients-section" nzGhost>
+            <nz-collapse-panel nzHeader="Ingrédients" i18n-nzHeader>
+              <p class="ingredients" style="margin: 0">
+                {{ pastry.ingredients.join(', ') }}
+              </p>
+            </nz-collapse-panel>
+          </nz-collapse>
+        </div>
+
+        <img nz-col class="mobile-card-image" *ngIf="!isLoading && imageUrl" [alt]="pastry.name" [src]="imageUrl" (error)="onImgError($event)" />
+      </div>
+    </ng-template>
   </nz-skeleton>
 </nz-card>
 <ng-template #coverTemplate>

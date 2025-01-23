@@ -5,6 +5,7 @@
   justify-content: center;
 
   nz-card {
+    width: 300px;
     max-width: 100%;
   }
 
@@ -55,6 +56,11 @@
     min-height: 300px;
   }
 
+  .template-description.-mobile,
+  .mobile-card-image {
+    display: none;
+  }
+
   .display-sequence-badge {
     position: absolute;
     top: -10px;
@@ -103,6 +109,10 @@
     }
   }
 
+  .mobile-description-section {
+    display: none;
+  }
+
   .ingredients::first-letter {
     text-transform: capitalize;
   }
@@ -110,5 +120,37 @@
   ::ng-deep .ant-card-actions i.-disabled {
     cursor: not-allowed;
     opacity: 0.8;
+  }
+
+  @media screen and (max-width: $lg) {
+    nz-card {
+      width: 100%;
+    }
+
+    .card-image {
+      display: none;
+    }
+
+    .mobile-card-image {
+      display: block;
+      width: 100px;
+      height: fit-content;
+      border-radius: 4px;
+    }
+
+    .template-description {
+      padding-right: 1rem;
+      margin-bottom: 0;
+      width: fit-content;
+      display: none;
+
+      &.-mobile {
+        display: block;
+      }
+    }
+
+    ::ng-deep .ant-collapse>.ant-collapse-item>.ant-collapse-header {
+      padding: 12px 0;
+    }
   }
 }

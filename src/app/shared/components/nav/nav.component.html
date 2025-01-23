@@ -40,8 +40,7 @@
           <ng-template #titleNameTpl>
             <span (click)="clickToggleRestaurant(restaurant.code, $event)" class="restaurant-name-tooltip"
               [class.-restaurant-title-selected]="routeName === 'admin-restaurant' && restaurant.code === (restaurant$ | async)?.code"
-              nz-tooltip [nzTooltipTitle]="restaurant.name"
-              nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
+              nz-tooltip [nzTooltipTitle]="restaurant.name" nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
               <span class="restaurant-name">{{ restaurant.name }}</span>
             </span>
           </ng-template>
