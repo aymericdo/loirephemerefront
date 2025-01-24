@@ -6,7 +6,7 @@ import {
   createUser, fetchingDemoResto, fetchingRestaurant,
   fetchingUser, openConfirmationModal, openRecoverModal, resetUser, setAuthError,
   setCode2, setDemoResto, setIsSiderCollapsed, setNewToken, setNoAuthError,
-  setPasswordAsChanged, setRestaurant, setUser, setUserAccess, setUserEmailError, setUserNoEmailError,
+  setPasswordAsChanged, setRestaurant, setRestaurantPublicKey, setUser, setUserAccess, setUserEmailError, setUserNoEmailError,
   setUserRestaurants, signInUser, startFirstNavigation,
   stopDemoRestoFetching, stopFirstNavigation, stopLoading, stopRestaurantFetching,
   stopUserFetching, toggleDisplayDemoResto, validatingUserEmail
@@ -21,6 +21,7 @@ export interface LoginState {
   user: User | null;
   userRestaurants: Restaurant[] | null;
   restaurant: Restaurant | null,
+  paymentInformationPublicKey: string | null,
   demoResto: Restaurant | null;
   firstNavigationStarting: boolean,
   restaurantFetching: boolean,
@@ -41,6 +42,7 @@ export const initialState: LoginState = {
   user: null,
   userRestaurants: null,
   restaurant: null,
+  paymentInformationPublicKey: null,
   demoResto: null,
   firstNavigationStarting: false,
   restaurantFetching: false,
@@ -171,6 +173,10 @@ const loginReducer = createReducer(
   on(setPasswordAsChanged, (state, { changed }) => ({
     ...state,
     passwordChanged: changed,
+  })),
+  on(setRestaurantPublicKey, (state, { publicKey }) => ({
+    ...state,
+    paymentInformationPublicKey: publicKey,
   })),
   on(resetUser, (state) => ({
     ...state,

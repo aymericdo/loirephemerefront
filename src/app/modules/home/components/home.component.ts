@@ -225,9 +225,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  handlePaymentDone(): void {
-    this.isPaymentModalVisible = false;
+  handlePayment(): void {
+    this.isSuccessModalVisible = false;
+    this.isPaymentModalVisible = true;
+  }
+
+  handlePaymentBack(): void {
     this.isSuccessModalVisible = true;
+    this.isPaymentModalVisible = false;
   }
 
   handleCommandCancelled(origin: 'human' | 'time'): void {

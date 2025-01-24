@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { catchError, debounceTime, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser } from 'src/app/interfaces/user.interface';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
-import { selectCode2 } from 'src/app/modules/login/store/login.selectors';
+import { selectCode2, selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
 import { AppState } from 'src/app/store/app.state';
 import {
   changePassword, confirmEmail, confirmRecoverEmail,
-  createUser, fetchingDemoResto, fetchingRestaurant, fetchingUser, fetchingUserRestaurants,
+  createUser, fetchingCurrentRestaurantPublicKey, fetchingDemoResto, fetchingRestaurant, fetchingUser, fetchingUserRestaurants,
   openConfirmationModal, openRecoverModal, refreshingUser, setAuthError,
   setCode2, setDemoResto, setNewToken, setNoAuthError,
-  setPasswordAsChanged, setRestaurant, setUser, setUserEmailError,
+  setPasswordAsChanged, setRestaurant, setRestaurantPublicKey, setUser, setUserEmailError,
   setUserNoEmailError, setUserRestaurants, signInUser,
   stopDemoRestoFetching,
   stopLoading,
@@ -23,6 +23,7 @@ import {
   validatingUserEmail
 } from './login.actions';
 import { startLoading } from 'src/app/modules/home/store/home.actions';
+import { EMPTY } from 'rxjs';
 
 @Injectable()
 export class LoginEffects {
@@ -65,6 +66,25 @@ export class LoginEffects {
           }),
           catchError(() => {
             return [stopUserFetching(), stopLoading()];
+          }),
+        );
+      })
+    )
+  );
+
+  fetchingCurrentRestaurantPublicKey$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchingCurrentRestaurantPublicKey),
+      withLatestFrom(
+        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([, restaurant]) => {
+        return this.restaurantApiService.getRestaurantPublicKey(restaurant.code).pipe(
+          switchMap(({ publicKey }) => {
+            return [setRestaurantPublicKey({ publicKey })];
+          }),
+          catchError(() => {
+            return EMPTY;
           }),
         );
       })

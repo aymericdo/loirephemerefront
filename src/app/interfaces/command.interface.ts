@@ -42,6 +42,7 @@ export interface Command extends CoreCommand {
   updatedAt: string;
   isDone?: boolean;
   isPayed?: boolean;
+  paymentRequired?: boolean;
   isCancelled?: boolean;
   restaurant: Restaurant;
   pastries: Pastry[];

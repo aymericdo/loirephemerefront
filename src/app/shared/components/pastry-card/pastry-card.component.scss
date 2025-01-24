@@ -9,6 +9,19 @@
     max-width: 100%;
   }
 
+  nz-skeleton {
+    display: flex;
+  }
+
+  nz-card-meta {
+    width: 100%;
+
+    ::ng-deep .ant-card-meta-title {
+      white-space: wrap;
+      width: calc(100% - 3rem);
+    }
+  }
+
   nz-badge.stock-badge {
     width: fit-content;
     position: absolute;
@@ -46,8 +59,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 1;
 
-    &>.block-btn {
+    &>.btn-section {
       padding: 0.625rem;
     }
   }
@@ -124,7 +138,17 @@
 
   @media screen and (max-width: $lg) {
     nz-card {
-      width: 100%;
+      width: 95%;
+    }
+
+    .-is-admin {
+      ::ng-deep .ant-card-cover {
+        position: static;
+      }
+
+      ::ng-deep .ant-card-body {
+        opacity: 0.6;
+      }
     }
 
     .card-image {

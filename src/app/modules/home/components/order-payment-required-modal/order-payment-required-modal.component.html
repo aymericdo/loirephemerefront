@@ -1,0 +1,51 @@
+<nz-modal [nzVisible]="true" nzCentered [nzClosable]="false" [nzMaskClosable]="true" [nzFooter]="null">
+  <ng-container *nzModalTitle>
+    <nz-space>
+      <span i18n *nzSpaceItem>Votre commande</span>
+      <nz-tag nzColor="warning" *nzSpaceItem>
+        <i nz-icon nzType="exclamation-circle"></i>
+        <span><b i18n>Ne pas rafraichir</b></span>
+      </nz-tag>
+    </nz-space>
+  </ng-container>
+  <ng-container *nzModalContent>
+    <div *ngIf="displayPayment; else stepOne" nz-flex nzJustify="center">
+      <nz-space nzDirection="vertical">
+        <app-time-remaining *nzSpaceItem [timeRemaining]="(timeRemaining$ | async)!"></app-time-remaining>
+        <app-payment-element *nzSpaceItem></app-payment-element>
+        <div *nzSpaceItem nz-flex nzJustify="center">
+          <button nz-button (click)="handleCancel()" i18n>
+            Annuler
+          </button>
+        </div>
+      </nz-space>
+    </div>
+
+    <ng-template #stepOne>
+      <nz-result *ngIf="!displayPayment" [nzStatus]="(timeRemaining$ | async)! <= 0 ? 'error' : 'success'">
+        <div nz-result-title>
+          <span i18n *ngIf="(timeRemaining$ | async)! > 0; else noTime">
+            Commande réservée !
+          </span>
+          <ng-template i18n #noTime>
+            Commande annulée !
+          </ng-template>
+        </div>
+
+        <div nz-result-subtitle>
+          <app-time-remaining [timeRemaining]="(timeRemaining$ | async)!"></app-time-remaining>
+        </div>
+        <div nz-result-extra>
+          <nz-space nzDirection="vertical">
+            <button nz-button nzType="primary" nzSize="large" (click)="handlePay()" i18n *nzSpaceItem [disabled]="(timeRemaining$ | async)! <= 0">
+              Payer
+            </button>
+            <button nz-button (click)="handleCancel()" i18n *nzSpaceItem>
+              Annuler
+            </button>
+          </nz-space>
+        </div>
+      </nz-result>
+    </ng-template>
+  </ng-container>
+</nz-modal>

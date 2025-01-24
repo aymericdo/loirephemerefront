@@ -87,7 +87,7 @@ export const selectRestaurant = createSelector(
 
 export const selectRestaurantPublicKey = createSelector(
   selectFeature,
-  (state: LoginState) => state.restaurant?.paymentInformationPublicKey
+  (state: LoginState) => state.paymentInformationPublicKey
 );
 
 export const selectIsSiderCollapsed = createSelector(

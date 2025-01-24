@@ -42,12 +42,21 @@
   (clickOk)="handleCommandClicked($event)" [restaurant]="(restaurant$ | async)!"></app-order-name-modal>
 
 <ng-container *ngIf="(personalCommand$ | async)">
-  <app-order-payment-modal *ngIf="isPaymentModalVisible" (clickCancel)="handleCommandCancelled($event)"
-    [command]="(personalCommand$ | async)!" (clickOk)="handlePaymentDone()" [restaurant]="(restaurant$ | async)!">
-  </app-order-payment-modal>
+  <ng-container *ngIf="isPaymentModalVisible">
+    <app-order-payment-required-modal *ngIf="(personalCommand$ | async)!.paymentRequired; else paymentNotRequired"
+      (clickCancel)="handleCommandCancelled($event)" [command]="(personalCommand$ | async)!" [restaurant]="(restaurant$ | async)!">
+    </app-order-payment-required-modal>
+
+    <ng-template #paymentNotRequired>
+      <app-order-payment-modal (clickBack)="handlePaymentBack()"
+        [command]="(personalCommand$ | async)!" [restaurant]="(restaurant$ | async)!">
+      </app-order-payment-modal>
+    </ng-template>
+  </ng-container>
 
   <app-order-success-modal *ngIf="isSuccessModalVisible && (errorCommand$ | async) === null"
-    [commandReference]="(personalCommand$ | async)?.reference!" (clickCancel)="handleCloseSuccessModal()">
+    [restaurant]="(restaurant$ | async)!" (clickPayment)="handlePayment()"
+    [command]="(personalCommand$ | async)!" (clickCancel)="handleCloseSuccessModal()">
 </app-order-success-modal>
 </ng-container>
 

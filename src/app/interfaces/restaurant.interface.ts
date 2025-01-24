@@ -7,7 +7,6 @@ export interface Restaurant extends CoreRestaurant {
   openingPickupTime?: { [weekDay: number]: { startTime: string } };
   displayStock?: boolean;
   alwaysOpen?: boolean;
-  paymentInformationPublicKey?: string;
   paymentInformation?: {
     type: 'Stripe';
     paymentActivated: boolean;

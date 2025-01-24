@@ -2,67 +2,91 @@
   <svg width="100%" height="100%" id="svg" viewBox="0 0 1440 690" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><defs><linearGradient id="gradient" x1="1%" y1="38%" x2="99%" y2="62%"><stop offset="5%" stop-color="#fadb14"></stop><stop offset="95%" stop-color="#1890ff"></stop></linearGradient></defs><path d="M 0,700 C 0,700 0,233 0,233 C 83.44497607655498,243.19138755980862 166.88995215310996,253.38277511961724 277,240 C 387.11004784689004,226.61722488038276 523.8851674641149,189.66028708133973 627,186 C 730.1148325358851,182.33971291866027 799.5693779904306,211.97607655502395 879,212 C 958.4306220095694,212.02392344497605 1047.8373205741627,182.43540669856458 1143,181 C 1238.1626794258373,179.56459330143542 1339.0813397129186,206.2822966507177 1440,233 C 1440,233 1440,700 1440,700 Z" stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="0.53" class="transition-all duration-300 ease-in-out delay-150 path-0" transform="rotate(-180 720 350)"></path><defs><linearGradient id="gradient" x1="1%" y1="38%" x2="99%" y2="62%"><stop offset="5%" stop-color="#fadb14"></stop><stop offset="95%" stop-color="#1890ff"></stop></linearGradient></defs><path d="M 0,700 C 0,700 0,466 0,466 C 80.14354066985646,458.71770334928226 160.28708133971293,451.4354066985646 252,462 C 343.7129186602871,472.5645933014354 446.9952153110047,500.97607655502395 558,498 C 669.0047846889953,495.02392344497605 787.7320574162679,460.66028708133973 886,471 C 984.2679425837321,481.33971291866027 1062.0765550239234,536.3827751196172 1151,543 C 1239.9234449760766,549.6172248803828 1339.9617224880383,507.8086124401914 1440,466 C 1440,466 1440,700 1440,700 Z" stroke="none" stroke-width="0" fill="url(#gradient)" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-1" transform="rotate(-180 720 350)"></path></svg>
 </div>
 
-<div class="full-page">
-  <div class="middle-row">
-    <div class="title">
-      <nz-affix (nzChange)="onChange($event)">
-        <div class="affix-section" [class.-has-scrolled]="hasScrolled">
-          <img class="logo" src="assets/icons/icon-512x512.png" alt="logo">
-          <h1>Oresto</h1>
-        </div>
-      </nz-affix>
-      <h2 [class.-has-scrolled]="hasScrolled" class="sub-title" i18n>
-        L'application de votre restaurant qui simplifie la prise de commande, le paiement, et plein d'autres choses.
-      </h2>
-      <nz-space nzDirection="vertical">
-        <ng-container *ngIf="(user$ | async) === null">
-          <ng-container *nzSpaceItem>
-            <a [routerLink]="['/', 'page', 'restaurant', 'new']">
-              <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round" i18n>
-                <span nz-icon nzType="swap-right"></span>
-                Créer son resto
-              </button>
-            </a>
-          </ng-container>
-          <ng-container *nzSpaceItem>
-            <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
-              <button nz-button nzType="default" [nzSize]="'large'" nzShape="round" i18n>
-                <span nz-icon nzType="swap-right"></span>
-                Tester le restaurant démo
-              </button>
-            </a>
-          </ng-container>
-        </ng-container>
+<div class="main-section">
+  <div class="title">
+    <nz-affix (nzChange)="onChange($event)">
+      <div class="affix-section" [class.-has-scrolled]="hasScrolled">
+        <img class="logo" src="assets/icons/icon-512x512.png" alt="logo">
+        <h1>Oresto</h1>
+      </div>
+    </nz-affix>
+    <h2 [class.-has-scrolled]="hasScrolled" class="sub-title" i18n>
+      Gérez votre restaurant en toute simplicité avec Oresto
+    </h2>
+    <div class="home-section">
+      <p><b>Oresto</b>, c’est l’outil tout-en-un pour les restaurateurs qui veulent gagner du temps et se concentrer sur l’essentiel : satisfaire leurs clients.</p>
+
+      <h2>Avec Oresto, vous pouvez :</h2>
+      <ul>
+          <li><b>Prendre des commandes en ligne</b> sans effort et sans intermédiaires.</li>
+          <li><b>Proposer le paiement en ligne sécurisé</b> à vos clients.</li>
+          <li><b>Surveiller vos stocks en temps réel</b> pour ne jamais manquer un ingrédient clé.</li>
+      </ul>
+
+      <h2>Pourquoi choisir Oresto ?</h2>
+
+      <ul>
+          <li><b>Un gain de temps incroyable :</b> Automatisez les commandes et simplifiez vos processus.</li>
+          <li><b>Une solution gratuite et accessible :</b> Aucune commission, pas de frais cachés.</li>
+          <li><b>Un outil conçu avec les besoins des restaurateurs en tête :</b> développé pour répondre aux défis du quotidien des professionnels.</li>
+      </ul>
+
+      <h2>Faites passer votre restaurant au niveau supérieur</h2>
+
+      <p><b>Oresto</b> est simple, intuitif et prêt à l’emploi. Ne perdez plus de temps avec des systèmes compliqués ou coûteux. Rejoignez des restaurateurs qui ont déjà adopté cette solution et transformez votre façon de travailler.</p>
+
+      <p>👉 <b>Essayez Oresto gratuitement dès maintenant !</b></p>
+    </div>
+
+    <nz-space nzDirection="vertical">
+      <ng-container *ngIf="(user$ | async) === null">
         <ng-container *nzSpaceItem>
-          <a [routerLink]="['/', 'page', 'login']">
-            <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
+          <a [routerLink]="['/', 'page', 'restaurant', 'new']">
+            <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round" i18n>
               <span nz-icon nzType="swap-right"></span>
-              <ng-container *ngIf="!!(user$ | async); else login" i18n>
-                Accéder à l'app
-              </ng-container>
-              <ng-template #login i18n>
-                Se connecter
-              </ng-template>
+              Créer son resto
             </button>
           </a>
         </ng-container>
         <ng-container *nzSpaceItem>
-          <div class="go-down-btn">
-            <button (click)="scroll(target)" nz-button [nzSize]="'large'" nzShape="circle">
-              <span nz-icon nzType="down-circle"></span>
+          <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
+            <button nz-button nzType="default" [nzSize]="'large'" nzShape="round" i18n>
+              <span nz-icon nzType="swap-right"></span>
+              Tester le restaurant démo
             </button>
-          </div>
+          </a>
         </ng-container>
-      </nz-space>
-    </div>
-    <div class="timeline-section" #target>
-      <nz-timeline [nzMode]="'alternate'">
-        <nz-timeline-item nzLabel="03/05/2021" i18n>Première ligne de code afin de gérer les commandes de ma pâtisserie éphèmere</nz-timeline-item>
-        <nz-timeline-item nzLabel="07/08/2021" i18n>Ouverture de ma boutique éphèmere de patisseries</nz-timeline-item>
-        <nz-timeline-item nzLabel="30/10/2022" i18n>Création de Oresto afin de rendre l'outil accessible à tous</nz-timeline-item>
-        <nz-timeline-item nzLabel="15/05/2023" i18n>Oresto est fonctionnel 🎉</nz-timeline-item>
-      </nz-timeline>
-    </div>
+      </ng-container>
+      <ng-container *nzSpaceItem>
+        <a [routerLink]="['/', 'page', 'login']">
+          <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
+            <span nz-icon nzType="swap-right"></span>
+            <ng-container *ngIf="!!(user$ | async); else login" i18n>
+              Accéder à l'app
+            </ng-container>
+            <ng-template #login i18n>
+              Se connecter
+            </ng-template>
+          </button>
+        </a>
+      </ng-container>
+      <ng-container *nzSpaceItem>
+        <div class="go-down-btn">
+          <button (click)="scroll(target)" nz-button [nzSize]="'large'" nzShape="circle">
+            <span nz-icon nzType="down-circle"></span>
+          </button>
+        </div>
+      </ng-container>
+    </nz-space>
+  </div>
+  <div class="timeline-section" #target>
+    <nz-timeline [nzMode]="'alternate'">
+      <nz-timeline-item nzLabel="03/05/2021" i18n>Première ligne de code afin de gérer les commandes de ma pâtisserie éphémère</nz-timeline-item>
+      <nz-timeline-item nzLabel="07/08/2021" i18n>Ouverture de ma boutique éphémère de patisseries</nz-timeline-item>
+      <nz-timeline-item nzLabel="30/10/2022" i18n>Création de Oresto afin de rendre l'outil accessible à tous</nz-timeline-item>
+      <nz-timeline-item nzLabel="15/05/2023" i18n>Oresto est fonctionnel 🎉</nz-timeline-item>
+      <nz-timeline-item nzLabel="01/01/2025" i18n>Paiement via Stripe</nz-timeline-item>
+    </nz-timeline>
   </div>
 </div>
 
@@ -100,6 +124,9 @@
         </li>
         <li i18n>
           Notifier le client que sa commande est prête grâce à un <b>système de bipeur</b> intégré à l'app
+        </li>
+        <li i18n>
+          Paiement en ligne via <b>Stripe</b> complètement indépendant de Oresto
         </li>
       </ul>
     </div>
@@ -158,32 +185,45 @@
       <div class="content">
         <div class="sub-content">
           <p i18n>
-            Salut ! Moi c'est Aymeric, je suis <a href="https://www.linkedin.com/in/aymeric-dominique/"
-              target="blank">développeur
-              web</a> et j'aime faire de la pâtisserie
-            à mes heures perdues.
+            Salut ! Moi, c'est Aymeric. <a href="https://www.linkedin.com/in/aymeric-dominique/"
+              target="blank">Développeur web de métier</a>, j'aime aussi mettre la main à la pâte (littéralement) en faisant de la pâtisserie pendant mon temps libre.
           </p>
           <p i18n>
-            Il se trouve que j'ai ouvert, deux étés de suite, une pâtisserie éphèmere, dans le village de mon enfance, et qu'à
-            cette occasion, j'ai créé cette application pour gérer les commandes.
+            Il y a quelques années, j'ai ouvert une pâtisserie éphémère trois étés de suite dans le village de mon enfance.
+            Pour simplifier la gestion des commandes, j'ai développé une application qui permet :
           </p>
+
+          <ul>
+            <li i18n>La prise de commande en ligne pour les restaurants</li>
+            <li i18n>Le paiement en ligne</li>
+            <li i18n>Et la gestion des stocks en temps réel</li>
+          </ul>
+
           <p i18n>
-            Je me doute bien que je suis pas le premier, et sans doute pas le dernier à créer ce genre de système. Cependant,
-            j'aimerais le rendre accessible au plus grand nombre.
+            Je sais bien que je ne suis pas le premier ni le dernier à développer ce genre de système, mais j'aimerais qu'il soit accessible au plus grand nombre.
           </p>
           <p i18n>
             <a href="https://www.larep.saint-hilaire-saint-mesmin-45160/loisirs/un-rendez-vous-patissier-gourmand-plebiscite_13995077/"
-              target="blank">La pâtisserie éphèmere</a> était à but non lucratif et nous a permis de reverser quelques milliers
-            d'euros à <a href="https://www.instagram.com/p/CQfi_pboxwM/" target="blank">Pâtisserie Solidaire</a>, une
-            association qui distribue des invendus sucrés à des associations
-            comme les Restos du Cœur.
+              target="blank">La pâtisserie éphémère</a>, à but non lucratif, nous a permis de reverser plusieurs milliers d'euros à
+              <a href="https://www.instagram.com/p/CQfi_pboxwM/" target="blank">Pâtisserie Solidaire</a>, une association qui redistribue
+              des invendus sucrés à des organisations comme les Restos du Cœur.
           </p>
           <p i18n>
-            Vous l'aurez compris, l'idée ici n'est toujours pas de devenir millionnaire mais juste de
-            donner accès à un outil au plus grand nombre.
+            Vous l'aurez compris, mon objectif ici n'est pas de faire fortune,
+            mais de fournir un outil pratique et gratuit à ceux qui en ont besoin.
           </p>
           <p i18n>
-            <b>L'accès est totalement gratuit.</b>
+            <b>L'accès est entièrement gratuit, alors n'hésitez pas à tester l'application et à me faire part de vos retours.
+              J'espère qu'elle pourra vous être utile !
+            </b>
+          </p>
+          <p>
+            <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
+              <button nz-button nzType="default" [nzSize]="'large'" nzShape="round" i18n>
+                <span nz-icon nzType="swap-right"></span>
+                Tester le restaurant démo
+              </button>
+            </a>
           </p>
         </div>
       </div>

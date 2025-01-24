@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Command } from 'src/app/interfaces/command.interface';
+import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
   selector: 'app-order-success-modal',
@@ -6,8 +8,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./order-success-modal.component.scss'],
 })
 export class OrderSuccessModalComponent {
-  @Input() commandReference: string = '';
+  @Input() command!: Command;
+  @Input() restaurant!: Restaurant;
   @Output() clickCancel = new EventEmitter<string>();
+  @Output() clickPayment = new EventEmitter<string>();
 
   constructor() { }
 }

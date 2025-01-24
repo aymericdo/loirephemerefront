@@ -141,6 +141,15 @@ export const stopUserFetching = createAction(
   '[Login page] Stop user fetching',
 );
 
+export const fetchingCurrentRestaurantPublicKey = createAction(
+  '[Login page] Fetching Current Restaurant Public Key',
+);
+
+export const setRestaurantPublicKey = createAction(
+  '[Login page] Set Current Restaurant Public Key',
+  props<{ publicKey: string }>()
+);
+
 export const fetchingRestaurant = createAction(
   '[Login page] Fetching restaurant',
   props<{ code: string }>()

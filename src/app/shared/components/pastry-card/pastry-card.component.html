@@ -1,6 +1,6 @@
 <nz-card [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]"
   [class.-is-admin]="isAdmin">
-  <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+  <nz-skeleton [nzActive]="false" [nzLoading]="isLoading">
     <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock <= 0"
       [class.-stock-issue]="isStockIssue" nzStandalone nzShowZero [nzCount]="pastry.stock" [nzOverflowCount]="99"
       [nzTitle]="'stock'" i18n-nzTitle>
@@ -23,19 +23,17 @@
     <ng-template #descriptionTemplate>
       <div nzFlex nz-row>
         <div nz-col nzFlex="1">
-          <p class="template-description -mobile" nz-tooltip [nzTooltipTitle]="tooltipTitleTemplate" nzTooltipPlacement="top" [nzTooltipMouseEnterDelay]="1">
+          <p class="template-description -mobile" nz-tooltip [nzTooltipTrigger]="pastry.description.split(' ').length > 20 ? 'hover' : null" [nzTooltipTitle]="tooltipTitleTemplate" nzTooltipPlacement="top" [nzTooltipMouseEnterDelay]="1">
             {{ pastry.description.split(' ').splice(0, 20).join(' ') + (pastry.description.split(' ').length > 20 ? '...' : '') }}
           </p>
+
+          <ng-template #tooltipTitleTemplate>
+            {{ pastry.description }}
+          </ng-template>
 
           <p class="template-description">
             {{ pastry.description }}
           </p>
-
-          <ng-template #tooltipTitleTemplate>
-            <ng-container *ngIf="pastry.description.split(' ').length > 20">
-              {{ pastry.description }}
-            </ng-container>
-          </ng-template>
 
           <nz-collapse *ngIf="pastry.ingredients?.length" class="ingredients-section" nzGhost>
             <nz-collapse-panel nzHeader="Ingrédients" i18n-nzHeader>
@@ -46,20 +44,19 @@
           </nz-collapse>
         </div>
 
-        <img nz-col class="mobile-card-image" *ngIf="!isLoading && imageUrl" [alt]="pastry.name" [src]="imageUrl" (error)="onImgError($event)" />
+        <img nz-col class="mobile-card-image" *ngIf="!isLoading && imageUrl" [alt]="pastry.name" [src]="imageUrl" (error)="onImgError()" />
       </div>
     </ng-template>
   </nz-skeleton>
 </nz-card>
 <ng-template #coverTemplate>
-  <img class="card-image" *ngIf="!isLoading && imageUrl" [alt]="pastry.name" [src]="imageUrl"
-    (error)="onImgError($event)" />
+  <img class="card-image" *ngIf="!isLoading && imageUrl" [alt]="pastry.name" [src]="imageUrl" (error)="onImgError()" />
   <div *ngIf="isAdmin && !isLoading && imageUrl" class="card-actions-btn">
-    <div class="block-btn">
+    <div class="btn-section">
       <button nz-button nzType="default" nzShape="circle" nzSize="large" (click)="clickEdit.emit()"><span nz-icon
           nzType="edit"></span></button>
     </div>
-    <div class="block-btn">
+    <div class="btn-section">
       <button *ngIf="!pastry.hidden" nz-button nzType="default" nzShape="circle" nzSize="large"
         (click)="clickDelete.emit()">
         <span nz-icon nzType="eye"></span>

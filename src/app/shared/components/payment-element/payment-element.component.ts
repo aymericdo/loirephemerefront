@@ -9,6 +9,7 @@ import { selectRestaurantPublicKey } from 'src/app/modules/login/store/login.sel
 import { AppState } from 'src/app/store/app.state';
 import { selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { Command } from 'src/app/interfaces/command.interface';
+import { fetchingCurrentRestaurantPublicKey } from 'src/app/modules/login/store/login.actions';
 
 @Component({
   selector: 'app-payment-element',
@@ -20,7 +21,7 @@ import { Command } from 'src/app/interfaces/command.interface';
   ]
 })
 export class PaymentElementComponent implements OnInit, OnDestroy {
-  selectRestaurantPublicKey$: Observable<string | undefined>;
+  selectRestaurantPublicKey$: Observable<string | null>;
   personalCommand$: Observable<Command | null>;
 
   private stripe: any = null;
@@ -48,6 +49,7 @@ export class PaymentElementComponent implements OnInit, OnDestroy {
       this.invokeStripe(restaurantPublicKey);
     });
 
+    this.store.dispatch(fetchingCurrentRestaurantPublicKey());
   }
 
   invokeStripe(restaurantPublicKey: string) {

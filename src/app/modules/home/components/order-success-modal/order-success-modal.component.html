@@ -3,12 +3,15 @@
   <ng-container *nzModalContent>
     <nz-result nzStatus="success" [nzTitle]="'Commande envoyée !'" i18n-nzTitle>
       <div nz-result-subtitle i18n>
-        Votre numéro de commande est le <b>{{ commandReference }}</b>.
+        Votre numéro de commande est le <b>{{ command.reference }}</b>.
       </div>
       <div nz-result-subtitle i18n>
         <b>Pour être averti que votre commande est prête, ne rafraichissez pas la page d'accueil. Une notification vous préviendra.</b>
       </div>
       <div nz-result-extra>
+        <button *ngIf="!!restaurant.paymentInformation?.paymentActivated && !command.isPayed" nz-button nzType="dashed" (click)="clickPayment.emit()" i18n>
+          Payer votre commande
+        </button>
         <button nz-button nzType="primary" (click)="clickCancel.emit()" i18n>
           Retour à la page d'accueil
         </button>

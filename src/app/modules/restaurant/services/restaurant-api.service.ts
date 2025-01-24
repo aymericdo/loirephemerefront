@@ -35,6 +35,12 @@ export class RestaurantApiService {
     ) as Observable<Restaurant>;
   }
 
+  getRestaurantPublicKey(code: string): Observable<{ publicKey: string }> {
+    return this.http.get(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/payment-information-public-key`,
+    ) as Observable<{ publicKey: string }>;
+  }
+
   getUserRestaurants(): Observable<Restaurant[]> {
     return this.http.get(
       `${this.protocolHttp}${this.baseUrl}/restaurants`,
