@@ -24,10 +24,13 @@ export class PaymentElementComponent implements OnInit, OnDestroy {
   selectRestaurantPublicKey$: Observable<string | null>;
   personalCommand$: Observable<Command | null>;
 
+  private stripeCheckout: any = null;
   private stripe: any = null;
   private commandReference = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  private readonly SCRIPT_ID = 'stripe-script';
 
   constructor(
     private store: Store<AppState>,
@@ -53,9 +56,9 @@ export class PaymentElementComponent implements OnInit, OnDestroy {
   }
 
   invokeStripe(restaurantPublicKey: string) {
-    if (!window.document.getElementById('stripe-script')) {
-      const script = window.document.createElement('script');
-      script.id = 'stripe-script';
+    if (!window.document.getElementById(this.SCRIPT_ID)) {
+      const script: HTMLScriptElement = window.document.createElement('script');
+      script.id = this.SCRIPT_ID;
       script.type = 'text/javascript';
       script.src = 'https://js.stripe.com/v3/';
       script.onload = () => {
@@ -71,16 +74,23 @@ export class PaymentElementComponent implements OnInit, OnDestroy {
     this.paymentElementService.createCheckoutSession(this.commandReference).subscribe(async (res) => {
       const clientSecret = res['clientSecret'] as string;
 
-      const checkout = await this.stripe.initEmbeddedCheckout({
+      this.stripeCheckout = await this.stripe.initEmbeddedCheckout({
         fetchClientSecret: () => clientSecret,
       });
 
-      checkout.mount('#checkout');
+      this.stripeCheckout.mount('#checkout');
     });
   }
 
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+
+    this.stripeCheckout.unmount();
+    this.stripeCheckout.destroy();
+
+    if (window.document.getElementById(this.SCRIPT_ID)) {
+      window.document.getElementById(this.SCRIPT_ID)?.remove();
+    }
   }
 }
