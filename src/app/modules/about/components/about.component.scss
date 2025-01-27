@@ -22,6 +22,8 @@
     display: flex;
     flex-direction: column;
     max-width: 50%;
+    height: 100vh;
+    justify-content: center;
   }
 
   .sub-title {
@@ -42,23 +44,22 @@
   .wave-separation {
     position: fixed;
     top: 0;
-    width: 100%;
+    width: 100vw;
+    height: 50vh;
     z-index: 0;
 
     svg {
-      animation: waveMove 60s infinite linear;
+      height: 100%;
+      animation: waveMove 15s infinite linear;
     }
   }
 
   @keyframes waveMove {
     0% {
-      transform: scale(1.5) translate(0);
-    }
-    50% {
-      transform: scale(1.7) translate(5%);
+      transform: scaleX(2) scaleY(1.5) translateX(0);
     }
     100% {
-      transform: scale(1.5) translate(0);
+      transform: scaleX(2.2) scaleY(1.7) translateX(25%);
     }
   }
 
@@ -68,7 +69,6 @@
     padding: 1rem;
     flex-direction: column;
     align-items: center;
-    margin-top: 15vh;
     position: relative;
   }
 
@@ -169,10 +169,6 @@
     }
   }
 
-  .timeline-section {
-    padding-top: 150px;
-  }
-
   ::ng-deep nz-timeline .ant-timeline .ant-timeline-item  {
     font-size: 1rem;
   }
@@ -199,19 +195,19 @@
     width: 80%;
   }
 
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
   .section {
     position: relative;
     padding: 1rem;
     display: flex;
     justify-content: space-evenly;
-    font-size: 1.25rem;
+    font-size: 1rem;
     flex-wrap: wrap;
     margin-top: 1rem;
-
-    h2 {
-      font-size: 3rem;
-      font-weight: 600;
-    }
 
     &.-swap {
       flex-direction: row-reverse;
@@ -234,7 +230,7 @@
       }
 
       img {
-        width: 500px;
+        width: 300px;
       }
     }
   }
@@ -249,8 +245,7 @@
 
     .title {
       max-width: inherit;
-      padding-top: calc(50% + 1.25rem);
-      padding-bottom: calc(50% + 1.25rem);
+      height: inherit;
       justify-content: center;
     }
 
@@ -282,14 +277,9 @@
         flex-direction: row;
       }
 
-      h2 {
-        font-size: 2rem;
-        font-weight: 600;
-      }
-
       .image {
         img {
-          width: 90%;
+          width: 80%;
         }
       }
     }
