@@ -211,22 +211,19 @@
 
     &.-swap {
       flex-direction: row-reverse;
-      .image {
-        transform: translate(-200px, -200px);
-      }
     }
 
     .image {
       display: flex;
       justify-content: center;
       padding-top: 100px;
-      transform: translate(200px, -200px);
+      transform: scale(0);
       opacity: 0;
       transition: transform ease 1s, opacity ease-in 1s;
 
       &.-visible {
         opacity: 1;
-        transform: translate(0, 0);
+        transform: scale(1);
       }
 
       img {
