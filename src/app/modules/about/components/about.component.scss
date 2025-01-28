@@ -45,21 +45,23 @@
     position: fixed;
     top: 0;
     width: 100vw;
-    height: 50vh;
     z-index: 0;
 
     svg {
-      height: 100%;
-      animation: waveMove 15s infinite linear;
+      width: 200%;
+      animation: waveMove 30s infinite linear;
     }
   }
 
   @keyframes waveMove {
     0% {
-      transform: scaleX(2) scaleY(1.5) translateX(0);
+      transform: translateX(-50%);
+    }
+    50% {
+      transform: translateX(0);
     }
     100% {
-      transform: scaleX(2.2) scaleY(1.7) translateX(25%);
+      transform: translateX(-50%);
     }
   }
 
@@ -216,7 +218,7 @@
     .image {
       display: flex;
       justify-content: center;
-      padding-top: 100px;
+      padding-top: 3rem;
       transform: scale(0);
       opacity: 0;
       transition: transform ease 1s, opacity ease-in 1s;
