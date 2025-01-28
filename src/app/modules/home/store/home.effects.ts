@@ -17,7 +17,7 @@ import { AppState } from 'src/app/store/app.state';
 import { HomeApiService } from '../services/home-api.service';
 import {
   cancelPersonalCommand,
-  fetchRestaurantPastries, getPersonalCommand, markPersonalCommandAsPayed, notificationSubSent,
+  fetchRestaurantPastries, fetchingPersonalCommand, markPersonalCommandAsPayed, notificationSubSent,
   resetCommand,
   resetPersonalCommand,
   sendCommand,
@@ -82,9 +82,9 @@ export class HomeEffects {
     )
   );
 
-  getPersonalCommand$ = createEffect(() =>
+  fetchingPersonalCommand$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(getPersonalCommand),
+      ofType(fetchingPersonalCommand),
       withLatestFrom(this.store$.select(selectRestaurant).pipe(filter(Boolean))),
       mergeMap(([action, restaurant]) => {
         return this.homeApiService.getPersonalCommand(restaurant?.code!, action.commandId).pipe(

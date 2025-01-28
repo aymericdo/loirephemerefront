@@ -13,9 +13,14 @@
       <nz-space nzDirection="vertical">
         <app-payment-element *nzSpaceItem></app-payment-element>
         <div *nzSpaceItem nz-flex nzJustify="center">
-          <button nz-button (click)="handleCancel()" i18n>
+          <button *ngIf="isPaymentModalBackBtn; else closeBtn" nz-button (click)="clickBack.emit()" i18n>
             Retour
           </button>
+          <ng-template #closeBtn>
+            <button nz-button (click)="clickClose.emit()" i18n>
+              Fermer
+            </button>
+          </ng-template>
         </div>
       </nz-space>
     </div>

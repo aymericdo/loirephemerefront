@@ -1,0 +1,28 @@
+
+<app-order-error-modal *ngIf="(errorCommand$ | async)" [errors]="(errorCommand$ | async)!"
+  (clickCancel)="handleCloseErrorModal()"></app-order-error-modal>
+
+<ng-container *ngIf="(personalCommand$ | async)">
+  <ng-container *ngIf="isPaymentModalVisible">
+    <app-order-payment-required-modal *ngIf="(personalCommand$ | async)!.paymentRequired; else paymentNotRequired"
+      (clickCancel)="handleCommandCancelled($event)" [command]="(personalCommand$ | async)!" [restaurant]="(restaurant$ | async)!">
+    </app-order-payment-required-modal>
+
+    <ng-template #paymentNotRequired>
+      <app-order-payment-modal (clickBack)="handlePaymentBack()" (clickClose)="isPaymentModalVisible = false"
+        [isPaymentModalBackBtn]="isPaymentModalBackBtn" [command]="(personalCommand$ | async)!" [restaurant]="(restaurant$ | async)!">
+      </app-order-payment-modal>
+    </ng-template>
+  </ng-container>
+
+  <app-order-success-modal *ngIf="isSuccessModalVisible && (errorCommand$ | async) === null"
+    [restaurant]="(restaurant$ | async)!" (clickPayment)="handlePayment(true)"
+    [command]="(personalCommand$ | async)!" (clickCancel)="handleCloseSuccessModal()">
+  </app-order-success-modal>
+</ng-container>
+
+<ng-template #notificationPayedBtnTpl let-notification>
+  <button nz-button nzType="dashed" (click)="handlePayment()" i18n>
+    Payer votre commande
+  </button>
+</ng-template>

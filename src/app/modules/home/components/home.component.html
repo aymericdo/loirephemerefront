@@ -1,5 +1,6 @@
 <nz-alert *ngIf="(demoResto$ | async)?.id && (demoResto$ | async)?.id === (restaurant$ | async)?.id"
   nzBanner nzType="info" nzMessage="Restaurant de test : amusez-vous !" i18n-nzMessage></nz-alert>
+
 <div class="home-section" [class.-has-order-footer]="hasSelectedPastries$ | async">
   <nz-page-header *ngIf="(restaurant$ | async) !== null">
     <nz-page-header-title><h1>{{ (restaurant$ | async)?.name }}</h1></nz-page-header-title>
@@ -32,33 +33,11 @@
 <app-order-footer *ngIf="hasSelectedPastries$ | async" (clickReset)="handleClickReset()"
   (clickConfirm)="isOrderModalVisible = true" [disabled]="(isStockIssue$ | async)! || !pickUpTimeAvailable"></app-order-footer>
 
-<app-order-error-modal *ngIf="(errorCommand$ | async)" [errors]="(errorCommand$ | async)!"
-  (clickCancel)="handleCloseErrorModal()"></app-order-error-modal>
-
 <app-order-modal *ngIf="isOrderModalVisible" [allPastries]="(pastries$ | async)!" [selectedPastries]="(selectedPastries$ | async)!"
   [totalPrice]="(totalPrice$ | async)!" (clickCancel)="isOrderModalVisible = false" (clickOk)="isOrderModalVisible = false; isUltimateConfirmationVisible = true"></app-order-modal>
 
 <app-order-name-modal *ngIf="isUltimateConfirmationVisible" (clickCancel)="isUltimateConfirmationVisible = false"
   (clickOk)="handleCommandClicked($event)" [restaurant]="(restaurant$ | async)!"></app-order-name-modal>
-
-<ng-container *ngIf="(personalCommand$ | async)">
-  <ng-container *ngIf="isPaymentModalVisible">
-    <app-order-payment-required-modal *ngIf="(personalCommand$ | async)!.paymentRequired; else paymentNotRequired"
-      (clickCancel)="handleCommandCancelled($event)" [command]="(personalCommand$ | async)!" [restaurant]="(restaurant$ | async)!">
-    </app-order-payment-required-modal>
-
-    <ng-template #paymentNotRequired>
-      <app-order-payment-modal (clickBack)="handlePaymentBack()"
-        [command]="(personalCommand$ | async)!" [restaurant]="(restaurant$ | async)!">
-      </app-order-payment-modal>
-    </ng-template>
-  </ng-container>
-
-  <app-order-success-modal *ngIf="isSuccessModalVisible && (errorCommand$ | async) === null"
-    [restaurant]="(restaurant$ | async)!" (clickPayment)="handlePayment()"
-    [command]="(personalCommand$ | async)!" (clickCancel)="handleCloseSuccessModal()">
-</app-order-success-modal>
-</ng-container>
 
 <div *ngIf="hasSelectedPastries$ | async" class="shopping-cart">
   <nz-badge [nzCount]="(totalCount$ | async)!">
@@ -73,3 +52,5 @@
   <div i18n>Vous pouvez donc prendre des commandes, manipuler, tester.</div>
   <div i18n>La partie <b>admin</b> de ce resto existe, et elle est accessible à tout le monde, <b>une fois connecté.</b></div>
 </app-information-popover>
+
+<app-home-notifications></app-home-notifications>

@@ -7,36 +7,27 @@ import {
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject, timer } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, withLatestFrom } from 'rxjs/operators';
-import { APP_NAME, VAPID_PUBLIC_KEY } from 'src/app/app.module';
+import { filter, map, switchMap, takeUntil, withLatestFrom } from 'rxjs/operators';
+import { APP_NAME } from 'src/app/app.module';
 import { Restaurant } from 'src/app/classes/restaurant';
-import { canVibrate } from 'src/app/helpers/vibrate';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 import {
   HomeWebSocketService,
-  WebSocketData
 } from 'src/app/modules/home/services/home-socket.service';
 import {
-  cancelPersonalCommand,
   decrementPastry,
   fetchRestaurantPastries,
-  getPersonalCommand,
   incrementPastry,
   markPersonalCommandAsPayed,
   resetCommand,
   resetErrorCommand,
   sendCommand,
-  sendNotificationSub,
-  setStock
 } from 'src/app/modules/home/store/home.actions';
 import {
-  selectCurrentSentCommandFromCommandList,
   selectErrorCommand,
   selectHasSelectedPastries,
   selectIsLoading,
@@ -67,11 +58,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   isStockIssue$: Observable<boolean>;
   personalCommand$: Observable<Command | null>;
-  errorCommand$: Observable<Object | null>;
   demoResto$: Observable<RestaurantInterface | null>;
 
-  isSuccessModalVisible = false;
-  isPaymentModalVisible = false;
   isOrderModalVisible: boolean = false;
   isUltimateConfirmationVisible: boolean = false;
 
@@ -79,18 +67,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   isRestaurantOpened: boolean = false;
   pickUpTimeAvailable: boolean = false;
 
-  private commandNotificationIdByCommandId: { [commandId: string]: string } = {};
-  private audio!: HTMLAudioElement;
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
-    private router: Router,
-    private wsService: HomeWebSocketService,
-    private notification: NzNotificationService,
-    private swPush: SwPush,
     private titleService: Title,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
@@ -102,7 +83,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isLoading$ = this.store.select(selectIsLoading);
     this.isStockIssue$ = this.store.select(selectIsStockIssue);
     this.personalCommand$ = this.store.select(selectPersonalCommand);
-    this.errorCommand$ = this.store.select(selectErrorCommand);
     this.demoResto$ = this.store.select(selectDemoResto);
   }
 
@@ -114,20 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe(code => {
-      this.subscribeToWS(code);
       this.store.dispatch(fetchRestaurantPastries({ code }));
-    });
-
-    this.restaurant$.pipe(
-      filter(Boolean),
-      switchMap(() => this.route.queryParamMap),
-      map((params: ParamMap) => params.get('commandId')),
-      filter(Boolean),
-      takeUntil(this.destroyed$),
-    ).subscribe((commandId) => {
-      this.store.dispatch(getPersonalCommand({ commandId }));
-
-      this.openSentCommandNotification(commandId);
     });
 
     this.restaurant$.pipe(
@@ -145,16 +112,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.restaurant$.pipe(
       filter(Boolean),
-      switchMap(() => this.route.queryParamMap),
-      map((params: ParamMap) => params.get('payedCommandId')),
-      filter(Boolean),
-      takeUntil(this.destroyed$),
-    ).subscribe(() => {
-      this.isSuccessModalVisible = true;
-    });
-
-    this.restaurant$.pipe(
-      filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((restaurant: RestaurantInterface) => {
       this.paymentRequired = !!(restaurant.paymentInformation?.paymentActivated &&
@@ -162,46 +119,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.titleService.setTitle(restaurant.name);
       this.setIsRestaurantOpened(restaurant);
     });
-
-    // if (this.swPush.isEnabled) {
-    //   this.swPush.notificationClicks
-    //     .pipe(takeUntil(this.destroyed$))
-    //     .subscribe((event) => {
-    //       console.log("event", event);
-    //     });
-
-    //   this.swPush.messages
-    //     .pipe(takeUntil(this.destroyed$))
-    //     .subscribe((message) => {
-    //       console.log("message:", message);
-    //     });
-    // }
-
-    this.personalCommand$
-      .pipe(filter(Boolean), takeUntil(this.destroyed$))
-      .subscribe(async (command: Command | any) => {
-        if (this.swPush.isEnabled) {
-          try {
-            const sub = await this.swPush.requestSubscription({
-              serverPublicKey: VAPID_PUBLIC_KEY,
-            });
-
-            this.store.dispatch(
-              sendNotificationSub({ commandId: command.id!, sub })
-            );
-            console.log('Subscription to notifications ok');
-          } catch (err) {
-            console.error('Could not subscribe to notifications', err);
-          }
-        }
-
-        this.wsService.sendMessage(
-          JSON.stringify({
-            event: 'addWaitingQueue',
-            data: command.id,
-          })
-        );
-      });
 
     this.watchIsOpened();
   }
@@ -217,60 +134,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   handleCommandClicked({ name, takeAway, pickUpTime }: CoreCommand): void {
     this.isUltimateConfirmationVisible = false;
     this.store.dispatch(sendCommand({ name, takeAway, pickUpTime }));
-
-    if (this.paymentRequired) {
-      this.isPaymentModalVisible = true;
-    } else {
-      this.isSuccessModalVisible = true;
-    }
-  }
-
-  handlePayment(): void {
-    this.isSuccessModalVisible = false;
-    this.isPaymentModalVisible = true;
-  }
-
-  handlePaymentBack(): void {
-    this.isSuccessModalVisible = true;
-    this.isPaymentModalVisible = false;
-  }
-
-  handleCommandCancelled(origin: 'human' | 'time'): void {
-    this.isPaymentModalVisible = false;
-
-    if (origin === 'human') {
-      this.personalCommand$.pipe(filter(Boolean), take(1)).subscribe((command: Command) => {
-        this.store.dispatch(cancelPersonalCommand({ commandId: command.id }));
-      });
-    }
   }
 
   handleClickReset(): void {
     this.store.dispatch(resetCommand());
-  }
-
-  handleCloseErrorModal(): void {
-    this.router.navigate(['.'], { relativeTo: this.route });
-    this.isSuccessModalVisible = false;
-    this.store.dispatch(resetErrorCommand());
-  }
-
-  handleCloseSuccessModal(): void {
-    this.router.navigate(['.'], { relativeTo: this.route });
-    this.isSuccessModalVisible = false;
-
-    this.personalCommand$.pipe(filter(Boolean), take(1))
-      .subscribe((command: Command) => {
-        this.commandNotificationIdByCommandId[command.id] = this.notification
-          .create(
-            'success',
-            `Votre commande ${command.reference} a bien été envoyée !`,
-            "Pour être averti que votre commande est prête, ne rafraichissez pas cette page. Une notification vous préviendra.", {
-              nzDuration: 0,
-              nzKey: command.id,
-            }
-          ).messageId;
-    });
   }
 
   ngOnDestroy() {
@@ -281,37 +148,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
-  }
-
-  private openSentCommandNotification(commandId: string): void {
-    this.store.select(selectCurrentSentCommandFromCommandList({ commandId }))
-      .pipe(filter(Boolean), take(1))
-      .subscribe((command: Command) => {
-        this.notification
-          .create(
-            'info',
-            `Votre commande ${command.reference} est prête !`,
-            'Bonne dégustation ! 🥰', {
-              nzDuration: 0,
-              nzKey: commandId,
-            }
-          );
-
-          if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
-
-          this.audio = new Audio('assets/sounds/french.mp3');
-          this.audio.pause();
-          this.audio.currentTime = 0;
-          this.audio.play();
-        });
-
-    if (this.swPush.isEnabled) {
-      try {
-        this.swPush.unsubscribe();
-      } catch (error) {
-        console.log('Impossible to unsubscribe', error);
-      }
-    }
   }
 
   private watchIsOpened(): void {
@@ -328,44 +164,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     const resto = new Restaurant(restaurant);
     this.isRestaurantOpened = resto.isOpen();
     this.pickUpTimeAvailable = resto.isPickupOpen();
-  }
-
-  private subscribeToWS(code: string) {
-    setInterval(() => {
-      this.wsService.sendMessage('ping');
-    }, 5000);
-
-    this.wsService
-      .createObservableSocket(code)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (data: WebSocketData) => {
-          if (data.hasOwnProperty('stockChanged')) {
-            this.store.dispatch(
-              setStock({
-                pastryId: data.stockChanged.pastryId as string,
-                newStock: data.stockChanged.newStock as number,
-              })
-            );
-          } else if (data.hasOwnProperty('wizz')) {
-            const commandId = data.wizz.commandId;
-
-            this.notification.remove(this.commandNotificationIdByCommandId[commandId]);
-
-            this.openSentCommandNotification(commandId);
-          }
-        },
-        error: (err) => {
-          console.error(err);
-        },
-        complete: () => {
-          if (!this.destroyed$.observed) {
-            setTimeout(() => {
-              this.subscribeToWS(code);
-            }, 1000);
-          }
-          console.log('The observable stream is complete');
-        }
-     });
   }
 }

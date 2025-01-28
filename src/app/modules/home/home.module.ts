@@ -16,6 +16,7 @@ import { PaymentElementComponent } from 'src/app/shared/components/payment-eleme
 import { OrderPaymentRequiredModalComponent } from 'src/app/modules/home/components/order-payment-required-modal/order-payment-required-modal.component';
 import { OrderPaymentModalComponent } from 'src/app/modules/home/components/order-payment-modal/order-payment-modal.component';
 import { TimeRemainingComponent } from 'src/app/modules/home/components/order-payment-required-modal/time-remaining.component';
+import { HomeNotificationsComponent } from 'src/app/modules/home/components/home-notifications/home-notifications.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { TimeRemainingComponent } from 'src/app/modules/home/components/order-pa
     OrderPaymentRequiredModalComponent,
     OrderPaymentModalComponent,
     TimeRemainingComponent,
+    HomeNotificationsComponent,
     OrderSuccessModalComponent,
     OrderErrorModalComponent,
     OrderModalComponent,

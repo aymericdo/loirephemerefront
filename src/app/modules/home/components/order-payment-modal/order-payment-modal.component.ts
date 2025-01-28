@@ -10,9 +10,7 @@ import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant
 export class OrderPaymentModalComponent {
   @Input() command!: Command;
   @Input() restaurant!: RestaurantInterface;
+  @Input() isPaymentModalBackBtn: boolean = false;
   @Output() clickBack = new EventEmitter<string>();
-
-  handleCancel(): void {
-    this.clickBack.emit();
-  }
+  @Output() clickClose = new EventEmitter<string>();
 }

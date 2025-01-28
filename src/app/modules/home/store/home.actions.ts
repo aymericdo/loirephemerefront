@@ -23,8 +23,8 @@ export const sendCommand = createAction(
   props<CoreCommand>()
 );
 export const resetCommand = createAction('[Home page] Reset command');
-export const getPersonalCommand = createAction(
-  '[Home page] Get personal command',
+export const fetchingPersonalCommand = createAction(
+  '[Home page] Fetching personal command',
   props<{ commandId: string }>()
 );
 export const cancelPersonalCommand = createAction(
