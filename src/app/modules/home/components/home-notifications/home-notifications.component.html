@@ -9,7 +9,7 @@
     </app-order-payment-required-modal>
 
     <ng-template #paymentNotRequired>
-      <app-order-payment-modal (clickBack)="handlePaymentBack()" (clickClose)="isPaymentModalVisible = false"
+      <app-order-payment-modal (clickBack)="handlePaymentBack()" (clickClose)="handlePaymentClose()"
         [isPaymentModalBackBtn]="isPaymentModalBackBtn" [command]="(personalCommand$ | async)!" [restaurant]="(restaurant$ | async)!">
       </app-order-payment-modal>
     </ng-template>
@@ -21,8 +21,9 @@
   </app-order-success-modal>
 </ng-container>
 
-<ng-template #notificationPayedBtnTpl let-notification>
-  <button nz-button nzType="dashed" (click)="handlePayment()" i18n>
+<ng-template #notificationPayedBtnTpl>
+  <button *ngIf="(personalCommand$ | async) && !!(restaurant$ | async)?.paymentInformation?.paymentActivated && !(personalCommand$ | async)?.isPayed"
+    nz-button nzType="dashed" (click)="handlePayment()" i18n>
     Payer votre commande
   </button>
 </ng-template>

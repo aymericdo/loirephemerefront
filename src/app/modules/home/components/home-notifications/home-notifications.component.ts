@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NzNotificationComponent, NzNotificationService } from 'ng-zorro-antd/notification';
-import { Observable, ReplaySubject, filter, map, switchMap, take, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, combineLatest, filter, map, switchMap, take, takeUntil } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
 import { cancelPersonalCommand, fetchingPersonalCommand, resetErrorCommand, sendNotificationSub, setStock } from 'src/app/modules/home/store/home.actions';
@@ -29,6 +29,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   isPaymentModalVisible = false;
   isPaymentModalBackBtn = false;
 
+  private personalCommand: Command | null = null;
   private commandNotificationIdByCommandId: { [commandId: string]: string } = {};
   private audio!: HTMLAudioElement;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -66,19 +67,47 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
       this.openSentCommandNotification(commandId);
     });
 
-    this.restaurant$.pipe(
-      filter(Boolean),
-      switchMap(() => this.route.queryParamMap),
-      map((params: ParamMap) => params.get('payedCommandId')),
-      filter(Boolean),
+    combineLatest([
+      this.route.queryParamMap.pipe(
+        map((params: ParamMap) => params.get('payedCommandId')),
+        filter(Boolean),
+      ),
+      this.personalCommand$.pipe(filter(Boolean)),
+      this.restaurant$.pipe(filter(Boolean)),
+    ])
+    .pipe(
+      map((data) => ({ commandId: data[0], personalCommand: data[1] })),
       takeUntil(this.destroyed$),
-    ).subscribe(() => {
-      this.isSuccessModalVisible = true;
+    ).subscribe(({ commandId, personalCommand }) => {
+      if (commandId === personalCommand.id) {
+        this.router.navigate(['.'], { relativeTo: this.route });
+
+        if (personalCommand.paymentRequired) {
+          this.isSuccessModalVisible = true;
+        } else {
+          this.openWaitingConfirmationNotification();
+        }
+      }
     });
+
+    this.personalCommand$
+      .pipe(
+        filter(Boolean),
+        take(1),
+      )
+      .subscribe((command: Command) => {
+        if (command.paymentRequired && !command.isPayed) {
+          this.isPaymentModalVisible = true;
+        } else if (!command.isPayed) {
+          this.isSuccessModalVisible = true;
+        }
+      });
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
       .subscribe(async (command: Command | any) => {
+        this.personalCommand = command;
+
         if (this.swPush.isEnabled) {
           try {
             const sub = await this.swPush.requestSubscription({
@@ -100,12 +129,6 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
             data: command.id,
           })
         );
-
-        if (command.paymentRequired) {
-          this.isPaymentModalVisible = true;
-        } else {
-          this.isSuccessModalVisible = true;
-        }
       });
 
     // if (this.swPush.isEnabled) {
@@ -127,6 +150,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.isSuccessModalVisible = false;
     this.isPaymentModalVisible = true;
     this.isPaymentModalBackBtn = enableBackBtn;
+    this.notification.remove(this.commandNotificationIdByCommandId[this.personalCommand!.id]);
   }
 
   handlePaymentBack(): void {
@@ -134,13 +158,18 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.isPaymentModalVisible = false;
   }
 
+  handlePaymentClose(): void {
+    this.isPaymentModalVisible = false;
+    this.openWaitingConfirmationNotification();
+  }
+
   handleCommandCancelled(origin: 'human' | 'time'): void {
     this.isPaymentModalVisible = false;
 
     if (origin === 'human') {
-      this.personalCommand$.pipe(filter(Boolean), take(1)).subscribe((command: Command) => {
-        this.store.dispatch(cancelPersonalCommand({ commandId: command.id }));
-      });
+      this.store.dispatch(cancelPersonalCommand({
+        commandId: this.personalCommand!.id,
+      }));
     }
   }
 
@@ -151,27 +180,26 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   }
 
   handleCloseSuccessModal(): void {
-    this.router.navigate(['.'], { relativeTo: this.route });
     this.isSuccessModalVisible = false;
-
-    this.personalCommand$.pipe(filter(Boolean), take(1))
-      .subscribe((command: Command) => {
-        this.commandNotificationIdByCommandId[command.id] = this.notification
-          .create(
-            'success',
-            $localize`Votre commande ${command.reference} a bien été envoyée !`,
-            $localize`Pour être averti que votre commande est prête, ne rafraichissez pas cette page. Une notification vous préviendra.`, {
-              nzDuration: 0,
-              nzKey: command.id,
-              nzButton: this.notificationPayedBtnTemplate,
-            }
-          ).messageId;
-    });
+    this.openWaitingConfirmationNotification();
   }
 
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private openWaitingConfirmationNotification(): void {
+    this.commandNotificationIdByCommandId[this.personalCommand!.id] = this.notification
+      .create(
+        'success',
+        $localize`Votre commande ${this.personalCommand!.reference} a bien été envoyée !`,
+        $localize`Pour être averti que votre commande est prête, ne rafraichissez pas cette page. Une notification vous préviendra.`, {
+          nzDuration: 0,
+          nzKey: this.personalCommand!.id,
+          nzButton: this.notificationPayedBtnTemplate,
+        }
+      ).messageId;
   }
 
   private subscribeToWS(code: string) {

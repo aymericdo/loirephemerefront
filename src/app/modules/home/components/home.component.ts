@@ -6,7 +6,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, timer } from 'rxjs';
 import { filter, map, switchMap, takeUntil, withLatestFrom } from 'rxjs/operators';
@@ -24,11 +24,9 @@ import {
   incrementPastry,
   markPersonalCommandAsPayed,
   resetCommand,
-  resetErrorCommand,
   sendCommand,
 } from 'src/app/modules/home/store/home.actions';
 import {
-  selectErrorCommand,
   selectHasSelectedPastries,
   selectIsLoading,
   selectIsStockIssue,
