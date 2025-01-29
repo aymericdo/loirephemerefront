@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { EffectsModule } from '@ngrx/effects';
@@ -12,7 +12,8 @@ import { LoginRoutingModule } from 'src/app/modules/login/login-routing.module';
 import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
 import { RecoverModalComponent } from 'src/app/modules/login/components/recover-modal/recover-modal.component';
 import { RecoverComponent } from 'src/app/modules/login/components/recover/recover.component';
-import { NgHcaptchaModule } from 'ng-hcaptcha';
+
+export const SITE_KEY = '76928deb-ad7e-4374-bc74-540e80fa1049';
 
 @NgModule({
   declarations: [
@@ -27,15 +28,13 @@ import { NgHcaptchaModule } from 'ng-hcaptcha';
     LoginRoutingModule,
     CommonModule,
     SharedModule,
-    NgHcaptchaModule.forRoot({
-      siteKey: '76928deb-ad7e-4374-bc74-540e80fa1049',
-    }),
     EffectsModule.forFeature([LoginEffects]),
     StoreModule.forFeature(loginFeatureKey, reducer),
   ],
   exports: [
     SignInComponent,
     RegisterComponent,
-  ]
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class LoginModule { }

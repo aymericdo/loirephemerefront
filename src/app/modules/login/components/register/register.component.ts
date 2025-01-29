@@ -5,6 +5,7 @@ import { Observable, ReplaySubject, filter, of, take, takeUntil } from 'rxjs';
 import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
+import { SITE_KEY } from 'src/app/modules/login/login.module';
 import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -13,7 +14,7 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   confirmationModalOpened$!: Observable<string>;
@@ -24,6 +25,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   confirmationModalVisible = false;
 
   captchaToken = (environment.production) ? '' : 'localToken';
+  SITE_KEY = SITE_KEY;
 
   SIZE = SIZE;
   PASSWORD_SPECIALS_CHARS = PASSWORD_SPECIALS_CHARS;
@@ -96,8 +98,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
   }
 
-  onVerify(token: string) {
-    this.captchaToken = token;
+  onVerify(event: Event) {
+    this.captchaToken = (event as unknown as { token: string }).token;
   }
 
   onExpired() {

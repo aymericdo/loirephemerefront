@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
+import { SITE_KEY } from 'src/app/modules/login/login.module';
 import { confirmRecoverEmail, validateRecoverEmailCode } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectPasswordChanged, selectRecoverModalOpened } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
@@ -22,6 +23,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
   validateForm!: UntypedFormGroup;
   emailCode!: string;
 
+  SITE_KEY = SITE_KEY;
   captchaToken = (environment.production) ? '' : 'localToken';
 
   SIZE = SIZE;
@@ -78,8 +80,8 @@ export class RecoverComponent implements OnInit, OnDestroy {
     this.validateForm.controls.email.setValue(this.validateForm.value.email.trim());
   }
 
-  onVerify(token: string) {
-    this.captchaToken = token;
+  onVerify(event: Event) {
+    this.captchaToken = (event as unknown as { token: string }).token;
   }
 
   onExpired() {

@@ -16,11 +16,11 @@
           <div nzFlex nz-row nzJustify="end">
             <nz-space nzWrap>
               <ng-container *ngIf="!captchaToken.length">
-                <ng-hcaptcha
-                  (verify)="onVerify($event)"
-                  (expired)="onExpired()"
+                <h-captcha [attr.site-key]="SITE_KEY"
                   (error)="onError()"
-                ></ng-hcaptcha>
+                  (expired)="onExpired()"
+                  (verified)="onVerify($event)"
+                ></h-captcha>
               </ng-container>
 
               <ng-container *ngIf="captchaToken.length">

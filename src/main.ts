@@ -6,6 +6,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
+import '@hcaptcha/vanilla-hcaptcha';
+
 if (environment.production) {
   enableProdMode();
 }

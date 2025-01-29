@@ -32,28 +32,34 @@ const ngZorroConfig: NzConfig = {
   message: { nzMaxStack: 1, nzDuration: 2000 },
 };
 
-@NgModule({ declarations: [AppComponent, FourOhFourComponent],
-    bootstrap: [AppComponent], imports: [AppRoutingModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterModule,
-        SharedModule,
-        HomeModule,
-        LoginModule,
-        ServiceWorkerModule.register('ngsw-worker.js', {
-            enabled: environment.production,
-        }),
-        StoreModule.forRoot({}, {}),
-        EffectsModule.forRoot([]),
-        StoreDevtoolsModule.instrument({
-            maxAge: 25,
-            logOnly: environment.production,
-        })], providers: [
-        { provide: NZ_I18N, useValue: fr_FR },
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: HttpResponseInterceptor, multi: true },
-        { provide: NZ_CONFIG, useValue: ngZorroConfig },
-        DatePipe,
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
+@NgModule({
+  declarations: [AppComponent, FourOhFourComponent],
+  bootstrap: [AppComponent],
+  imports: [
+    AppRoutingModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    RouterModule,
+    SharedModule,
+    HomeModule,
+    LoginModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
+  ],
+  providers: [
+    { provide: NZ_I18N, useValue: fr_FR },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpResponseInterceptor, multi: true },
+    { provide: NZ_CONFIG, useValue: ngZorroConfig },
+    DatePipe,
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
+})
 export class AppModule { }
