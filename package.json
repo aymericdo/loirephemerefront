@@ -31,9 +31,9 @@
     "@angular/service-worker": "^18.2.13",
     "@ant-design/colors": "^7.1.0",
     "@auth0/angular-jwt": "^5.2.0",
-    "@ngrx/effects": "^17.2.0",
-    "@ngrx/store": "^17.2.0",
-    "@ngrx/store-devtools": "^17.2.0",
+    "@ngrx/effects": "^18.1.1",
+    "@ngrx/store": "^18.1.1",
+    "@ngrx/store-devtools": "^18.1.1",
     "@types/chart.js": "^2.9.41",
     "@types/resize-observer-browser": "^0.1.11",
     "chart.js": "^4.4.4",
@@ -45,7 +45,8 @@
     "ng2-charts": "^4.1.1",
     "rxjs": "^7.8.0",
     "tslib": "^2.7.0",
-    "zone.js": "^0.14.10"
+    "zone.js": "^0.14.10",
+    "@ngrx/operators": "^18.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.14",
