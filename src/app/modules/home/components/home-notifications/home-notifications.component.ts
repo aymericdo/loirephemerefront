@@ -5,14 +5,15 @@ import { NzNotificationComponent, NzNotificationService } from 'ng-zorro-antd/no
 import { Observable, ReplaySubject, combineLatest, filter, map, switchMap, take, takeUntil } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
-import { cancelPersonalCommand, fetchingPersonalCommand, resetErrorCommand, sendNotificationSub, setStock } from 'src/app/modules/home/store/home.actions';
-import { selectCurrentSentCommandFromCommandList, selectErrorCommand, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
+import { cancelPersonalCommand, closeHomeModal, fetchingPersonalCommand, openHomeModal, resetErrorCommand, sendNotificationSub, setStock } from 'src/app/modules/home/store/home.actions';
+import { selectCurrentSentCommandFromCommandList, selectErrorCommand, selectHomeModal, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { AppState } from 'src/app/store/app.state';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { SwPush } from '@angular/service-worker';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
+import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 
 @Component({
   selector: 'app-home-notifications',
@@ -24,9 +25,8 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   personalCommand$: Observable<Command | null>;
   restaurant$: Observable<RestaurantInterface | null>;
   errorCommand$: Observable<Object | null>;
+  homeModal$: Observable<HomeModalType | null>;
 
-  isSuccessModalVisible = false;
-  isPaymentModalVisible = false;
   isPaymentModalBackBtn = false;
 
   private personalCommand: Command | null = null;
@@ -45,6 +45,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.personalCommand$ = this.store.select(selectPersonalCommand);
     this.errorCommand$ = this.store.select(selectErrorCommand);
+    this.homeModal$ = this.store.select(selectHomeModal);
   }
 
   ngOnInit(): void {
@@ -83,25 +84,12 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
         this.router.navigate(['.'], { relativeTo: this.route });
 
         if (personalCommand.paymentRequired) {
-          this.isSuccessModalVisible = true;
+          this.store.dispatch(openHomeModal({ modal: 'success' }));
         } else {
           this.openWaitingConfirmationNotification();
         }
       }
     });
-
-    this.personalCommand$
-      .pipe(
-        filter(Boolean),
-        take(1),
-      )
-      .subscribe((command: Command) => {
-        if (command.paymentRequired && !command.isPayed) {
-          this.isPaymentModalVisible = true;
-        } else if (!command.isPayed) {
-          this.isSuccessModalVisible = true;
-        }
-      });
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
@@ -147,24 +135,22 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   }
 
   handlePayment(enableBackBtn = false): void {
-    this.isSuccessModalVisible = false;
-    this.isPaymentModalVisible = true;
+    this.store.dispatch(openHomeModal({ modal: 'payment' }));
     this.isPaymentModalBackBtn = enableBackBtn;
     this.notification.remove(this.commandNotificationIdByCommandId[this.personalCommand!.id]);
   }
 
   handlePaymentBack(): void {
-    this.isSuccessModalVisible = true;
-    this.isPaymentModalVisible = false;
+    this.store.dispatch(openHomeModal({ modal: 'success' }));
   }
 
   handlePaymentClose(): void {
-    this.isPaymentModalVisible = false;
+    this.store.dispatch(closeHomeModal());
     this.openWaitingConfirmationNotification();
   }
 
   handleCommandCancelled(origin: 'human' | 'time'): void {
-    this.isPaymentModalVisible = false;
+    this.store.dispatch(closeHomeModal());
 
     if (origin === 'human') {
       this.store.dispatch(cancelPersonalCommand({
@@ -175,12 +161,12 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
 
   handleCloseErrorModal(): void {
     this.router.navigate(['.'], { relativeTo: this.route });
-    this.isSuccessModalVisible = false;
+    this.store.dispatch(closeHomeModal());
     this.store.dispatch(resetErrorCommand());
   }
 
   handleCloseSuccessModal(): void {
-    this.isSuccessModalVisible = false;
+    this.store.dispatch(closeHomeModal());
     this.openWaitingConfirmationNotification();
   }
 

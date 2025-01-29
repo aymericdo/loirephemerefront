@@ -3,7 +3,7 @@
   (clickCancel)="handleCloseErrorModal()"></app-order-error-modal>
 
 <ng-container *ngIf="(personalCommand$ | async)">
-  <ng-container *ngIf="isPaymentModalVisible">
+  <ng-container *ngIf="(homeModal$ | async) === 'payment'">
     <app-order-payment-required-modal *ngIf="(personalCommand$ | async)!.paymentRequired; else paymentNotRequired"
       (clickCancel)="handleCommandCancelled($event)" [command]="(personalCommand$ | async)!" [restaurant]="(restaurant$ | async)!">
     </app-order-payment-required-modal>
@@ -15,7 +15,7 @@
     </ng-template>
   </ng-container>
 
-  <app-order-success-modal *ngIf="isSuccessModalVisible && (errorCommand$ | async) === null"
+  <app-order-success-modal *ngIf="(homeModal$ | async) === 'success' && (errorCommand$ | async) === null"
     [restaurant]="(restaurant$ | async)!" (clickPayment)="handlePayment(true)"
     [command]="(personalCommand$ | async)!" (clickCancel)="handleCloseSuccessModal()">
   </app-order-success-modal>

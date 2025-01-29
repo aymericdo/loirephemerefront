@@ -24,7 +24,7 @@ import {
   incrementPastry,
   markPersonalCommandAsPayed,
   resetCommand,
-  sendCommand,
+  sendingCommand,
 } from 'src/app/modules/home/store/home.actions';
 import {
   selectHasSelectedPastries,
@@ -58,8 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   personalCommand$: Observable<Command | null>;
   demoResto$: Observable<RestaurantInterface | null>;
 
-  isOrderModalVisible: boolean = false;
-  isUltimateConfirmationVisible: boolean = false;
+  orderModalOpened: 'order-summary' | 'order-name' | null = null;
 
   paymentRequired: boolean = false;
   isRestaurantOpened: boolean = false;
@@ -130,8 +129,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   handleCommandClicked({ name, takeAway, pickUpTime }: CoreCommand): void {
-    this.isUltimateConfirmationVisible = false;
-    this.store.dispatch(sendCommand({ name, takeAway, pickUpTime }));
+    this.orderModalOpened = null;
+    this.store.dispatch(sendingCommand({ name, takeAway, pickUpTime }));
   }
 
   handleClickReset(): void {

@@ -31,17 +31,17 @@
 </div>
 
 <app-order-footer *ngIf="hasSelectedPastries$ | async" (clickReset)="handleClickReset()"
-  (clickConfirm)="isOrderModalVisible = true" [disabled]="(isStockIssue$ | async)! || !pickUpTimeAvailable"></app-order-footer>
+  (clickConfirm)="orderModalOpened = 'order-summary'" [disabled]="(isStockIssue$ | async)! || !pickUpTimeAvailable"></app-order-footer>
 
-<app-order-modal *ngIf="isOrderModalVisible" [allPastries]="(pastries$ | async)!" [selectedPastries]="(selectedPastries$ | async)!"
-  [totalPrice]="(totalPrice$ | async)!" (clickCancel)="isOrderModalVisible = false" (clickOk)="isOrderModalVisible = false; isUltimateConfirmationVisible = true"></app-order-modal>
+<app-order-modal *ngIf="orderModalOpened === 'order-summary'" [allPastries]="(pastries$ | async)!" [selectedPastries]="(selectedPastries$ | async)!"
+  [totalPrice]="(totalPrice$ | async)!" (clickCancel)="orderModalOpened = null" (clickOk)="orderModalOpened = 'order-name'"></app-order-modal>
 
-<app-order-name-modal *ngIf="isUltimateConfirmationVisible" (clickCancel)="isUltimateConfirmationVisible = false"
+<app-order-name-modal *ngIf="orderModalOpened === 'order-name'" (clickCancel)="orderModalOpened = null"
   (clickOk)="handleCommandClicked($event)" [restaurant]="(restaurant$ | async)!"></app-order-name-modal>
 
 <div *ngIf="hasSelectedPastries$ | async" class="shopping-cart">
   <nz-badge [nzCount]="(totalCount$ | async)!">
-    <button nz-button nzType="primary" nzSize="large" nzShape="circle" (click)="isOrderModalVisible = true" [disabled]="!pickUpTimeAvailable">
+    <button nz-button nzType="primary" nzSize="large" nzShape="circle" (click)="orderModalOpened = 'order-summary'" [disabled]="!pickUpTimeAvailable">
       <span nz-icon nzType="shopping-cart"></span>
     </button>
   </nz-badge>

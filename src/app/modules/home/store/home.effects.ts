@@ -18,10 +18,11 @@ import { HomeApiService } from '../services/home-api.service';
 import {
   cancelPersonalCommand,
   fetchRestaurantPastries, fetchingPersonalCommand, markPersonalCommandAsPayed, notificationSubSent,
+  openHomeModal,
   resetCommand,
   resetPersonalCommand,
-  sendCommand,
   sendNotificationSub,
+  sendingCommand,
   setErrorCommand,
   setPastries,
   setPersonalCommand,
@@ -44,9 +45,9 @@ export class HomeEffects {
     )
   );
 
-  sendCommand$ = createEffect(() =>
+  sendingCommand$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(sendCommand),
+      ofType(sendingCommand),
       withLatestFrom(this.store$.select(selectPastries)),
       withLatestFrom(this.store$.select(selectSelectedPastries)),
       withLatestFrom(this.store$.select(selectRestaurant).pipe(filter(Boolean))),
@@ -74,7 +75,13 @@ export class HomeEffects {
         };
         return this.homeApiService.postCommand(restaurant?.code!, command).pipe(
           switchMap((command) => {
-            return [setPersonalCommand({ command }), resetCommand()];
+            return [
+              setPersonalCommand({ command }),
+              resetCommand(),
+              openHomeModal({
+                modal: command.paymentRequired ? 'payment' : 'success'
+              }),
+            ];
           }),
           catchError((error) => [fetchRestaurantPastries({ code: restaurant.code }), setErrorCommand({ error })])
         );

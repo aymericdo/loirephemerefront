@@ -46,6 +46,11 @@ export const selectPersonalCommand = createSelector(
   (state: HomeState) => state.personalCommand
 );
 
+export const selectHomeModal = createSelector(
+  selectFeature,
+  (state: HomeState) => state.homeModal
+);
+
 export const selectCurrentSentCommands = createSelector(
   selectFeature,
   (state: HomeState) => state.currentSentCommands

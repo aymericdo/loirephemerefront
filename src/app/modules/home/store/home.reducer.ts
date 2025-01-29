@@ -3,11 +3,13 @@ import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { pastriesMock } from 'src/app/mocks/pastry.mock';
 import {
+  closeHomeModal,
   decrementPastry, fetchRestaurantPastries, incrementPastry,
+  openHomeModal,
   resetCommand,
   resetErrorCommand,
   resetPersonalCommand,
-  sendCommand,
+  sendingCommand,
   setErrorCommand,
   setPastries,
   setPersonalCommand,
@@ -18,12 +20,15 @@ import {
 
 export const homeFeatureKey = 'home';
 
+export type HomeModalType = 'success' | 'payment';
+
 export interface HomeState {
   pastries: Pastry[];
   selectedPastries: { [pastryId: string]: number };
   personalCommand: Command | null;
   currentSentCommands: Command[];
   errorCommand: Object | null;
+  homeModal: HomeModalType | null;
   loading: boolean;
 }
 
@@ -33,6 +38,7 @@ export const initialState: HomeState = {
   personalCommand: null,
   currentSentCommands: [],
   errorCommand: null,
+  homeModal: null,
   loading: false,
 
 };
@@ -101,7 +107,7 @@ const homeReducer = createReducer(
     ...state,
     selectedPastries: {},
   })),
-  on(sendCommand, (state) => ({
+  on(sendingCommand, (state) => ({
     ...state,
     personalCommand: null,
     errorCommand: null,
@@ -110,6 +116,14 @@ const homeReducer = createReducer(
     ...state,
     personalCommand: command,
     currentSentCommands: [...state.currentSentCommands, command]
+  })),
+  on(openHomeModal, (state, { modal }) => ({
+    ...state,
+    homeModal: modal,
+  })),
+  on(closeHomeModal, (state) => ({
+    ...state,
+    homeModal: null,
   })),
   on(resetPersonalCommand, (state) => ({
     ...state,

@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 
 export const fetchRestaurantPastries = createAction(
   '[Home page] Fetch pastries for a restaurant',
@@ -18,10 +19,15 @@ export const decrementPastry = createAction(
   '[Home page] Decrement pastry',
   props<{ pastry: Pastry }>()
 );
-export const sendCommand = createAction(
-  '[Home page] Send command',
+export const sendingCommand = createAction(
+  '[Home page] Sending command',
   props<CoreCommand>()
 );
+export const openHomeModal = createAction(
+  '[Home page] Open home modal',
+  props<{ modal: HomeModalType }>()
+);
+export const closeHomeModal = createAction('[Home page] Close home modal');
 export const resetCommand = createAction('[Home page] Reset command');
 export const fetchingPersonalCommand = createAction(
   '[Home page] Fetching personal command',
