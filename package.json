@@ -41,7 +41,7 @@
     "http-server": "^14.1.1",
     "luxon": "^3.5.0",
     "ng-hcaptcha": "^2.3.1",
-    "ng-zorro-antd": "^17.4.1",
+    "ng-zorro-antd": "^18.2.1",
     "ng2-charts": "^4.1.1",
     "rxjs": "^7.8.0",
     "tslib": "^2.7.0",
