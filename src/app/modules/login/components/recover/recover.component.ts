@@ -13,7 +13,8 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-recover',
   templateUrl: './recover.component.html',
-  styleUrls: ['./recover.component.scss']
+  styleUrls: ['./recover.component.scss'],
+  standalone: false,
 })
 export class RecoverComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;

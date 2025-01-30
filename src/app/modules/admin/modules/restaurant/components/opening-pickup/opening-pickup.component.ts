@@ -13,9 +13,10 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-opening-pickup',
-  templateUrl: './opening-pickup.component.html',
-  styleUrls: ['./opening-pickup.component.scss'],
+    selector: 'app-opening-pickup',
+    templateUrl: './opening-pickup.component.html',
+    styleUrls: ['./opening-pickup.component.scss'],
+    standalone: false
 })
 export class OpeningPickupComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;

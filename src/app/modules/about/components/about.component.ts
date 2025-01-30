@@ -8,9 +8,10 @@ import { selectDemoResto, selectUser } from 'src/app/modules/login/store/login.s
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './about.component.html',
+    styleUrls: ['./about.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AboutComponent implements OnInit, OnDestroy {
   @ViewChildren('sectionImg') sectionImgs!: QueryList<ElementRef<HTMLDivElement>>;

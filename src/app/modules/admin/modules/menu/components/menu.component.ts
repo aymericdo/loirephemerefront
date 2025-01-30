@@ -11,9 +11,10 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
-  providers: [MenuWebSocketService],
+    templateUrl: './menu.component.html',
+    styleUrls: ['./menu.component.scss'],
+    providers: [MenuWebSocketService],
+    standalone: false
 })
 export class MenuComponent implements OnInit, OnDestroy {
   restaurant$: Observable<Restaurant | null>;

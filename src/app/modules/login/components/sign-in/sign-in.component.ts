@@ -9,9 +9,10 @@ import { selectLoading, selectUserAuthError } from 'src/app/modules/login/store/
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-sign-in',
-  templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+    selector: 'app-sign-in',
+    templateUrl: './sign-in.component.html',
+    styleUrls: ['./sign-in.component.scss'],
+    standalone: false
 })
 export class SignInComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;

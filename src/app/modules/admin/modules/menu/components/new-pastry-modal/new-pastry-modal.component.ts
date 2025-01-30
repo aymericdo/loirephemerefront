@@ -9,9 +9,10 @@ import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/adm
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-new-pastry-modal',
-  templateUrl: './new-pastry-modal.component.html',
-  styleUrls: ['./new-pastry-modal.component.scss'],
+    selector: 'app-new-pastry-modal',
+    templateUrl: './new-pastry-modal.component.html',
+    styleUrls: ['./new-pastry-modal.component.scss'],
+    standalone: false
 })
 export class NewPastryModalComponent implements OnInit {
   @Input() restaurant: Restaurant = null!;

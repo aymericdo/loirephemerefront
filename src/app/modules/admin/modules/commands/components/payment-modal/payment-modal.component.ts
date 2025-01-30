@@ -4,9 +4,10 @@ import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/inter
 import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
 
 @Component({
-  selector: 'app-payment-modal',
-  templateUrl: './payment-modal.component.html',
-  styleUrls: ['./payment-modal.component.scss'],
+    selector: 'app-payment-modal',
+    templateUrl: './payment-modal.component.html',
+    styleUrls: ['./payment-modal.component.scss'],
+    standalone: false
 })
 export class PaymentModalComponent {
   @Input() command!: Command;

@@ -10,8 +10,9 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  templateUrl: './restaurant.component.html',
-  styleUrls: ['./restaurant.component.scss'],
+    templateUrl: './restaurant.component.html',
+    styleUrls: ['./restaurant.component.scss'],
+    standalone: false
 })
 export class RestaurantComponent implements OnInit, OnDestroy {
   @ViewChild('download', { static: false }) download!: ElementRef;

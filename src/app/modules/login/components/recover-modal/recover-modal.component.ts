@@ -10,9 +10,10 @@ import { selectLoading } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-recover-modal',
-  templateUrl: './recover-modal.component.html',
-  styleUrls: ['./recover-modal.component.scss']
+    selector: 'app-recover-modal',
+    templateUrl: './recover-modal.component.html',
+    styleUrls: ['./recover-modal.component.scss'],
+    standalone: false
 })
 export class RecoverModalComponent implements OnInit, OnDestroy {
   @Input() email!: string;

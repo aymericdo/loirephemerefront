@@ -7,9 +7,10 @@ import { selectTimeInterval } from 'src/app/modules/admin/modules/stats/store/st
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-bar-chart',
-  templateUrl: './bar-chart.component.html',
-  styleUrls: ['./bar-chart.component.scss']
+    selector: 'app-bar-chart',
+    templateUrl: './bar-chart.component.html',
+    styleUrls: ['./bar-chart.component.scss'],
+    standalone: false
 })
 export class BarChartComponent {
   @Input() isTimeIntervalChangeable = false;

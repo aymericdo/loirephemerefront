@@ -6,9 +6,10 @@ import { CoreCommand } from 'src/app/interfaces/command.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
-  selector: 'app-order-name-modal',
-  templateUrl: './order-name-modal.component.html',
-  styleUrls: ['./order-name-modal.component.scss'],
+    selector: 'app-order-name-modal',
+    templateUrl: './order-name-modal.component.html',
+    styleUrls: ['./order-name-modal.component.scss'],
+    standalone: false
 })
 export class OrderNameModalComponent implements OnInit, OnDestroy {
   @Input() restaurant!: RestaurantInterface;

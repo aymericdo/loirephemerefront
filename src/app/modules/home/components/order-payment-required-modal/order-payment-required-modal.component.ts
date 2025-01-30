@@ -4,9 +4,10 @@ import { Command } from 'src/app/interfaces/command.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
-  selector: 'app-order-payment-required-modal',
-  templateUrl: './order-payment-required-modal.component.html',
-  styleUrls: ['./order-payment-required-modal.component.scss'],
+    selector: 'app-order-payment-required-modal',
+    templateUrl: './order-payment-required-modal.component.html',
+    styleUrls: ['./order-payment-required-modal.component.scss'],
+    standalone: false
 })
 export class OrderPaymentRequiredModalComponent implements OnInit, OnDestroy {
   @Input() command!: Command;

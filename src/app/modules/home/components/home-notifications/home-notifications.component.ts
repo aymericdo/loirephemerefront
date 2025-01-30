@@ -16,8 +16,9 @@ import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 
 @Component({
-  selector: 'app-home-notifications',
-  templateUrl: './home-notifications.component.html',
+    selector: 'app-home-notifications',
+    templateUrl: './home-notifications.component.html',
+    standalone: false
 })
 export class HomeNotificationsComponent implements OnInit, OnDestroy {
   @ViewChild('notificationPayedBtnTpl', { static: true }) notificationPayedBtnTemplate!: TemplateRef<{ $implicit: NzNotificationComponent }>;

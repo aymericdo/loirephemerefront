@@ -8,9 +8,10 @@ import { selectAllPastries, selectIsMovingPastry } from 'src/app/modules/admin/m
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-sequence',
-  templateUrl: './sequence.component.html',
-  styleUrls: ['./sequence.component.scss']
+    selector: 'app-sequence',
+    templateUrl: './sequence.component.html',
+    styleUrls: ['./sequence.component.scss'],
+    standalone: false
 })
 export class SequenceComponent {
   pastries$: Observable<Pastry[]>;

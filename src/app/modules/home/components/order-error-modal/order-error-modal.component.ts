@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 
 @Component({
-  selector: 'app-order-error-modal',
-  templateUrl: './order-error-modal.component.html',
-  styleUrls: ['./order-error-modal.component.scss'],
+    selector: 'app-order-error-modal',
+    templateUrl: './order-error-modal.component.html',
+    styleUrls: ['./order-error-modal.component.scss'],
+    standalone: false
 })
 export class OrderErrorModalComponent implements OnInit {
   @Input() errors: Object = null!;

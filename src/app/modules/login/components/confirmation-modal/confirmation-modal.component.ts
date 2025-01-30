@@ -7,9 +7,10 @@ import { selectLoading } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-confirmation-modal',
-  templateUrl: './confirmation-modal.component.html',
-  styleUrls: ['./confirmation-modal.component.scss']
+    selector: 'app-confirmation-modal',
+    templateUrl: './confirmation-modal.component.html',
+    styleUrls: ['./confirmation-modal.component.scss'],
+    standalone: false
 })
 export class ConfirmationModalComponent implements OnInit, OnDestroy {
   @Input() submitButton = $localize`Suivant`;

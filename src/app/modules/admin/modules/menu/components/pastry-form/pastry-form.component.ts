@@ -11,9 +11,10 @@ import { AdminApiService } from 'src/app/modules/admin/services/admin-api.servic
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-pastry-form',
-  templateUrl: './pastry-form.component.html',
-  styleUrls: ['./pastry-form.component.scss'],
+    selector: 'app-pastry-form',
+    templateUrl: './pastry-form.component.html',
+    styleUrls: ['./pastry-form.component.scss'],
+    standalone: false
 })
 export class PastryFormComponent implements OnInit {
   @Input() restaurant: Restaurant = null!;

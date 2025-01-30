@@ -18,8 +18,9 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.scss'],
+    templateUrl: './stats.component.html',
+    styleUrls: ['./stats.component.scss'],
+    standalone: false
 })
 export class StatsComponent implements OnInit, OnDestroy {
   payedCommands$: Observable<Command[]>;

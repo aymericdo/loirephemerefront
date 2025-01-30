@@ -8,8 +8,9 @@ import { updatingDisplayDemoResto } from 'src/app/modules/profile/store/profile.
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    standalone: false
 })
 export class ProfileComponent {
   user$: Observable<User | null>;

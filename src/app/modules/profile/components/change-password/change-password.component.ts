@@ -11,9 +11,10 @@ import { selectChangePasswordError, selectPasswordChanged } from 'src/app/module
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-change-password',
-  templateUrl: './change-password.component.html',
-  styleUrls: ['./change-password.component.scss']
+    selector: 'app-change-password',
+    templateUrl: './change-password.component.html',
+    styleUrls: ['./change-password.component.scss'],
+    standalone: false
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;

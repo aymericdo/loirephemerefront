@@ -12,13 +12,12 @@ import { Command } from 'src/app/interfaces/command.interface';
 import { fetchingCurrentRestaurantPublicKey } from 'src/app/modules/login/store/login.actions';
 
 @Component({
-  selector: 'app-payment-element',
-  templateUrl: './payment-element.component.html',
-  standalone: true,
-  imports: [
-    BrowserModule,
-    NgZorroModule,
-  ]
+    selector: 'app-payment-element',
+    templateUrl: './payment-element.component.html',
+    imports: [
+        BrowserModule,
+        NgZorroModule,
+    ]
 })
 export class PaymentElementComponent implements OnInit, OnDestroy {
   selectRestaurantPublicKey$: Observable<string | null>;

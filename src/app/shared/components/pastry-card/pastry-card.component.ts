@@ -12,10 +12,11 @@ import { AdminApiService } from 'src/app/modules/admin/services/admin-api.servic
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-pastry-card',
-  templateUrl: './pastry-card.component.html',
-  styleUrls: ['./pastry-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-pastry-card',
+    templateUrl: './pastry-card.component.html',
+    styleUrls: ['./pastry-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PastryCardComponent implements OnChanges {
   @Input() pastry!: Pastry;

@@ -10,9 +10,10 @@ import { selectUserEmailError } from 'src/app/modules/admin/modules/users/store/
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-new-user-modal',
-  templateUrl: './new-user-modal.component.html',
-  styleUrls: ['./new-user-modal.component.scss']
+    selector: 'app-new-user-modal',
+    templateUrl: './new-user-modal.component.html',
+    styleUrls: ['./new-user-modal.component.scss'],
+    standalone: false
 })
 export class NewUserModalComponent implements OnInit {
   @Input() users!: User[];

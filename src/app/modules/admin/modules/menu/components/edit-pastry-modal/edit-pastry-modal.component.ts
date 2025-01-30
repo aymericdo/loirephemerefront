@@ -10,9 +10,10 @@ import { selectIsSavingPastry, selectPastryNameDeactivated, selectPastryNameErro
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-edit-pastry-modal',
-  templateUrl: './edit-pastry-modal.component.html',
-  styleUrls: ['./edit-pastry-modal.component.scss'],
+    selector: 'app-edit-pastry-modal',
+    templateUrl: './edit-pastry-modal.component.html',
+    styleUrls: ['./edit-pastry-modal.component.scss'],
+    standalone: false
 })
 export class EditPastryModalComponent implements OnInit, OnDestroy {
   @Input() restaurant: Restaurant = null!;

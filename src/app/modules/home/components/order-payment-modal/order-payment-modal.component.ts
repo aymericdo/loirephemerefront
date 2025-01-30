@@ -3,9 +3,10 @@ import { Command } from 'src/app/interfaces/command.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 
 @Component({
-  selector: 'app-order-payment-modal',
-  templateUrl: './order-payment-modal.component.html',
-  styleUrls: ['./order-payment-modal.component.scss'],
+    selector: 'app-order-payment-modal',
+    templateUrl: './order-payment-modal.component.html',
+    styleUrls: ['./order-payment-modal.component.scss'],
+    standalone: false
 })
 export class OrderPaymentModalComponent {
   @Input() command!: Command;

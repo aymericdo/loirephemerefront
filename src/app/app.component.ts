@@ -5,9 +5,10 @@ import { selectIsSiderCollapsed } from 'src/app/modules/login/store/login.select
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
   isSiderCollapsed$!: Observable<boolean>;

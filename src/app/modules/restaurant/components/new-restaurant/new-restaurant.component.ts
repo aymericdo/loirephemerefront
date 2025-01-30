@@ -12,9 +12,10 @@ import { selectNewRestaurant, selectRestaurantNameError } from 'src/app/modules/
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-new-restaurant',
-  templateUrl: './new-restaurant.component.html',
-  styleUrls: ['./new-restaurant.component.scss']
+    selector: 'app-new-restaurant',
+    templateUrl: './new-restaurant.component.html',
+    styleUrls: ['./new-restaurant.component.scss'],
+    standalone: false
 })
 export class NewRestaurantComponent implements OnInit, OnDestroy {
   validateForm!: UntypedFormGroup;

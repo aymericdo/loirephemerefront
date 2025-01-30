@@ -20,9 +20,10 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  templateUrl: './commands.component.html',
-  styleUrls: ['./commands.component.scss'],
-  providers: [CommandWebSocketService],
+    templateUrl: './commands.component.html',
+    styleUrls: ['./commands.component.scss'],
+    providers: [CommandWebSocketService],
+    standalone: false
 })
 export class CommandsComponent implements OnInit, OnDestroy {
   onGoingCommands$: Observable<Command[]>;

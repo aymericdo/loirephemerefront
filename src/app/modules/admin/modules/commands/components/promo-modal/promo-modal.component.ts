@@ -10,9 +10,10 @@ export interface Discount {
 }
 
 @Component({
-  selector: 'app-promo-modal',
-  templateUrl: './promo-modal.component.html',
-  styleUrls: ['./promo-modal.component.scss'],
+    selector: 'app-promo-modal',
+    templateUrl: './promo-modal.component.html',
+    styleUrls: ['./promo-modal.component.scss'],
+    standalone: false
 })
 export class PromoModalComponent implements OnInit {
   @Input() command!: Command;

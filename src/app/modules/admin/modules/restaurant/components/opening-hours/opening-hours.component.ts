@@ -13,9 +13,10 @@ import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-opening-hours',
-  templateUrl: './opening-hours.component.html',
-  styleUrls: ['./opening-hours.component.scss'],
+    selector: 'app-opening-hours',
+    templateUrl: './opening-hours.component.html',
+    styleUrls: ['./opening-hours.component.scss'],
+    standalone: false
 })
 export class OpeningHoursComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;

@@ -9,9 +9,10 @@ import { settingCommonStock } from 'src/app/modules/admin/modules/menu/store/men
 import { COLORS } from 'src/app/helpers/colors';
 
 @Component({
-  selector: 'app-association',
-  templateUrl: './association.component.html',
-  styleUrls: ['./association.component.scss']
+    selector: 'app-association',
+    templateUrl: './association.component.html',
+    styleUrls: ['./association.component.scss'],
+    standalone: false
 })
 export class AssociationComponent implements OnInit, OnDestroy {
   pastries$: Observable<Pastry[]>;

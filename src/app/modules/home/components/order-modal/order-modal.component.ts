@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 
 @Component({
-  selector: 'app-order-modal',
-  templateUrl: './order-modal.component.html',
-  styleUrls: ['./order-modal.component.scss'],
+    selector: 'app-order-modal',
+    templateUrl: './order-modal.component.html',
+    styleUrls: ['./order-modal.component.scss'],
+    standalone: false
 })
 export class OrderModalComponent implements OnInit {
   @Input() allPastries: Pastry[] = [];

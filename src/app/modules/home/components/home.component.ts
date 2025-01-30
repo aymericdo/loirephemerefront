@@ -40,9 +40,10 @@ import { selectDemoResto, selectRestaurant } from 'src/app/modules/login/store/l
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  providers: [HomeWebSocketService],
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    providers: [HomeWebSocketService],
+    standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
   @ViewChildren('item') itemElements!: QueryList<any>;

@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'app-order-footer',
-  templateUrl: './order-footer.component.html',
-  styleUrls: ['./order-footer.component.scss'],
+    selector: 'app-order-footer',
+    templateUrl: './order-footer.component.html',
+    styleUrls: ['./order-footer.component.scss'],
+    standalone: false
 })
 export class OrderFooterComponent {
   @Input() disabled: boolean = false;

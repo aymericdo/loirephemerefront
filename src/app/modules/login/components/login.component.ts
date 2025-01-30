@@ -8,9 +8,10 @@ import { selectDemoResto, selectUser, selectUserRestaurants } from 'src/app/modu
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent implements OnInit, OnDestroy {
   isOnRecover = false;

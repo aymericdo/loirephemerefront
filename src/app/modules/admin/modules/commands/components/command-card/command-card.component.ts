@@ -18,10 +18,11 @@ import { Discount } from 'src/app/modules/admin/modules/commands/components/prom
 const SECONDS_HIGHLIGHT = 20;
 
 @Component({
-  selector: 'app-command-card',
-  templateUrl: './command-card.component.html',
-  styleUrls: ['./command-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-command-card',
+    templateUrl: './command-card.component.html',
+    styleUrls: ['./command-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CommandCardComponent implements OnInit, OnDestroy {
   @Input() command: Command = null!;
