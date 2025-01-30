@@ -33,9 +33,9 @@
   <nz-form-item>
     <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Prix</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="priceErrorTpl">
-      <nz-input-number-group nzAddOnAfter="€">
-        <nz-input-number formControlName="price" [nzStep]="0.5" [nzMin]="0" placeholder="3"></nz-input-number>
-      </nz-input-number-group>
+      <nz-input-number formControlName="price" [nzStep]="0.5" [nzMin]="0" placeholder="3">
+        <span nzInputAddonAfter i18n>€</span>
+      </nz-input-number>
       <ng-template #priceErrorTpl let-control>
         <ng-container *ngIf="control.hasError('required')" i18n>Merci d'entrer un prix (même 0)</ng-container>
       </ng-template>
@@ -104,7 +104,7 @@
     <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Photo</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <div class="clearfix">
-        <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [(nzFileList)]="fileList" [nzAccept]="'image/jpeg'"
+        <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [(nzFileList)]="fileList" [nzFileType]="'image/jpeg,image/jpg'"
           (nzChange)="handleUpload($event)" [nzShowButton]="fileList.length === 0" [nzPreview]="handlePreview">
           <div>
             <span nz-icon nzType="plus"></span>

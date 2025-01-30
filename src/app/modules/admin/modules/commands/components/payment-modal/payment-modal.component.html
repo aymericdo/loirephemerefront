@@ -1,33 +1,28 @@
 <nz-modal [nzVisible]="true" nzCentered [nzMaskClosable]="true" (nzOnCancel)="clickCancel.emit()">
   <ng-container *nzModalTitle>
-    Payment de la commande #{{ command.reference }}
+    <span i18n>Payment de la commande #{{ command.reference }}</span>
   </ng-container>
 
   <ng-container *nzModalContent>
     <div class="payment-modal-content">
-      <p>Cette commande a bien été payée ? (<span [class.-line-through]="!!discount">{{ command.totalPrice }}€</span>)
+      <p i18n>Cette commande a bien été payée ? (<span [class.-line-through]="!!discount">{{ command.totalPrice }}€</span>)
         <span *ngIf="discount" class="new-price">({{ (discount.newPrice) | number : '1.0-2' }}€)</span>
       </p>
       <nz-space nzDirection="vertical" style="width: 100%">
         <ng-container *ngFor="let paymentPossibility of paymentPossibilities; trackBy: trackByKey">
-          <nz-input-number-group *nzSpaceItem nzCompact>
-            <button nz-button disabled
+          <nz-input-number *nzSpaceItem [(ngModel)]="paymentPossibility.value" (ngModelChange)="onChange()" [nzStep]="0.01" [nzMin]="0">
+            <span nzInputAddonBefore
               class="label-pre-btn"
               [ngStyle]="{ 'border-left': '2px solid ' + PAYMENT_METHOD_LABEL[paymentPossibility.key].color }"
             >
               {{ PAYMENT_METHOD_LABEL[paymentPossibility.key].label }}
-            </button>
-
-            <nz-input-number [(ngModel)]="paymentPossibility.value" (ngModelChange)="onChange()" [nzStep]="0.01" [nzMin]="0" style="width: calc(100% - 250px)"></nz-input-number>
-
-            <button nz-button
-              nzType="primary"
-              class="shortcut-btn"
-              [ngStyle]="{ 'background-color': PAYMENT_METHOD_LABEL[paymentPossibility.key].color, 'border-color': PAYMENT_METHOD_LABEL[paymentPossibility.key].color }"
-              (click)="setTotal(paymentPossibility.key)">
+            </span>
+            <span nzInputAddonAfter class="shortcut-btn"
+              (click)="setTotal(paymentPossibility.key)" [style.width.px]="60"
+              [ngStyle]="{ 'color': PAYMENT_METHOD_LABEL[paymentPossibility.key].color }">
               <span nz-icon nzType="euro" nzTheme="outline"></span>
-            </button>
-          </nz-input-number-group>
+            </span>
+          </nz-input-number>
         </ng-container>
 
         <ng-container *ngIf="isTooMuch">
@@ -47,10 +42,10 @@
 
   <ng-container *nzModalFooter>
     <div class="payment-modal-footer">
-      <button nz-button nzType="dashed" (click)="openPromoModal()">Promo</button>
+      <button nz-button nzType="dashed" (click)="openPromoModal()" i18n>Promo</button>
       <div>
-        <button nz-button nzType="default" (click)="clickCancel.emit()">Annuler</button>
-        <button nz-button nzType="primary" (click)="payCommand()" [disabled]="!isOk">OK</button>
+        <button nz-button nzType="default" (click)="clickCancel.emit()" i18n>Annuler</button>
+        <button nz-button nzType="primary" (click)="payCommand()" [disabled]="!isOk" i18n>OK</button>
       </div>
     </div>
   </ng-container>

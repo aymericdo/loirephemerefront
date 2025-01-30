@@ -1,4 +1,3 @@
-@import 'src/vars.scss';
 
 :host {
   display: block;
@@ -234,7 +233,7 @@
     }
   }
 
-  @media screen and (max-width: $lg) {
+  @media screen and (max-width: var(--lg)) {
     .go-down-btn {
       display: flex;
       justify-content: center;

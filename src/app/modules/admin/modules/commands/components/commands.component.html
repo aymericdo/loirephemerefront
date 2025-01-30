@@ -57,7 +57,7 @@
         <ng-container *ngIf="(payedCommands$ | async)?.length! > 0">
           <div class="data-section">
             <nz-page-header>
-              <nz-page-header-title *ngIf="(payedCommands$ | async)?.length" i18n>Total : {{ totalPayedCommands$ | async }}€
+              <nz-page-header-title *ngIf="(payedCommands$ | async)?.length" i18n>Total&nbsp;: {{ totalPayedCommands$ | async }}€
               </nz-page-header-title>
             </nz-page-header>
             <div nz-row [nzGutter]="[0, 24]">

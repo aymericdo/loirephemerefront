@@ -62,7 +62,7 @@
                     <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.pastry"></app-pie-chart>
                   </div>
                   <span *ngIf="totalByType.pastry" class="total">
-                    <div i18n>Total de plats : {{ totalByType.pastry }}</div>
+                    <div i18n>Total de plats&nbsp;: {{ totalByType.pastry }}</div>
                   </span>
                 </div>
               </div>
@@ -91,7 +91,7 @@
                 </div>
 
                 <span *ngIf="totalByType.drink" class="total">
-                  <div>Total de boissons : {{ totalByType.drink }}</div>
+                  <div>Total de boissons&nbsp;: {{ totalByType.drink }}</div>
                 </span>
               </div>
 
@@ -118,7 +118,7 @@
                     <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.tip"></app-pie-chart>
                   </div>
                   <span *ngIf="totalByType.tip" class="total">
-                    <div i18n>Total de pourboires : {{ totalByType.tip }}</div>
+                    <div i18n>Total de pourboires&nbsp;: {{ totalByType.tip }}</div>
                   </span>
                 </div>
               </div>
@@ -147,7 +147,7 @@
                     <app-pie-chart [pieChartData]="pastriesByTypeByDatePieChartData.other"></app-pie-chart>
                   </div>
                   <span *ngIf="totalByType.other" class="total">
-                    <div i18n>Total autres : {{ totalByType.other }}</div>
+                    <div i18n>Total autres&nbsp;: {{ totalByType.other }}</div>
                   </span>
                 </div>
               </div>

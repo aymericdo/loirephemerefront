@@ -1,5 +1,3 @@
-@import 'src/vars.scss';
-
 :host {
   display: flex;
   justify-content: center;
@@ -11,7 +9,7 @@
   }
 
   p.-pick-up-time {
-    background: $orange-light;
+    background: var(--orange-light);
     color: white;
     padding: 0 0.625rem;
     margin-left: -0.625rem;
@@ -35,7 +33,7 @@
     justify-content: center;
     font-weight: 500;
     border-radius: 4px;
-    background-color: $grey;
+    background-color: var(--grey);
   }
 
   nz-card {
@@ -44,11 +42,11 @@
   }
 
   nz-card.-is-just-updated {
-    box-shadow: 0 0 6px $orange;
+    box-shadow: 0 0 6px var(--orange);
   }
 
   nz-card.-is-new {
-    box-shadow: 0 0 6px $red;
+    box-shadow: 0 0 6px var(--red);
   }
 
   nz-ribbon {

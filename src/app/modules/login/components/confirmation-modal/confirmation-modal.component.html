@@ -1,31 +1,16 @@
 <nz-modal [nzVisible]="true" nzCentered nzTitle="Code de confirmation (vérifiez vos emails / spams)" i18n-nzTitle [nzClosable]="false">
-  <form nz-form [formGroup]="validateForm">
-    <ng-container *nzModalContent>
-      <nz-form-item nzJustify="center">
-        <div nzFlex nz-row nzJustify="center">
-          <nz-form-control [nzXs]="6">
-            <nz-input-number #figure1 formControlName="figure1" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0" (paste)="onPaste($event)" (input)="goNext($event, 2)"></nz-input-number>
-          </nz-form-control>
-          <nz-form-control [nzXs]="6">
-            <nz-input-number #figure2 formControlName="figure2" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0" (input)="goNext($event, 3)"></nz-input-number>
-          </nz-form-control>
-          <nz-form-control [nzXs]="6">
-            <nz-input-number #figure3 formControlName="figure3" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0" (input)="goNext($event, 4)"></nz-input-number>
-          </nz-form-control>
-          <nz-form-control [nzXs]="6">
-            <nz-input-number #figure4 formControlName="figure4" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" [nzMax]="9"
-              nzPlaceHolder="0" (input)="goNext($event, 1)"></nz-input-number>
-          </nz-form-control>
-        </div>
-      </nz-form-item>
-    </ng-container>
+  <ng-container *nzModalContent>
+    <div nzFlex nz-row nzJustify="center">
+      <nz-flex nzVertical>
+        <nz-input-otp
+          [nzLength]="4" [nzSize]="'large'" [nzDisabled]="(isLoading$ | async)"
+          [nzFormatter]="formatter" [(ngModel)]="value"></nz-input-otp>
+      </nz-flex>
+    </div>
+  </ng-container>
 
-    <ng-container *nzModalFooter>
-      <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!validateForm.valid"
-        [nzLoading]="isLoading$ | async">{{ submitButton }}</button>
-    </ng-container>
-  </form>
+  <ng-container *nzModalFooter>
+    <button nz-button nzType="primary" (click)="handleSubmit()" [disabled]="(isLoading$ | async) || value.length < 4"
+      [nzLoading]="isLoading$ | async">{{ submitButton }}</button>
+  </ng-container>
 </nz-modal>

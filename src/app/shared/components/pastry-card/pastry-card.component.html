@@ -24,7 +24,7 @@
       <div nzFlex nz-row>
         <div nz-col nzFlex="1">
           <p class="template-description -mobile" nz-tooltip [nzTooltipTrigger]="pastry.description.split(' ').length > 20 ? 'hover' : null" [nzTooltipTitle]="tooltipTitleTemplate" nzTooltipPlacement="top" [nzTooltipMouseEnterDelay]="1">
-            {{ pastry.description.split(' ').splice(0, 20).join(' ') + (pastry.description.split(' ').length > 20 ? '...' : '') }}
+            {{ pastry.description.split(' ').splice(0, 20).join(' ') + (pastry.description.split(' ').length > 20 ? '…' : '') }}
           </p>
 
           <ng-template #tooltipTitleTemplate>

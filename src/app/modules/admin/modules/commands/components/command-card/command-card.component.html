@@ -12,9 +12,9 @@
         </ng-template>
       </p>
       <nz-divider></nz-divider>
-      <p i18n>Nom : {{ command.name }}</p>
-      <p [class.-pick-up-time]="command.pickUpTime" i18n>Récupération : {{ !!command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
-      <p i18n>Commande :</p>
+      <p i18n>Nom&nbsp;: {{ command.name }}</p>
+      <p [class.-pick-up-time]="command.pickUpTime" i18n>Récupération&nbsp;: {{ !!command.pickUpTime ? (command.pickUpTime | date: "dd/MM/YYYY HH:mm") : 'Maintenant' }}</p>
+      <p i18n>Commande&nbsp;:</p>
       <ng-container *ngFor="let pastryType of pastries">
         <span class="pastry-type">{{ PASTRY_TYPE_LABEL[pastryType[0]].label }}</span>
         <ul>
@@ -24,9 +24,9 @@
           </li>
         </ul>
       </ng-container>
-      <p><span class="price" [class.-discount]="!!command.discount" i18n>Prix total : {{ command.totalPrice }}€</span><span *ngIf="!!command.discount?.percentage">{{ ' (-' + command.discount?.percentage + '%)'}}</span></p>
+      <p><span class="price" [class.-discount]="!!command.discount" i18n>Prix total&nbsp;: {{ command.totalPrice }}€</span><span *ngIf="!!command.discount?.percentage">{{ ' (-' + command.discount?.percentage + '%)'}}</span></p>
       <ng-container *ngIf="!!command.discount">
-        <p i18n><b>Ristourne :</b></p>
+        <p i18n><b>Ristourne&nbsp;:</b></p>
         <ng-container *ngFor="let pastryType of pastries">
           <ng-container *ngIf="pastryTypeHasDiscount(pastryType[0])">
             <span class="pastry-type">{{ PASTRY_TYPE_LABEL[pastryType[0]].label }}</span>
@@ -43,12 +43,12 @@
             </ul>
           </ng-container>
         </ng-container>
-        <p class="final-price" i18n>Prix définitif : {{ command.discount.newPrice }}€</p>
+        <p class="final-price" i18n>Prix définitif&nbsp;: {{ command.discount.newPrice }}€</p>
       </ng-container>
-      <p i18n>Créée le : {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
-      <p i18n>Modifiée le : {{ command.updatedAt | date: "dd/MM/YYYY HH:mm" }}</p>
+      <p i18n>Créée le&nbsp;: {{ command.createdAt | date: "dd/MM/YYYY HH:mm" }}</p>
+      <p i18n>Modifiée le&nbsp;: {{ command.updatedAt | date: "dd/MM/YYYY HH:mm" }}</p>
       <ng-container *ngIf="command.payment?.length">
-        <p i18n>Paiements :</p>
+        <p i18n>Paiements&nbsp;:</p>
         <ul>
           <li *ngFor="let payment of command.payment">
             <span [ngStyle]="{ color: PAYMENT_METHOD_LABEL[payment.key].color, 'font-weight': 500 }">{{ PAYMENT_METHOD_LABEL[payment.key].label }}</span>

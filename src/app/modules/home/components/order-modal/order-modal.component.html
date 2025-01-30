@@ -1,11 +1,11 @@
 <nz-modal [nzVisible]="true" nzTitle="Récapitulatif" i18n-nzTitle nzCentered [nzMaskClosable]="true"
   (nzOnCancel)="clickCancel.emit()">
   <ng-container *nzModalContent i18n>
-    <p>Vous êtes sur le point de commander :</p>
+    <p>Vous êtes sur le point de commander&nbsp;:</p>
     <ul>
       <li *ngFor="let pastry of pastriesStr">{{ pastry }}</li>
     </ul>
-    <p>Pour un prix total de : {{ totalPrice }}€</p>
+    <p>Pour un prix total de&nbsp;: {{ totalPrice }}€</p>
   </ng-container>
   <ng-container *nzModalFooter>
     <button nz-button nzType="primary" (click)="clickOk.emit()">OK</button>

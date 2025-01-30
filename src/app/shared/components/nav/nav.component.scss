@@ -1,5 +1,3 @@
-@import 'src/vars.scss';
-
 :host {
   display: flex;
   z-index: 5;
@@ -70,7 +68,7 @@
   }
 
   ::ng-deep .ant-menu-submenu-title:has(.restaurant-name-tooltip.-restaurant-title-selected) {
-    background-color: $blue;
+    background-color: var(--blue);
   }
 
   ::ng-deep .restaurant-section {
@@ -91,7 +89,7 @@
     text-overflow: ellipsis;
   }
 
-  @media screen and (max-width: $lg) {
+  @media screen and (max-width: var(--lg)) {
     nz-sider {
       overflow: inherit;
     }
