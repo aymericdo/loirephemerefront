@@ -11,6 +11,7 @@ import { SITE_KEY } from 'src/app/modules/login/login.module';
 import { confirmRecoverEmail, validateRecoverEmailCode } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectPasswordChanged, selectRecoverModalOpened } from 'src/app/modules/login/store/login.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+
 import { environment } from 'src/environments/environment';
 
 @Component({

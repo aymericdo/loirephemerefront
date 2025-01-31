@@ -7,6 +7,7 @@ import { TimeRemainingComponent } from 'src/app/modules/home/components/order-pa
 import { PaymentElementComponent } from 'src/app/shared/components/payment-element/payment-element.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
+
 @Component({
   selector: 'app-order-payment-required-modal',
   templateUrl: './order-payment-required-modal.component.html',

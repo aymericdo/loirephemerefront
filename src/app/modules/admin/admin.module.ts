@@ -11,24 +11,23 @@ import { usersFeatureKey, reducer as usersReducer } from './modules/users/store/
 import { statsFeatureKey, reducer as statsReducer } from './modules/stats/store/stats.reducer';
 import { reducer as adminRestaurantReducer, restaurantFeatureKey } from './modules/restaurant/store/restaurant.reducer';
 import { AdminRoutingModule } from './admin-routing.module';
-import { SharedModule } from 'src/app/shared/shared.module';
+
 
 
 @NgModule({
   imports: [
     AdminRoutingModule,
-    SharedModule,
     CommonModule,
     EffectsModule.forFeature([AdminEffects]),
     StoreModule.forFeature(adminFeatureKey, {
-      ...reducer,
-      [restaurantFeatureKey]: adminRestaurantReducer,
-      [menuFeatureKey]: menuReducer,
-      [commandsFeatureKey]: commandsReducer,
-      [statsFeatureKey]: statsReducer,
-      [usersFeatureKey]: usersReducer,
+        ...reducer,
+        [restaurantFeatureKey]: adminRestaurantReducer,
+        [menuFeatureKey]: menuReducer,
+        [commandsFeatureKey]: commandsReducer,
+        [statsFeatureKey]: statsReducer,
+        [usersFeatureKey]: usersReducer,
     }),
     AdminComponent,
-  ],
+],
 })
 export class AdminModule { }

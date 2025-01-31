@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
+
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',

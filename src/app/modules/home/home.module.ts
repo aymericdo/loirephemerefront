@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../shared/shared.module';
+
 import { homeFeatureKey, reducer } from './store/home.reducer';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -19,14 +19,13 @@ import { FooterComponent } from 'src/app/shared/components/footer/footer.compone
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
     EffectsModule.forFeature([HomeEffects]),
     StoreModule.forFeature(homeFeatureKey, reducer),
     PaymentElementComponent,
     PastryCardComponent,
     InformationPopoverComponent,
     FooterComponent,
-  ],
+],
   providers: [
     Title,
   ],

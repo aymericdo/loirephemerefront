@@ -14,6 +14,7 @@ import { createRestaurant, validateRestaurantName } from 'src/app/modules/restau
 import { selectNewRestaurant, selectRestaurantNameError } from 'src/app/modules/restaurant/store/restaurant.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
+
 @Component({
   templateUrl: './new-restaurant.component.html',
   styleUrls: ['./new-restaurant.component.scss'],

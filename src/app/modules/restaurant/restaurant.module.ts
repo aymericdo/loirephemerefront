@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { SharedModule } from 'src/app/shared/shared.module';
+
 import { reducer } from '../restaurant/store/restaurant.reducer';
 import { RestaurantEffects } from './store/restaurant.effects';
 import { restaurantFeatureKey } from './store/restaurant.reducer';
@@ -16,7 +16,6 @@ import { LoginModule } from 'src/app/modules/login/login.module';
   imports: [
     RestaurantRoutingModule,
     CommonModule,
-    SharedModule,
     LoginModule,
     EffectsModule.forFeature([RestaurantEffects]),
     StoreModule.forFeature(restaurantFeatureKey, reducer),

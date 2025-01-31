@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EffectsModule } from '@ngrx/effects';
-import { SharedModule } from 'src/app/shared/shared.module';
+
 import { MenuRoutingModule } from 'src/app/modules/admin/modules/menu/menu-routing.module';
 import { PastryFormComponent } from 'src/app/modules/admin/modules/menu/components/pastry-form/pastry-form.component';
 import { MenuEffects } from 'src/app/modules/admin/modules/menu/store/menu.effects';
@@ -12,11 +12,10 @@ import { InformationPopoverComponent } from 'src/app/shared/components/informati
   imports: [
     MenuRoutingModule,
     CommonModule,
-    SharedModule,
     EffectsModule.forFeature([MenuEffects]),
     PastryCardComponent,
     InformationPopoverComponent,
     PastryFormComponent,
-  ],
+],
 })
 export class MenuModule { }

@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { RecoverComponent } from './recover/recover.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
+
 @Component({
   templateUrl: './restaurant.component.html',
   styleUrls: ['./restaurant.component.scss'],

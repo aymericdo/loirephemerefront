@@ -10,6 +10,7 @@ import { changePassword } from 'src/app/modules/login/store/login.actions';
 import { selectLoading } from 'src/app/modules/login/store/login.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
+
 @Component({
   selector: 'app-recover-modal',
   templateUrl: './recover-modal.component.html',

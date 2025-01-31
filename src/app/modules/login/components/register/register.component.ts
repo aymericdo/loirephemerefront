@@ -12,6 +12,7 @@ import { SITE_KEY } from 'src/app/modules/login/login.module';
 import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+
 import { environment } from 'src/environments/environment';
 
 @Component({

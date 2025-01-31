@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../shared/shared.module';
+
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { LoginEffects } from './store/login.effects';
@@ -17,14 +17,13 @@ export const SITE_KEY = '76928deb-ad7e-4374-bc74-540e80fa1049';
   imports: [
     LoginRoutingModule,
     CommonModule,
-    SharedModule,
     EffectsModule.forFeature([LoginEffects]),
     StoreModule.forFeature(loginFeatureKey, reducer),
     SignInComponent,
     RecoverComponent,
     RegisterComponent,
     LoginComponent,
-  ],
+],
   exports: [],
 })
 export class LoginModule { }
