@@ -4,12 +4,22 @@ import { ChartData, ChartOptions } from 'chart.js';
 import { Observable } from 'rxjs';
 import { setTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.actions';
 import { selectTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { NzSwitchComponent } from 'ng-zorro-antd/switch';
+import { FormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
 
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
-  standalone: false,
+  imports: [
+    NgIf,
+    NzSwitchComponent,
+    FormsModule,
+    NgChartsModule,
+    AsyncPipe,
+  ],
 })
 export class BarChartComponent {
   @Input() isTimeIntervalChangeable = false;

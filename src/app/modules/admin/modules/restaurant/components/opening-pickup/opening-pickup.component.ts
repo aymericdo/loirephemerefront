@@ -1,6 +1,6 @@
-import { DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
+import { AsyncPipe, DATE_PIPE_DEFAULT_OPTIONS, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
@@ -9,12 +9,44 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { startLoading, stopLoading, updateOpeningPickupTime } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent } from 'ng-zorro-antd/form';
+import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
+import { NzAlertComponent } from 'ng-zorro-antd/alert';
+import { NzSpaceCompactItemDirective, NzSpaceComponent, NzSpaceItemDirective } from 'ng-zorro-antd/space';
+import { NzTimePickerComponent } from 'ng-zorro-antd/time-picker';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
+import { ɵNzTransitionPatchDirective } from 'ng-zorro-antd/core/transition-patch';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { InformationPopoverComponent } from '../../../../../../shared/components/information-popover/information-popover.component';
 
 @Component({
   selector: 'app-opening-pickup',
   templateUrl: './opening-pickup.component.html',
   styleUrls: ['./opening-pickup.component.scss'],
-  standalone: false,
+  imports: [
+    FormsModule,
+    NzFormDirective,
+    NzRowDirective,
+    ReactiveFormsModule,
+    NgIf,
+    NzColDirective,
+    NzAlertComponent,
+    NgFor,
+    NzFormItemComponent,
+    NzFormLabelComponent,
+    NzFormControlComponent,
+    NzSpaceComponent,
+    NzSpaceItemDirective,
+    NzSpaceCompactItemDirective,
+    NzTimePickerComponent,
+    NzButtonComponent,
+    NzWaveDirective,
+    ɵNzTransitionPatchDirective,
+    NzIconDirective,
+    InformationPopoverComponent,
+    AsyncPipe,
+  ],
 })
 export class OpeningPickupComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;

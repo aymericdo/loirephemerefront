@@ -14,9 +14,6 @@ import { RecoverComponent } from 'src/app/modules/login/components/recover/recov
 export const SITE_KEY = '76928deb-ad7e-4374-bc74-540e80fa1049';
 
 @NgModule({
-  declarations: [
-    LoginComponent,
-  ],
   imports: [
     LoginRoutingModule,
     CommonModule,
@@ -26,6 +23,7 @@ export const SITE_KEY = '76928deb-ad7e-4374-bc74-540e80fa1049';
     SignInComponent,
     RecoverComponent,
     RegisterComponent,
+    LoginComponent,
   ],
   exports: [],
 })

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, of, takeUntil } from 'rxjs';
 import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
@@ -8,12 +8,42 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { selectLoading } from 'src/app/modules/login/store/login.selectors';
 import { changingPassword } from 'src/app/modules/profile/store/profile.actions';
 import { selectChangePasswordError, selectPasswordChanged } from 'src/app/modules/profile/store/profile.selectors';
+import { NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent } from 'ng-zorro-antd/form';
+import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
+import { ɵNzTransitionPatchDirective } from 'ng-zorro-antd/core/transition-patch';
+import { NzSpaceCompactItemDirective, NzSpaceComponent, NzSpaceItemDirective } from 'ng-zorro-antd/space';
+import { NzInputDirective, NzInputGroupComponent, NzInputGroupWhitSuffixOrPrefixDirective } from 'ng-zorro-antd/input';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
 
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss'],
-  standalone: false,
+  imports: [
+    FormsModule,
+    NzFormDirective,
+    NzRowDirective,
+    ReactiveFormsModule,
+    NzFormItemComponent,
+    NzColDirective,
+    NzFormLabelComponent,
+    NzFormControlComponent,
+    ɵNzTransitionPatchDirective,
+    NzSpaceCompactItemDirective,
+    NzInputGroupComponent,
+    NzInputGroupWhitSuffixOrPrefixDirective,
+    NzInputDirective,
+    NzIconDirective,
+    NgIf,
+    NzSpaceComponent,
+    NzSpaceItemDirective,
+    NzButtonComponent,
+    NzWaveDirective,
+    AsyncPipe,
+  ],
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;

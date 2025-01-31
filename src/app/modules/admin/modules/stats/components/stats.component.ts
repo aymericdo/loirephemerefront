@@ -1,6 +1,6 @@
-import { DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
+import { AsyncPipe, DATE_PIPE_DEFAULT_OPTIONS, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   ChartData,
@@ -15,11 +15,55 @@ import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, resetTimeInt
 import { statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
 import { selectAllPastries, selectIsLoading, selectPayedCommands, selectTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { NzPageHeaderComponent, NzPageHeaderSubtitleDirective, NzPageHeaderTagDirective, NzPageHeaderTitleDirective } from 'ng-zorro-antd/page-header';
+import { NzTagComponent } from 'ng-zorro-antd/tag';
+import { NzSpaceCompactItemDirective, NzSpaceComponent, NzSpaceItemDirective } from 'ng-zorro-antd/space';
+import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
+import { FormsModule } from '@angular/forms';
+import { NzDatePickerComponent, NzRangePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzEmptyComponent } from 'ng-zorro-antd/empty';
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { NzTabComponent, NzTabLinkDirective, NzTabLinkTemplateDirective, NzTabSetComponent } from 'ng-zorro-antd/tabs';
+import { NzStatisticComponent } from 'ng-zorro-antd/statistic';
+import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
+import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
+import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
+import { CommandCardComponent } from '../../commands/components/command-card/command-card.component';
 
 @Component({
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.scss'],
-  standalone: false,
+  imports: [
+    NzPageHeaderComponent,
+    NzPageHeaderTitleDirective,
+    NzPageHeaderSubtitleDirective,
+    NzPageHeaderTagDirective,
+    NzTagComponent,
+    NzSpaceComponent,
+    NzSpaceItemDirective,
+    NzSpaceCompactItemDirective,
+    NzSelectComponent,
+    FormsModule,
+    NgFor,
+    NzOptionComponent,
+    NzDatePickerComponent,
+    NzRangePickerComponent,
+    NgIf,
+    NzEmptyComponent,
+    NzSpinComponent,
+    NzTabSetComponent,
+    NzTabComponent,
+    NzTabLinkTemplateDirective,
+    NzTabLinkDirective,
+    RouterLink,
+    NzStatisticComponent,
+    BarChartComponent,
+    PieChartComponent,
+    NzRowDirective,
+    NzColDirective,
+    CommandCardComponent,
+    AsyncPipe,
+  ],
 })
 export class StatsComponent implements OnInit, OnDestroy {
   payedCommands$: Observable<Command[]>;

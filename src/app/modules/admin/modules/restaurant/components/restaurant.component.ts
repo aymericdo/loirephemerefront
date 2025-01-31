@@ -1,16 +1,31 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { updateDisplayStock } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsDisplayStockLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PaymentComponent } from './payment/payment.component';
+import { OpeningHoursComponent } from './opening-hours/opening-hours.component';
+import { OpeningPickupComponent } from './opening-pickup/opening-pickup.component';
+import { CommonModule } from '@angular/common';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
   templateUrl: './restaurant.component.html',
   styleUrls: ['./restaurant.component.scss'],
-  standalone: false,
+  imports: [
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PaymentComponent,
+    OpeningHoursComponent,
+    OpeningPickupComponent,
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class RestaurantComponent implements OnInit, OnDestroy {
   @ViewChild('download', { static: false }) download!: ElementRef;

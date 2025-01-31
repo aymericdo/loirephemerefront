@@ -12,18 +12,16 @@ import { CommandCardComponent } from 'src/app/modules/admin/modules/commands/com
 
 
 @NgModule({
-  declarations: [
-    StatsComponent,
-    BarChartComponent,
-    PieChartComponent,
-  ],
-  imports: [
-    StatsRoutingModule,
-    CommonModule,
-    SharedModule,
-    NgChartsModule,
-    EffectsModule.forFeature([StatsEffects]),
-    CommandCardComponent,
-  ],
+    imports: [
+        StatsRoutingModule,
+        CommonModule,
+        SharedModule,
+        NgChartsModule,
+        EffectsModule.forFeature([StatsEffects]),
+        CommandCardComponent,
+        StatsComponent,
+        BarChartComponent,
+        PieChartComponent,
+    ],
 })
 export class StatsModule { }

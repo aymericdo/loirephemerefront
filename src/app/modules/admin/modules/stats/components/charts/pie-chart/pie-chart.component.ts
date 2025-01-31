@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { ChartData, ChartOptions } from 'chart.js';
 import DatalabelsPlugin from 'chartjs-plugin-datalabels';
+import { NgChartsModule } from 'ng2-charts';
 
 @Component({
   selector: 'app-pie-chart',
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss'],
-  standalone: false,
+  imports: [NgChartsModule],
 })
 export class PieChartComponent {
   @Input() unit: string = '';

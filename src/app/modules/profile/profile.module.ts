@@ -11,16 +11,14 @@ import { StoreModule } from '@ngrx/store';
 
 
 @NgModule({
-  declarations: [
-    ProfileComponent,
-    ChangePasswordComponent,
-  ],
   imports: [
     ProfileRoutingModule,
     CommonModule,
     SharedModule,
     EffectsModule.forFeature([ProfileEffects]),
     StoreModule.forFeature(profileFeatureKey, reducer),
+    ProfileComponent,
+    ChangePasswordComponent,
   ],
 })
 export class ProfileModule { }

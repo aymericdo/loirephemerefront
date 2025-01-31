@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
@@ -8,12 +8,21 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { updatePaymentInformation } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { CommonModule } from '@angular/common';
+import { InformationPopoverComponent } from '../../../../../../shared/components/information-popover/information-popover.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss'],
-  standalone: false,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    InformationPopoverComponent,
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;

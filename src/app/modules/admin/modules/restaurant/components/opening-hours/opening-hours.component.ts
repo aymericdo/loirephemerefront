@@ -1,6 +1,6 @@
-import { DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
+import { CommonModule, DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, take, takeUntil, withLatestFrom } from 'rxjs';
@@ -9,12 +9,20 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { startLoading, stopLoading, updateAlwaysOpen, updateOpeningTime } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsAlwaysOpenLoading, selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { InformationPopoverComponent } from '../../../../../../shared/components/information-popover/information-popover.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
   selector: 'app-opening-hours',
   templateUrl: './opening-hours.component.html',
   styleUrls: ['./opening-hours.component.scss'],
-  standalone: false,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    InformationPopoverComponent,
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class OpeningHoursComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;

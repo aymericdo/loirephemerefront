@@ -7,6 +7,10 @@ import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
 import { deletingUserToRestaurant, fetchingUsers, patchingUserRestaurantAccess, startLoading } from 'src/app/modules/admin/modules/users/store/users.actions';
 import { selectIsLoading, selectUsers } from 'src/app/modules/admin/modules/users/store/users.selectors';
 import { selectRestaurant, selectUser } from 'src/app/modules/login/store/login.selectors';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NewUserModalComponent } from './new-user-modal/new-user-modal.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 export interface CheckboxGroupValue {
   label: string;
@@ -19,7 +23,13 @@ export interface CheckboxGroupValue {
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
-  standalone: false,
+  imports: [
+    NgZorroModule,
+    CommonModule,
+    FormsModule,
+    NewUserModalComponent,
+    DatePipe,
+  ],
 })
 export class UsersComponent implements OnInit, OnDestroy {
   users$: Observable<User[]>;

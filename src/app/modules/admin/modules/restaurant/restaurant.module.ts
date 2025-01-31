@@ -12,18 +12,16 @@ import { InformationPopoverComponent } from 'src/app/shared/components/informati
 
 
 @NgModule({
-  declarations: [
-    OpeningHoursComponent,
-    OpeningPickupComponent,
-    PaymentComponent,
-    RestaurantComponent,
-  ],
-  imports: [
-    RestaurantRoutingModule,
-    CommonModule,
-    SharedModule,
-    EffectsModule.forFeature([RestaurantEffects]),
-    InformationPopoverComponent,
-  ],
+    imports: [
+        RestaurantRoutingModule,
+        CommonModule,
+        SharedModule,
+        EffectsModule.forFeature([RestaurantEffects]),
+        InformationPopoverComponent,
+        OpeningHoursComponent,
+        OpeningPickupComponent,
+        PaymentComponent,
+        RestaurantComponent,
+    ],
 })
 export class RestaurantModule { }

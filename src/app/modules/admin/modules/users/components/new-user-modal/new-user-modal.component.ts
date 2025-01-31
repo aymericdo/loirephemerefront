@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, filter, of, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
@@ -7,12 +7,19 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { addingUserToRestaurant, validatingUserEmail } from 'src/app/modules/admin/modules/users/store/users.actions';
 import { selectUserEmailError } from 'src/app/modules/admin/modules/users/store/users.selectors';
+import { CommonModule } from '@angular/common';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
   selector: 'app-new-user-modal',
   templateUrl: './new-user-modal.component.html',
   styleUrls: ['./new-user-modal.component.scss'],
-  standalone: false,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgZorroModule,
+    CommonModule,
+  ],
 })
 export class NewUserModalComponent implements OnInit {
   @Input() users!: User[];

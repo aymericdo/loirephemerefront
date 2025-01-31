@@ -7,17 +7,14 @@ import { UsersEffects } from 'src/app/modules/admin/modules/users/store/users.ef
 import { UsersComponent } from 'src/app/modules/admin/modules/users/components/users.component';
 import { NewUserModalComponent } from 'src/app/modules/admin/modules/users/components/new-user-modal/new-user-modal.component';
 
-
 @NgModule({
-  declarations: [
-    UsersComponent,
-    NewUserModalComponent,
-  ],
   imports: [
     UsersRoutingModule,
     CommonModule,
     SharedModule,
     EffectsModule.forFeature([UsersEffects]),
+    UsersComponent,
+    NewUserModalComponent,
   ],
 })
 export class UsersModule { }
