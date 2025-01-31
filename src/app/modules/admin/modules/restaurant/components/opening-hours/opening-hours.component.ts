@@ -8,15 +8,13 @@ import { hourMinuteToDate } from 'src/app/helpers/date';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { startLoading, stopLoading, updateAlwaysOpen, updateOpeningTime } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsAlwaysOpenLoading, selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
-
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
-    selector: 'app-opening-hours',
-    templateUrl: './opening-hours.component.html',
-    styleUrls: ['./opening-hours.component.scss'],
-    standalone: false
+  selector: 'app-opening-hours',
+  templateUrl: './opening-hours.component.html',
+  styleUrls: ['./opening-hours.component.scss'],
+  standalone: false,
 })
 export class OpeningHoursComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
@@ -31,7 +29,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private datepipe: DatePipe,
     private fb: UntypedFormBuilder,
     private modal: NzModalService,
@@ -101,7 +99,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
     this.isLoading$
       .pipe(
         withLatestFrom(this.restaurant$),
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe(([loading, restaurant]) => {
         if (loading) {
           this.validateForm.disable();
@@ -215,8 +213,8 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
     return (!startTime && !endTime) ?
       $localize`Fermé le ${this.weekDays[weekDayNumber]}` :
       isOnTwoDays ?
-      $localize`Le restaurant est ouvert entre le ${this.weekDays[weekDayNumber]} ${startTime} et le ${this.weekDays[(weekDayNumber + 1) % this.weekDays.length]} ${endTime}` :
-      '';
+        $localize`Le restaurant est ouvert entre le ${this.weekDays[weekDayNumber]} ${startTime} et le ${this.weekDays[(weekDayNumber + 1) % this.weekDays.length]} ${endTime}` :
+        '';
   }
 
   handleAlwaysOpen(alwaysOpen: boolean): void {
@@ -233,7 +231,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
           };
 
           return prev;
-        }, {} as { [weekDay: number]: { startTime: string, endTime: string } })
+        }, {} as { [weekDay: number]: { startTime: string, endTime: string } }),
     }));
   }
 

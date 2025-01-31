@@ -3,16 +3,16 @@ import { ChartData, ChartOptions } from 'chart.js';
 import DatalabelsPlugin from 'chartjs-plugin-datalabels';
 
 @Component({
-    selector: 'app-pie-chart',
-    templateUrl: './pie-chart.component.html',
-    styleUrls: ['./pie-chart.component.scss'],
-    standalone: false
+  selector: 'app-pie-chart',
+  templateUrl: './pie-chart.component.html',
+  styleUrls: ['./pie-chart.component.scss'],
+  standalone: false,
 })
 export class PieChartComponent {
   @Input() unit: string = '';
   @Input() pieChartData: ChartData<'pie', number[], string | string[]> = {
     labels: [],
-    datasets: []
+    datasets: [],
   };
 
   pieChartOptions: ChartOptions = {
@@ -37,15 +37,15 @@ export class PieChartComponent {
         labels: {
           title: {
             font: {
-              weight: 'bold'
-            }
+              weight: 'bold',
+            },
           },
         },
         align: 'end',
         anchor: 'center',
-        clamp: true
+        clamp: true,
       },
-    }
+    },
   };
   pieChartPlugins = [DatalabelsPlugin];
 }

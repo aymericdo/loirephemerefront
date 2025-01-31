@@ -37,55 +37,55 @@ export const usersInitialState: UsersState = {
 
 const usersReducer = createReducer(
   usersInitialState,
-  on(fetchingUsers, startLoading, (state) => ({
+  on(fetchingUsers, startLoading, (state): UsersState => ({
     ...state,
     loading: true,
     users: [],
   })),
-  on(setUsers, (state, { users }) => ({
+  on(setUsers, (state, { users }): UsersState => ({
     ...state,
     users,
   })),
-  on(setUser, (state, { user }) => ({
+  on(setUser, (state, { user }): UsersState => ({
     ...state,
     users: [
       ...state.users.map((u) => {
         return (u.id === user.id) ? user : u;
-      })
+      }),
     ],
   })),
-  on(stopLoading, (state) => ({
+  on(stopLoading, (state): UsersState => ({
     ...state,
     loading: false,
   })),
-  on(validatingUserEmail, (state) => ({
+  on(validatingUserEmail, (state): UsersState => ({
     ...state,
     userEmailError: undefined,
   })),
-  on(setUserEmailError, (state, { error, notExists }) => ({
+  on(setUserEmailError, (state, { error, notExists }): UsersState => ({
     ...state,
     userEmailError: { error, notExists },
     isEmailValidating: false,
   })),
-  on(setUserNoEmailError, (state) => ({
+  on(setUserNoEmailError, (state): UsersState => ({
     ...state,
     userEmailError: null,
     isEmailValidating: false,
   })),
-  on(addingUserToRestaurant, (state) => ({
+  on(addingUserToRestaurant, (state): UsersState => ({
     ...state,
     isAddingUser: true,
   })),
-  on(deletingUserToRestaurant, (state) => ({
+  on(deletingUserToRestaurant, (state): UsersState => ({
     ...state,
     isDeletingUser: true,
   })),
-  on(addUser, (state, { user }) => ({
+  on(addUser, (state, { user }): UsersState => ({
     ...state,
     isAddingUser: false,
     users: [...state.users, user],
   })),
-  on(deleteUser, (state, { userId }) => ({
+  on(deleteUser, (state, { userId }): UsersState => ({
     ...state,
     isDeletingUser: false,
     users: state.users.filter(user => user.id !== userId),

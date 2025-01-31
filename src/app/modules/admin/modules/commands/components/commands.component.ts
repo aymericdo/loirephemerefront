@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,21 +10,29 @@ import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { CommandCardComponent } from 'src/app/modules/admin/modules/commands/components/command-card/command-card.component';
 import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
 import { addCommand, cancellingCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
 import { selectCancelledCommands, selectDeliveredCommands, selectIsLoading, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
 import {
   CommandWebSocketService,
-  WebSocketData
+  WebSocketData,
 } from 'src/app/modules/admin/services/command-socket.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    templateUrl: './commands.component.html',
-    styleUrls: ['./commands.component.scss'],
-    providers: [CommandWebSocketService],
-    standalone: false
+  templateUrl: './commands.component.html',
+  styleUrls: ['./commands.component.scss'],
+  providers: [CommandWebSocketService],
+  imports: [
+    CommonModule,
+    RouterModule,
+    NgZorroModule,
+    InformationPopoverComponent,
+    CommandCardComponent,
+  ],
 })
 export class CommandsComponent implements OnInit, OnDestroy {
   onGoingCommands$: Observable<Command[]>;
@@ -37,12 +46,12 @@ export class CommandsComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private wsService: CommandWebSocketService,
     private notification: NzNotificationService,
     private swPush: SwPush,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.onGoingCommands$ = this.store.select(selectOnGoingCommands);
     this.deliveredCommands$ = this.store.select(selectDeliveredCommands);
@@ -57,13 +66,13 @@ export class CommandsComponent implements OnInit, OnDestroy {
     this.store.dispatch(startLoading());
 
     this.route.paramMap.pipe(
-      takeUntil(this.destroyed$)
+      takeUntil(this.destroyed$),
     ).subscribe(params => {
       this.subscribeToWS(params.get('code')!);
     });
 
     this.route.queryParams.pipe(
-      takeUntil(this.destroyed$)
+      takeUntil(this.destroyed$),
     ).subscribe((params) => {
       if (!params['tab']) {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'ongoing' } });
@@ -108,7 +117,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
       JSON.stringify({
         event: 'wizzer',
         data: command.id,
-      })
+      }),
     );
   }
 
@@ -141,7 +150,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
         next: (data: WebSocketData) => {
           if (data.hasOwnProperty('addCommand')) {
             this.store.dispatch(
-              addCommand({ command: data.addCommand as Command })
+              addCommand({ command: data.addCommand as Command }),
             );
 
             if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
@@ -152,15 +161,15 @@ export class CommandsComponent implements OnInit, OnDestroy {
               '',
               {
                 nzDuration: 5000,
-              }
+              },
             );
           } else if (data.hasOwnProperty('closeCommand')) {
             this.store.dispatch(
-              editCommand({ command: data.closeCommand as Command })
+              editCommand({ command: data.closeCommand as Command }),
             );
           } else if (data.hasOwnProperty('payedCommand')) {
             this.store.dispatch(
-              editCommand({ command: data.payedCommand as Command })
+              editCommand({ command: data.payedCommand as Command }),
             );
           }
         },
@@ -174,7 +183,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
             }, 1000);
           }
           console.log('The observable stream is complete');
-        }
-     });
+        },
+      });
   }
 }

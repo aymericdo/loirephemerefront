@@ -1,11 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-order-error-modal',
-    templateUrl: './order-error-modal.component.html',
-    styleUrls: ['./order-error-modal.component.scss'],
-    standalone: false
+  selector: 'app-order-error-modal',
+  templateUrl: './order-error-modal.component.html',
+  styleUrls: ['./order-error-modal.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class OrderErrorModalComponent implements OnInit {
   @Input() errors: Object = null!;

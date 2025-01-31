@@ -53,20 +53,20 @@ export const menuInitialState: MenuState = {
 
 const menuReducer = createReducer(
   menuInitialState,
-  on(startLoading, fetchingAllRestaurantPastries, (state) => ({
+  on(startLoading, fetchingAllRestaurantPastries, (state): MenuState => ({
     ...state,
     loading: true,
     allPastries: [...pastriesMock],
   })),
-  on(setAllPastries, (state, { pastries }) => ({
+  on(setAllPastries, (state, { pastries }): MenuState => ({
     ...state,
     allPastries: [...pastries],
   })),
-  on(stopLoading, (state) => ({
+  on(stopLoading, (state): MenuState => ({
     ...state,
     loading: false,
   })),
-  on(addPastry, (state, { pastry }) => ({
+  on(addPastry, (state, { pastry }): MenuState => ({
     ...state,
     allPastries: [...state.allPastries, pastry],
   })),
@@ -80,7 +80,7 @@ const menuReducer = createReducer(
       allPastries: newList,
     };
   }),
-  on(reorderPastries, (state, { sequence }) => {
+  on(reorderPastries, (state, { sequence }): MenuState => {
     const newList: Pastry[] = state.allPastries.map((pastry) => ({
       ...pastry,
       displaySequence: sequence[pastry.id],
@@ -93,60 +93,60 @@ const menuReducer = createReducer(
       allPastries: newList,
     };
   }),
-  on(reactivatePastryName, (state) => ({
+  on(reactivatePastryName, (state): MenuState => ({
     ...state,
     pastryNameDeactivated: false,
   })),
-  on(deactivatePastryName, (state) => ({
+  on(deactivatePastryName, (state): MenuState => ({
     ...state,
     pastryNameDeactivated: true,
   })),
-  on(validatingPastryName, (state) => ({
+  on(validatingPastryName, (state): MenuState => ({
     ...state,
     pastryNameError: undefined,
     isNameValidating: true,
   })),
-  on(postingPastry, (state) => ({
+  on(postingPastry, (state): MenuState => ({
     ...state,
     isSavingPastry: true,
   })),
-  on(pastryCreated, (state) => ({
+  on(pastryCreated, (state): MenuState => ({
     ...state,
     isSavingPastry: false,
   })),
-  on(movingPastry, (state) => ({
+  on(movingPastry, (state): MenuState => ({
     ...state,
     isMovingPastry: true,
   })),
-  on(editingPastry, (state) => ({
+  on(editingPastry, (state): MenuState => ({
     ...state,
     isSavingPastry: true,
   })),
-  on(pastryEdited, (state) => ({
+  on(pastryEdited, (state): MenuState => ({
     ...state,
     isSavingPastry: false,
   })),
-  on(pastryMoved, (state) => ({
+  on(pastryMoved, (state): MenuState => ({
     ...state,
     isMovingPastry: false,
   })),
-  on(setPastryNameError, (state, { error, duplicated }) => ({
+  on(setPastryNameError, (state, { error, duplicated }): MenuState => ({
     ...state,
     pastryNameError: { error, duplicated },
     isNameValidating: false,
   })),
-  on(setPastryNoNameError, (state) => ({
+  on(setPastryNoNameError, (state): MenuState => ({
     ...state,
     pastryNameError: null,
     isNameValidating: false,
   })),
-  on(openMenuModal, (state, { modal, pastry }) => ({
+  on(openMenuModal, (state, { modal, pastry }): MenuState => ({
     ...state,
     pastryNameDeactivated: true,
     menuModalOpened: modal,
     editingPastry: pastry ?? null,
   })),
-  on(closeMenuModal, (state) => ({
+  on(closeMenuModal, (state): MenuState => ({
     ...state,
     menuModalOpened: null,
     editingPastry: null,

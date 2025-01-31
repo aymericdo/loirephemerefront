@@ -1,11 +1,11 @@
 <nz-modal [nzVisible]="true" nzCentered nzTitle="Code de confirmation (vérifiez vos emails / spams)" i18n-nzTitle [nzClosable]="false">
   <ng-container *nzModalContent>
     <div nzFlex nz-row nzJustify="center">
-      <nz-flex nzVertical>
+      <div nz-flex nzVertical>
         <nz-input-otp
-          [nzLength]="4" [nzSize]="'large'" [nzDisabled]="(isLoading$ | async)"
+          [nzLength]="4" [nzSize]="'large'" [disabled]="(isLoading$ | async) === true"
           [nzFormatter]="formatter" [(ngModel)]="value"></nz-input-otp>
-      </nz-flex>
+      </div>
     </div>
   </ng-container>
 

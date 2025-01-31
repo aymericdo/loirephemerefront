@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: StatsComponent,
-    data: { routeName: "stats" }
+    data: { routeName: "stats" },
   },
   { path: '**', redirectTo: '/page/404' },
 ];

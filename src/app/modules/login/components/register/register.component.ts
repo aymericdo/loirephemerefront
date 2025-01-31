@@ -1,21 +1,32 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, of, take, takeUntil } from 'rxjs';
 import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
+import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
 import { SITE_KEY } from 'src/app/modules/login/login.module';
 import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 import { environment } from 'src/environments/environment';
 
 @Component({
-    selector: 'app-register',
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.scss'],
-    standalone: false
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgZorroModule,
+    ConfirmationModalComponent,
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   confirmationModalOpened$!: Observable<string>;
@@ -33,7 +44,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private store: Store, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.userEmailError$ = this.store.select(selectUserEmailError);
@@ -48,7 +59,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.isLoading$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((loading) => {
         if (loading) {
           this.validateForm.controls.email.disable();
@@ -136,11 +147,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     const error = this.validateForm.value.password &&
       control.value &&
       control.value !== this.validateForm.value.password;
-      if (error) {
-        return of({ passwordDifferentToConfirmPasswordValidator: true });
-      } else {
-        this.validateForm.controls.password.setErrors(null);
-        return of({});
-      }
+    if (error) {
+      return of({ passwordDifferentToConfirmPasswordValidator: true });
+    } else {
+      this.validateForm.controls.password.setErrors(null);
+      return of({});
+    }
   };
 }

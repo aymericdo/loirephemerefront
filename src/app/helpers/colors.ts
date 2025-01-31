@@ -11,7 +11,7 @@ export const COLORS = [
   'geekblue',
   'purple',
   'magenta',
-  'grey'
+  'grey',
 ];
 
 export type AntColorType = typeof COLORS[number];

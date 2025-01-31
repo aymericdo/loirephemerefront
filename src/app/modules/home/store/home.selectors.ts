@@ -1,18 +1,17 @@
-import { createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
-import { AppState } from 'src/app/store/app.state';
 import { HomeState } from './home.reducer';
 
-export const selectFeature = (state: AppState) => state.home;
+export const selectFeature = createFeatureSelector<HomeState>('home');
 
 export const selectPastries = createSelector(
   selectFeature,
-  (state: HomeState) => state.pastries
+  (state: HomeState) => state.pastries,
 );
 
 export const selectSelectedPastries = createSelector(
   selectFeature,
-  (state: HomeState) => state.selectedPastries
+  (state: HomeState) => state.selectedPastries,
 );
 
 export const selectSelectedPastriesTotalCount = createSelector(
@@ -20,12 +19,12 @@ export const selectSelectedPastriesTotalCount = createSelector(
   (state: HomeState) => Object.keys(state.selectedPastries).reduce((prev, pastryId) => {
     prev += state.selectedPastries[pastryId];
     return prev;
-  }, 0)
+  }, 0),
 );
 
 export const selectIsLoading = createSelector(
   selectFeature,
-  (state: HomeState) => state.loading
+  (state: HomeState) => state.loading,
 );
 
 export const selectIsStockIssue = createSelector(
@@ -38,22 +37,22 @@ export const selectIsStockIssue = createSelector(
         pastry.stock -
         state.selectedPastries[pastryId] < 0
       );
-    })
+    }),
 );
 
 export const selectPersonalCommand = createSelector(
   selectFeature,
-  (state: HomeState) => state.personalCommand
+  (state: HomeState) => state.personalCommand,
 );
 
 export const selectHomeModal = createSelector(
   selectFeature,
-  (state: HomeState) => state.homeModal
+  (state: HomeState) => state.homeModal,
 );
 
 export const selectCurrentSentCommands = createSelector(
   selectFeature,
-  (state: HomeState) => state.currentSentCommands
+  (state: HomeState) => state.currentSentCommands,
 );
 
 export const selectCurrentSentCommandFromCommandList = (props: { commandId: string }) =>
@@ -63,15 +62,15 @@ export const selectCurrentSentCommandFromCommandList = (props: { commandId: stri
 
 export const selectErrorCommand = createSelector(
   selectFeature,
-  (state: HomeState) => state.errorCommand
+  (state: HomeState) => state.errorCommand,
 );
 
 export const selectHasSelectedPastries = createSelector(
   selectFeature,
   (state: HomeState) =>
     Object.keys(state.selectedPastries).some(
-      (key) => !!state.selectedPastries[key]
-    )
+      (key) => !!state.selectedPastries[key],
+    ),
 );
 
 export const selectTotalPrice = createSelector(
@@ -82,6 +81,6 @@ export const selectTotalPrice = createSelector(
         prev +
         (state.pastries.find((p) => p.id === pastryId)?.price || 0) *
         state.selectedPastries[pastryId],
-      0
-    )
+      0,
+    ),
 );

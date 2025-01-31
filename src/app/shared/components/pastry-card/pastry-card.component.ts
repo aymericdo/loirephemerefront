@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,14 +10,18 @@ import {
 } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 import { environment } from 'src/environments/environment';
 
 @Component({
-    selector: 'app-pastry-card',
-    templateUrl: './pastry-card.component.html',
-    styleUrls: ['./pastry-card.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-pastry-card',
+  templateUrl: './pastry-card.component.html',
+  styleUrls: ['./pastry-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class PastryCardComponent implements OnChanges {
   @Input() pastry!: Pastry;

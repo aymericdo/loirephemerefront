@@ -3,16 +3,22 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { selectAllPastries, selectIsMovingPastry } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
-import { AppState } from 'src/app/store/app.state';
 import { generate, presetPalettes } from '@ant-design/colors';
 import { settingCommonStock } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { COLORS } from 'src/app/helpers/colors';
+import { CommonModule } from '@angular/common';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 
 @Component({
-    selector: 'app-association',
-    templateUrl: './association.component.html',
-    styleUrls: ['./association.component.scss'],
-    standalone: false
+  selector: 'app-association',
+  templateUrl: './association.component.html',
+  styleUrls: ['./association.component.scss'],
+  imports: [
+    InformationPopoverComponent,
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class AssociationComponent implements OnInit, OnDestroy {
   pastries$: Observable<Pastry[]>;
@@ -26,7 +32,7 @@ export class AssociationComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store) {
     this.isMoving$ = this.store.select(selectIsMovingPastry);
     this.pastries$ = this.store.select(selectAllPastries);
   }

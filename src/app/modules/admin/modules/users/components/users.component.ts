@@ -7,7 +7,6 @@ import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
 import { deletingUserToRestaurant, fetchingUsers, patchingUserRestaurantAccess, startLoading } from 'src/app/modules/admin/modules/users/store/users.actions';
 import { selectIsLoading, selectUsers } from 'src/app/modules/admin/modules/users/store/users.selectors';
 import { selectRestaurant, selectUser } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 export interface CheckboxGroupValue {
   label: string;
@@ -17,10 +16,10 @@ export interface CheckboxGroupValue {
 };
 
 @Component({
-    selector: 'app-users',
-    templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss'],
-    standalone: false
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  standalone: false,
 })
 export class UsersComponent implements OnInit, OnDestroy {
   users$: Observable<User[]>;
@@ -35,7 +34,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private modal: NzModalService,
   ) {
     this.users$ = this.store.select(selectUsers);
@@ -85,7 +84,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         }
 
         return prev;
-      }, [] as Access[])
+      }, [] as Access[]),
     }));
   }
 

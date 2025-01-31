@@ -1,20 +1,34 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, map, takeUntil } from 'rxjs';
 import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { AssociationComponent } from 'src/app/modules/admin/modules/menu/components/association/association.component';
+import { EditPastryModalComponent } from 'src/app/modules/admin/modules/menu/components/edit-pastry-modal/edit-pastry-modal.component';
+import { NewPastryModalComponent } from 'src/app/modules/admin/modules/menu/components/new-pastry-modal/new-pastry-modal.component';
+import { SequenceComponent } from 'src/app/modules/admin/modules/menu/components/sequence/sequence.component';
 import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock, startLoading } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { MenuWebSocketService, WebSocketData } from 'src/app/modules/admin/services/menu-socket.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { PastryCardComponent } from 'src/app/shared/components/pastry-card/pastry-card.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    templateUrl: './menu.component.html',
-    styleUrls: ['./menu.component.scss'],
-    providers: [MenuWebSocketService],
-    standalone: false
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.scss'],
+  providers: [MenuWebSocketService],
+  imports: [
+    CommonModule,
+    PastryCardComponent,
+    AssociationComponent,
+    SequenceComponent,
+    EditPastryModalComponent,
+    NewPastryModalComponent,
+    NgZorroModule,
+  ],
 })
 export class MenuComponent implements OnInit, OnDestroy {
   restaurant$: Observable<Restaurant | null>;
@@ -30,7 +44,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private route: ActivatedRoute,
     private wsService: MenuWebSocketService,
   ) {
@@ -48,7 +62,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(
       map((params: ParamMap) => params.get('code')),
       filter(Boolean),
-      takeUntil(this.destroyed$)
+      takeUntil(this.destroyed$),
     ).subscribe(code => {
       this.subscribeToWS(code);
       this.store.dispatch(fetchingAllRestaurantPastries({ code }));
@@ -132,7 +146,7 @@ export class MenuComponent implements OnInit, OnDestroy {
               setStock({
                 pastryId: stockChanged.pastryId as string,
                 newStock: stockChanged.newStock as number,
-              })
+              }),
             );
           }
         },
@@ -146,7 +160,7 @@ export class MenuComponent implements OnInit, OnDestroy {
             }, 1000);
           }
           console.log('The observable stream is complete');
-        }
-     });
+        },
+      });
   }
 }

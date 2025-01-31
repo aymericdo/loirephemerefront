@@ -1,25 +1,24 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { RestaurantState } from './restaurant.reducer';
 
-export const selectFeature = (state: AppState) => state.restaurant;
+export const selectFeature = createFeatureSelector<RestaurantState>('restaurant');
 
 export const selectRestaurants = createSelector(
   selectFeature,
-  (state: RestaurantState) => state.restaurants
+  (state: RestaurantState) => state.restaurants,
 );
 
 export const selectIsLoading = createSelector(
   selectFeature,
-  (state: RestaurantState) => state.loading
+  (state: RestaurantState) => state.loading,
 );
 
 export const selectRestaurantNameError = createSelector(
   selectFeature,
-  (state: RestaurantState) => state.restaurantNameError
+  (state: RestaurantState) => state.restaurantNameError,
 );
 
 export const selectNewRestaurant = createSelector(
   selectFeature,
-  (state: RestaurantState) => state.newRestaurant
+  (state: RestaurantState) => state.newRestaurant,
 );

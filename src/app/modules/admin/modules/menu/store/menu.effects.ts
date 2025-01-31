@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY, pipe } from 'rxjs';
-import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, debounceTime, filter, mergeMap, switchMap } from 'rxjs/operators';
+import { concatLatestFrom } from '@ngrx/operators';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 import {
   activatingPastry,
   addPastry,
@@ -28,13 +28,13 @@ import {
   setPastryNoNameError,
   settingCommonStock,
   stopLoading,
-  validatingPastryName
+  validatingPastryName,
 } from './menu.actions';
 
 @Injectable()
 export class MenuEffects {
-  fetchingAllRestaurantPastries$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchingAllRestaurantPastries$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fetchingAllRestaurantPastries),
       mergeMap((action) => {
         return this.adminApiService.getAllPastries(action.code).pipe(
@@ -42,20 +42,20 @@ export class MenuEffects {
             stopLoading(),
             setAllPastries({ pastries }),
           ]),
-          catchError(() => EMPTY)
+          catchError(() => EMPTY),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  openMenuModal$ = createEffect(() =>
-    this.actions$.pipe(
+  openMenuModal$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(openMenuModal),
       pipe(
-        filter((value) => value.modal === 'edit')
+        filter((value) => value.modal === 'edit'),
       ),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.validatePastryIsAlreadyOrdered(restaurant.code, action.pastry?.id!).pipe(
@@ -65,18 +65,18 @@ export class MenuEffects {
             }
 
             return [reactivatePastryName()];
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  validatingPastryName$ = createEffect(() =>
-    this.actions$.pipe(
+  validatingPastryName$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(validatingPastryName),
       debounceTime(500),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.validatePastryName(restaurant.code, action.pastryName, action.pastryId).pipe(
@@ -86,17 +86,17 @@ export class MenuEffects {
             } else {
               return [setPastryNameError({ error: true, duplicated: true })];
             }
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  postingPastry$ = createEffect(() =>
-    this.actions$.pipe(
+  postingPastry$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(postingPastry),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.postPastry(restaurant.code, action.pastry).pipe(
@@ -105,17 +105,17 @@ export class MenuEffects {
           }),
           catchError(() => {
             return [pastryCreated()];
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  editingPastry$ = createEffect(() =>
-    this.actions$.pipe(
+  editingPastry$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(editingPastry),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
@@ -133,17 +133,17 @@ export class MenuEffects {
           }),
           catchError(() => {
             return [pastryEdited()];
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  movingPastry$ = createEffect(() =>
-    this.actions$.pipe(
+  movingPastry$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(movingPastry),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
@@ -152,7 +152,7 @@ export class MenuEffects {
               return [
                 editPastry({ pastry: data.pastry }),
                 reorderPastries({ sequence: data.displaySequenceById }),
-                pastryMoved({ pastry: data.pastry })
+                pastryMoved({ pastry: data.pastry }),
               ];
             } else {
               return [editPastry({ pastry: data.pastry })];
@@ -160,17 +160,17 @@ export class MenuEffects {
           }),
           catchError(() => {
             return [pastryEdited()];
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  settingCommonStock$ = createEffect(() =>
-    this.actions$.pipe(
+  settingCommonStock$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(settingCommonStock),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.putEditCommonStockPastry(
@@ -183,17 +183,17 @@ export class MenuEffects {
           }),
           catchError(() => {
             return [pastryEdited()];
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  patchingPastry$ = createEffect(() =>
-    this.actions$.pipe(
+  patchingPastry$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(activatingPastry, deactivatingPastry, incrementPastry, decrementPastry),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.putPastry(restaurant.code, action.pastry).pipe(
@@ -202,15 +202,15 @@ export class MenuEffects {
           }),
           catchError(() => {
             return [pastryEdited()];
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
   constructor(
     private actions$: Actions,
-    private store$: Store<AppState>,
+    private store: Store,
     private adminApiService: AdminApiService,
   ) { }
 }

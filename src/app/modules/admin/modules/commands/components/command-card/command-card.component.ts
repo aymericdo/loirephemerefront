@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -13,16 +14,22 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { PASTRY_TYPE_LABEL, PastryType } from 'src/app/interfaces/pastry.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { PaymentModalComponent } from 'src/app/modules/admin/modules/commands/components/payment-modal/payment-modal.component';
 import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 const SECONDS_HIGHLIGHT = 20;
 
 @Component({
-    selector: 'app-command-card',
-    templateUrl: './command-card.component.html',
-    styleUrls: ['./command-card.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-command-card',
+  templateUrl: './command-card.component.html',
+  styleUrls: ['./command-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    PaymentModalComponent,
+  ],
 })
 export class CommandCardComponent implements OnInit, OnDestroy {
   @Input() command: Command = null!;
@@ -91,7 +98,7 @@ export class CommandCardComponent implements OnInit, OnDestroy {
       Object.keys(pastriesGroupedBy[pastryType]).map((pastryId) => {
         const elem = pastriesGroupedBy[pastryType][pastryId];
         return [elem[0] as Pastry, elem[1] as number, elem[2] as number];
-      })
+      }),
     ]).sort((a, b) => {
       return PASTRY_TYPE_LABEL[a[0] as PastryType].sequence - PASTRY_TYPE_LABEL[b[0] as PastryType].sequence;
     }) as [PastryType, [Pastry, number, number][]][];

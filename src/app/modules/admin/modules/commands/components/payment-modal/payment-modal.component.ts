@@ -1,13 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/interfaces/command.interface';
-import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
+import { Discount, PromoModalComponent } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-payment-modal',
-    templateUrl: './payment-modal.component.html',
-    styleUrls: ['./payment-modal.component.scss'],
-    standalone: false
+  selector: 'app-payment-modal',
+  templateUrl: './payment-modal.component.html',
+  styleUrls: ['./payment-modal.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgZorroModule,
+    PromoModalComponent,
+  ],
 })
 export class PaymentModalComponent {
   @Input() command!: Command;

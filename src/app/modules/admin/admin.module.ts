@@ -15,9 +15,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
-  declarations: [
-    AdminComponent,
-  ],
   imports: [
     AdminRoutingModule,
     SharedModule,
@@ -31,6 +28,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
       [statsFeatureKey]: statsReducer,
       [usersFeatureKey]: usersReducer,
     }),
+    AdminComponent,
   ],
 })
 export class AdminModule { }

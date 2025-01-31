@@ -1,11 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-order-footer',
-    templateUrl: './order-footer.component.html',
-    styleUrls: ['./order-footer.component.scss'],
-    standalone: false
+  selector: 'app-order-footer',
+  templateUrl: './order-footer.component.html',
+  styleUrls: ['./order-footer.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class OrderFooterComponent {
   @Input() disabled: boolean = false;

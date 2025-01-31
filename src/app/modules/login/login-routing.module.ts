@@ -19,7 +19,7 @@ const routes: Routes = [
     }, {
       path: 'recover',
       component: RecoverComponent,
-    }]
+    }],
   },
   { path: '**', redirectTo: '/page/404' },
 ];

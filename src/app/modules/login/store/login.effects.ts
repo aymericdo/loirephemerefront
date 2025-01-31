@@ -1,65 +1,83 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, concatMap, debounceTime, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser } from 'src/app/interfaces/user.interface';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
 import { selectCode2, selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { RestaurantApiService } from 'src/app/modules/restaurant/services/restaurant-api.service';
-import { AppState } from 'src/app/store/app.state';
 import {
   changePassword, confirmEmail, confirmRecoverEmail,
-  createUser, fetchingCurrentRestaurantPublicKey, fetchingDemoResto, fetchingRestaurant, fetchingUser, fetchingUserRestaurants,
+  createUser, fetchingCurrentRestaurantPublicKey, fetchingDemoResto,
+  fetchingRestaurant, fetchingUser, getUserSuccess,
   openConfirmationModal, openRecoverModal, refreshingUser, setAuthError,
   setCode2, setDemoResto, setNewToken, setNoAuthError,
   setPasswordAsChanged, setRestaurant, setRestaurantPublicKey, setUser, setUserEmailError,
   setUserNoEmailError, setUserRestaurants, signInUser,
-  stopDemoRestoFetching,
-  stopLoading,
-  stopRestaurantFetching,
-  stopUserFetching,
-  validateRecoverEmailCode,
-  validatingUserEmail
+  startFirstNavigation, stopDemoRestoFetching, stopLoading, stopRestaurantFetching, stopUserFetching,
+  validateRecoverEmailCode, validatingUserEmail,
 } from './login.actions';
 import { startLoading } from 'src/app/modules/home/store/home.actions';
 import { EMPTY } from 'rxjs';
+import { concatLatestFrom } from '@ngrx/operators';
 
 @Injectable()
 export class LoginEffects {
-  fetchingUser$ = createEffect(() =>
-    this.actions$.pipe(
+  startFirstNavigation$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(startFirstNavigation),
+      map(() => fetchingDemoResto()),
+    );
+  });
+
+  fetchingUser$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fetchingUser),
-      mergeMap(() => {
+      concatMap(() => {
         return this.loginApiService.getUser().pipe(
-          switchMap((user) => {
-            return [setUser({ user }), fetchingUserRestaurants(), stopLoading()];
+          map((user) => {
+            return getUserSuccess({ user });
           }),
           catchError(() => {
             return [stopUserFetching()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  refreshingUser$ = createEffect(() =>
-    this.actions$.pipe(
+  setUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(getUserSuccess),
+      map(({ user }) => setUser({ user })),
+    );
+  });
+
+  stopLoading$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(getUserSuccess),
+      map(() => stopLoading()),
+    );
+  });
+
+  refreshingUser$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(refreshingUser),
-      mergeMap(() => {
+      concatMap(() => {
         return this.loginApiService.getUser().pipe(
-          switchMap((user) => {
-            return [setUser({ user })];
-          })
+          map((user) => {
+            return setUser({ user });
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  fetchingUserRestaurants$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(fetchingUserRestaurants),
-      mergeMap(() => {
+  fetchingUserRestaurants$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(getUserSuccess),
+      concatMap(() => {
         return this.restaurantApiService.getUserRestaurants().pipe(
           switchMap((restaurants: Restaurant[]) => {
             return [setUserRestaurants({ restaurants }), stopUserFetching()];
@@ -68,15 +86,15 @@ export class LoginEffects {
             return [stopUserFetching(), stopLoading()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  fetchingCurrentRestaurantPublicKey$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchingCurrentRestaurantPublicKey$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fetchingCurrentRestaurantPublicKey),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([, restaurant]) => {
         return this.restaurantApiService.getRestaurantPublicKey(restaurant.code).pipe(
@@ -87,12 +105,12 @@ export class LoginEffects {
             return EMPTY;
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  confirmEmail$ = createEffect(() =>
-    this.actions$.pipe(
+  confirmEmail$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(confirmEmail),
       mergeMap((action: { email: string, captchaToken: string }) => {
         return this.loginApiService.postConfirmEmailUser(action.email, action.captchaToken).pipe(
@@ -103,12 +121,12 @@ export class LoginEffects {
             return [stopLoading()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  confirmRecoverEmail$ = createEffect(() =>
-    this.actions$.pipe(
+  confirmRecoverEmail$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(confirmRecoverEmail),
       mergeMap((action: { email: string, captchaToken: string }) => {
         return this.loginApiService.postConfirmRecoverEmailUser(action.email, action.captchaToken).pipe(
@@ -119,14 +137,14 @@ export class LoginEffects {
             return [stopLoading()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  validateRecoverEmailCode$ = createEffect(() =>
-    this.actions$.pipe(
+  validateRecoverEmailCode$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(validateRecoverEmailCode),
-      withLatestFrom(this.store$.select(selectCode2)),
+      concatLatestFrom(() => this.store.select(selectCode2)),
       mergeMap(([action, code2]) => {
         const { email, emailCode }: { email: string, emailCode: string } =
           action as { email: string, emailCode: string };
@@ -142,14 +160,14 @@ export class LoginEffects {
             return [stopLoading()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  changePassword$ = createEffect(() =>
-    this.actions$.pipe(
+  changePassword$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(changePassword),
-      withLatestFrom(this.store$.select(selectCode2)),
+      concatLatestFrom(() => this.store.select(selectCode2)),
       mergeMap(([action, code2]) => {
         const { email, password, emailCode }: { email: string, password: string, emailCode: string } = action;
         return this.loginApiService.postChangePassword(email, password, emailCode, code2!).pipe(
@@ -164,14 +182,14 @@ export class LoginEffects {
             return [stopLoading()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  postUser$ = createEffect(() =>
-    this.actions$.pipe(
+  postUser$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(createUser),
-      withLatestFrom(this.store$.select(selectCode2)),
+      concatLatestFrom(() => this.store.select(selectCode2)),
       mergeMap(([action, code2]) => {
         const { user, emailCode }: { user: CoreUser, emailCode: string } =
           action as { user: CoreUser, emailCode: string };
@@ -187,12 +205,12 @@ export class LoginEffects {
             return [stopLoading()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  signInUser$ = createEffect(() =>
-    this.actions$.pipe(
+  signInUser$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(signInUser),
       mergeMap((action: { user: CoreUser }) => {
         return this.loginApiService.postAuthLogin(action.user).pipe(
@@ -209,12 +227,12 @@ export class LoginEffects {
             return [stopLoading()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  validatingUserEmail$ = createEffect(() =>
-    this.actions$.pipe(
+  validatingUserEmail$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(validatingUserEmail),
       debounceTime(500),
       mergeMap((action: { email: string }) => {
@@ -225,34 +243,40 @@ export class LoginEffects {
             } else {
               return [setUserEmailError({ error: true, duplicated: true })];
             }
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  fetchingDemoResto$ = createEffect(() =>
-    this.actions$.pipe(
+  startLoading$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fetchingDemoResto),
+      mergeMap(() => [startLoading()]),
+    );
+  });
+
+  fetchingDemoResto$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fetchingDemoResto),
       mergeMap(() => {
-        this.store$.dispatch(startLoading());
         return this.restaurantApiService.getDemoResto().pipe(
           switchMap((restaurant: Restaurant) => {
             return [
               setDemoResto({ restaurant}),
-              stopDemoRestoFetching()
+              stopDemoRestoFetching(),
             ];
           }),
           catchError(() => {
             return [stopLoading(), stopDemoRestoFetching()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  fetchingRestaurant$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchingRestaurant$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fetchingRestaurant),
       mergeMap((action: { code: string }) => {
         return this.restaurantApiService.getRestaurant(action.code).pipe(
@@ -267,14 +291,14 @@ export class LoginEffects {
             return [stopLoading(), stopRestaurantFetching()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
   constructor(
     private actions$: Actions,
     private loginApiService: LoginApiService,
     private restaurantApiService: RestaurantApiService,
-    private store$: Store<AppState>,
+    private store: Store,
   ) {}
 }

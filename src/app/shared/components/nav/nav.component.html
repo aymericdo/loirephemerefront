@@ -3,7 +3,7 @@
 <nz-sider [nzCollapsible]="!routeWithoutNavBar" nzBreakpoint="lg" [nzCollapsedWidth]="0" [nzCollapsed]="isSiderCollapsed$ | async" (nzCollapsedChange)="siderCollapseChange($event)">
   <div class="logo"></div>
   <ul nz-menu nzTheme="dark" nzMode="inline">
-    <li *ngIf="(allRestaurantFetching$ | async) === false" nz-menu-item class="row-border-left"
+    <li *ngIf="(allRestaurantsFetching$ | async) === false" nz-menu-item class="row-border-left"
       [nzSelected]="routeName === 'home'"
       [ngStyle]="(restaurant$ | async) === null || (demoResto$ | async)?.code === (restaurant$ | async)?.code ? getDemoStyle() : {}">
       <a (click)="manuallyCollapse()" class="main-link" [routerLink]="[(restaurant$ | async)?.code || (demoResto$ | async)?.code]">
@@ -11,7 +11,7 @@
         <span class="restaurant-name">{{ (restaurant$ | async)?.name || (demoResto$ | async)?.name }}</span>
       </a>
     </li>
-    <div class="loading-section" *ngIf="(allRestaurantFetching$ | async)">
+    <div class="loading-section" *ngIf="(allRestaurantsFetching$ | async)">
       <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
     </div>
 

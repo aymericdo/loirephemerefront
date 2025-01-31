@@ -15,7 +15,7 @@ const routes: Routes = [
     {
       path: 'menu',
       data: {
-        access: 'menu'
+        access: 'menu',
       },
       canActivate: [AuthGuardService],
       loadChildren: () =>
@@ -24,7 +24,7 @@ const routes: Routes = [
     {
       path: 'commands',
       data: {
-        access: 'commands'
+        access: 'commands',
       },
       canActivate: [AuthGuardService],
       loadChildren: () =>
@@ -33,7 +33,7 @@ const routes: Routes = [
     {
       path: 'stats',
       data: {
-        access: 'stats'
+        access: 'stats',
       },
       canActivate: [AuthGuardService],
       loadChildren: () =>
@@ -42,13 +42,13 @@ const routes: Routes = [
     {
       path: 'users',
       data: {
-        access: 'users'
+        access: 'users',
       },
       canActivate: [AuthGuardService],
       loadChildren: () =>
         import('./modules/users/users.module').then((m) => m.UsersModule),
     },
-  ]},
+    ]},
   { path: '**', redirectTo: '/page/404' },
 ];
 

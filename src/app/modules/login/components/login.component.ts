@@ -5,13 +5,12 @@ import { ReplaySubject, combineLatest, filter, takeUntil, withLatestFrom } from 
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { stopLoading } from 'src/app/modules/login/store/login.actions';
 import { selectDemoResto, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: false
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  standalone: false,
 })
 export class LoginComponent implements OnInit, OnDestroy {
   isOnRecover = false;
@@ -20,7 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private store: Store<AppState>,
+    private store: Store,
   ) { }
 
   ngOnInit(): void {

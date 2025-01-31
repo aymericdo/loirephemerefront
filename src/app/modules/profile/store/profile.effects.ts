@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
 import { catchError, mergeMap, switchMap } from 'rxjs/operators';
 import { ProfileApiService } from 'src/app/modules/profile/services/profile-api.service';
-import { AppState } from 'src/app/store/app.state';
 import {
   changingPassword, setChangePasswordError,
   setPasswordAsChanged, stopLoading, updatingDisplayDemoResto,
@@ -12,8 +10,8 @@ import { toggleDisplayDemoResto } from 'src/app/modules/login/store/login.action
 
 @Injectable()
 export class ProfileEffects {
-  changingPassword$ = createEffect(() =>
-    this.actions$.pipe(
+  changingPassword$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(changingPassword),
       mergeMap(({ oldPassword, password }) => {
         return this.profileApiService.postChangePassword(oldPassword, password).pipe(
@@ -26,14 +24,14 @@ export class ProfileEffects {
             } else {
               return [setPasswordAsChanged({ changed: false }), stopLoading()];
             }
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  updatingDisplayDemoResto$ = createEffect(() =>
-    this.actions$.pipe(
+  updatingDisplayDemoResto$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(updatingDisplayDemoResto),
       mergeMap((action) => {
         return this.profileApiService
@@ -41,13 +39,12 @@ export class ProfileEffects {
           .pipe(
             switchMap((displayDemoResto) => [toggleDisplayDemoResto({ displayDemoResto }), stopLoading()]),
           );
-      })
-    )
-  );
+      }),
+    );
+  });
 
   constructor(
     private actions$: Actions,
     private profileApiService: ProfileApiService,
-    private store$: Store<AppState>,
   ) {}
 }

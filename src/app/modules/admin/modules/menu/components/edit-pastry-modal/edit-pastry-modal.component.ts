@@ -1,19 +1,25 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, take, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { PastryFormComponent } from 'src/app/modules/admin/modules/menu/components/pastry-form/pastry-form.component';
 import { editingPastry, validatingPastryName } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectIsSavingPastry, selectPastryNameDeactivated, selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-edit-pastry-modal',
-    templateUrl: './edit-pastry-modal.component.html',
-    styleUrls: ['./edit-pastry-modal.component.scss'],
-    standalone: false
+  selector: 'app-edit-pastry-modal',
+  templateUrl: './edit-pastry-modal.component.html',
+  styleUrls: ['./edit-pastry-modal.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    PastryFormComponent,
+  ],
 })
 export class EditPastryModalComponent implements OnInit, OnDestroy {
   @Input() restaurant: Restaurant = null!;
@@ -27,7 +33,7 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private store: Store, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.restaurantNameError$ = this.store.select(selectPastryNameError);
@@ -83,7 +89,7 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
         displaySequence: this.validateForm.value.displaySequence,
         imageUrl: this.validateForm.value.imageUrl,
         type: this.validateForm.value.type,
-      }
+      },
     }));
   }
 

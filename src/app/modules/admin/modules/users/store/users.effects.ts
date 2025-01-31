@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
-import { catchError, debounceTime, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, debounceTime, filter, mergeMap, switchMap } from 'rxjs/operators';
+import { concatLatestFrom } from '@ngrx/operators';
 import { Access, User } from 'src/app/interfaces/user.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 import {
   addUser, addingUserToRestaurant, deleteUser,
   deletingUserToRestaurant,
@@ -17,7 +17,7 @@ import {
   setUserNoEmailError,
   setUsers,
   stopLoading,
-  validatingUserEmail
+  validatingUserEmail,
 } from './users.actions';
 
 import { setUserAccess } from 'src/app/modules/login/store/login.actions';
@@ -25,8 +25,8 @@ import { selectUser } from 'src/app/modules/login/store/login.selectors';
 
 @Injectable()
 export class UsersEffects {
-  fetchingUsers$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchingUsers$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fetchingUsers),
       mergeMap((action) => {
         return this.adminApiService.getAllUsers(action.code).pipe(
@@ -35,14 +35,14 @@ export class UsersEffects {
           }),
           catchError(() => {
             return EMPTY;
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  validatingUserEmail$ = createEffect(() =>
-    this.actions$.pipe(
+  validatingUserEmail$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(validatingUserEmail),
       debounceTime(500),
       mergeMap((action: { email: string }) => {
@@ -53,70 +53,70 @@ export class UsersEffects {
             } else {
               return [setUserEmailError({ error: true, notExists: true })];
             }
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  addingUserToRestaurant$ = createEffect(() =>
-    this.actions$.pipe(
+  addingUserToRestaurant$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(addingUserToRestaurant),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.postUserToRestaurant(restaurant.code, action.email).pipe(
           switchMap((user: User) => {
             return [addUser({ user })];
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  deletingUserToRestaurant$ = createEffect(() =>
-    this.actions$.pipe(
+  deletingUserToRestaurant$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(deletingUserToRestaurant),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService.deleteUserToRestaurant(restaurant.code, action.userId).pipe(
           switchMap((isDone: boolean) => {
             return isDone ? [deleteUser({ userId: action.userId })] : EMPTY;
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  patchingUserRestaurantAccess$ = createEffect(() =>
-    this.actions$.pipe(
+  patchingUserRestaurantAccess$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(patchingUserRestaurantAccess),
-      withLatestFrom(
-        this.store$.select(selectRestaurant).pipe(filter(Boolean)),
-        this.store$.select(selectUser).pipe(filter(Boolean)),
-      ),
+      concatLatestFrom(() => [
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
+        this.store.select(selectUser).pipe(filter(Boolean)),
+      ]),
       mergeMap(([action, restaurant, currentUser]) => {
         return this.adminApiService.patchUserRestaurantAccess(restaurant.code, action.userId, action.access).pipe(
           switchMap((user: User) => {
             if (user.id === currentUser.id) {
               return [
                 setUser({ user }),
-                setUserAccess({ access: user.access as Access[], restaurantId: restaurant.id })
+                setUserAccess({ access: user.access as Access[], restaurantId: restaurant.id }),
               ];
             } else {
               return [setUser({ user })];
             }
-          })
+          }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
   constructor(
-    private store$: Store<AppState>,
+    private store: Store,
     private actions$: Actions,
     private adminApiService: AdminApiService,
   ) { }

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './components/home.component';
 import { SharedModule } from '../../shared/shared.module';
 import { homeFeatureKey, reducer } from './store/home.reducer';
 import { StoreModule } from '@ngrx/store';
@@ -13,33 +12,23 @@ import { OrderSuccessModalComponent } from './components/order-success-modal/ord
 import { OrderErrorModalComponent } from './components/order-error-modal/order-error-modal.component';
 import { Title } from '@angular/platform-browser';
 import { PaymentElementComponent } from 'src/app/shared/components/payment-element/payment-element.component';
-import { OrderPaymentRequiredModalComponent } from 'src/app/modules/home/components/order-payment-required-modal/order-payment-required-modal.component';
-import { OrderPaymentModalComponent } from 'src/app/modules/home/components/order-payment-modal/order-payment-modal.component';
-import { TimeRemainingComponent } from 'src/app/modules/home/components/order-payment-required-modal/time-remaining.component';
-import { HomeNotificationsComponent } from 'src/app/modules/home/components/home-notifications/home-notifications.component';
+import { PastryCardComponent } from 'src/app/shared/components/pastry-card/pastry-card.component';
+import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
+import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 
 @NgModule({
-  declarations: [
-    HomeComponent,
-    OrderFooterComponent,
-    OrderNameModalComponent,
-    OrderPaymentRequiredModalComponent,
-    OrderPaymentModalComponent,
-    TimeRemainingComponent,
-    HomeNotificationsComponent,
-    OrderSuccessModalComponent,
-    OrderErrorModalComponent,
-    OrderModalComponent,
-  ],
   imports: [
     CommonModule,
     SharedModule,
     EffectsModule.forFeature([HomeEffects]),
     StoreModule.forFeature(homeFeatureKey, reducer),
     PaymentElementComponent,
+    PastryCardComponent,
+    InformationPopoverComponent,
+    FooterComponent,
   ],
   providers: [
     Title,
-  ]
+  ],
 })
 export class HomeModule { }

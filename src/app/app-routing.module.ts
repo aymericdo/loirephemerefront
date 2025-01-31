@@ -45,7 +45,7 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     component: AboutComponent,
-    data: { routeName: "about", routeWithoutNavBar: true }
+    data: { routeName: "about", routeWithoutNavBar: true },
   },
   {
     path: ':code',

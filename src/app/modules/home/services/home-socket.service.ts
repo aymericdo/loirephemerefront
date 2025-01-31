@@ -24,8 +24,8 @@ export class HomeWebSocketService {
     }).pipe(
       map((data: any) => JSON.parse(data) as WebSocketData),
       filter((data: WebSocketData) =>
-        webSocketDataKey.some((key) => Object.keys(data).includes(key))
-      )
+        webSocketDataKey.some((key) => Object.keys(data).includes(key)),
+      ),
     );
   }
 

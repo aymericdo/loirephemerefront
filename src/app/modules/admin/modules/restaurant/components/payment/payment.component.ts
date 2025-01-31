@@ -7,15 +7,13 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { updatePaymentInformation } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
-
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
-    selector: 'app-payment',
-    templateUrl: './payment.component.html',
-    styleUrls: ['./payment.component.scss'],
-    standalone: false
+  selector: 'app-payment',
+  templateUrl: './payment.component.html',
+  styleUrls: ['./payment.component.scss'],
+  standalone: false,
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
@@ -32,7 +30,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   constructor(
     private modal: NzModalService,
     private fb: UntypedFormBuilder,
-    private store: Store<AppState>,
+    private store: Store,
   ) {
     this.isLoading$ = this.store.select(selectIsLoading);
     this.restaurant$ = this.store.select(selectRestaurant);
@@ -85,7 +83,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     this.isLoading$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((loading) => {
         if (loading) {
           this.validateForm.disable();

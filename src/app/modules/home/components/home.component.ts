@@ -1,10 +1,12 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -15,6 +17,11 @@ import { Restaurant } from 'src/app/classes/restaurant';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
+import { HomeNotificationsComponent } from 'src/app/modules/home/components/home-notifications/home-notifications.component';
+import { OrderFooterComponent } from 'src/app/modules/home/components/order-footer/order-footer.component';
+import { OrderModalComponent } from 'src/app/modules/home/components/order-modal/order-modal.component';
+import { OrderNameModalComponent } from 'src/app/modules/home/components/order-name-modal/order-name-modal.component';
+import { OrderSuccessModalComponent } from 'src/app/modules/home/components/order-success-modal/order-success-modal.component';
 import {
   HomeWebSocketService,
 } from 'src/app/modules/home/services/home-socket.service';
@@ -34,16 +41,30 @@ import {
   selectPersonalCommand,
   selectSelectedPastries,
   selectSelectedPastriesTotalCount,
-  selectTotalPrice
+  selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
 import { selectDemoResto, selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
+import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
+import { PastryCardComponent } from 'src/app/shared/components/pastry-card/pastry-card.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss'],
-    providers: [HomeWebSocketService],
-    standalone: false
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
+  providers: [HomeWebSocketService],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    FormsModule,
+    HomeNotificationsComponent,
+    PastryCardComponent,
+    InformationPopoverComponent,
+    OrderNameModalComponent,
+    OrderFooterComponent,
+    OrderModalComponent,
+    FooterComponent,
+  ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   @ViewChildren('item') itemElements!: QueryList<any>;
@@ -68,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private route: ActivatedRoute,
     private titleService: Title,
   ) {
@@ -131,7 +152,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   handleCommandClicked({ name, takeAway, pickUpTime }: CoreCommand): void {
     this.orderModalOpened = null;
-    this.store.dispatch(sendingCommand({ name, takeAway, pickUpTime }));
+    this.store.dispatch(sendingCommand({ command: { name, takeAway, pickUpTime } }));
   }
 
   handleClickReset(): void {

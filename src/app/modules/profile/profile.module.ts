@@ -21,6 +21,6 @@ import { StoreModule } from '@ngrx/store';
     SharedModule,
     EffectsModule.forFeature([ProfileEffects]),
     StoreModule.forFeature(profileFeatureKey, reducer),
-  ]
+  ],
 })
 export class ProfileModule { }

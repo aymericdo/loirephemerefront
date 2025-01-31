@@ -29,7 +29,7 @@ export class HttpResponseInterceptor implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       tap(evt => {
@@ -48,16 +48,16 @@ export class HttpResponseInterceptor implements HttpInterceptor {
           console.error(`Error Code: ${error.status}\nMessage: ${error.message}`);
 
           switch (error.status) {
-            case 401: {
-              if (!this.isIn401BlackList(req.url)) {
-                this.authService.doLogout();
-              }
-              break;
+          case 401: {
+            if (!this.isIn401BlackList(req.url)) {
+              this.authService.doLogout();
             }
+            break;
+          }
 
-            default: {
-              this.message.create('error', 'Une erreur est survenue');
-            }
+          default: {
+            this.message.create('error', 'Une erreur est survenue');
+          }
           }
         }
 

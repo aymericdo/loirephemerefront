@@ -6,23 +6,29 @@ export const fetchingUser = createAction(
   '[Login page] Fetching User',
 );
 
-export const fetchingUserRestaurants = createAction(
-  '[Login page] Fetching user restaurant',
-);
-
 export const setUserRestaurants = createAction(
   '[Login page] Set user restaurants',
-  props<{ restaurants: Restaurant[] }>()
+  props<{ restaurants: Restaurant[] }>(),
 );
 
 export const setDemoResto = createAction(
   '[Login page] Set demo resto',
-  props<{ restaurant: Restaurant }>()
+  props<{ restaurant: Restaurant }>(),
 );
 
 export const addUserRestaurants = createAction(
   '[Login page] Add user restaurant',
-  props<{ restaurant: Restaurant }>()
+  props<{ restaurant: Restaurant }>(),
+);
+
+export const postRestaurantSuccess = createAction(
+  '[Login page] Post restaurant success',
+  props<{ restaurant: Restaurant }>(),
+);
+
+export const getUserSuccess = createAction(
+  '[Login page] Get user success success',
+  props<{ user: User }>(),
 );
 
 export const refreshingUser = createAction(
@@ -31,12 +37,12 @@ export const refreshingUser = createAction(
 
 export const setUser = createAction(
   '[Login page] Set User',
-  props<{ user: User }>()
+  props<{ user: User }>(),
 );
 
 export const setUserAccess = createAction(
   '[Login page] Set User access',
-  props<{ access: Access[], restaurantId: string }>()
+  props<{ access: Access[], restaurantId: string }>(),
 );
 
 export const resetUser = createAction(
@@ -45,17 +51,17 @@ export const resetUser = createAction(
 
 export const setAuthError = createAction(
   '[Login page] Set auth error',
-  props<{ error: boolean }>()
+  props<{ error: boolean }>(),
 );
 
 export const validatingUserEmail = createAction(
   '[Login page] Validate user email',
-  props<{ email: string }>()
+  props<{ email: string }>(),
 );
 
 export const setUserEmailError = createAction(
   '[Login page] Set user email error',
-  props<{ error: boolean, duplicated: boolean }>()
+  props<{ error: boolean, duplicated: boolean }>(),
 );
 
 export const setNoAuthError = createAction(
@@ -68,37 +74,37 @@ export const setUserNoEmailError = createAction(
 
 export const createUser = createAction(
   '[Login page] Create a new user',
-  props<{ user: CoreUser, emailCode: string }>()
+  props<{ user: CoreUser, emailCode: string }>(),
 );
 
 export const confirmEmail = createAction(
   '[Login page] Confirm an email of a new user',
-  props<{ email: string, captchaToken: string }>()
+  props<{ email: string, captchaToken: string }>(),
 );
 
 export const setCode2 = createAction(
   '[Login page] Set code 2',
-  props<{ code2: string }>()
+  props<{ code2: string }>(),
 );
 
 export const openConfirmationModal = createAction(
   '[Login page] Open confirmation modal',
-  props<{ modal: 'register' | 'recover' | '' }>()
+  props<{ modal: 'register' | 'recover' | '' }>(),
 );
 
 export const openRecoverModal = createAction(
   '[Login page] Open recover modal',
-  props<{ modal: boolean }>()
+  props<{ modal: boolean }>(),
 );
 
 export const signInUser = createAction(
   '[Login page] Sign in with a user',
-  props<{ user: CoreUser }>()
+  props<{ user: CoreUser }>(),
 );
 
 export const setNewToken = createAction(
   '[Login page] Set user token',
-  props<{ token: string }>()
+  props<{ token: string }>(),
 );
 
 export const stopLoading = createAction(
@@ -107,22 +113,22 @@ export const stopLoading = createAction(
 
 export const confirmRecoverEmail = createAction(
   '[Login page] Confirm recover email',
-  props<{ email: string, captchaToken: string }>()
+  props<{ email: string, captchaToken: string }>(),
 );
 
 export const validateRecoverEmailCode = createAction(
   '[Login page] Validate recover email code',
-  props<{ email: string, emailCode: string }>()
+  props<{ email: string, emailCode: string }>(),
 );
 
 export const changePassword = createAction(
   '[Login page] Change password',
-  props<{ email: string, emailCode: string, password: string }>()
+  props<{ email: string, emailCode: string, password: string }>(),
 );
 
 export const setPasswordAsChanged = createAction(
   '[Login page] Set password as changed',
-  props<{ changed: boolean }>()
+  props<{ changed: boolean }>(),
 );
 
 export const fetchingDemoResto = createAction(
@@ -147,22 +153,22 @@ export const fetchingCurrentRestaurantPublicKey = createAction(
 
 export const setRestaurantPublicKey = createAction(
   '[Login page] Set Current Restaurant Public Key',
-  props<{ publicKey: string }>()
+  props<{ publicKey: string }>(),
 );
 
 export const fetchingRestaurant = createAction(
   '[Login page] Fetching restaurant',
-  props<{ code: string }>()
+  props<{ code: string }>(),
 );
 
 export const setRestaurant = createAction(
   '[Login page] Set restaurant',
-  props<{ restaurant: Restaurant }>()
+  props<{ restaurant: Restaurant }>(),
 );
 
 export const setIsSiderCollapsed = createAction(
   '[Login page] Set is sider collapse',
-  props<{ isCollapsed: boolean }>()
+  props<{ isCollapsed: boolean }>(),
 );
 
 export const startFirstNavigation = createAction(
@@ -175,5 +181,5 @@ export const stopFirstNavigation = createAction(
 
 export const toggleDisplayDemoResto = createAction(
   '[Login page] Toggle display demo resto',
-  props<{ displayDemoResto: boolean }>()
+  props<{ displayDemoResto: boolean }>(),
 );

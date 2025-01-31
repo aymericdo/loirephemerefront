@@ -1,21 +1,30 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, combineLatest, filter, take, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
+import { RegisterComponent } from 'src/app/modules/login/components/register/register.component';
+import { SignInComponent } from 'src/app/modules/login/components/sign-in/sign-in.component';
 import { selectUser } from 'src/app/modules/login/store/login.selectors';
 import { createRestaurant, validateRestaurantName } from 'src/app/modules/restaurant/store/restaurant.actions';
 import { selectNewRestaurant, selectRestaurantNameError } from 'src/app/modules/restaurant/store/restaurant.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-new-restaurant',
-    templateUrl: './new-restaurant.component.html',
-    styleUrls: ['./new-restaurant.component.scss'],
-    standalone: false
+  templateUrl: './new-restaurant.component.html',
+  styleUrls: ['./new-restaurant.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SignInComponent,
+    RegisterComponent,
+  ],
 })
 export class NewRestaurantComponent implements OnInit, OnDestroy {
   validateForm!: UntypedFormGroup;
@@ -29,7 +38,7 @@ export class NewRestaurantComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private router: Router,
     private fb: UntypedFormBuilder,
   ) { }

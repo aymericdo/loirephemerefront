@@ -21,7 +21,7 @@ export const PAYMENT_METHOD_LABEL = {
   internet: {
     label: $localize`Internet`,
     color: presetPalettes['orange'].primary as string,
-  }
+  },
 };
 
 export interface Discount {

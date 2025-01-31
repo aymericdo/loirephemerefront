@@ -17,20 +17,20 @@ export const initialState: ProfileState = {
 
 const profileReducer = createReducer(
   initialState,
-  on(changingPassword, (state) => ({
+  on(changingPassword, (state): ProfileState => ({
     ...state,
     loading: true,
     passwordChanged: undefined,
   })),
-  on(stopLoading, (state) => ({
+  on(stopLoading, (state): ProfileState => ({
     ...state,
     loading: false,
   })),
-  on(setPasswordAsChanged, (state, { changed }) => ({
+  on(setPasswordAsChanged, (state, { changed }): ProfileState => ({
     ...state,
     passwordChanged: changed,
   })),
-  on(setChangePasswordError, (state, { error }) => ({
+  on(setChangePasswordError, (state, { error }): ProfileState => ({
     ...state,
     changePasswordError: { error },
   })),

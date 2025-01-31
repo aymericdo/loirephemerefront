@@ -1,20 +1,20 @@
 import { createSelector } from '@ngrx/store';
 import { RestaurantState } from 'src/app/modules/admin/modules/restaurant/store/restaurant.reducer';
-import { AppState } from 'src/app/store/app.state';
+import { selectFeature as selectAdminFeature } from 'src/app/modules/admin/store/admin.selectors';
 
-export const selectFeature = (state: AppState) => state.admin.restaurant;
+export const selectFeature = createSelector(selectAdminFeature, (state) => state.restaurant);
 
 export const selectIsAlwaysOpenLoading = createSelector(
   selectFeature,
-  (state: RestaurantState) => state.isAlwaysOpenLoading
+  (state: RestaurantState) => state.isAlwaysOpenLoading,
 );
 
 export const selectIsDisplayStockLoading = createSelector(
   selectFeature,
-  (state: RestaurantState) => state.isDisplayStockLoading
+  (state: RestaurantState) => state.isDisplayStockLoading,
 );
 
 export const selectIsLoading = createSelector(
   selectFeature,
-  (state: RestaurantState) => state.loading || state.isAlwaysOpenLoading
+  (state: RestaurantState) => state.loading || state.isAlwaysOpenLoading,
 );

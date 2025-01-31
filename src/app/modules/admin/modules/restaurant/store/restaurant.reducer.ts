@@ -25,19 +25,19 @@ export const restaurantInitialState: RestaurantState = {
 
 const adminRestaurantReducer = createReducer(
   restaurantInitialState,
-  on(updatePaymentInformation, updateOpeningPickupTime, updateOpeningTime, startLoading, (state) => ({
+  on(updatePaymentInformation, updateOpeningPickupTime, updateOpeningTime, startLoading, (state): RestaurantState => ({
     ...state,
     loading: true,
   })),
-  on(updateAlwaysOpen, (state) => ({
+  on(updateAlwaysOpen, (state): RestaurantState => ({
     ...state,
     isAlwaysOpenLoading: true,
   })),
-  on(updateDisplayStock, (state) => ({
+  on(updateDisplayStock, (state): RestaurantState => ({
     ...state,
     isDisplayStockLoading: true,
   })),
-  on(stopLoading, (state) => ({
+  on(stopLoading, (state): RestaurantState => ({
     ...state,
     loading: false,
     isAlwaysOpenLoading: false,

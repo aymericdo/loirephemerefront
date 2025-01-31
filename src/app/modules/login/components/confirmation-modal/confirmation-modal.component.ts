@@ -1,14 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { NzInputOtpComponent } from 'ng-zorro-antd/input';
 import { Observable } from 'rxjs';
 import { selectLoading } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-confirmation-modal',
-    templateUrl: './confirmation-modal.component.html',
-    styleUrls: ['./confirmation-modal.component.scss'],
-    standalone: false
+  selector: 'app-confirmation-modal',
+  templateUrl: './confirmation-modal.component.html',
+  styleUrls: ['./confirmation-modal.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgZorroModule,
+    NzInputOtpComponent,
+  ],
 })
 export class ConfirmationModalComponent implements OnInit {
   @Input() submitButton = $localize`Suivant`;
@@ -17,7 +25,7 @@ export class ConfirmationModalComponent implements OnInit {
   isLoading$!: Observable<boolean>;
   value: string = '';
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store) { }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(selectLoading);

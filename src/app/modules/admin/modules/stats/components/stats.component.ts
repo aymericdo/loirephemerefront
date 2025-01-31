@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
-  ChartData
+  ChartData,
 } from 'chart.js';
 import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
@@ -15,12 +15,11 @@ import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, resetTimeInt
 import { statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
 import { selectAllPastries, selectIsLoading, selectPayedCommands, selectTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
-    templateUrl: './stats.component.html',
-    styleUrls: ['./stats.component.scss'],
-    standalone: false
+  templateUrl: './stats.component.html',
+  styleUrls: ['./stats.component.scss'],
+  standalone: false,
 })
 export class StatsComponent implements OnInit, OnDestroy {
   payedCommands$: Observable<Command[]>;
@@ -38,69 +37,69 @@ export class StatsComponent implements OnInit, OnDestroy {
   pastriesByTypeByDatePieChartData: { [key in PastryType]: ChartData<'pie', number[], string | string[]> } = {
     pastry: {
       labels: [],
-      datasets: []
+      datasets: [],
     },
     drink: {
       labels: [],
-      datasets: []
+      datasets: [],
     },
     tip: {
       labels: [],
-      datasets: []
+      datasets: [],
     },
     other: {
       labels: [],
-      datasets: []
-    }
+      datasets: [],
+    },
   };
 
   countByPaymentPieChartData: ChartData<'pie', number[], string | string[]> = {
     labels: [],
-    datasets: []
+    datasets: [],
   };
 
   valueByPaymentPieChartData: ChartData<'pie', number[], string | string[]> = {
     labels: [],
-    datasets: []
+    datasets: [],
   };
 
   pastriesByTypeByDateBarChartData: { [key in PastryType]: ChartData<'bar'> } = {
     pastry: {
       labels: [],
-      datasets: []
+      datasets: [],
     },
     drink: {
       labels: [],
-      datasets: []
+      datasets: [],
     },
     tip: {
       labels: [],
-      datasets: []
+      datasets: [],
     },
     other: {
       labels: [],
-      datasets: []
-    }
+      datasets: [],
+    },
   };
 
   globalBarChartData: ChartData<'bar' | 'line'> = {
     labels: [],
-    datasets: []
+    datasets: [],
   };
 
   paymentGlobalBarChartData: ChartData<'bar' | 'line'> = {
     labels: [],
-    datasets: []
+    datasets: [],
   };
 
   totalByType: {
     [key in PastryType]: number
   } = {
-    pastry: 0,
-    drink: 0,
-    tip: 0,
-    other: 0,
-  };
+      pastry: 0,
+      drink: 0,
+      tip: 0,
+      other: 0,
+    };
 
   commandsCount: number = 0;
   totalCash: number = 0;
@@ -118,7 +117,7 @@ export class StatsComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private router: Router,
     private route: ActivatedRoute,
     private datepipe: DatePipe,
@@ -135,14 +134,14 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.store.dispatch(startLoading());
 
     this.route.paramMap.pipe(
-      takeUntil(this.destroyed$)
+      takeUntil(this.destroyed$),
     ).subscribe(params => {
       const code: string = params.get('code')!;
       this.store.dispatch(fetchingAllRestaurantPastries({ code: code }));
     });
 
     this.route.queryParamMap.pipe(
-      takeUntil(this.destroyed$)
+      takeUntil(this.destroyed$),
     ).subscribe((params: ParamMap) => {
       const defaultQueryParam: {
         tab?: string,
@@ -165,7 +164,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     });
 
     this.years = Array.from({
-      length: +nowYear - 2021 + 1
+      length: +nowYear - 2021 + 1,
     }, (v, k) => k + 2021).map((year) => year.toString());
 
     this.restaurant$.pipe(
@@ -202,7 +201,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     combineLatest([this.payedCommands$, this.pastries$, this.timeInterval$, this.isLoading$])
       .pipe(
         filter(([_commands, _pastries, _timeInterval, isLoading]) => !isLoading),
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       )
       .subscribe(([commands, pastries, timeInterval]) => {
         this.totallyEmpty = commands.length === 0;
@@ -337,9 +336,10 @@ export class StatsComponent implements OnInit, OnDestroy {
 
       const realState: { [attribute: string]: (string | number) } =
         this.statsAttributes.reduce((prev, attr: string) => {
-        (prev as { [attribute: string]: (string | number) })[attr] = pastry[attr as keyof Pastry] as (string | number);
-        return prev;
-      }, {} as { [attribute: string]: (string | number) });
+          (prev as { [attribute: string]: (string | number) })[attr] =
+            pastry[attr as keyof Pastry] as (string | number);
+          return prev;
+        }, {} as { [attribute: string]: (string | number) });
 
       let historicalDateIndex = 0;
       while (historicalDateIndex < pastry.historical.length - 1
@@ -365,7 +365,7 @@ export class StatsComponent implements OnInit, OnDestroy {
 
   private setCountByPayment(
     countByPayment: { [key in PaymentType]: number },
-    command: Command
+    command: Command,
   ): void {
     if (!command.payment?.length) return;
 
@@ -376,7 +376,7 @@ export class StatsComponent implements OnInit, OnDestroy {
 
   private setValueByPayment(
     valueByPayment: { [key in PaymentType]: number },
-    command: Command
+    command: Command,
   ): void {
     if (!command.payment?.length) return;
 
@@ -521,8 +521,8 @@ export class StatsComponent implements OnInit, OnDestroy {
             prev.push(last + dayTotal);
 
             return prev;
-          }, [])
-      }]
+          }, []),
+      }],
     };
   }
 
@@ -569,7 +569,7 @@ export class StatsComponent implements OnInit, OnDestroy {
       } else {
         this.pastriesByTypeByDatePieChartData[type] = {
           labels: [],
-          datasets: []
+          datasets: [],
         };
       }
     });
@@ -602,7 +602,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     (Object.keys(countByTypeByPastry) as PastryType[]).forEach((type: PastryType) => {
       this.totalByType[type] = Object.values(countByTypeByPastry[type]).reduce(
         (prev, v) => prev + v,
-        0
+        0,
       );
     });
   }
@@ -624,5 +624,5 @@ export class StatsComponent implements OnInit, OnDestroy {
     const difference = date1.getTime() - date2.getTime();
     const total = Math.ceil(difference / (1000 * 3600 * 24));
     return total > 0 ? total : total * -1;
-};
+  };
 }

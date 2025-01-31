@@ -5,14 +5,12 @@ import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { updateDisplayStock } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsDisplayStockLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
-
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
-    templateUrl: './restaurant.component.html',
-    styleUrls: ['./restaurant.component.scss'],
-    standalone: false
+  templateUrl: './restaurant.component.html',
+  styleUrls: ['./restaurant.component.scss'],
+  standalone: false,
 })
 export class RestaurantComponent implements OnInit, OnDestroy {
   @ViewChild('download', { static: false }) download!: ElementRef;
@@ -24,7 +22,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private router: Router,
     private route: ActivatedRoute,
   ) {
@@ -34,7 +32,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.queryParamMap.pipe(
-      takeUntil(this.destroyed$)
+      takeUntil(this.destroyed$),
     ).subscribe((params) => {
       if (!params.get('tab')) {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'info' } });

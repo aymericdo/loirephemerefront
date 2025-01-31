@@ -54,7 +54,15 @@
           2,
           "always"
         ],
+        "indent": ["error", 2],
+        "comma-dangle": ["error", "always-multiline"],
         "no-unused-vars": "off",
+        "@ngrx/prefer-concat-latest-from": [
+          "warn",
+          {
+            "strict": false
+          }
+        ],
         "unused-imports/no-unused-imports": "error",
         "unused-imports/no-unused-vars": [
           "warn",

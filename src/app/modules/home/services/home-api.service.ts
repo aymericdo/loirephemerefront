@@ -37,21 +37,21 @@ export class HomeApiService {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}/personal-command/${commandId}/mark-as-payed`, {
         sessionId,
-      }
+      },
     ) as Observable<Command>;
   }
 
   postCommand(restaurantCode: string, command: CoreCommand): Observable<Command> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}`,
-      command
+      command,
     ) as Observable<Command>;
   }
 
   postSub(commandId: string, sub: PushSubscription): Observable<any> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/pastries/notification`,
-      { commandId, sub }
+      { commandId, sub },
     );
   }
 }

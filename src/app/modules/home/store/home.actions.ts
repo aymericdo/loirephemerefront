@@ -5,64 +5,65 @@ import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 
 export const fetchRestaurantPastries = createAction(
   '[Home page] Fetch pastries for a restaurant',
-  props<{ code: string }>()
+  props<{ code: string }>(),
 );
 export const setPastries = createAction(
   '[Home page] Set pastries',
-  props<{ pastries: Pastry[] }>()
+  props<{ pastries: Pastry[] }>(),
 );
 export const incrementPastry = createAction(
   '[Home page] Increment pastry',
-  props<{ pastry: Pastry }>()
+  props<{ pastry: Pastry }>(),
 );
 export const decrementPastry = createAction(
   '[Home page] Decrement pastry',
-  props<{ pastry: Pastry }>()
+  props<{ pastry: Pastry }>(),
 );
 export const sendingCommand = createAction(
   '[Home page] Sending command',
-  props<CoreCommand>()
+  props<{ command: CoreCommand }>(),
 );
 export const openHomeModal = createAction(
   '[Home page] Open home modal',
-  props<{ modal: HomeModalType }>()
+  props<{ modal: HomeModalType }>(),
 );
+export const closeErrorModal = createAction('[Home page] Close error modal');
 export const closeHomeModal = createAction('[Home page] Close home modal');
 export const resetCommand = createAction('[Home page] Reset command');
 export const fetchingPersonalCommand = createAction(
   '[Home page] Fetching personal command',
-  props<{ commandId: string }>()
+  props<{ commandId: string }>(),
 );
 export const cancelPersonalCommand = createAction(
   '[Home page] Cancel personal command',
-  props<{ commandId: string }>()
+  props<{ commandId: string }>(),
 );
 export const markPersonalCommandAsPayed = createAction(
   '[Home page] Mark personal command as payed',
-  props<{ commandId: string, sessionId: string }>()
+  props<{ commandId: string, sessionId: string }>(),
 );
 export const resetPersonalCommand = createAction('[Home page] Reset personal command');
 export const setPersonalCommand = createAction(
   '[Home page] Set personal command',
-  props<{ command: Command }>()
+  props<{ command: Command }>(),
 );
 export const setErrorCommand = createAction(
   '[Home page] Set error command',
-  props<{ error: any }>()
+  props<{ error: any }>(),
 );
 export const resetErrorCommand = createAction(
   '[Home page] Reset error command',
 );
 export const setStock = createAction(
   '[Home page] Set stock',
-  props<{ pastryId: string; newStock: number }>()
+  props<{ pastryId: string; newStock: number }>(),
 );
 export const sendNotificationSub = createAction(
   '[Home page] Send notification sub',
-  props<{ commandId: string; sub: PushSubscription }>()
+  props<{ commandId: string; sub: PushSubscription }>(),
 );
 export const notificationSubSent = createAction(
-  '[Home page] Notification sub sent'
+  '[Home page] Notification sub sent',
 );
 export const stopLoading = createAction(
   '[Home page] Stop loading',

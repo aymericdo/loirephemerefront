@@ -61,7 +61,7 @@ export class AdminApiService {
   postPastry(code: string, pastry: CorePastry): Observable<Pastry> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}`,
-      pastry
+      pastry,
     ) as Observable<Pastry>;
   }
 
@@ -69,7 +69,7 @@ export class AdminApiService {
     Observable<{ pastry: Pastry, displaySequenceById: { [pastryId: string]: number } }> {
     return this.http.put(
       `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}`,
-      pastry
+      pastry,
     ) as Observable<{ pastry: Pastry, displaySequenceById: { [pastryId: string]: number } }>;
   }
 
@@ -78,7 +78,7 @@ export class AdminApiService {
       `${this.protocolHttp}${this.baseUrl}/pastries/by-code/${code}/common-stock`, {
         pastryIds,
         commonStock,
-      }
+      },
     ) as Observable<Pastry[]>;
   }
 
@@ -96,19 +96,19 @@ export class AdminApiService {
 
   closeCommand(code: string, commandId: string): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/close/${commandId}`, null
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/close/${commandId}`, null,
     );
   }
 
   deletingCommand(code: string, commandId: string): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/cancel/${commandId}`, null
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/cancel/${commandId}`, null,
     );
   }
 
   payedCommand(code: string, commandId: string, payments: PaymentPossibility[], discount: Discount): Observable<any> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, { payments, discount }
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, { payments, discount },
     );
   }
 
@@ -121,35 +121,35 @@ export class AdminApiService {
   postUserToRestaurant(code: string, email: string): Observable<User> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/users/by-code/${code}`,
-      { email }
+      { email },
     ) as Observable<User>;
   }
 
   deleteUserToRestaurant(code: string, id: string): Observable<boolean> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/users/by-code/${code}/delete`,
-      { id }
+      { id },
     ) as Observable<boolean>;
   }
 
   patchUserRestaurantAccess(code: string, id: string, access: Access[]): Observable<User> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/users/by-code/${code}`,
-      { id, access }
+      { id, access },
     ) as Observable<User>;
   }
 
   postSub(sub: PushSubscription, code: string): Observable<any> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/notification`,
-      { sub }
+      { sub },
     );
   }
 
   deleteSub(code: string): Observable<any> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/notification/delete`,
-      { }
+      { },
     );
   }
 
@@ -158,7 +158,7 @@ export class AdminApiService {
     openingTime: { [weekDay: number]: { startTime: string; endTime: string } }): Observable<Restaurant> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/opening-time`,
-      { openingTime }
+      { openingTime },
     ) as Observable<Restaurant>;
   }
 
@@ -167,7 +167,7 @@ export class AdminApiService {
     openingTime: { [weekDay: number]: { startTime: string } }): Observable<Restaurant> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/opening-pickup-time`,
-      { openingTime }
+      { openingTime },
     ) as Observable<Restaurant>;
   }
 
@@ -180,7 +180,7 @@ export class AdminApiService {
   ): Observable<Restaurant> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/payment-information`,
-      { paymentActivated, paymentRequired, publicKey, secretKey }
+      { paymentActivated, paymentRequired, publicKey, secretKey },
     ) as Observable<Restaurant>;
   }
 
@@ -189,7 +189,7 @@ export class AdminApiService {
     displayStock: boolean): Observable<Restaurant> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/display-stock`,
-      { displayStock }
+      { displayStock },
     ) as Observable<Restaurant>;
   }
 
@@ -198,7 +198,7 @@ export class AdminApiService {
     alwaysOpen: boolean): Observable<Restaurant> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/always-open`,
-      { alwaysOpen }
+      { alwaysOpen },
     ) as Observable<Restaurant>;
   }
 }

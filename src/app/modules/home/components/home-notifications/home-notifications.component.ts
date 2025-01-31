@@ -5,20 +5,32 @@ import { NzNotificationComponent, NzNotificationService } from 'ng-zorro-antd/no
 import { Observable, ReplaySubject, combineLatest, filter, map, switchMap, take, takeUntil } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
-import { cancelPersonalCommand, closeHomeModal, fetchingPersonalCommand, openHomeModal, resetErrorCommand, sendNotificationSub, setStock } from 'src/app/modules/home/store/home.actions';
+import { cancelPersonalCommand, closeErrorModal, closeHomeModal, fetchingPersonalCommand, openHomeModal, sendNotificationSub, setStock } from 'src/app/modules/home/store/home.actions';
 import { selectCurrentSentCommandFromCommandList, selectErrorCommand, selectHomeModal, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
-import { AppState } from 'src/app/store/app.state';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { SwPush } from '@angular/service-worker';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
+import { CommonModule } from '@angular/common';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+import { OrderSuccessModalComponent } from 'src/app/modules/home/components/order-success-modal/order-success-modal.component';
+import { OrderPaymentModalComponent } from 'src/app/modules/home/components/order-payment-modal/order-payment-modal.component';
+import { OrderErrorModalComponent } from 'src/app/modules/home/components/order-error-modal/order-error-modal.component';
+import { OrderPaymentRequiredModalComponent } from 'src/app/modules/home/components/order-payment-required-modal/order-payment-required-modal.component';
 
 @Component({
-    selector: 'app-home-notifications',
-    templateUrl: './home-notifications.component.html',
-    standalone: false
+  selector: 'app-home-notifications',
+  templateUrl: './home-notifications.component.html',
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    OrderErrorModalComponent,
+    OrderSuccessModalComponent,
+    OrderPaymentModalComponent,
+    OrderPaymentRequiredModalComponent,
+  ],
 })
 export class HomeNotificationsComponent implements OnInit, OnDestroy {
   @ViewChild('notificationPayedBtnTpl', { static: true }) notificationPayedBtnTemplate!: TemplateRef<{ $implicit: NzNotificationComponent }>;
@@ -36,7 +48,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private router: Router,
     private route: ActivatedRoute,
     private notification: NzNotificationService,
@@ -77,20 +89,20 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
       this.personalCommand$.pipe(filter(Boolean)),
       this.restaurant$.pipe(filter(Boolean)),
     ])
-    .pipe(
-      map((data) => ({ commandId: data[0], personalCommand: data[1] })),
-      takeUntil(this.destroyed$),
-    ).subscribe(({ commandId, personalCommand }) => {
-      if (commandId === personalCommand.id) {
-        this.router.navigate(['.'], { relativeTo: this.route });
+      .pipe(
+        map((data) => ({ commandId: data[0], personalCommand: data[1] })),
+        takeUntil(this.destroyed$),
+      ).subscribe(({ commandId, personalCommand }) => {
+        if (commandId === personalCommand.id) {
+          this.router.navigate(['.'], { relativeTo: this.route });
 
-        if (personalCommand.paymentRequired) {
-          this.store.dispatch(openHomeModal({ modal: 'success' }));
-        } else {
-          this.openWaitingConfirmationNotification();
+          if (personalCommand.paymentRequired) {
+            this.store.dispatch(openHomeModal({ modal: 'success' }));
+          } else {
+            this.openWaitingConfirmationNotification();
+          }
         }
-      }
-    });
+      });
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
@@ -104,7 +116,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
             });
 
             this.store.dispatch(
-              sendNotificationSub({ commandId: command.id!, sub })
+              sendNotificationSub({ commandId: command.id!, sub }),
             );
             console.log('Subscription to notifications ok');
           } catch (err) {
@@ -116,7 +128,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
           JSON.stringify({
             event: 'addWaitingQueue',
             data: command.id,
-          })
+          }),
         );
       });
 
@@ -162,8 +174,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
 
   handleCloseErrorModal(): void {
     this.router.navigate(['.'], { relativeTo: this.route });
-    this.store.dispatch(closeHomeModal());
-    this.store.dispatch(resetErrorCommand());
+    this.store.dispatch(closeErrorModal());
   }
 
   handleCloseSuccessModal(): void {
@@ -185,7 +196,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
           nzDuration: 0,
           nzKey: this.personalCommand!.id,
           nzButton: this.notificationPayedBtnTemplate,
-        }
+        },
       ).messageId;
   }
 
@@ -204,7 +215,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
               setStock({
                 pastryId: data.stockChanged.pastryId as string,
                 newStock: data.stockChanged.newStock as number,
-              })
+              }),
             );
           } else if (data.hasOwnProperty('wizz')) {
             const commandId = data.wizz.commandId;
@@ -224,8 +235,8 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
             }, 1000);
           }
           console.log('The observable stream is complete');
-        }
-     });
+        },
+      });
   }
 
   private openSentCommandNotification(commandId: string): void {
@@ -239,16 +250,16 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
             $localize`Bonne dégustation ! 🥰`, {
               nzDuration: 0,
               nzKey: commandId,
-            }
+            },
           );
 
-          if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
+        if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
 
-          this.audio = new Audio('assets/sounds/french.mp3');
-          this.audio.pause();
-          this.audio.currentTime = 0;
-          this.audio.play();
-        });
+        this.audio = new Audio('assets/sounds/french.mp3');
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        this.audio.play();
+      });
 
     if (this.swPush.isEnabled) {
       try {

@@ -19,7 +19,7 @@ export class RestaurantApiService {
   postRestaurant(restaurant: CoreRestaurant): Observable<Restaurant> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/restaurants`,
-      restaurant
+      restaurant,
     ) as Observable<Restaurant>;
   }
 

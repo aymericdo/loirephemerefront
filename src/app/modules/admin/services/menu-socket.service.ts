@@ -30,13 +30,13 @@ export class MenuWebSocketService {
           this.sendMessage(
             JSON.stringify({
               event: 'menuAuthorization',
-            })
+            }),
           );
         }
       }),
       filter((data: WebSocketData) =>
-        webSocketDataKey.some((key) => Object.keys(data).includes(key))
-      )
+        webSocketDataKey.some((key) => Object.keys(data).includes(key)),
+      ),
     );
   }
 

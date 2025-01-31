@@ -8,15 +8,13 @@ import { hourMinuteToDate } from 'src/app/helpers/date';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { startLoading, stopLoading, updateOpeningPickupTime } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
-
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
-    selector: 'app-opening-pickup',
-    templateUrl: './opening-pickup.component.html',
-    styleUrls: ['./opening-pickup.component.scss'],
-    standalone: false
+  selector: 'app-opening-pickup',
+  templateUrl: './opening-pickup.component.html',
+  styleUrls: ['./opening-pickup.component.scss'],
+  standalone: false,
 })
 export class OpeningPickupComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
@@ -32,7 +30,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private datepipe: DatePipe,
     private fb: UntypedFormBuilder,
     private modal: NzModalService,
@@ -94,7 +92,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
 
     this.isLoading$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((loading) => {
         if (loading) {
           this.validateForm.disable();
@@ -161,7 +159,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
           };
 
           return prev;
-        }, {} as { [weekDay: number]: { startTime: string } })
+        }, {} as { [weekDay: number]: { startTime: string } }),
     }));
   }
 
@@ -177,11 +175,11 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
             !this.disabledHours(wd)
               .includes(this.validateForm.controls[weekDayNumber].value.startTime?.getHours()) &&
             !this.disabledMinutes(wd, this.validateForm.controls[weekDayNumber].value.startTime?.getHours())
-              .includes(this.validateForm.controls[weekDayNumber].value.startTime?.getMinutes())
+              .includes(this.validateForm.controls[weekDayNumber].value.startTime?.getMinutes()),
           )
           .forEach((wd) => {
-          this.validateForm.controls[wd].setValue(this.validateForm.controls[weekDayNumber].value);
-        });
+            this.validateForm.controls[wd].setValue(this.validateForm.controls[weekDayNumber].value);
+          });
       },
       nzCancelText: $localize`Annuler`,
     });

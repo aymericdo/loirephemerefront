@@ -32,35 +32,35 @@ export const statsInitialState: StatsState = {
 
 const statsReducer = createReducer(
   statsInitialState,
-  on(startLoading, fetchingAllRestaurantPastries, fetchingRestaurantCommands, (state) => ({
+  on(startLoading, fetchingAllRestaurantPastries, fetchingRestaurantCommands, (state): StatsState => ({
     ...state,
     loading: true,
   })),
-  on(fetchingAllRestaurantPastries, (state) => ({
+  on(fetchingAllRestaurantPastries, (state): StatsState => ({
     ...state,
     allPastries: [...pastriesMock],
   })),
-  on(fetchingRestaurantCommands, (state) => ({
+  on(fetchingRestaurantCommands, (state): StatsState => ({
     ...state,
     commands: [...commandsMock],
   })),
-  on(setAllPastries, (state, { pastries }) => ({
+  on(setAllPastries, (state, { pastries }): StatsState => ({
     ...state,
     allPastries: [...pastries],
   })),
-  on(setCommands, (state, { commands }) => ({
+  on(setCommands, (state, { commands }): StatsState => ({
     ...state,
     commands: [...commands],
   })),
-  on(setTimeInterval, (state, { timeInterval }) => ({
+  on(setTimeInterval, (state, { timeInterval }): StatsState => ({
     ...state,
     timeInterval,
   })),
-  on(resetTimeInterval, (state) => ({
+  on(resetTimeInterval, (state): StatsState => ({
     ...state,
     timeInterval: statsInitialState.timeInterval,
   })),
-  on(stopLoading, (state) => ({
+  on(stopLoading, (state): StatsState => ({
     ...state,
     loading: false,
   })),

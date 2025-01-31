@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { fr_FR } from 'ng-zorro-antd/i18n';
@@ -22,6 +21,8 @@ import { AuthInterceptor } from 'src/app/auth/auth.interceptor';
 import { HttpResponseInterceptor } from 'src/app/shared/services/http-response.interceptor';
 import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
 import { LoginModule } from 'src/app/modules/login/login.module';
+import { NavComponent } from 'src/app/shared/components/nav/nav.component';
+import { AppComponent } from 'src/app/app.component';
 
 registerLocaleData(fr, 'fr');
 
@@ -33,7 +34,7 @@ const ngZorroConfig: NzConfig = {
 };
 
 @NgModule({
-  declarations: [AppComponent, FourOhFourComponent],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
   imports: [
     AppRoutingModule,
@@ -52,6 +53,8 @@ const ngZorroConfig: NzConfig = {
       maxAge: 25,
       logOnly: environment.production,
     }),
+    NavComponent,
+    FourOhFourComponent,
   ],
   providers: [
     { provide: NZ_I18N, useValue: fr_FR },

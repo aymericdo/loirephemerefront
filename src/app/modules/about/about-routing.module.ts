@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: AboutComponent,
-    data: { routeName: "about", routeWithoutNavBar: true }
+    data: { routeName: "about", routeWithoutNavBar: true },
   },
   { path: '**', redirectTo: '/page/404' },
 ];

@@ -18,30 +18,32 @@ export interface CommandsState {
   commands: Command[];
   loading: boolean;
   sub: PushSubscription | null;
+  adminSub: PushSubscription | null;
 }
 
 export const commandsInitialState: CommandsState = {
   commands: [...commandsMock],
   loading: false,
   sub: null,
+  adminSub: null,
 };
 
 const adminReducer = createReducer(
   commandsInitialState,
-  on(startLoading, fetchingRestaurantCommands, (state) => ({
+  on(startLoading, fetchingRestaurantCommands, (state): CommandsState => ({
     ...state,
     loading: true,
     commands: [...commandsMock],
   })),
-  on(setCommands, (state, { commands }) => ({
+  on(setCommands, (state, { commands }): CommandsState => ({
     ...state,
     commands: [...commands],
   })),
-  on(stopLoading, (state) => ({
+  on(stopLoading, (state): CommandsState => ({
     ...state,
     loading: false,
   })),
-  on(addCommand, (state, { command }) => ({
+  on(addCommand, (state, { command }): CommandsState => ({
     ...state,
     commands: [...state.commands, command],
   })),
@@ -55,11 +57,11 @@ const adminReducer = createReducer(
       commands: newList,
     };
   }),
-  on(setNotificationSub, (state, { sub }) => ({
+  on(setNotificationSub, (state, { sub }): CommandsState => ({
     ...state,
     sub,
   })),
-  on(removeNotificationSub, (state) => ({
+  on(removeNotificationSub, (state): CommandsState => ({
     ...state,
     adminSub: null,
   })),

@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
@@ -8,13 +9,18 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-pastry-form',
-    templateUrl: './pastry-form.component.html',
-    styleUrls: ['./pastry-form.component.scss'],
-    standalone: false
+  selector: 'app-pastry-form',
+  templateUrl: './pastry-form.component.html',
+  styleUrls: ['./pastry-form.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class PastryFormComponent implements OnInit {
   @Input() restaurant: Restaurant = null!;
@@ -35,7 +41,7 @@ export class PastryFormComponent implements OnInit {
   @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
 
   constructor(
-    private store: Store<AppState>,
+    private store: Store,
     private msg: NzMessageService,
     private adminApiService: AdminApiService,
   ) { }

@@ -4,12 +4,19 @@ import { ReplaySubject, takeUntil, timer } from 'rxjs';
 import { addMinutes, getNumberListBetweenTwoNumbers } from 'src/app/helpers/date';
 import { CoreCommand } from 'src/app/interfaces/command.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
+import { CommonModule } from '@angular/common';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-order-name-modal',
-    templateUrl: './order-name-modal.component.html',
-    styleUrls: ['./order-name-modal.component.scss'],
-    standalone: false
+  selector: 'app-order-name-modal',
+  templateUrl: './order-name-modal.component.html',
+  styleUrls: ['./order-name-modal.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    FormsModule,
+  ],
 })
 export class OrderNameModalComponent implements OnInit, OnDestroy {
   @Input() restaurant!: RestaurantInterface;
@@ -67,7 +74,7 @@ export class OrderNameModalComponent implements OnInit, OnDestroy {
 
   disabledMinutes(hour: number): number[] {
     const selectableMinutes: number[] = hour && this.selectableMinutesByHour.hasOwnProperty(hour) ?
-    this.selectableMinutesByHour[hour] :
+      this.selectableMinutesByHour[hour] :
       Object.values(this.selectableMinutesByHour).flat();
 
     const allMinutes: number[] = getNumberListBetweenTwoNumbers(0, 59);
@@ -80,7 +87,7 @@ export class OrderNameModalComponent implements OnInit, OnDestroy {
     this.clickOk.emit({
       name: this.currentFirstName,
       takeAway: this.takeAwayValue,
-      pickUpTime: this.needPickUpTimeValue ? this.pickUpTimeValue : null
+      pickUpTime: this.needPickUpTimeValue ? this.pickUpTimeValue : null,
     });
   }
 
@@ -137,7 +144,7 @@ export class OrderNameModalComponent implements OnInit, OnDestroy {
 
   private getSelectableHoursMinutes(): {
     selectableHours: number[], selectableMinutesByHour: { [hour: string]: number[] },
-  } {
+    } {
     const restaurant = new Restaurant(this.restaurant);
     if (restaurant.alwaysOpen) {
       return {
@@ -158,7 +165,7 @@ export class OrderNameModalComponent implements OnInit, OnDestroy {
 
     const endRange: Date = restaurant.getTodayClosingTime();
 
-      while(cursor < endRange) {
+    while(cursor < endRange) {
       if (restaurant.isOpen(cursor) && cursor.getMinutes() <= 50) {
         const cursorHour = cursor.getHours();
         if (!selectableHours.includes(cursorHour)) {

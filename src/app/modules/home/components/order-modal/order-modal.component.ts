@@ -1,11 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-order-modal',
-    templateUrl: './order-modal.component.html',
-    styleUrls: ['./order-modal.component.scss'],
-    standalone: false
+  selector: 'app-order-modal',
+  templateUrl: './order-modal.component.html',
+  styleUrls: ['./order-modal.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class OrderModalComponent implements OnInit {
   @Input() allPastries: Pastry[] = [];
@@ -25,7 +30,7 @@ export class OrderModalComponent implements OnInit {
         prev.push(`${name} (x${this.selectedPastries[pastryId]})`);
         return prev;
       },
-      [] as string[]
+      [] as string[],
     );
   }
 }

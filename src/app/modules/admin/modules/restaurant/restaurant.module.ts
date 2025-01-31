@@ -8,6 +8,7 @@ import { RestaurantEffects } from 'src/app/modules/admin/modules/restaurant/stor
 import { OpeningHoursComponent } from 'src/app/modules/admin/modules/restaurant/components/opening-hours/opening-hours.component';
 import { OpeningPickupComponent } from 'src/app/modules/admin/modules/restaurant/components/opening-pickup/opening-pickup.component';
 import { PaymentComponent } from 'src/app/modules/admin/modules/restaurant/components/payment/payment.component';
+import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { PaymentComponent } from 'src/app/modules/admin/modules/restaurant/compo
     CommonModule,
     SharedModule,
     EffectsModule.forFeature([RestaurantEffects]),
+    InformationPopoverComponent,
   ],
 })
 export class RestaurantModule { }

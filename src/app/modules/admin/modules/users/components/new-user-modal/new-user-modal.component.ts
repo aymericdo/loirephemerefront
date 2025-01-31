@@ -7,13 +7,12 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { addingUserToRestaurant, validatingUserEmail } from 'src/app/modules/admin/modules/users/store/users.actions';
 import { selectUserEmailError } from 'src/app/modules/admin/modules/users/store/users.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
-    selector: 'app-new-user-modal',
-    templateUrl: './new-user-modal.component.html',
-    styleUrls: ['./new-user-modal.component.scss'],
-    standalone: false
+  selector: 'app-new-user-modal',
+  templateUrl: './new-user-modal.component.html',
+  styleUrls: ['./new-user-modal.component.scss'],
+  standalone: false,
 })
 export class NewUserModalComponent implements OnInit {
   @Input() users!: User[];
@@ -26,7 +25,7 @@ export class NewUserModalComponent implements OnInit {
 
   SIZE = SIZE;
 
-  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private store: Store, private fb: UntypedFormBuilder) { }
 
   ngOnInit(): void {
     this.userEmailError$ = this.store.select(selectUserEmailError);

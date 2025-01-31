@@ -1,17 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, fromEvent, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { selectDemoResto, selectUser } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    templateUrl: './about.component.html',
-    styleUrls: ['./about.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  templateUrl: './about.component.html',
+  styleUrls: ['./about.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    RouterModule,
+  ],
 })
 export class AboutComponent implements OnInit, OnDestroy {
   @ViewChildren('sectionImg') sectionImgs!: QueryList<ElementRef<HTMLDivElement>>;
@@ -28,21 +33,21 @@ export class AboutComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private changeDetectorRef: ChangeDetectorRef,
-    private store: Store<AppState>,
+    private store: Store,
   ) {
     this.demoResto$ = this.store.select(selectDemoResto);
     this.user$ = this.store.select(selectUser);
 
     fromEvent(window, 'scroll')
       .pipe(takeUntil(this.destroyed$))
-			.subscribe((_e: Event) => {
+      .subscribe((_e: Event) => {
         this.movingElements();
       });
   }
 
   ngOnInit(): void {
     this.route.queryParams.pipe(
-      takeUntil(this.destroyed$)
+      takeUntil(this.destroyed$),
     ).subscribe((params) => {
       if (!params['tab']) {
         this.router.navigate([], { relativeTo: this.route, queryParams: { tab: 'context' } });

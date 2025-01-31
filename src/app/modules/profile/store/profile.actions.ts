@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 
 export const changingPassword = createAction(
   '[Profile page] Changing password',
-  props<{ oldPassword: string, password: string }>()
+  props<{ oldPassword: string, password: string }>(),
 );
 
 export const stopLoading = createAction(
@@ -11,15 +11,15 @@ export const stopLoading = createAction(
 
 export const setPasswordAsChanged = createAction(
   '[Profile page] Set password as changed',
-  props<{ changed: boolean }>()
+  props<{ changed: boolean }>(),
 );
 
 export const setChangePasswordError = createAction(
   '[Profile page] Set change password error',
-  props<{ error: boolean }>()
+  props<{ error: boolean }>(),
 );
 
 export const updatingDisplayDemoResto = createAction(
   '[Profile page] Updating display demo resto',
-  props<{ displayDemoResto: boolean }>()
+  props<{ displayDemoResto: boolean }>(),
 );

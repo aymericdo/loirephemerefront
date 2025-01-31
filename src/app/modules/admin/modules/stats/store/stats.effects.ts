@@ -12,8 +12,8 @@ import {
 
 @Injectable()
 export class StatsEffects {
-  fetchingAllRestaurantPastries$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchingAllRestaurantPastries$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fetchingAllRestaurantPastries),
       mergeMap((action) => {
         return this.adminApiService.getAllPastries(action.code).pipe(
@@ -21,12 +21,12 @@ export class StatsEffects {
             return [setAllPastries({ pastries })];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
-  fetchingRestaurantCommands$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchingRestaurantCommands$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fetchingRestaurantCommands),
       mergeMap((action) => {
         return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate, true).pipe(
@@ -34,9 +34,9 @@ export class StatsEffects {
             return [setCommands({ commands }), stopLoading()];
           }),
         );
-      })
-    )
-  );
+      }),
+    );
+  });
 
   constructor(
     private actions$: Actions,

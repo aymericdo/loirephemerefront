@@ -18,7 +18,7 @@ export class ProfileApiService {
   postChangePassword(oldPassword: string, password: string): Observable<boolean> {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/users/change-old-password`,
-      { oldPassword, password }
+      { oldPassword, password },
     ) as Observable<boolean>;
   }
 
@@ -26,7 +26,7 @@ export class ProfileApiService {
     displayDemoResto: boolean): Observable<boolean> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/users/display-demo-resto`,
-      { displayDemoResto }
+      { displayDemoResto },
     ) as Observable<boolean>;
   }
 }

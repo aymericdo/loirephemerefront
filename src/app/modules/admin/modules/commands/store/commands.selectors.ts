@@ -1,9 +1,9 @@
 import { createSelector } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { CommandsState } from 'src/app/modules/admin/modules/commands/store/commands.reducer';
-import { AppState } from 'src/app/store/app.state';
+import { selectFeature as selectAdminFeature } from 'src/app/modules/admin/store/admin.selectors';
 
-export const selectFeature = (state: AppState) => state.admin.commands;
+export const selectFeature = createSelector(selectAdminFeature, (state) => state.commands);
 
 export const selectOnGoingCommands = createSelector(
   selectFeature,
@@ -36,7 +36,7 @@ export const selectPayedCommands = createSelector(
         const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
         const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
         return dateB - dateA;
-      })
+      }),
 );
 
 export const selectCancelledCommands = createSelector(
@@ -48,7 +48,7 @@ export const selectCancelledCommands = createSelector(
         const dateA = a.pickUpTime ? new Date(a.pickUpTime!).getTime() : new Date(a.createdAt!).getTime();
         const dateB = b.pickUpTime ? new Date(b.pickUpTime!).getTime() : new Date(b.createdAt!).getTime();
         return dateB - dateA;
-      })
+      }),
 );
 
 export const selectTotalPayedCommands = createSelector(
@@ -56,10 +56,10 @@ export const selectTotalPayedCommands = createSelector(
   (state: CommandsState) =>
     state.commands
       .filter((c: Command) => c.isPayed)
-      .reduce((prev, c) => c.totalPrice + prev, 0)
+      .reduce((prev, c) => c.totalPrice + prev, 0),
 );
 
 export const selectIsLoading = createSelector(
   selectFeature,
-  (state: CommandsState) => state.loading
+  (state: CommandsState) => state.loading,
 );

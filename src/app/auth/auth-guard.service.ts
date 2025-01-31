@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, map, of, take, withLatestFrom } from 'rxjs';
 import { Access } from 'src/app/interfaces/user.interface';
 import { selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -14,7 +13,7 @@ export class AuthGuardService  {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private store: Store<AppState>,
+    private store: Store,
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {

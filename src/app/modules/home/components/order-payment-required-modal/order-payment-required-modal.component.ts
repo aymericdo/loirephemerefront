@@ -1,13 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, filter, map, take, takeUntil, timer } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
+import { TimeRemainingComponent } from 'src/app/modules/home/components/order-payment-required-modal/time-remaining.component';
+import { PaymentElementComponent } from 'src/app/shared/components/payment-element/payment-element.component';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-order-payment-required-modal',
-    templateUrl: './order-payment-required-modal.component.html',
-    styleUrls: ['./order-payment-required-modal.component.scss'],
-    standalone: false
+  selector: 'app-order-payment-required-modal',
+  templateUrl: './order-payment-required-modal.component.html',
+  styleUrls: ['./order-payment-required-modal.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    TimeRemainingComponent,
+    PaymentElementComponent,
+  ],
 })
 export class OrderPaymentRequiredModalComponent implements OnInit, OnDestroy {
   @Input() command!: Command;

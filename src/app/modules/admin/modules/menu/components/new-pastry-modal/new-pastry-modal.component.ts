@@ -1,18 +1,24 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, filter, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
+import { PastryFormComponent } from 'src/app/modules/admin/modules/menu/components/pastry-form/pastry-form.component';
 import { postingPastry, validatingPastryName } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-new-pastry-modal',
-    templateUrl: './new-pastry-modal.component.html',
-    styleUrls: ['./new-pastry-modal.component.scss'],
-    standalone: false
+  selector: 'app-new-pastry-modal',
+  templateUrl: './new-pastry-modal.component.html',
+  styleUrls: ['./new-pastry-modal.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    PastryFormComponent,
+  ],
 })
 export class NewPastryModalComponent implements OnInit {
   @Input() restaurant: Restaurant = null!;
@@ -22,7 +28,7 @@ export class NewPastryModalComponent implements OnInit {
   restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   isLoading$!: Observable<boolean>;
 
-  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private store: Store, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.restaurantNameError$ = this.store.select(selectPastryNameError);

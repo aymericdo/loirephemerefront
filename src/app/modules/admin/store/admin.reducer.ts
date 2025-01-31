@@ -28,7 +28,7 @@ export const initialState: AdminState = {
 
 const adminReducer = createReducer(
   initialState,
-  on(stopLoading, (state) => ({
+  on(stopLoading, (state): AdminState => ({
     ...state,
     loading: false,
   })),

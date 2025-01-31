@@ -8,13 +8,12 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { selectLoading } from 'src/app/modules/login/store/login.selectors';
 import { changingPassword } from 'src/app/modules/profile/store/profile.actions';
 import { selectChangePasswordError, selectPasswordChanged } from 'src/app/modules/profile/store/profile.selectors';
-import { AppState } from 'src/app/store/app.state';
 
 @Component({
-    selector: 'app-change-password',
-    templateUrl: './change-password.component.html',
-    styleUrls: ['./change-password.component.scss'],
-    standalone: false
+  selector: 'app-change-password',
+  templateUrl: './change-password.component.html',
+  styleUrls: ['./change-password.component.scss'],
+  standalone: false,
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
@@ -29,7 +28,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   PASSWORD_SPECIALS_CHARS = PASSWORD_SPECIALS_CHARS;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private store: Store, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(selectLoading);
@@ -44,7 +43,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
     this.isLoading$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((loading) => {
         if (loading) {
           this.validateForm.controls.oldPassword.disable();
@@ -59,7 +58,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
     this.changePasswordError$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((changePasswordError: { error: boolean } | null | undefined) => {
         if (changePasswordError) {
           this.validateForm.controls.password.setErrors(changePasswordError);
@@ -71,7 +70,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     this.passwordChanged$
       .pipe(
         filter(Boolean),
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((changed: boolean) => {
         if (changed) {
           this.resetForm();
@@ -124,11 +123,11 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     const error = this.validateForm.value.password &&
       control.value &&
       control.value !== this.validateForm.value.password;
-      if (error) {
-        return of({ passwordDifferentToConfirmPasswordValidator: true });
-      } else {
-        this.validateForm.controls.password.setErrors(null);
-        return of({});
-      }
+    if (error) {
+      return of({ passwordDifferentToConfirmPasswordValidator: true });
+    } else {
+      this.validateForm.controls.password.setErrors(null);
+      return of({});
+    }
   };
 }

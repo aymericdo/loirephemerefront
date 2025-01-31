@@ -1,23 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
-import { BrowserModule } from '@angular/platform-browser';
 import { PaymentElementApiService } from 'src/app/shared/components/payment-element/payment-element.service';
 import { Observable, ReplaySubject, filter, take, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectRestaurantPublicKey } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
 import { selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { Command } from 'src/app/interfaces/command.interface';
 import { fetchingCurrentRestaurantPublicKey } from 'src/app/modules/login/store/login.actions';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-payment-element',
-    templateUrl: './payment-element.component.html',
-    imports: [
-        BrowserModule,
-        NgZorroModule,
-    ]
+  selector: 'app-payment-element',
+  templateUrl: './payment-element.component.html',
+  imports: [
+    CommonModule,
+    NgZorroModule,
+  ],
 })
 export class PaymentElementComponent implements OnInit, OnDestroy {
   selectRestaurantPublicKey$: Observable<string | null>;
@@ -32,8 +31,8 @@ export class PaymentElementComponent implements OnInit, OnDestroy {
   private readonly SCRIPT_ID = 'stripe-script';
 
   constructor(
-    private store: Store<AppState>,
-    private paymentElementService: PaymentElementApiService
+    private store: Store,
+    private paymentElementService: PaymentElementApiService,
   ) {
     this.personalCommand$ = this.store.select(selectPersonalCommand);
     this.selectRestaurantPublicKey$ = this.store.select(selectRestaurantPublicKey);

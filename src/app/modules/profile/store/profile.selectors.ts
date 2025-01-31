@@ -1,20 +1,19 @@
-import { createSelector } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ProfileState } from './profile.reducer';
 
-export const selectFeature = (state: AppState) => state.profile;
+export const selectFeature = createFeatureSelector<ProfileState>('profile');
 
 export const selectLoading = createSelector(
   selectFeature,
-  (state: ProfileState) => state.loading
+  (state: ProfileState) => state.loading,
 );
 
 export const selectPasswordChanged = createSelector(
   selectFeature,
-  (state: ProfileState) => state.passwordChanged
+  (state: ProfileState) => state.passwordChanged,
 );
 
 export const selectChangePasswordError = createSelector(
   selectFeature,
-  (state: ProfileState) => state.changePasswordError
+  (state: ProfileState) => state.changePasswordError,
 );

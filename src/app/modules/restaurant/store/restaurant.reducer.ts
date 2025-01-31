@@ -29,30 +29,30 @@ export const initialState: RestaurantState = {
 
 const restaurantReducer = createReducer(
   initialState,
-  on(createRestaurant, fetchRestaurants, validateRestaurantName, (state) => ({
+  on(createRestaurant, fetchRestaurants, validateRestaurantName, (state): RestaurantState => ({
     ...state,
     loading: true,
   })),
-  on(setRestaurants, (state, { restaurants }) => ({
+  on(setRestaurants, (state, { restaurants }): RestaurantState => ({
     ...state,
     restaurants: [...restaurants],
     loading: false,
   })),
-  on(setNewRestaurant, (state, { restaurant }) => ({
+  on(setNewRestaurant, (state, { restaurant }): RestaurantState => ({
     ...state,
     newRestaurant: { ...restaurant },
     loading: false,
   })),
-  on(validateRestaurantName, (state) => ({
+  on(validateRestaurantName, (state): RestaurantState => ({
     ...state,
     restaurantNameError: undefined,
   })),
-  on(setRestaurantNameError, (state, { error, duplicated }) => ({
+  on(setRestaurantNameError, (state, { error, duplicated }): RestaurantState => ({
     ...state,
     restaurantNameError: { error, duplicated },
     loading: false,
   })),
-  on(setRestaurantNoNameError, (state) => ({
+  on(setRestaurantNoNameError, (state): RestaurantState => ({
     ...state,
     restaurantNameError: null,
     loading: false,

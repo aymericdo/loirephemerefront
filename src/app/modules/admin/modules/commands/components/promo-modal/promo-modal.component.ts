@@ -1,7 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 export interface Discount {
   gifts: string[];
@@ -13,7 +16,11 @@ export interface Discount {
   selector: 'app-promo-modal',
   templateUrl: './promo-modal.component.html',
   styleUrls: ['./promo-modal.component.scss'],
-  standalone: false
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgZorroModule,
+  ],
 })
 export class PromoModalComponent implements OnInit {
   @Input() command!: Command;

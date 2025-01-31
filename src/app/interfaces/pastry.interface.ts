@@ -24,8 +24,8 @@ export const PASTRY_TYPE_LABEL = {
   other: {
     label: 'Autres',
     sequence: 3,
-  }
-}
+  },
+};
 
 export interface Pastry extends CorePastry {
   id: string;

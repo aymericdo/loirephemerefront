@@ -8,6 +8,7 @@ import { BarChartComponent } from 'src/app/modules/admin/modules/stats/component
 import { PieChartComponent } from 'src/app/modules/admin/modules/stats/components/charts/pie-chart/pie-chart.component';
 import { StatsEffects } from 'src/app/modules/admin/modules/stats/store/stats.effects';
 import { StatsRoutingModule } from 'src/app/modules/admin/modules/stats/stats-routing.module';
+import { CommandCardComponent } from 'src/app/modules/admin/modules/commands/components/command-card/command-card.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { StatsRoutingModule } from 'src/app/modules/admin/modules/stats/stats-ro
     SharedModule,
     NgChartsModule,
     EffectsModule.forFeature([StatsEffects]),
-  ]
+    CommandCardComponent,
+  ],
 })
 export class StatsModule { }

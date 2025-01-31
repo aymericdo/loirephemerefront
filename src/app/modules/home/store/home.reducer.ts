@@ -15,7 +15,7 @@ import {
   setPersonalCommand,
   setStock,
   startLoading,
-  stopLoading
+  stopLoading,
 } from './home.actions';
 
 export const homeFeatureKey = 'home';
@@ -45,16 +45,16 @@ export const initialState: HomeState = {
 
 const homeReducer = createReducer(
   initialState,
-  on(startLoading, fetchRestaurantPastries, (state) => ({
+  on(startLoading, fetchRestaurantPastries, (state): HomeState => ({
     ...state,
     loading: true,
     pastries: [...pastriesMock],
   })),
-  on(setPastries, (state, { pastries }) => ({
+  on(setPastries, (state, { pastries }): HomeState => ({
     ...state,
     pastries: [...pastries],
   })),
-  on(stopLoading, (state) => ({
+  on(stopLoading, (state): HomeState => ({
     ...state,
     loading: false,
   })),
@@ -73,7 +73,7 @@ const homeReducer = createReducer(
       pastries: newList,
     };
   }),
-  on(incrementPastry, (state, { pastry }) => ({
+  on(incrementPastry, (state, { pastry }): HomeState => ({
     ...state,
     selectedPastries: {
       ...state.selectedPastries,
@@ -82,7 +82,7 @@ const homeReducer = createReducer(
         : 1,
     },
   })),
-  on(decrementPastry, (state, { pastry }) => {
+  on(decrementPastry, (state, { pastry }): HomeState => {
     const newStock = state.selectedPastries.hasOwnProperty(pastry.id)
       ? state.selectedPastries[pastry.id] === 0
         ? 0
@@ -103,38 +103,38 @@ const homeReducer = createReducer(
       selectedPastries: newSelectedPastries,
     };
   }),
-  on(resetCommand, (state) => ({
+  on(resetCommand, (state): HomeState => ({
     ...state,
     selectedPastries: {},
   })),
-  on(sendingCommand, (state) => ({
+  on(sendingCommand, (state): HomeState => ({
     ...state,
     personalCommand: null,
     errorCommand: null,
   })),
-  on(setPersonalCommand, (state, { command }) => ({
+  on(setPersonalCommand, (state, { command }): HomeState => ({
     ...state,
     personalCommand: command,
-    currentSentCommands: [...state.currentSentCommands, command]
+    currentSentCommands: [...state.currentSentCommands, command],
   })),
-  on(openHomeModal, (state, { modal }) => ({
+  on(openHomeModal, (state, { modal }): HomeState => ({
     ...state,
     homeModal: modal,
   })),
-  on(closeHomeModal, (state) => ({
+  on(closeHomeModal, (state): HomeState => ({
     ...state,
     homeModal: null,
   })),
-  on(resetPersonalCommand, (state) => ({
+  on(resetPersonalCommand, (state): HomeState => ({
     ...state,
     personalCommand: null,
     currentSentCommands: [],
   })),
-  on(setErrorCommand, (state, { error }) => ({
+  on(setErrorCommand, (state, { error }): HomeState => ({
     ...state,
     errorCommand: error.error,
   })),
-  on(resetErrorCommand, (state) => ({
+  on(resetErrorCommand, (state): HomeState => ({
     ...state,
     errorCommand: null,
   })),

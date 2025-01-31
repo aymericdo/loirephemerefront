@@ -18,6 +18,6 @@ import { NewUserModalComponent } from 'src/app/modules/admin/modules/users/compo
     CommonModule,
     SharedModule,
     EffectsModule.forFeature([UsersEffects]),
-  ]
+  ],
 })
 export class UsersModule { }

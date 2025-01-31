@@ -1,20 +1,31 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
+import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
+import { RecoverModalComponent } from 'src/app/modules/login/components/recover-modal/recover-modal.component';
 import { SITE_KEY } from 'src/app/modules/login/login.module';
 import { confirmRecoverEmail, validateRecoverEmailCode } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectPasswordChanged, selectRecoverModalOpened } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-recover',
   templateUrl: './recover.component.html',
   styleUrls: ['./recover.component.scss'],
-  standalone: false,
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RecoverModalComponent,
+    ConfirmationModalComponent,
+  ],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class RecoverComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
@@ -31,7 +42,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private router: Router, private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private router: Router, private store: Store, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(selectLoading);
@@ -45,7 +56,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
 
     this.isLoading$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((loading) => {
         if (loading) {
           this.validateForm.disable();
@@ -57,7 +68,7 @@ export class RecoverComponent implements OnInit, OnDestroy {
     this.passwordChanged$
       .pipe(
         filter(Boolean),
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((changed: boolean) => {
         if (changed) {
           this.router.navigate(['page', 'login']);

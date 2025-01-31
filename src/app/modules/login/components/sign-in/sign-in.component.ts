@@ -1,18 +1,25 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { signInUser } from 'src/app/modules/login/store/login.actions';
 import { selectLoading, selectUserAuthError } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-sign-in',
-    templateUrl: './sign-in.component.html',
-    styleUrls: ['./sign-in.component.scss'],
-    standalone: false
+  selector: 'app-sign-in',
+  templateUrl: './sign-in.component.html',
+  styleUrls: ['./sign-in.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgZorroModule,
+  ],
 })
 export class SignInComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
@@ -27,7 +34,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private router: Router, private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private router: Router, private store: Store, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.userAuthError$ = this.store.select(selectUserAuthError);
@@ -40,7 +47,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
     this.isLoading$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((loading) => {
         if (loading) {
           this.validateForm.controls.email.disable();
@@ -53,7 +60,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
     this.userAuthError$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((authError: { error: boolean } | null | undefined) => {
         if (authError) {
           this.validateForm.controls.password.setErrors(authError);
@@ -62,7 +69,7 @@ export class SignInComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.isInLoginPage = this.router.url.includes('page/login');
+    this.isInLoginPage = this.router.url.includes('page/login');
   }
 
   ngOnDestroy() {
@@ -72,7 +79,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.store.dispatch(
-      signInUser({ user: { email: this.validateForm.value.email, password: this.validateForm.value.password } })
+      signInUser({ user: { email: this.validateForm.value.email, password: this.validateForm.value.password } }),
     );
   }
 

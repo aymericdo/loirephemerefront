@@ -1,21 +1,26 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { presetPalettes } from '@ant-design/colors';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, combineLatest, filter, map, takeUntil, withLatestFrom } from 'rxjs';
+import { Observable, ReplaySubject, filter, map, takeUntil, withLatestFrom } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { APP_VERSION } from 'src/app/helpers/version';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
-import { fetchingDemoResto, fetchingRestaurant, fetchingUser, resetUser, setIsSiderCollapsed, setUserRestaurants, startFirstNavigation, stopFirstNavigation } from 'src/app/modules/login/store/login.actions';
-import { selectDemoResto, selectDemoRestoFetching, selectFirstNavigationStarting, selectIsSiderCollapsed, selectRestaurant, selectRestaurantFetching, selectUser, selectUserFetching, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { fetchingRestaurant, fetchingUser, resetUser, setIsSiderCollapsed, setUserRestaurants, startFirstNavigation, stopFirstNavigation } from 'src/app/modules/login/store/login.actions';
+import { selectAllRestaurantsFetching, selectDemoResto, selectIsSiderCollapsed, selectRestaurant, selectRestaurantFetching, selectUser, selectUserFetching, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-nav',
-    templateUrl: './nav.component.html',
-    styleUrls: ['./nav.component.scss'],
-    standalone: false
+  selector: 'app-nav',
+  templateUrl: './nav.component.html',
+  styleUrls: ['./nav.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    NgZorroModule,
+  ],
 })
 export class NavComponent implements OnInit, OnDestroy {
   @ViewChild('list') listElement!: any;
@@ -28,7 +33,7 @@ export class NavComponent implements OnInit, OnDestroy {
   demoResto$: Observable<Restaurant | null>;
   userFetching$: Observable<boolean>;
   restaurantFetching$: Observable<boolean>;
-  allRestaurantFetching$: Observable<boolean>;
+  allRestaurantsFetching$: Observable<boolean>;
 
   isUserCollapsed = true;
   currentOpenedRestaurant = '';
@@ -47,7 +52,7 @@ export class NavComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private store: Store<AppState>,
+    private store: Store,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.user$ = this.store.select(selectUser);
@@ -56,15 +61,7 @@ export class NavComponent implements OnInit, OnDestroy {
     this.demoResto$ = this.store.select(selectDemoResto);
     this.userFetching$ = this.store.select(selectUserFetching);
     this.restaurantFetching$ = this.store.select(selectRestaurantFetching);
-    this.allRestaurantFetching$ = combineLatest([
-      this.store.select(selectRestaurantFetching),
-      this.store.select(selectDemoRestoFetching),
-      this.store.select(selectFirstNavigationStarting),
-    ]).pipe(
-      map(([restaurantFetching, demoRestoFetching, firstNavigationStarting]) => {
-        return restaurantFetching || demoRestoFetching || firstNavigationStarting;
-      }),
-    );
+    this.allRestaurantsFetching$ = this.store.select(selectAllRestaurantsFetching);
   }
 
   ngOnInit(): void {
@@ -113,7 +110,7 @@ export class NavComponent implements OnInit, OnDestroy {
           }
           return route;
         }),
-        withLatestFrom(this.isSiderCollapsed$, this.restaurantFetching$)
+        withLatestFrom(this.isSiderCollapsed$, this.restaurantFetching$),
       )
       .subscribe(([route, isSiderCollapsed, restaurantFetching]) => {
         const data = route.snapshot.data;
@@ -152,7 +149,6 @@ export class NavComponent implements OnInit, OnDestroy {
     }
 
     this.store.dispatch(startFirstNavigation());
-    this.store.dispatch(fetchingDemoResto());
   }
 
   ngOnDestroy() {

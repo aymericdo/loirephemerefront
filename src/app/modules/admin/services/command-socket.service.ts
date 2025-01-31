@@ -31,13 +31,13 @@ export class CommandWebSocketService {
           this.sendMessage(
             JSON.stringify({
               event: 'commandsAuthorization',
-            })
+            }),
           );
         }
       }),
       filter((data: WebSocketData) =>
-        webSocketDataKey.some((key) => Object.keys(data).includes(key))
-      )
+        webSocketDataKey.some((key) => Object.keys(data).includes(key)),
+      ),
     );
   }
 

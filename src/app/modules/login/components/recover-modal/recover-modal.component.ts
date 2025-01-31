@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
 import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
@@ -7,13 +8,18 @@ import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
 import { changePassword } from 'src/app/modules/login/store/login.actions';
 import { selectLoading } from 'src/app/modules/login/store/login.selectors';
-import { AppState } from 'src/app/store/app.state';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 @Component({
-    selector: 'app-recover-modal',
-    templateUrl: './recover-modal.component.html',
-    styleUrls: ['./recover-modal.component.scss'],
-    standalone: false
+  selector: 'app-recover-modal',
+  templateUrl: './recover-modal.component.html',
+  styleUrls: ['./recover-modal.component.scss'],
+  imports: [
+    CommonModule,
+    NgZorroModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
 export class RecoverModalComponent implements OnInit, OnDestroy {
   @Input() email!: string;
@@ -28,7 +34,7 @@ export class RecoverModalComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private fb: UntypedFormBuilder) { }
+  constructor(private store: Store, private fb: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.isLoading$ = this.store.select(selectLoading);
@@ -40,7 +46,7 @@ export class RecoverModalComponent implements OnInit, OnDestroy {
 
     this.isLoading$
       .pipe(
-        takeUntil(this.destroyed$)
+        takeUntil(this.destroyed$),
       ).subscribe((loading) => {
         if (loading) {
           this.validateForm.disable();
@@ -79,11 +85,11 @@ export class RecoverModalComponent implements OnInit, OnDestroy {
     const error = this.validateForm.value.password &&
       control.value &&
       control.value !== this.validateForm.value.password;
-      if (error) {
-        return of({ passwordDifferentToConfirmPasswordValidator: true });
-      } else {
-        this.validateForm.controls.password.setErrors(null);
-        return of({});
-      }
+    if (error) {
+      return of({ passwordDifferentToConfirmPasswordValidator: true });
+    } else {
+      this.validateForm.controls.password.setErrors(null);
+      return of({});
+    }
   };
 }
