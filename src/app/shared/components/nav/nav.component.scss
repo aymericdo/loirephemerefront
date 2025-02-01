@@ -89,7 +89,7 @@
     text-overflow: ellipsis;
   }
 
-  @media screen and (max-width: var(--lg)) {
+  @media screen and (max-width: 992px) {
     nz-sider {
       overflow: inherit;
     }

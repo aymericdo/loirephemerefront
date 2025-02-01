@@ -20,7 +20,7 @@
     margin-left: 0;
   }
 
-  @media screen and (max-width: var(--lg)) {
+  @media screen and (max-width: 992px) {
     .right-layout {
       margin-left: inherit;
     }

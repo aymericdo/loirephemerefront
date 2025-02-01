@@ -12,7 +12,7 @@
     justify-content: space-between;
   }
 
-  @media screen and (max-width: var(--lg)) {
+  @media screen and (max-width: 992px) {
     width: calc(100%);
   }
 }
