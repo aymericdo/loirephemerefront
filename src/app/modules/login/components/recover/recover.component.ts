@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -7,7 +7,7 @@ import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
 import { RecoverModalComponent } from 'src/app/modules/login/components/recover-modal/recover-modal.component';
-import { SITE_KEY } from 'src/app/modules/login/login.module';
+import { SITE_KEY } from 'src/app/modules/login/login-routing.module';
 import { confirmRecoverEmail, validateRecoverEmailCode } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectPasswordChanged, selectRecoverModalOpened } from 'src/app/modules/login/store/login.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';

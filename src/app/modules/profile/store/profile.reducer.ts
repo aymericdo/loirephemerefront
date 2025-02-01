@@ -1,8 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { changingPassword, setChangePasswordError, setPasswordAsChanged, stopLoading } from './profile.actions';
 
-export const profileFeatureKey = 'profile';
-
 export interface ProfileState {
   loading: boolean;
   passwordChanged: boolean | undefined;

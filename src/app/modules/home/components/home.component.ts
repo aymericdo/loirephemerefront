@@ -12,7 +12,6 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, timer } from 'rxjs';
 import { filter, map, switchMap, takeUntil, withLatestFrom } from 'rxjs/operators';
-import { APP_NAME } from 'src/app/app.module';
 import { Restaurant } from 'src/app/classes/restaurant';
 import { Command, CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
@@ -21,7 +20,6 @@ import { HomeNotificationsComponent } from 'src/app/modules/home/components/home
 import { OrderFooterComponent } from 'src/app/modules/home/components/order-footer/order-footer.component';
 import { OrderModalComponent } from 'src/app/modules/home/components/order-modal/order-modal.component';
 import { OrderNameModalComponent } from 'src/app/modules/home/components/order-name-modal/order-name-modal.component';
-import { OrderSuccessModalComponent } from 'src/app/modules/home/components/order-success-modal/order-success-modal.component';
 import {
   HomeWebSocketService,
 } from 'src/app/modules/home/services/home-socket.service';
@@ -48,6 +46,7 @@ import { FooterComponent } from 'src/app/shared/components/footer/footer.compone
 import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 import { PastryCardComponent } from 'src/app/shared/components/pastry-card/pastry-card.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+import { APP_NAME } from 'src/main';
 
 @Component({
   templateUrl: './home.component.html',

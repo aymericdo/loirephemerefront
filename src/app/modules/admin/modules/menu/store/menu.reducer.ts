@@ -25,8 +25,6 @@ import {
   validatingPastryName,
 } from './menu.actions';
 
-export const menuFeatureKey = 'menu';
-
 export interface MenuState {
   allPastries: Pastry[];
   loading: boolean;

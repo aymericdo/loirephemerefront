@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { LoginComponent } from 'src/app/modules/login/components/login.component';
 import { RecoverComponent } from 'src/app/modules/login/components/recover/recover.component';
 import { RegisterComponent } from 'src/app/modules/login/components/register/register.component';
 import { SignInComponent } from 'src/app/modules/login/components/sign-in/sign-in.component';
 
-const routes: Routes = [
+export const SITE_KEY = '76928deb-ad7e-4374-bc74-540e80fa1049';
+
+export const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
@@ -23,9 +24,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '/page/404' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class LoginRoutingModule { }

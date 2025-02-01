@@ -176,7 +176,7 @@ export class MenuEffects {
         return this.adminApiService.putEditCommonStockPastry(
           restaurant.code,
           action.pastries.map((p: Pastry) => p.id),
-          action.commonStock
+          action.commonStock,
         ).pipe(
           switchMap((pastries: Pastry[]) => {
             return [setAllPastries({ pastries }), stopLoading()];

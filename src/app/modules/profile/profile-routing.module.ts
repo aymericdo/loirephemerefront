@@ -1,17 +1,18 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
+import { reducer } from 'src/app/modules/login/store/login.reducer';
 import { ProfileComponent } from 'src/app/modules/profile/components/profile.component';
+import { ProfileEffects } from 'src/app/modules/profile/store/profile.effects';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: ProfileComponent,
+    providers: [
+      provideState('profile', reducer),
+      provideEffects([ProfileEffects]),
+    ],
   },
   { path: '**', redirectTo: '/page/404' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ProfileRoutingModule { }

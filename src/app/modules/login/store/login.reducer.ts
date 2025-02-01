@@ -12,8 +12,6 @@ import {
   stopUserFetching, toggleDisplayDemoResto, validatingUserEmail,
 } from './login.actions';
 
-export const loginFeatureKey = 'login';
-
 export interface LoginState {
   userEmailError: { error: boolean, duplicated: boolean } | null | undefined;
   userAuthError: { error: boolean } | null | undefined;

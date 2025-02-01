@@ -1,12 +1,19 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { NewRestaurantComponent } from './components/new-restaurant/new-restaurant.component';
 import { RestaurantComponent } from './components/restaurant.component';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
+import { reducer } from 'src/app/modules/login/store/login.reducer';
+import { RestaurantEffects } from 'src/app/modules/restaurant/store/restaurant.effects';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: RestaurantComponent,
+    providers: [
+      provideState('restaurant', reducer),
+      provideEffects([RestaurantEffects]),
+    ],
     children: [{
       path: '',
       pathMatch: 'full',
@@ -19,9 +26,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '/page/404' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class RestaurantRoutingModule { }

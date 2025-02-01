@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
@@ -21,6 +20,7 @@ import {
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+import { VAPID_PUBLIC_KEY } from 'src/main';
 
 @Component({
   templateUrl: './commands.component.html',

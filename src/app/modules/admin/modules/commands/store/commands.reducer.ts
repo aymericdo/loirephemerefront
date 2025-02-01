@@ -12,8 +12,6 @@ import {
   stopLoading,
 } from './commands.actions';
 
-export const commandsFeatureKey = 'commands';
-
 export interface CommandsState {
   commands: Command[];
   loading: boolean;

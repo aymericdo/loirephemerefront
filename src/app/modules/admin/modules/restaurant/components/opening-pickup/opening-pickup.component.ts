@@ -18,7 +18,7 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzWaveDirective } from 'ng-zorro-antd/core/wave';
 import { ɵNzTransitionPatchDirective } from 'ng-zorro-antd/core/transition-patch';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
-import { InformationPopoverComponent } from '../../../../../../shared/components/information-popover/information-popover.component';
+import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 
 @Component({
   selector: 'app-opening-pickup',
@@ -102,8 +102,8 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
       this.weekDayNumbers.forEach((weekDay: number) => {
         let startTime = null;
 
-        if (restaurant.openingPickupTime) {
-          const weekdayOpeningPickupTime = restaurant.openingPickupTime![weekDay];
+        if (restaurant?.openingPickupTime) {
+          const weekdayOpeningPickupTime = restaurant?.openingPickupTime![weekDay];
 
           if (!this.isDayClosed(weekDay)) {
             if (weekdayOpeningPickupTime?.startTime) {
@@ -149,9 +149,9 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
   }
 
   disabledHours(weekDayNumber: number): number[] {
-    if (this.restaurant.openingTime && this.restaurant.openingTime[weekDayNumber]
-      && this.restaurant.openingTime[weekDayNumber].startTime) {
-      const openingHour: number = +this.restaurant.openingTime[weekDayNumber].startTime.split(':')[0];
+    if (this.restaurant?.openingTime && this.restaurant?.openingTime[weekDayNumber]
+      && this.restaurant?.openingTime[weekDayNumber].startTime) {
+      const openingHour: number = +this.restaurant?.openingTime[weekDayNumber].startTime.split(':')[0];
 
       const disabledHours: number[] = [];
       for (let i = openingHour + 1; i < 24; ++i) {
@@ -165,10 +165,10 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
   };
 
   disabledMinutes(weekDayNumber: number, hour: number): number[] {
-    if (this.restaurant.openingTime && this.restaurant.openingTime[weekDayNumber] &&
-      this.restaurant.openingTime[weekDayNumber].startTime &&
-      hour === +this.restaurant.openingTime[weekDayNumber].startTime.split(':')[0]) {
-      const openingMinute: number = +this.restaurant.openingTime[weekDayNumber].startTime.split(':')[1];
+    if (this.restaurant?.openingTime && this.restaurant?.openingTime[weekDayNumber] &&
+      this.restaurant?.openingTime[weekDayNumber].startTime &&
+      hour === +this.restaurant?.openingTime[weekDayNumber].startTime.split(':')[0]) {
+      const openingMinute: number = +this.restaurant?.openingTime[weekDayNumber].startTime.split(':')[1];
 
       const disabledMinute: number[] = [];
       for (let i = openingMinute + 1; i < 60; ++i) {
@@ -225,7 +225,7 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
   }
 
   isDayClosed(weekDayNumber: number): boolean {
-    const openingTime = this.restaurant.openingTime && this.restaurant.openingTime[weekDayNumber];
+    const openingTime = this.restaurant?.openingTime && this.restaurant?.openingTime[weekDayNumber];
     return (!openingTime || (!openingTime.startTime && !openingTime.endTime));
   }
 

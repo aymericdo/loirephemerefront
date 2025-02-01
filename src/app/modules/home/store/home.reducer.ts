@@ -18,8 +18,6 @@ import {
   stopLoading,
 } from './home.actions';
 
-export const homeFeatureKey = 'home';
-
 export type HomeModalType = 'success' | 'payment';
 
 export interface HomeState {

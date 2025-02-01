@@ -15,8 +15,6 @@ import {
   validatingUserEmail,
 } from 'src/app/modules/admin/modules/users/store/users.actions';
 
-export const usersFeatureKey = 'users';
-
 export interface UsersState {
   users: User[],
   loading: boolean;

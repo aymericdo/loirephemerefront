@@ -14,8 +14,6 @@ import {
   stopLoading,
 } from './stats.actions';
 
-export const statsFeatureKey = 'stats';
-
 export interface StatsState {
   allPastries: Pastry[];
   commands: Command[];

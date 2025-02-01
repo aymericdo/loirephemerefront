@@ -9,8 +9,6 @@ import {
   updatePaymentInformation,
 } from './restaurant.actions';
 
-export const restaurantFeatureKey = 'restaurant';
-
 export interface RestaurantState {
   loading: boolean;
   isDisplayStockLoading: boolean;

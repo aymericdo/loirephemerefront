@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
-import { catchError, concatMap, filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, filter, map, mergeMap } from 'rxjs/operators';
 import { concatLatestFrom } from '@ngrx/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';

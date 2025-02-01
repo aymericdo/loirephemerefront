@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { RestaurantComponent } from 'src/app/modules/admin/modules/restaurant/components/restaurant.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
@@ -11,9 +10,3 @@ const routes: Routes = [
   },
   { path: '**', redirectTo: '/page/404' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class RestaurantRoutingModule { }

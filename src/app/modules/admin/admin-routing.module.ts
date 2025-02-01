@@ -1,16 +1,35 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
 import { AuthGuardService } from 'src/app/auth/auth-guard.service';
+import { CommandsEffects } from 'src/app/modules/admin/modules/commands/store/commands.effects';
+import { MenuEffects } from 'src/app/modules/admin/modules/menu/store/menu.effects';
+import { RestaurantEffects } from 'src/app/modules/admin/modules/restaurant/store/restaurant.effects';
+import { StatsEffects } from 'src/app/modules/admin/modules/stats/store/stats.effects';
+import { UsersEffects } from 'src/app/modules/admin/modules/users/store/users.effects';
+import { AdminEffects } from 'src/app/modules/admin/store/admin.effects';
+import { reducer } from 'src/app/modules/admin/store/admin.reducer';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     canActivate: [AuthGuardService],
+    providers: [
+      provideState('admin', reducer),
+      provideEffects([
+        AdminEffects,
+        RestaurantEffects,
+        MenuEffects,
+        StatsEffects,
+        CommandsEffects,
+        UsersEffects,
+      ]),
+    ],
     children: [{
       path: '',
       pathMatch: 'full',
       loadChildren: () =>
-        import('./modules/restaurant/restaurant.module').then((m) => m.RestaurantModule),
+        import('./modules/restaurant/restaurant-routing.module').then(m => m.routes),
     },
     {
       path: 'menu',
@@ -19,7 +38,7 @@ const routes: Routes = [
       },
       canActivate: [AuthGuardService],
       loadChildren: () =>
-        import('./modules/menu/menu.module').then((m) => m.MenuModule),
+        import('./modules/menu/menu-routing.module').then(m => m.routes),
     },
     {
       path: 'commands',
@@ -28,7 +47,7 @@ const routes: Routes = [
       },
       canActivate: [AuthGuardService],
       loadChildren: () =>
-        import('./modules/commands/commands.module').then((m) => m.CommandsModule),
+        import('./modules/commands/commands-routing.module').then(m => m.routes),
     },
     {
       path: 'stats',
@@ -37,7 +56,7 @@ const routes: Routes = [
       },
       canActivate: [AuthGuardService],
       loadChildren: () =>
-        import('./modules/stats/stats.module').then((m) => m.StatsModule),
+        import('./modules/stats/stats-routing.module').then(m => m.routes),
     },
     {
       path: 'users',
@@ -46,14 +65,8 @@ const routes: Routes = [
       },
       canActivate: [AuthGuardService],
       loadChildren: () =>
-        import('./modules/users/users.module').then((m) => m.UsersModule),
+        import('./modules/users/users-routing.module').then(m => m.routes),
     },
     ]},
   { path: '**', redirectTo: '/page/404' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class AdminRoutingModule { }

@@ -6,8 +6,6 @@ import { StatsState, statsInitialState } from 'src/app/modules/admin/modules/sta
 import { UsersState, usersInitialState } from 'src/app/modules/admin/modules/users/store/users.reducer';
 import { stopLoading } from './admin.actions';
 
-export const adminFeatureKey = 'admin';
-
 export interface AdminState {
   loading: boolean;
   restaurant: RestaurantState;

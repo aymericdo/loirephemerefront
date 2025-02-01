@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -8,7 +8,7 @@ import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars'
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
 import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
-import { SITE_KEY } from 'src/app/modules/login/login.module';
+import { SITE_KEY } from 'src/app/modules/login/login-routing.module';
 import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
 import { selectConfirmationModalOpened, selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';

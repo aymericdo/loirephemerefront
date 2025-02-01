@@ -11,7 +11,6 @@ import { canVibrate } from 'src/app/helpers/vibrate';
 import { SwPush } from '@angular/service-worker';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
-import { VAPID_PUBLIC_KEY } from 'src/app/app.module';
 import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 import { CommonModule } from '@angular/common';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
@@ -19,6 +18,7 @@ import { OrderSuccessModalComponent } from 'src/app/modules/home/components/orde
 import { OrderPaymentModalComponent } from 'src/app/modules/home/components/order-payment-modal/order-payment-modal.component';
 import { OrderErrorModalComponent } from 'src/app/modules/home/components/order-error-modal/order-error-modal.component';
 import { OrderPaymentRequiredModalComponent } from 'src/app/modules/home/components/order-payment-required-modal/order-payment-required-modal.component';
+import { VAPID_PUBLIC_KEY } from 'src/main';
 
 @Component({
   selector: 'app-home-notifications',

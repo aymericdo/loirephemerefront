@@ -11,8 +11,6 @@ import {
   validateRestaurantName,
 } from './restaurant.actions';
 
-export const restaurantFeatureKey = 'restaurant';
-
 export interface RestaurantState {
   restaurants: Restaurant[];
   restaurantNameError: { error: boolean, duplicated: boolean } | null | undefined;
