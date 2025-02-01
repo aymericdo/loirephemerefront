@@ -8,17 +8,17 @@
 /  /ru     302  Language=ru
 /  /ar     302  Language=ar
 
-/           /browser/fr/index.html      200
+/           /fr/index.html      200
 
-/en/*       /browser/en/index.html      200
-/fr/*       /browser/fr/index.html      200
-/es/*       /browser/es/index.html      200
-/de/*       /browser/de/index.html      200
-/pt/*       /browser/pt/index.html      200
-/pl/*       /browser/pl/index.html      200
-/nl/*       /browser/nl/index.html      200
-/ru/*       /browser/ru/index.html      200
-/ar/*       /browser/ar/index.html      200
+/en/*       /en/index.html      200
+/fr/*       /fr/index.html      200
+/es/*       /es/index.html      200
+/de/*       /de/index.html      200
+/pt/*       /pt/index.html      200
+/pl/*       /pl/index.html      200
+/nl/*       /nl/index.html      200
+/ru/*       /ru/index.html      200
+/ar/*       /ar/index.html      200
 
 /*  /fr/:splat     302  Language=fr
 /*  /en/:splat     302  Language=en

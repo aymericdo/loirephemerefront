@@ -40,7 +40,8 @@
               "fr"
             ],
             "outputPath": {
-              "base": "dist/loirephemerefront"
+              "base": "dist/loirephemerefront",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
