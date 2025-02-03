@@ -164,7 +164,7 @@ export class LoginEffects {
       concatMap(([action, code2]) => {
         const { email, emailCode }: { email: string, emailCode: string } =
           action as { email: string, emailCode: string };
-        return this.loginApiService.postValidateRecoverEmailCodeSuccess(email, emailCode, code2!).pipe(
+        return this.loginApiService.postValidateRecoverEmailCode(email, emailCode, code2!).pipe(
           map((isValid: boolean) => {
             return (isValid) ?
               postValidateRecoverEmailCodeSuccess() :
