@@ -17,7 +17,8 @@ import {
   setCode2, setDemoResto, setNewToken, setNoAuthError,
   setPasswordAsChanged, setRestaurant, setRestaurantPublicKey, setUser, setUserEmailError,
   setUserNoEmailError, setUserRestaurants, signInUser,
-  startFirstNavigation, stopDemoRestoFetching, stopLoading, stopLoadingAfterUnauthorizedError, stopRestaurantFetching, stopUserFetching,
+  startFirstNavigation, stopDemoRestoFetching, stopLoading, stopLoadingAfterUnauthorizedError,
+  stopRestaurantFetching, stopUserFetching,
   validateRecoverEmailCode, validatingUserEmail,
 } from './login.actions';
 import { startLoading } from 'src/app/modules/home/store/home.actions';
