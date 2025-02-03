@@ -17,7 +17,7 @@ import {
   setCode2, setDemoResto, setNewToken, setNoAuthError,
   setPasswordAsChanged, setRestaurant, setRestaurantPublicKey, setUser, setUserEmailError,
   setUserNoEmailError, setUserRestaurants, signInUser,
-  startFirstNavigation, stopDemoRestoFetching, stopLoading, stopRestaurantFetching, stopUserFetching,
+  startFirstNavigation, stopDemoRestoFetching, stopLoading, stopLoadingAfterUnauthorizedError, stopRestaurantFetching, stopUserFetching,
   validateRecoverEmailCode, validatingUserEmail,
 } from './login.actions';
 import { startLoading } from 'src/app/modules/home/store/home.actions';
@@ -263,13 +263,20 @@ export class LoginEffects {
           catchError((error) => {
             if (error.status === 401) {
               localStorage.removeItem('access_token');
-              return [stopLoading(), setAuthError({ error: true })]; // order is important
+              return [stopLoadingAfterUnauthorizedError()];
             }
 
             return [stopLoading()];
           }),
         );
       }),
+    );
+  });
+
+  setAuthError$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(stopLoadingAfterUnauthorizedError),
+      map(() => setAuthError({ error: true })),
     );
   });
 

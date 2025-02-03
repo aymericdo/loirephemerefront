@@ -8,7 +8,7 @@ import {
   setCode2, setDemoResto, setIsSiderCollapsed, setNewToken, setNoAuthError,
   setPasswordAsChanged, setRestaurant, setRestaurantPublicKey, setUser, setUserAccess,
   setUserEmailError, setUserNoEmailError, setUserRestaurants, signInUser, startFirstNavigation,
-  stopDemoRestoFetching, stopFirstNavigation, stopLoading, stopRestaurantFetching,
+  stopDemoRestoFetching, stopFirstNavigation, stopLoading, stopLoadingAfterUnauthorizedError, stopRestaurantFetching,
   stopUserFetching, toggleDisplayDemoResto, validatingUserEmail,
 } from './login.actions';
 
@@ -150,7 +150,7 @@ const loginReducer = createReducer(
     ...state,
     userRestaurants: [...state.userRestaurants || [], restaurant],
   })),
-  on(stopLoading, (state): LoginState => ({
+  on(stopLoading, stopLoadingAfterUnauthorizedError, (state): LoginState => ({
     ...state,
     loading: false,
   })),

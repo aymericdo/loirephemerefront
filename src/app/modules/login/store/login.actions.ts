@@ -202,6 +202,10 @@ export const stopFirstNavigation = createAction(
   '[Login page] Stop First Navigation',
 );
 
+export const stopLoadingAfterUnauthorizedError = createAction(
+  '[Login page] Stop loading after unauthorized error',
+);
+
 export const toggleDisplayDemoResto = createAction(
   '[Login page] Toggle display demo resto',
   props<{ displayDemoResto: boolean }>(),
