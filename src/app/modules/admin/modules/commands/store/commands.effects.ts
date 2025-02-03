@@ -28,9 +28,7 @@ export class CommandsEffects {
       ofType(fetchingRestaurantCommands),
       concatMap((action) => {
         return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate).pipe(
-          map((commands) => {
-            return getCommandsSuccess({ commands });
-          }),
+          map((commands) => getCommandsSuccess({ commands })),
         );
       }),
     );
@@ -59,9 +57,7 @@ export class CommandsEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
           .closeCommand(restaurant.code, action.command.id!)
-          .pipe(
-            map((command) => editCommand({ command })),
-          );
+          .pipe(map((command) => editCommand({ command })));
       }),
     );
   });
@@ -75,9 +71,7 @@ export class CommandsEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
           .deletingCommand(restaurant.code, action.command.id!)
-          .pipe(
-            map((command) => editCommand({ command })),
-          );
+          .pipe(map((command) => editCommand({ command })));
       }),
     );
   });
@@ -91,9 +85,7 @@ export class CommandsEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
           .payedCommand(restaurant.code, action.command.id!, action.payments, action.discount)
-          .pipe(
-            map((command) => editCommand({ command })),
-          );
+          .pipe(map((command) => editCommand({ command })));
       }),
     );
   });

@@ -1,8 +1,7 @@
-import { createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { RestaurantState } from 'src/app/modules/admin/modules/restaurant/store/restaurant.reducer';
-import { selectFeature as selectAdminFeature } from 'src/app/modules/admin/store/admin.selectors';
 
-export const selectFeature = createSelector(selectAdminFeature, (state) => state.restaurant);
+export const selectFeature = createFeatureSelector<RestaurantState>('admin/restaurant');
 
 export const selectIsAlwaysOpenLoading = createSelector(
   selectFeature,

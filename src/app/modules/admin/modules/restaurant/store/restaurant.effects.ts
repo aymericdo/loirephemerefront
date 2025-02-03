@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { filter, mergeMap, switchMap } from 'rxjs/operators';
+import { concatMap, filter, map, mergeMap } from 'rxjs/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import { setRestaurant } from 'src/app/modules/login/store/login.actions';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
@@ -23,28 +23,24 @@ export class RestaurantEffects {
       concatLatestFrom(() =>
         this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
-      mergeMap(([action, restaurant]) => {
+      concatMap(([action, restaurant]) => {
         return this.adminApiService
           .patchOpeningTime(restaurant.code, action.openingTime)
-          .pipe(
-            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
-          );
+          .pipe(map((restaurant) => setRestaurant({ restaurant })));
       }),
     );
   });
 
-  updateOpeningPickupHours$ = createEffect(() => {
+  updateOpeningPickupTime$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updateOpeningPickupTime),
       concatLatestFrom(() =>
         this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
-      mergeMap(([action, restaurant]) => {
+      concatMap(([action, restaurant]) => {
         return this.adminApiService
           .patchOpeningPickupTime(restaurant.code, action.openingTime)
-          .pipe(
-            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
-          );
+          .pipe(map((restaurant) => setRestaurant({ restaurant })));
       }),
     );
   });
@@ -61,9 +57,7 @@ export class RestaurantEffects {
             restaurant.code, action.paymentActivated, action.paymentRequired,
             action.publicKey, action.secretKey,
           )
-          .pipe(
-            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
-          );
+          .pipe(map((restaurant) => setRestaurant({ restaurant })));
       }),
     );
   });
@@ -77,9 +71,7 @@ export class RestaurantEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
           .patchDisplayStock(restaurant.code, action.displayStock)
-          .pipe(
-            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
-          );
+          .pipe(map((restaurant) => setRestaurant({ restaurant })));
       }),
     );
   });
@@ -93,10 +85,15 @@ export class RestaurantEffects {
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
           .patchAlwaysOpen(restaurant.code, action.alwaysOpen)
-          .pipe(
-            switchMap((restaurant) => [setRestaurant({ restaurant }), stopLoading()]),
-          );
+          .pipe(map((restaurant) => setRestaurant({ restaurant })));
       }),
+    );
+  });
+
+  stopLoading$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setRestaurant),
+      map(() => stopLoading()),
     );
   });
 

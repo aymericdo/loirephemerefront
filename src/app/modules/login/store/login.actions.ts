@@ -87,6 +87,29 @@ export const setCode2 = createAction(
   props<{ code2: string }>(),
 );
 
+export const postConfirmEmailUserSuccess = createAction(
+  '[Login page] Post confirm email user success',
+  props<{ code2: string }>(),
+);
+
+export const postConfirmRecoverEmailUserSuccess = createAction(
+  '[Login page] Post confirm recover email user success',
+  props<{ code2: string }>(),
+);
+
+export const postChangePasswordSuccess = createAction(
+  '[Login page] Post Change Password success',
+);
+
+export const postValidateRecoverEmailCodeSuccess = createAction(
+  '[Login page] Post validate recover email code success',
+);
+
+export const postUserSuccess = createAction(
+  '[Login page] Post user success',
+  props<{ user: User, password: string }>(),
+);
+
 export const openConfirmationModal = createAction(
   '[Login page] Open confirmation modal',
   props<{ modal: 'register' | 'recover' | '' }>(),

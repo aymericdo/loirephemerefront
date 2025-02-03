@@ -10,8 +10,6 @@ import {
   fetchingAllRestaurantPastries,
   movingPastry,
   openMenuModal,
-  pastryCreated,
-  pastryEdited,
   pastryMoved,
   postingPastry,
   reactivatePastryName,
@@ -22,6 +20,7 @@ import {
   setStock,
   startLoading,
   stopLoading,
+  stopSavingPastry,
   validatingPastryName,
 } from './menu.actions';
 
@@ -51,9 +50,12 @@ export const menuInitialState: MenuState = {
 
 const menuReducer = createReducer(
   menuInitialState,
-  on(startLoading, fetchingAllRestaurantPastries, (state): MenuState => ({
+  on(startLoading, (state): MenuState => ({
     ...state,
     loading: true,
+  })),
+  on(fetchingAllRestaurantPastries, (state): MenuState => ({
+    ...state,
     allPastries: [...pastriesMock],
   })),
   on(setAllPastries, (state, { pastries }): MenuState => ({
@@ -108,7 +110,7 @@ const menuReducer = createReducer(
     ...state,
     isSavingPastry: true,
   })),
-  on(pastryCreated, (state): MenuState => ({
+  on(stopSavingPastry, (state): MenuState => ({
     ...state,
     isSavingPastry: false,
   })),
@@ -119,10 +121,6 @@ const menuReducer = createReducer(
   on(editingPastry, (state): MenuState => ({
     ...state,
     isSavingPastry: true,
-  })),
-  on(pastryEdited, (state): MenuState => ({
-    ...state,
-    isSavingPastry: false,
   })),
   on(pastryMoved, (state): MenuState => ({
     ...state,

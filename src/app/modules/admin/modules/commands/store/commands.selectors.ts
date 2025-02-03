@@ -1,9 +1,8 @@
-import { createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Command } from 'src/app/interfaces/command.interface';
 import { CommandsState } from 'src/app/modules/admin/modules/commands/store/commands.reducer';
-import { selectFeature as selectAdminFeature } from 'src/app/modules/admin/store/admin.selectors';
 
-export const selectFeature = createSelector(selectAdminFeature, (state) => state.commands);
+export const selectFeature = createFeatureSelector<CommandsState>('admin/commands');
 
 export const selectOnGoingCommands = createSelector(
   selectFeature,

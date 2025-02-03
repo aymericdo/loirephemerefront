@@ -17,6 +17,10 @@ export const setUser = createAction(
   '[Users page] Set user',
   props<{ user: User }>(),
 );
+export const patchUserRestaurantAccessSuccess = createAction(
+  '[Users page] Patch user restaurant access user success',
+  props<{ user: User }>(),
+);
 export const deleteUser = createAction(
   '[Users page] Delete users',
   props<{ userId: string }>(),

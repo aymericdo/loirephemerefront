@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, switchMap } from 'rxjs/operators';
+import { concatMap, map } from 'rxjs/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
 import {
   fetchingAllRestaurantPastries,
@@ -15,11 +15,9 @@ export class StatsEffects {
   fetchingAllRestaurantPastries$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fetchingAllRestaurantPastries),
-      mergeMap((action) => {
+      concatMap((action) => {
         return this.adminApiService.getAllPastries(action.code).pipe(
-          switchMap((pastries) => {
-            return [setAllPastries({ pastries })];
-          }),
+          map((pastries) => setAllPastries({ pastries })),
         );
       }),
     );
@@ -28,13 +26,18 @@ export class StatsEffects {
   fetchingRestaurantCommands$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fetchingRestaurantCommands),
-      mergeMap((action) => {
+      concatMap((action) => {
         return this.adminApiService.getCommandsByCode(action.code, action.fromDate, action.toDate, true).pipe(
-          switchMap((commands) => {
-            return [setCommands({ commands }), stopLoading()];
-          }),
+          map((commands) => setCommands({ commands })),
         );
       }),
+    );
+  });
+
+  stopLoading$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setCommands),
+      map(() => stopLoading()),
     );
   });
 

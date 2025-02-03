@@ -47,6 +47,10 @@ export const setPersonalCommand = createAction(
   '[Home page] Set personal command',
   props<{ command: Command }>(),
 );
+export const postCommandSuccess = createAction(
+  '[Home page] Post command success',
+  props<{ command: Command }>(),
+);
 export const setErrorCommand = createAction(
   '[Home page] Set error command',
   props<{ error: any }>(),

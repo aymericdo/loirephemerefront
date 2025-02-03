@@ -50,11 +50,12 @@ export const settingCommonStock = createAction(
   '[Menu page] Setting common stock pastries',
   props<{ commonStock: string, pastries: Pastry[] }>(),
 );
-export const pastryCreated = createAction(
-  '[Menu page] Pastry created',
+export const stopSavingPastry = createAction(
+  '[Menu page] Stop Saving Pastry',
 );
-export const pastryEdited = createAction(
-  '[Menu page] Pastry edited',
+export const putPastrySuccess = createAction(
+  '[Menu page] Put Pastry Success',
+  props<{ pastry: Pastry, displaySequenceById?: { [pastryId: string]: number } }>(),
 );
 export const addPastry = createAction(
   '[Menu page] Add pastry',

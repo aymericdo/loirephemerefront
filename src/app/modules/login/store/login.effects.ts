@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { catchError, concatMap, debounceTime, filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, debounceTime, filter, map, switchMap } from 'rxjs/operators';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CoreUser } from 'src/app/interfaces/user.interface';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
@@ -11,7 +11,9 @@ import {
   changePassword, confirmEmail, confirmRecoverEmail,
   createUser, fetchingCurrentRestaurantPublicKey, fetchingDemoResto,
   fetchingRestaurant, fetchingUser, getUserSuccess,
-  openConfirmationModal, openRecoverModal, refreshingUser, setAuthError,
+  openConfirmationModal, openRecoverModal, postChangePasswordSuccess, postConfirmEmailUserSuccess,
+  postConfirmRecoverEmailUserSuccess, postUserSuccess, postValidateRecoverEmailCodeSuccess,
+  refreshingUser, setAuthError,
   setCode2, setDemoResto, setNewToken, setNoAuthError,
   setPasswordAsChanged, setRestaurant, setRestaurantPublicKey, setUser, setUserEmailError,
   setUserNoEmailError, setUserRestaurants, signInUser,
@@ -36,12 +38,8 @@ export class LoginEffects {
       ofType(fetchingUser),
       concatMap(() => {
         return this.loginApiService.getUser().pipe(
-          map((user) => {
-            return getUserSuccess({ user });
-          }),
-          catchError(() => {
-            return [stopUserFetching()];
-          }),
+          map((user) => getUserSuccess({ user })),
+          catchError(() => [stopUserFetching()]),
         );
       }),
     );
@@ -49,14 +47,21 @@ export class LoginEffects {
 
   setUser$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(getUserSuccess),
+      ofType(getUserSuccess, postUserSuccess),
       map(({ user }) => setUser({ user })),
     );
   });
 
   stopLoading$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(getUserSuccess),
+      ofType(
+        getUserSuccess,
+        stopUserFetching,
+        setCode2,
+        postValidateRecoverEmailCodeSuccess,
+        postChangePasswordSuccess,
+        setRestaurant,
+      ),
       map(() => stopLoading()),
     );
   });
@@ -66,9 +71,7 @@ export class LoginEffects {
       ofType(refreshingUser),
       concatMap(() => {
         return this.loginApiService.getUser().pipe(
-          map((user) => {
-            return setUser({ user });
-          }),
+          map((user) => setUser({ user })),
         );
       }),
     );
@@ -79,14 +82,17 @@ export class LoginEffects {
       ofType(getUserSuccess),
       concatMap(() => {
         return this.restaurantApiService.getUserRestaurants().pipe(
-          switchMap((restaurants: Restaurant[]) => {
-            return [setUserRestaurants({ restaurants }), stopUserFetching()];
-          }),
-          catchError(() => {
-            return [stopUserFetching(), stopLoading()];
-          }),
+          map((restaurants: Restaurant[]) => setUserRestaurants({ restaurants })),
+          catchError(() => [stopUserFetching()]),
         );
       }),
+    );
+  });
+
+  stopUserFetching$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setUserRestaurants),
+      map(() => stopUserFetching()),
     );
   });
 
@@ -96,14 +102,10 @@ export class LoginEffects {
       concatLatestFrom(() =>
         this.store.select(selectRestaurant).pipe(filter(Boolean)),
       ),
-      mergeMap(([, restaurant]) => {
+      concatMap(([, restaurant]) => {
         return this.restaurantApiService.getRestaurantPublicKey(restaurant.code).pipe(
-          switchMap(({ publicKey }) => {
-            return [setRestaurantPublicKey({ publicKey })];
-          }),
-          catchError(() => {
-            return EMPTY;
-          }),
+          map(({ publicKey }) => setRestaurantPublicKey({ publicKey })),
+          catchError(() => EMPTY),
         );
       }),
     );
@@ -112,14 +114,10 @@ export class LoginEffects {
   confirmEmail$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(confirmEmail),
-      mergeMap((action: { email: string, captchaToken: string }) => {
+      concatMap((action: { email: string, captchaToken: string }) => {
         return this.loginApiService.postConfirmEmailUser(action.email, action.captchaToken).pipe(
-          switchMap((code2: string) => {
-            return [setCode2({ code2 }), openConfirmationModal({ modal: 'register' }), stopLoading()];
-          }),
-          catchError(() => {
-            return [stopLoading()];
-          }),
+          map((code2: string) => postConfirmEmailUserSuccess({ code2 })),
+          catchError(() => [stopLoading()]),
         );
       }),
     );
@@ -128,16 +126,33 @@ export class LoginEffects {
   confirmRecoverEmail$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(confirmRecoverEmail),
-      mergeMap((action: { email: string, captchaToken: string }) => {
+      concatMap((action: { email: string, captchaToken: string }) => {
         return this.loginApiService.postConfirmRecoverEmailUser(action.email, action.captchaToken).pipe(
-          switchMap((code2: string) => {
-            return [setCode2({ code2 }), openConfirmationModal({ modal: 'recover' }), stopLoading()];
-          }),
-          catchError(() => {
-            return [stopLoading()];
-          }),
+          map((code2: string) => postConfirmRecoverEmailUserSuccess({ code2 })),
+          catchError(() => [stopLoading()]),
         );
       }),
+    );
+  });
+
+  setCode2$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postConfirmEmailUserSuccess, postConfirmRecoverEmailUserSuccess),
+      map(({ code2 }) => setCode2({ code2 })),
+    );
+  });
+
+  openRegisterConfirmationModal$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postConfirmEmailUserSuccess),
+      map(() => openConfirmationModal({ modal: 'register' })),
+    );
+  });
+
+  openRecoverConfirmationModal$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postConfirmRecoverEmailUserSuccess, postValidateRecoverEmailCodeSuccess),
+      map(() => openConfirmationModal({ modal: 'recover' })),
     );
   });
 
@@ -145,22 +160,25 @@ export class LoginEffects {
     return this.actions$.pipe(
       ofType(validateRecoverEmailCode),
       concatLatestFrom(() => this.store.select(selectCode2)),
-      mergeMap(([action, code2]) => {
+      concatMap(([action, code2]) => {
         const { email, emailCode }: { email: string, emailCode: string } =
           action as { email: string, emailCode: string };
-        return this.loginApiService.postValidateRecoverEmailCode(email, emailCode, code2!).pipe(
-          switchMap((isValid: boolean) => {
-            if (isValid) {
-              return [openConfirmationModal({ modal: 'recover' }), openRecoverModal({ modal: true }), stopLoading()];
-            } else {
-              return [stopLoading()];
-            }
+        return this.loginApiService.postValidateRecoverEmailCodeSuccess(email, emailCode, code2!).pipe(
+          map((isValid: boolean) => {
+            return (isValid) ?
+              postValidateRecoverEmailCodeSuccess() :
+              stopLoading();
           }),
-          catchError(() => {
-            return [stopLoading()];
-          }),
+          catchError(() => [stopLoading()]),
         );
       }),
+    );
+  });
+
+  openRecoverModal$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postValidateRecoverEmailCodeSuccess),
+      map(() => openRecoverModal({ modal: true })),
     );
   });
 
@@ -168,14 +186,14 @@ export class LoginEffects {
     return this.actions$.pipe(
       ofType(changePassword),
       concatLatestFrom(() => this.store.select(selectCode2)),
-      mergeMap(([action, code2]) => {
+      concatMap(([action, code2]) => {
         const { email, password, emailCode }: { email: string, password: string, emailCode: string } = action;
         return this.loginApiService.postChangePassword(email, password, emailCode, code2!).pipe(
-          switchMap((isValid: boolean) => {
+          map((isValid: boolean) => {
             if (isValid) {
-              return [openRecoverModal({ modal: false }), setPasswordAsChanged({ changed: true }), stopLoading()];
+              return postChangePasswordSuccess();
             } else {
-              return [stopLoading()];
+              return stopLoading();
             }
           }),
           catchError(() => {
@@ -186,20 +204,30 @@ export class LoginEffects {
     );
   });
 
+  closeRecoverModal$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postChangePasswordSuccess),
+      map(() => openRecoverModal({ modal: false })),
+    );
+  });
+
+  setPasswordAsChanged$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postChangePasswordSuccess),
+      map(() => setPasswordAsChanged({ changed: true })),
+    );
+  });
+
   postUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(createUser),
       concatLatestFrom(() => this.store.select(selectCode2)),
-      mergeMap(([action, code2]) => {
+      concatMap(([action, code2]) => {
         const { user, emailCode }: { user: CoreUser, emailCode: string } =
           action as { user: CoreUser, emailCode: string };
         return this.loginApiService.postUser(user, emailCode, code2!).pipe(
-          switchMap((userRes) => {
-            return [
-              setUser({ user: userRes }),
-              openConfirmationModal({ modal: '' }),
-              signInUser({ user: { email: userRes.email, password: user.password } }),
-            ];
+          map((data) => {
+            return postUserSuccess({ user: data, password: user.password });
           }),
           catchError(() => {
             return [stopLoading()];
@@ -209,14 +237,28 @@ export class LoginEffects {
     );
   });
 
+  closeConfirmationModal$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postUserSuccess),
+      map(() => openConfirmationModal({ modal: ''  })),
+    );
+  });
+
+  signInAfterCreationUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postUserSuccess),
+      map(({ user, password }) => signInUser({ user: { email: user.email, password } })),
+    );
+  });
+
   signInUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(signInUser),
-      mergeMap((action: { user: CoreUser }) => {
+      switchMap((action: { user: CoreUser }) => {
         return this.loginApiService.postAuthLogin(action.user).pipe(
-          switchMap((token: { access_token: string }) => {
+          map((token: { access_token: string }) => {
             localStorage.setItem('access_token', token.access_token);
-            return [setNewToken({ token: token.access_token }), setNoAuthError(), fetchingUser()];
+            return setNewToken({ token: token.access_token });
           }),
           catchError((error) => {
             if (error.status === 401) {
@@ -231,17 +273,31 @@ export class LoginEffects {
     );
   });
 
+  setNoAuthError$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setNewToken),
+      map(() => setNoAuthError()),
+    );
+  });
+
+  fetchingNewUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setNewToken),
+      map(() => fetchingUser()),
+    );
+  });
+
   validatingUserEmail$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(validatingUserEmail),
       debounceTime(500),
-      mergeMap((action: { email: string }) => {
+      switchMap((action: { email: string }) => {
         return this.loginApiService.validateUserEmail(action.email).pipe(
-          switchMap((isValid: boolean) => {
+          map((isValid: boolean) => {
             if (isValid) {
-              return [setUserNoEmailError()];
+              return setUserNoEmailError();
             } else {
-              return [setUserEmailError({ error: true, duplicated: true })];
+              return setUserEmailError({ error: true, duplicated: true });
             }
           }),
         );
@@ -252,20 +308,17 @@ export class LoginEffects {
   startLoading$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fetchingDemoResto),
-      mergeMap(() => [startLoading()]),
+      map(() => startLoading()),
     );
   });
 
   fetchingDemoResto$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fetchingDemoResto),
-      mergeMap(() => {
+      concatMap(() => {
         return this.restaurantApiService.getDemoResto().pipe(
-          switchMap((restaurant: Restaurant) => {
-            return [
-              setDemoResto({ restaurant}),
-              stopDemoRestoFetching(),
-            ];
+          map((restaurant: Restaurant) => {
+            return setDemoResto({ restaurant});
           }),
           catchError(() => {
             return [stopLoading(), stopDemoRestoFetching()];
@@ -275,23 +328,31 @@ export class LoginEffects {
     );
   });
 
+  stopDemoRestoFetching$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setDemoResto),
+      map(() => stopDemoRestoFetching()),
+    );
+  });
+
   fetchingRestaurant$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fetchingRestaurant),
-      mergeMap((action: { code: string }) => {
+      concatMap((action: { code: string }) => {
         return this.restaurantApiService.getRestaurant(action.code).pipe(
-          switchMap((restaurant) => {
-            return [
-              stopLoading(),
-              stopRestaurantFetching(),
-              setRestaurant({ restaurant }),
-            ];
-          }),
+          map((restaurant) => setRestaurant({ restaurant })),
           catchError(() => {
             return [stopLoading(), stopRestaurantFetching()];
           }),
         );
       }),
+    );
+  });
+
+  stopRestaurantFetching$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setRestaurant),
+      map(() => stopRestaurantFetching()),
     );
   });
 

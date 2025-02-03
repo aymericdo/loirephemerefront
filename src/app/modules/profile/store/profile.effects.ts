@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, map } from 'rxjs/operators';
 import { ProfileApiService } from 'src/app/modules/profile/services/profile-api.service';
 import {
   changingPassword, setChangePasswordError,
@@ -13,16 +13,14 @@ export class ProfileEffects {
   changingPassword$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(changingPassword),
-      mergeMap(({ oldPassword, password }) => {
+      concatMap(({ oldPassword, password }) => {
         return this.profileApiService.postChangePassword(oldPassword, password).pipe(
-          switchMap((changed: boolean) => {
-            return [setPasswordAsChanged({ changed }), stopLoading()];
-          }),
+          map((changed: boolean) => setPasswordAsChanged({ changed })),
           catchError((error) => {
             if (error.code === 'old-password-not-ok') {
-              return [setChangePasswordError({ error: true }), setPasswordAsChanged({ changed: false }), stopLoading()];
+              return [setChangePasswordError({ error: true })];
             } else {
-              return [setPasswordAsChanged({ changed: false }), stopLoading()];
+              return [setPasswordAsChanged({ changed: false })];
             }
           }),
         );
@@ -30,16 +28,28 @@ export class ProfileEffects {
     );
   });
 
+  setPasswordAsNotChanged$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setChangePasswordError),
+      map(() => setPasswordAsChanged({ changed: false })),
+    );
+  });
+
   updatingDisplayDemoResto$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updatingDisplayDemoResto),
-      mergeMap((action) => {
+      concatMap((action) => {
         return this.profileApiService
           .patchDisplayDemoResto(action.displayDemoResto)
-          .pipe(
-            switchMap((displayDemoResto) => [toggleDisplayDemoResto({ displayDemoResto }), stopLoading()]),
-          );
+          .pipe(map((displayDemoResto) => toggleDisplayDemoResto({ displayDemoResto })));
       }),
+    );
+  });
+
+  stopLoading$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setPasswordAsChanged, toggleDisplayDemoResto),
+      map(() => stopLoading()),
     );
   });
 

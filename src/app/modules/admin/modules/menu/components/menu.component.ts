@@ -9,7 +9,7 @@ import { AssociationComponent } from 'src/app/modules/admin/modules/menu/compone
 import { EditPastryModalComponent } from 'src/app/modules/admin/modules/menu/components/edit-pastry-modal/edit-pastry-modal.component';
 import { NewPastryModalComponent } from 'src/app/modules/admin/modules/menu/components/new-pastry-modal/new-pastry-modal.component';
 import { SequenceComponent } from 'src/app/modules/admin/modules/menu/components/sequence/sequence.component';
-import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock, startLoading } from 'src/app/modules/admin/modules/menu/store/menu.actions';
+import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { MenuWebSocketService, WebSocketData } from 'src/app/modules/admin/services/menu-socket.service';
 import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
@@ -57,8 +57,6 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(startLoading());
-
     this.route.paramMap.pipe(
       map((params: ParamMap) => params.get('code')),
       filter(Boolean),

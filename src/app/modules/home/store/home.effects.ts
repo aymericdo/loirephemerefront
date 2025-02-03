@@ -4,10 +4,9 @@ import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
 import {
   catchError,
+  concatMap,
   filter,
   map,
-  mergeMap,
-  switchMap,
 } from 'rxjs/operators';
 import { concatLatestFrom } from '@ngrx/operators';
 import { CoreCommand } from 'src/app/interfaces/command.interface';
@@ -20,6 +19,7 @@ import {
   closeHomeModal,
   fetchRestaurantPastries, fetchingPersonalCommand, markPersonalCommandAsPayed, notificationSubSent,
   openHomeModal,
+  postCommandSuccess,
   resetCommand,
   resetErrorCommand,
   resetPersonalCommand,
@@ -38,9 +38,9 @@ export class HomeEffects {
   fetchRestaurantPastries$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fetchRestaurantPastries),
-      mergeMap((action) => {
+      concatMap((action) => {
         return this.homeApiService.getPastries(action.code).pipe(
-          switchMap((pastries) => [setPastries({ pastries }), stopLoading()]),
+          map((pastries) => setPastries({ pastries })),
           catchError(() => EMPTY),
         );
       }),
@@ -50,10 +50,12 @@ export class HomeEffects {
   sendingCommand$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(sendingCommand),
-      concatLatestFrom(() => this.store.select(selectPastries)),
-      concatLatestFrom(() => this.store.select(selectSelectedPastries)),
-      concatLatestFrom(() => this.store.select(selectRestaurant).pipe(filter(Boolean))),
-      mergeMap(([[[action, allPastries], selectedPastries], restaurant]) => {
+      concatLatestFrom(() => [
+        this.store.select(selectPastries),
+        this.store.select(selectSelectedPastries),
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
+      ]),
+      concatMap(([action, allPastries, selectedPastries, restaurant]) => {
         const { name, takeAway, pickUpTime }: CoreCommand = action.command;
 
         const command: CoreCommand = {
@@ -76,18 +78,41 @@ export class HomeEffects {
           ),
         };
         return this.homeApiService.postCommand(restaurant?.code!, command).pipe(
-          switchMap((command) => {
-            return [
-              setPersonalCommand({ command }),
-              resetCommand(),
-              openHomeModal({
-                modal: command.paymentRequired ? 'payment' : 'success',
-              }),
-            ];
-          }),
-          catchError((error) => [fetchRestaurantPastries({ code: restaurant.code }), setErrorCommand({ error })]),
+          map((command) => postCommandSuccess({ command })),
+          catchError((error) => [setErrorCommand({ error })]),
         );
       }),
+    );
+  });
+
+  setErrorCommand$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setErrorCommand),
+      concatLatestFrom(() => this.store.select(selectRestaurant).pipe(filter(Boolean))),
+      map(([_, restaurant]) => fetchRestaurantPastries({ code: restaurant.code })),
+    );
+  });
+
+  setPersonalCommand$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postCommandSuccess),
+      map(({ command }) => setPersonalCommand({ command })),
+    );
+  });
+
+  resetCommand$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setPersonalCommand, resetPersonalCommand),
+      map(() => resetCommand()),
+    );
+  });
+
+  openHomeModal$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(postCommandSuccess),
+      map(({ command }) => openHomeModal({
+        modal: command.paymentRequired ? 'payment' : 'success',
+      })),
     );
   });
 
@@ -95,11 +120,9 @@ export class HomeEffects {
     return this.actions$.pipe(
       ofType(fetchingPersonalCommand),
       concatLatestFrom(() => this.store.select(selectRestaurant).pipe(filter(Boolean))),
-      mergeMap(([action, restaurant]) => {
+      concatMap(([action, restaurant]) => {
         return this.homeApiService.getPersonalCommand(restaurant?.code!, action.commandId).pipe(
-          switchMap((command) => {
-            return [setPersonalCommand({ command }), resetCommand()];
-          }),
+          map((command) => setPersonalCommand({ command })),
           catchError(() => EMPTY),
         );
       }),
@@ -110,11 +133,9 @@ export class HomeEffects {
     return this.actions$.pipe(
       ofType(cancelPersonalCommand),
       concatLatestFrom(() => this.store.select(selectRestaurant).pipe(filter(Boolean))),
-      mergeMap(([action, restaurant]) => {
+      concatMap(([action, restaurant]) => {
         return this.homeApiService.cancelPersonalCommand(restaurant?.code!, action.commandId).pipe(
-          switchMap(() => {
-            return [resetPersonalCommand(), resetCommand()];
-          }),
+          map(() => resetPersonalCommand()),
           catchError(() => EMPTY),
         );
       }),
@@ -125,17 +146,15 @@ export class HomeEffects {
     return this.actions$.pipe(
       ofType(markPersonalCommandAsPayed),
       concatLatestFrom(() => this.store.select(selectRestaurant).pipe(filter(Boolean))),
-      mergeMap(([action, restaurant]) => {
+      concatMap(([action, restaurant]) => {
         return this.homeApiService.markPersonalCommandAsPayed(
           restaurant?.code!, action.commandId, action.sessionId,
         ).pipe(
-          switchMap((command) => {
+          map((command) => {
             this.router.navigate([restaurant?.code!], { queryParams: { payedCommandId: command.id }});
-            return [setPersonalCommand({ command }), resetCommand()];
+            return setPersonalCommand({ command });
           }),
-          catchError((error) => {
-            return [setErrorCommand({ error })];
-          }),
+          catchError((error) => [setErrorCommand({ error })]),
         );
       }),
     );
@@ -144,7 +163,7 @@ export class HomeEffects {
   sendNotificationSub$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(sendNotificationSub),
-      mergeMap((action) => {
+      concatMap((action) => {
         return this.homeApiService.postSub(action.commandId, action.sub).pipe(
           map(() => notificationSubSent()),
           catchError(() => EMPTY),
@@ -156,14 +175,21 @@ export class HomeEffects {
   closeHomeModal$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(closeErrorModal),
-      mergeMap(() => [closeHomeModal()]),
+      map(() => closeHomeModal()),
     );
   });
 
   resetErrorCommand$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(closeErrorModal),
-      mergeMap(() => [resetErrorCommand()]),
+      map(() => resetErrorCommand()),
+    );
+  });
+
+  stopLoading$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setPastries),
+      map(() => stopLoading()),
     );
   });
 

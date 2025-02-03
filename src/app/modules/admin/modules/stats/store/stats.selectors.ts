@@ -1,8 +1,7 @@
-import { createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { StatsState } from './stats.reducer';
-import { selectFeature as selectAdminFeature } from 'src/app/modules/admin/store/admin.selectors';
 
-export const selectFeature = createSelector(selectAdminFeature, (state) => state.stats);
+export const selectFeature = createFeatureSelector<StatsState>('admin/stats');
 
 export const selectPayedCommands = createSelector(
   selectFeature,
