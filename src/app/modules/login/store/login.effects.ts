@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { LoginApiService } from 'src/app/modules/login/services/login-api.service';
-import { concatMap, map, catchError, debounceTime, switchMap } from 'rxjs';
+import { catchError, concatMap, debounceTime, map, switchMap } from 'rxjs';
 import {
   changePassword, confirmEmail, confirmRecoverEmail, createUser,
   openConfirmationModal, openRecoverModal, postChangePasswordSuccess,
@@ -64,7 +64,7 @@ export class LoginEffects {
     );
   });
 
-   validateRecoverEmailCode$ = createEffect(() => {
+  validateRecoverEmailCode$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(validateRecoverEmailCode),
       concatLatestFrom(() => this.store.select(selectCode2)),
