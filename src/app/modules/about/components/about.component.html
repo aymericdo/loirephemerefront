@@ -13,6 +13,21 @@
     <h2 [class.-has-scrolled]="hasScrolled" class="sub-title" i18n>
       Gérez votre restaurant en toute simplicité avec Oresto
     </h2>
+
+    <div class="redirect-btn" nzFlex nz-row nzJustify="center">
+      <a [routerLink]="['/', 'page', 'login']">
+        <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
+          <span nz-icon nzType="swap-right"></span>
+          <ng-container *ngIf="!!(user$ | async); else notConnected" i18n>
+            Accéder à l'app
+          </ng-container>
+          <ng-template #notConnected i18n>
+            Se connecter
+          </ng-template>
+        </button>
+      </a>
+    </div>
+
     <div class="home-section">
       <p i18n><b>Oresto</b>, c’est l’outil tout-en-un pour les restaurateurs qui veulent gagner du temps et se concentrer sur l’essentiel&nbsp;: satisfaire leurs clients.</p>
 
@@ -57,19 +72,21 @@
           </a>
         </ng-container>
       </ng-container>
+
       <ng-container *nzSpaceItem>
         <a [routerLink]="['/', 'page', 'login']">
           <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
             <span nz-icon nzType="swap-right"></span>
-            <ng-container *ngIf="!!(user$ | async); else login" i18n>
+            <ng-container *ngIf="!!(user$ | async); else notConnected" i18n>
               Accéder à l'app
             </ng-container>
-            <ng-template #login i18n>
+            <ng-template #notConnected i18n>
               Se connecter
             </ng-template>
           </button>
         </a>
       </ng-container>
+
       <ng-container *nzSpaceItem>
         <div class="go-down-btn">
           <button (click)="scroll(target)" nz-button [nzSize]="'large'" nzShape="circle">
@@ -79,6 +96,7 @@
       </ng-container>
     </nz-space>
   </div>
+
   <div class="timeline-section" #target>
     <nz-timeline [nzMode]="'alternate'">
       <nz-timeline-item nzLabel="03/05/2021" i18n>Première ligne de code afin de gérer les commandes de ma pâtisserie éphémère</nz-timeline-item>
