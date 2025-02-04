@@ -4,10 +4,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PaymentElementApiService } from 'src/app/shared/components/payment-element/payment-element.service';
 import { Observable, ReplaySubject, filter, take, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectRestaurantPublicKey } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurantPublicKey } from 'src/app/auth/store/auth.selectors';
 import { selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { Command } from 'src/app/interfaces/command.interface';
-import { fetchingCurrentRestaurantPublicKey } from 'src/app/modules/login/store/login.actions';
+import { fetchingCurrentRestaurantPublicKey } from 'src/app/auth/store/auth.actions';
 import { CommonModule } from '@angular/common';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 

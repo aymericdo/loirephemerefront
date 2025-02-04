@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, StoreModule } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectIsSiderCollapsed } from 'src/app/modules/login/store/login.selectors';
+import { selectIsSiderCollapsed } from 'src/app/auth/store/auth.selectors';
 import { NzContentComponent, NzLayoutComponent } from 'ng-zorro-antd/layout';
 import { NavComponent } from './shared/components/nav/nav.component';
 import { RouterOutlet } from '@angular/router';

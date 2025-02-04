@@ -7,7 +7,7 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { updatePaymentInformation } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { CommonModule } from '@angular/common';
 import { InformationPopoverComponent } from '../../../../../../shared/components/information-popover/information-popover.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';

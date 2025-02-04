@@ -6,7 +6,7 @@ import { catchError, concatMap, debounceTime, filter, map, mergeMap, switchMap }
 import { concatLatestFrom } from '@ngrx/operators';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import {
   activatingPastry,
   addPastry,

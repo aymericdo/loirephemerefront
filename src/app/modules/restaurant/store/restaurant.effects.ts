@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators';
-import { addUserRestaurants, postRestaurantSuccess, refreshingUser } from 'src/app/modules/login/store/login.actions';
+import { addUserRestaurants, postRestaurantSuccess, refreshingUser } from 'src/app/auth/store/auth.actions';
 import { setNewRestaurant, setRestaurantNameError, setRestaurantNoNameError, validateRestaurantName } from '../../restaurant/store/restaurant.actions';
 import { RestaurantApiService } from '../services/restaurant-api.service';
 import { createRestaurant } from './restaurant.actions';

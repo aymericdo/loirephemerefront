@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { selectDemoResto } from 'src/app/modules/login/store/login.selectors';
+import { selectDemoResto } from 'src/app/auth/store/auth.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 

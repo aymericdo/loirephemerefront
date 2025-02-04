@@ -5,7 +5,7 @@ import { Observable, ReplaySubject, filter, of, takeUntil } from 'rxjs';
 import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
-import { selectLoading } from 'src/app/modules/login/store/login.selectors';
+import { selectLoading } from 'src/app/auth/store/auth.selectors';
 import { changingPassword } from 'src/app/modules/profile/store/profile.actions';
 import { selectChangePasswordError, selectPasswordChanged } from 'src/app/modules/profile/store/profile.selectors';
 import { NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent } from 'ng-zorro-antd/form';

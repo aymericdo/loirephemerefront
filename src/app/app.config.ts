@@ -13,10 +13,8 @@ import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { provideServiceWorker } from '@angular/service-worker';
-import { HomeEffects } from 'src/app/modules/home/store/home.effects';
-import { LoginEffects } from 'src/app/modules/login/store/login.effects';
-import { reducer as LoginReducer } from 'src/app/modules/login/store/login.reducer';
-import { reducer as HomeReducer } from 'src/app/modules/home/store/home.reducer';
+import { AuthEffects } from 'src/app/auth/store/auth.effects';
+import { reducer as AuthReducer } from 'src/app/auth/store/auth.reducer';
 
 const ngZorroConfig: NzConfig = {
   message: { nzMaxStack: 1, nzDuration: 2000 },
@@ -42,12 +40,10 @@ export const appConfig: ApplicationConfig = {
       },
     ),
     provideStore({
-      'home': HomeReducer,
-      'login': LoginReducer,
+      'auth': AuthReducer,
     }),
     provideEffects([
-      HomeEffects,
-      LoginEffects,
+      AuthEffects,
     ]),
     provideStoreDevtools({
       maxAge: 25,

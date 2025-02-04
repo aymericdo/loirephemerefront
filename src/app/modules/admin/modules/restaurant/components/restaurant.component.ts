@@ -5,7 +5,7 @@ import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { updateDisplayStock } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsDisplayStockLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PaymentComponent } from './payment/payment.component';
 import { OpeningHoursComponent } from './opening-hours/opening-hours.component';

@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, filter, map, of, take, withLatestFrom } from 'rxjs';
 import { Access } from 'src/app/interfaces/user.interface';
-import { selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { selectUser, selectUserRestaurants } from 'src/app/auth/store/auth.selectors';
 import { AuthService } from './auth.service';
 
 @Injectable({

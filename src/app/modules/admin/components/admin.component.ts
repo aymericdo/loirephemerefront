@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { removeNotificationSub } from 'src/app/modules/admin/modules/commands/store/commands.actions';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 
 @Component({
   templateUrl: './admin.component.html',

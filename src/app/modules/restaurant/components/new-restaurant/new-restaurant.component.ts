@@ -9,7 +9,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
 import { RegisterComponent } from 'src/app/modules/login/components/register/register.component';
 import { SignInComponent } from 'src/app/modules/login/components/sign-in/sign-in.component';
-import { selectUser } from 'src/app/modules/login/store/login.selectors';
+import { selectUser } from 'src/app/auth/store/auth.selectors';
 import { createRestaurant, validateRestaurantName } from 'src/app/modules/restaurant/store/restaurant.actions';
 import { selectNewRestaurant, selectRestaurantNameError } from 'src/app/modules/restaurant/store/restaurant.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';

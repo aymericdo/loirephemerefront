@@ -41,7 +41,7 @@ import {
   selectSelectedPastriesTotalCount,
   selectTotalPrice,
 } from 'src/app/modules/home/store/home.selectors';
-import { selectDemoResto, selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectDemoResto, selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 import { PastryCardComponent } from 'src/app/shared/components/pastry-card/pastry-card.component';

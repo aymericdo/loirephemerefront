@@ -3,13 +3,13 @@ import { ActivationEnd, NavigationEnd, Router, RouterLink } from '@angular/route
 import { Store } from '@ngrx/store';
 import { ReplaySubject, combineLatest, filter, takeUntil, withLatestFrom } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { stopLoading } from 'src/app/modules/login/store/login.actions';
-import { selectDemoResto, selectUser, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { selectDemoResto, selectUser, selectUserRestaurants } from 'src/app/auth/store/auth.selectors';
 import { RegisterComponent } from './register/register.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { CommonModule } from '@angular/common';
 import { RecoverComponent } from './recover/recover.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+import { stopLoading } from 'src/app/modules/login/store/login.actions';
 
 
 @Component({

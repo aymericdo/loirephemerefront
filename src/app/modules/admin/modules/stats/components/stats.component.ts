@@ -14,7 +14,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { fetchingAllRestaurantPastries, fetchingRestaurantCommands, resetTimeInterval, startLoading } from 'src/app/modules/admin/modules/stats/store/stats.actions';
 import { statsInitialState } from 'src/app/modules/admin/modules/stats/store/stats.reducer';
 import { selectAllPastries, selectIsLoading, selectPayedCommands, selectTimeInterval } from 'src/app/modules/admin/modules/stats/store/stats.selectors';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { NzPageHeaderComponent, NzPageHeaderSubtitleDirective, NzPageHeaderTagDirective, NzPageHeaderTitleDirective } from 'ng-zorro-antd/page-header';
 import { NzTagComponent } from 'ng-zorro-antd/tag';
 import { NzSpaceCompactItemDirective, NzSpaceComponent, NzSpaceItemDirective } from 'ng-zorro-antd/space';

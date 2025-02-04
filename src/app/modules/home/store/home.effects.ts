@@ -11,7 +11,7 @@ import {
 import { concatLatestFrom } from '@ngrx/operators';
 import { CoreCommand } from 'src/app/interfaces/command.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { HomeApiService } from '../services/home-api.service';
 import {
   cancelPersonalCommand,

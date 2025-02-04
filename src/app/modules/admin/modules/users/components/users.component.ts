@@ -6,7 +6,7 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
 import { deletingUserToRestaurant, fetchingUsers, patchingUserRestaurantAccess, startLoading } from 'src/app/modules/admin/modules/users/store/users.actions';
 import { selectIsLoading, selectUsers } from 'src/app/modules/admin/modules/users/store/users.selectors';
-import { selectRestaurant, selectUser } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant, selectUser } from 'src/app/auth/store/auth.selectors';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NewUserModalComponent } from './new-user-modal/new-user-modal.component';

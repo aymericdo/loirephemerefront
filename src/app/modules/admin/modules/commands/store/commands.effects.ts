@@ -5,7 +5,7 @@ import { EMPTY } from 'rxjs';
 import { catchError, concatMap, filter, map, mergeMap } from 'rxjs/operators';
 import { concatLatestFrom } from '@ngrx/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import {
   cancellingCommand,
   closingCommand,

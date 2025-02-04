@@ -3,7 +3,7 @@ import { NewRestaurantComponent } from './components/new-restaurant/new-restaura
 import { RestaurantComponent } from './components/restaurant.component';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
-import { reducer } from 'src/app/modules/login/store/login.reducer';
+import { reducer } from 'src/app/auth/store/auth.reducer';
 import { RestaurantEffects } from 'src/app/modules/restaurant/store/restaurant.effects';
 
 export const routes: Routes = [

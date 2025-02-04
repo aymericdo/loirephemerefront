@@ -9,7 +9,7 @@ import { cancelPersonalCommand, closeErrorModal, closeHomeModal, fetchingPersona
 import { selectCurrentSentCommandFromCommandList, selectErrorCommand, selectHomeModal, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { SwPush } from '@angular/service-worker';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 import { CommonModule } from '@angular/common';

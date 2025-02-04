@@ -5,9 +5,9 @@ import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 import { signInUser } from 'src/app/modules/login/store/login.actions';
 import { selectLoading, selectUserAuthError } from 'src/app/modules/login/store/login.selectors';
-import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 
 @Component({

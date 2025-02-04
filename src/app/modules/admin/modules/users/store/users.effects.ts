@@ -6,7 +6,7 @@ import { catchError, concatMap, debounceTime, filter, map, switchMap } from 'rxj
 import { concatLatestFrom } from '@ngrx/operators';
 import { Access, User } from 'src/app/interfaces/user.interface';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import {
   addUser, addingUserToRestaurant, deleteUser,
   deletingUserToRestaurant,
@@ -21,8 +21,8 @@ import {
   validatingUserEmail,
 } from './users.actions';
 
-import { setUserAccess } from 'src/app/modules/login/store/login.actions';
-import { selectUser } from 'src/app/modules/login/store/login.selectors';
+import { setUserAccess } from 'src/app/auth/store/auth.actions';
+import { selectUser } from 'src/app/auth/store/auth.selectors';
 
 @Injectable()
 export class UsersEffects {

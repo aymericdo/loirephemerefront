@@ -12,7 +12,7 @@ import { SequenceComponent } from 'src/app/modules/admin/modules/menu/components
 import { activatingPastry, closeMenuModal, deactivatingPastry, decrementPastry, fetchingAllRestaurantPastries, incrementPastry, openMenuModal, setStock } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectAllPastries, selectEditingPastry, selectIsLoading, selectIsMovingPastry, selectMenuModalOpened } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { MenuWebSocketService, WebSocketData } from 'src/app/modules/admin/services/menu-socket.service';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { PastryCardComponent } from 'src/app/shared/components/pastry-card/pastry-card.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 

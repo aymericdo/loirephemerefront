@@ -6,7 +6,7 @@ import {
   changingPassword, setChangePasswordError,
   setPasswordAsChanged, stopLoading, updatingDisplayDemoResto,
 } from './profile.actions';
-import { toggleDisplayDemoResto } from 'src/app/modules/login/store/login.actions';
+import { toggleDisplayDemoResto } from 'src/app/auth/store/auth.actions';
 
 @Injectable()
 export class ProfileEffects {

@@ -3,8 +3,8 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { concatMap, filter, map, mergeMap } from 'rxjs/operators';
 import { AdminApiService } from 'src/app/modules/admin/services/admin-api.service';
-import { setRestaurant } from 'src/app/modules/login/store/login.actions';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { setRestaurant } from 'src/app/auth/store/auth.actions';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import {
   stopLoading,
   updateAlwaysOpen,

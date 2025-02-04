@@ -9,11 +9,11 @@ import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
 import { ConfirmationModalComponent } from 'src/app/modules/login/components/confirmation-modal/confirmation-modal.component';
 import { SITE_KEY } from 'src/app/modules/login/login-routing.module';
-import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
-import { selectConfirmationModalOpened, selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 import { environment } from 'src/environments/environment';
+import { selectConfirmationModalOpened, selectLoading, selectUserEmailError } from 'src/app/modules/login/store/login.selectors';
+import { confirmEmail, createUser, validatingUserEmail } from 'src/app/modules/login/store/login.actions';
 
 @Component({
   selector: 'app-register',

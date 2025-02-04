@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { User } from 'src/app/interfaces/user.interface';
-import { selectDemoResto, selectUser } from 'src/app/modules/login/store/login.selectors';
+import { selectDemoResto, selectUser } from 'src/app/auth/store/auth.selectors';
 import { updatingDisplayDemoResto } from 'src/app/modules/profile/store/profile.actions';
 import { NzTabComponent, NzTabSetComponent } from 'ng-zorro-antd/tabs';
 import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';

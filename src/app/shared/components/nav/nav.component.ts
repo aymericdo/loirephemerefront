@@ -8,8 +8,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { APP_VERSION } from 'src/app/helpers/version';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
-import { fetchingRestaurant, fetchingUser, resetUser, setIsSiderCollapsed, setUserRestaurants, startFirstNavigation, stopFirstNavigation } from 'src/app/modules/login/store/login.actions';
-import { selectAllRestaurantsFetching, selectDemoResto, selectIsSiderCollapsed, selectRestaurant, selectRestaurantFetching, selectUser, selectUserFetching, selectUserRestaurants } from 'src/app/modules/login/store/login.selectors';
+import { fetchingRestaurant, fetchingUser, resetUser, setIsSiderCollapsed, setUserRestaurants, startFirstNavigation, stopFirstNavigation } from 'src/app/auth/store/auth.actions';
+import { selectAllRestaurantsFetching, selectDemoResto, selectIsSiderCollapsed, selectRestaurant, selectRestaurantFetching, selectUser, selectUserFetching, selectUserRestaurants } from 'src/app/auth/store/auth.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 

@@ -17,7 +17,7 @@ import {
   CommandWebSocketService,
   WebSocketData,
 } from 'src/app/modules/admin/services/command-socket.service';
-import { selectRestaurant } from 'src/app/modules/login/store/login.selectors';
+import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 import { VAPID_PUBLIC_KEY } from 'src/main';

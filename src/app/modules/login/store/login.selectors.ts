@@ -1,47 +1,16 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { LoginState } from './login.reducer';
-import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { User } from 'src/app/interfaces/user.interface';
+import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { LoginState } from "src/app/modules/login/store/login.reducer";
 
-export const selectFeature = createFeatureSelector<LoginState>('login');
-
-export const selectUserEmailError = createSelector(
-  selectFeature,
-  (state: LoginState) => state.userEmailError,
-);
-
-export const selectIsEmailValidating = createSelector(
-  selectFeature,
-  (state: LoginState) => state.isEmailValidating,
-);
-
-export const selectUserAuthError = createSelector(
-  selectFeature,
-  (state: LoginState) => state.userAuthError,
-);
-
-export const selectUser = createSelector(
-  selectFeature,
-  (state: LoginState) => state.user,
-);
-
-export const selectDemoResto = createSelector(
-  selectFeature,
-  (state: LoginState) => state.demoResto,
-);
-
-export const selectUserRestaurants = createSelector(
-  selectFeature,
-  selectDemoResto,
-  selectUser,
-  (state: LoginState, demoResto: Restaurant | null, user: User | null) => state.userRestaurants?.filter((resto) => {
-    return resto.code != demoResto?.code || user?.displayDemoResto;
-  }) || null,
-);
+const selectFeature = createFeatureSelector<LoginState>('login');
 
 export const selectLoading = createSelector(
   selectFeature,
   (state: LoginState) => state.loading,
+);
+
+export const selectPasswordChanged = createSelector(
+  selectFeature,
+  (state: LoginState) => state.passwordChanged,
 );
 
 export const selectCode2 = createSelector(
@@ -59,51 +28,18 @@ export const selectRecoverModalOpened = createSelector(
   (state: LoginState) => state.recoverModalOpened,
 );
 
-export const selectPasswordChanged = createSelector(
+export const selectUserEmailError = createSelector(
   selectFeature,
-  (state: LoginState) => state.passwordChanged,
+  (state: LoginState) => state.userEmailError,
 );
 
-export const selectUserFetching = createSelector(
+export const selectIsEmailValidating = createSelector(
   selectFeature,
-  (state: LoginState) => state.userFetching,
+  (state: LoginState) => state.isEmailValidating,
 );
 
-export const selectDemoRestoFetching = createSelector(
+export const selectUserAuthError = createSelector(
   selectFeature,
-  (state: LoginState) => state.demoRestoFetching,
+  (state: LoginState) => state.userAuthError,
 );
 
-export const selectRestaurantFetching = createSelector(
-  selectFeature,
-  (state: LoginState) => state.restaurantFetching,
-);
-
-export const selectRestaurant = createSelector(
-  selectFeature,
-  (state: LoginState) => state.restaurant,
-);
-
-export const selectRestaurantPublicKey = createSelector(
-  selectFeature,
-  (state: LoginState) => state.paymentInformationPublicKey,
-);
-
-export const selectIsSiderCollapsed = createSelector(
-  selectFeature,
-  (state: LoginState) => state.isSiderCollapsed,
-);
-
-export const selectFirstNavigationStarting = createSelector(
-  selectFeature,
-  (state: LoginState) => state.firstNavigationStarting,
-);
-
-export const selectAllRestaurantsFetching = createSelector(
-  selectRestaurantFetching,
-  selectDemoRestoFetching,
-  selectFirstNavigationStarting,
-  (restaurantFetching, demoRestoFetching, firstNavigationStarting) => {
-    return restaurantFetching || demoRestoFetching || firstNavigationStarting;
-  },
-);

@@ -6,9 +6,9 @@ import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
 import { PASSWORD_SPECIALS_CHARS } from 'src/app/helpers/password-special-chars';
 import { REGEX } from 'src/app/helpers/regex';
 import { SIZE } from 'src/app/helpers/sizes';
+import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 import { changePassword } from 'src/app/modules/login/store/login.actions';
 import { selectLoading } from 'src/app/modules/login/store/login.selectors';
-import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 
 @Component({
