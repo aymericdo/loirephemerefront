@@ -103,6 +103,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
       });
 
     this.validateForm.controls.paymentActivated.valueChanges.subscribe((paymentActivated) => {
+      if (!paymentActivated) {
+        this.validateForm.controls.paymentRequired.setValue(false);
+      }
       this.manageFormDisabling(paymentActivated);
     });
   }
@@ -133,8 +136,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
       });
     } else {
       this.store.dispatch(updatePaymentInformation({
-        paymentActivated: this.validateForm.value.paymentActivated,
-        paymentRequired: this.validateForm.value.paymentRequired,
+        paymentActivated: this.validateForm.controls.paymentActivated.value,
+        paymentRequired: this.validateForm.controls.paymentRequired.value,
         publicKey: this.validateForm.value.publicKey,
         secretKey: this.validateForm.value.secretKey,
       }));
