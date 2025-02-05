@@ -1,6 +1,8 @@
 <nz-alert *ngIf="(demoResto$ | async)?.id && (demoResto$ | async)?.id === (restaurant$ | async)?.id"
   nzBanner nzType="info" nzMessage="Restaurant de test&nbsp;: amusez-vous !" i18n-nzMessage></nz-alert>
 
+<app-home-notifications></app-home-notifications>
+
 <div class="home-section" [class.-has-order-footer]="hasSelectedPastries$ | async">
   <nz-page-header *ngIf="(restaurant$ | async) !== null">
     <nz-page-header-title><h1>{{ (restaurant$ | async)?.name }}</h1></nz-page-header-title>
@@ -52,5 +54,3 @@
   <div i18n>Vous pouvez donc prendre des commandes, manipuler, tester.</div>
   <div i18n>La partie <b>admin</b> de ce resto existe, et elle est accessible à tout le monde, <b>une fois connecté.</b></div>
 </app-information-popover>
-
-<app-home-notifications></app-home-notifications>

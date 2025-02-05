@@ -102,7 +102,7 @@ export class HomeEffects {
 
   resetCommand$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(setPersonalCommand, resetPersonalCommand),
+      ofType(postCommandSuccess, resetPersonalCommand),
       map(() => resetCommand()),
     );
   });

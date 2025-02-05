@@ -15,6 +15,7 @@ export class HttpResponseInterceptor implements HttpInterceptor {
     '/users/validate-recover-email-code',
     '/notification',
     '/payments/create-checkout-session',
+    '/mark-as-payed',
   ];
 
   unauthorizedBlackList = [
@@ -23,7 +24,6 @@ export class HttpResponseInterceptor implements HttpInterceptor {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
     private message: NzMessageService,
   ) {}
 

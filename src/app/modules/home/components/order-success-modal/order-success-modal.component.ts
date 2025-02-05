@@ -17,8 +17,6 @@ import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 export class OrderSuccessModalComponent {
   @Input() command!: Command;
   @Input() restaurant!: Restaurant;
-  @Output() clickCancel = new EventEmitter<string>();
+  @Output() clickGo = new EventEmitter<string>();
   @Output() clickPayment = new EventEmitter<string>();
-
-  constructor() { }
 }

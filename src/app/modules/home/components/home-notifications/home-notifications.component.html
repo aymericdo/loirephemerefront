@@ -17,7 +17,7 @@
 
   <app-order-success-modal *ngIf="(homeModal$ | async) === 'success' && (errorCommand$ | async) === null"
     [restaurant]="(restaurant$ | async)!" (clickPayment)="handlePayment(true)"
-    [command]="(personalCommand$ | async)!" (clickCancel)="handleCloseSuccessModal()">
+    [command]="(personalCommand$ | async)!" (clickGo)="handleCloseSuccessModal()">
   </app-order-success-modal>
 </ng-container>
 

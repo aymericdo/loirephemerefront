@@ -97,7 +97,9 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
           this.router.navigate(['.'], { relativeTo: this.route });
 
           if (personalCommand.paymentRequired) {
-            this.store.dispatch(openHomeModal({ modal: 'success' }));
+            setTimeout(() => {
+              this.store.dispatch(openHomeModal({ modal: 'success' }));
+            }, 1000);
           } else {
             this.openWaitingConfirmationNotification();
           }
