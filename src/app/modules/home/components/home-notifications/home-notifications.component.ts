@@ -99,7 +99,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
           if (personalCommand.paymentRequired) {
             setTimeout(() => {
               this.store.dispatch(openHomeModal({ modal: 'success' }));
-            }, 1000);
+            }, 1000); // to avoid a huge weird freeze
           } else {
             this.openWaitingConfirmationNotification();
           }
