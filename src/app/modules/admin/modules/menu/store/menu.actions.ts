@@ -36,11 +36,11 @@ export const editingPastry = createAction(
 );
 export const activatingPastry = createAction(
   '[Menu page] Activating pastry',
-  props<{ pastry: CorePastry }>(),
+  props<{ pastry: Pastry }>(),
 );
 export const deactivatingPastry = createAction(
   '[Menu page] Deactivating pastry',
-  props<{ pastry: CorePastry }>(),
+  props<{ pastry: Pastry }>(),
 );
 export const movingPastry = createAction(
   '[Menu page] Moving pastry',
@@ -67,11 +67,11 @@ export const editPastry = createAction(
 );
 export const incrementPastry = createAction(
   '[Menu page] Increment pastry',
-  props<{ pastry: CorePastry }>(),
+  props<{ pastry: Pastry }>(),
 );
 export const decrementPastry = createAction(
   '[Menu page] Decrement pastry',
-  props<{ pastry: CorePastry }>(),
+  props<{ pastry: Pastry }>(),
 );
 export const setStock = createAction(
   '[Menu page] Set stock',

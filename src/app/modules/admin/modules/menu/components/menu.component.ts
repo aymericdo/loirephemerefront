@@ -81,17 +81,15 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   handleActivePastry(pastry: Pastry): void {
-    const currentPastry = this.getCorePastry(pastry);
     this.store.dispatch(activatingPastry({ pastry: {
-      ...currentPastry,
+      ...pastry,
       hidden: false,
     }}));
   }
 
   handleDeletePastry(pastry: Pastry): void {
-    const currentPastry = this.getCorePastry(pastry);
     this.store.dispatch(deactivatingPastry({ pastry: {
-      ...currentPastry,
+      ...pastry,
       hidden: true,
     }}));
   }
@@ -101,29 +99,21 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   handleClickPlus(pastry: Pastry): void {
-    const currentPastry = this.getCorePastry(pastry);
     this.store.dispatch(incrementPastry({ pastry: {
-      ...currentPastry,
-      stock: (currentPastry.stock + 1 >= 0) ? currentPastry.stock + 1 : 0,
+      ...pastry,
+      stock: (pastry.stock + 1 >= 0) ? pastry.stock + 1 : 0,
     }}));
   }
 
   handleClickMinus(pastry: Pastry): void {
-    const currentPastry = this.getCorePastry(pastry);
     this.store.dispatch(decrementPastry({ pastry: {
-      ...currentPastry,
-      stock: (currentPastry.stock - 1 >= 0) ? currentPastry.stock - 1 : 0,
+      ...pastry,
+      stock: (pastry.stock - 1 >= 0) ? pastry.stock - 1 : 0,
     }}));
   }
 
   trackById(_index: any, pastry: Pastry): string {
     return pastry.id;
-  }
-
-  private getCorePastry(pastry: Pastry): CorePastry {
-    const currentPastry = { ...pastry };
-    delete currentPastry.restaurant;
-    return currentPastry;
   }
 
   private subscribeToWS(code: string) {

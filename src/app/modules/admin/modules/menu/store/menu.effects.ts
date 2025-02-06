@@ -241,6 +241,13 @@ export class MenuEffects {
     );
   });
 
+  preEditPastry$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(activatingPastry, deactivatingPastry, incrementPastry, decrementPastry),
+      map(({ pastry }) => editPastry({ pastry })),
+    );
+  });
+
   patchingPastry$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(activatingPastry, deactivatingPastry, incrementPastry, decrementPastry),
