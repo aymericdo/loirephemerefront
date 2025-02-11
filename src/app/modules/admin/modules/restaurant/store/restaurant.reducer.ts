@@ -1,5 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import {
+  setTimezones,
   startLoading,
   stopLoading,
   updateAlwaysOpen,
@@ -13,12 +14,14 @@ export interface RestaurantState {
   loading: boolean;
   isDisplayStockLoading: boolean;
   isAlwaysOpenLoading: boolean;
+  timezones: string[];
 }
 
 export const restaurantInitialState: RestaurantState = {
   loading: false,
   isDisplayStockLoading: false,
   isAlwaysOpenLoading: false,
+  timezones: [],
 };
 
 const adminRestaurantReducer = createReducer(
@@ -34,6 +37,10 @@ const adminRestaurantReducer = createReducer(
   on(updateDisplayStock, (state): RestaurantState => ({
     ...state,
     isDisplayStockLoading: true,
+  })),
+  on(setTimezones, (state, { timezones }): RestaurantState => ({
+    ...state,
+    timezones,
   })),
   on(stopLoading, (state): RestaurantState => ({
     ...state,

@@ -17,3 +17,8 @@ export const selectIsLoading = createSelector(
   selectFeature,
   (state: RestaurantState) => state.loading || state.isAlwaysOpenLoading,
 );
+
+export const selectTimezones = createSelector(
+  selectFeature,
+  (state: RestaurantState) => state.timezones,
+);

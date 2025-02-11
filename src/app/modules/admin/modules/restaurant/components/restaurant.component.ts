@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { filter, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { updateDisplayStock } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
-import { selectIsDisplayStockLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
+import { fetchingTimezones, updateDisplayStock, updatingRestaurantInformation } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
+import { selectIsDisplayStockLoading, selectTimezones } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
 import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { PaymentComponent } from './payment/payment.component';
 import { OpeningHoursComponent } from './opening-hours/opening-hours.component';
 import { OpeningPickupComponent } from './opening-pickup/opening-pickup.component';
@@ -31,8 +31,10 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   @ViewChild('download', { static: false }) download!: ElementRef;
 
   restaurant$: Observable<Restaurant | null>;
+  timezones$: Observable<string[]>;
   isDisplayStockLoading$: Observable<boolean>;
   currentTab = '';
+  validateForm!: UntypedFormGroup;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -40,8 +42,10 @@ export class RestaurantComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
     private route: ActivatedRoute,
+    private fb: UntypedFormBuilder,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
+    this.timezones$ = this.store.select(selectTimezones);
     this.isDisplayStockLoading$ = this.store.select(selectIsDisplayStockLoading);
   }
 
@@ -54,6 +58,23 @@ export class RestaurantComponent implements OnInit, OnDestroy {
       }
       this.currentTab = params.get('tab')!;
     });
+
+    this.store.dispatch(fetchingTimezones());
+
+    this.validateForm = this.fb.group({
+      timezone: ['', [Validators.required]],
+    });
+
+    this.restaurant$.pipe(filter(Boolean), take(1)).subscribe((restaurant) => {
+      console.log(restaurant);
+      this.validateForm.controls.timezone.setValue(restaurant.timezone)
+    });
+  }
+
+  submitForm(): void {
+    this.store.dispatch(updatingRestaurantInformation({
+      timezone: this.validateForm.value.timezone,
+    }));
   }
 
   ngOnDestroy() {

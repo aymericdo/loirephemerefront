@@ -16,6 +16,7 @@ export class Restaurant implements RestaurantInterface {
   openingTime?: { [weekDay: number]: { startTime: string, endTime: string } };
   openingPickupTime?: { [weekDay: number]: { startTime: string } };
   displayStock?: boolean;
+  timezone?: string;
   alwaysOpen?: boolean;
   paymentInformation?: {
     type: 'Stripe';
@@ -37,6 +38,7 @@ export class Restaurant implements RestaurantInterface {
     this.openingTime = restaurant.openingTime;
     this.openingPickupTime = restaurant.openingPickupTime;
     this.displayStock = restaurant.displayStock;
+    this.timezone = restaurant.timezone;
     this.alwaysOpen = restaurant.alwaysOpen;
     this.paymentInformation = restaurant.paymentInformation;
 

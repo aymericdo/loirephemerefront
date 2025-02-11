@@ -153,6 +153,19 @@ export class AdminApiService {
     );
   }
 
+  getTimezones(): Observable<string[]> {
+    return this.http.get(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/timezones`,
+    ) as Observable<string[]>;
+  }
+
+  updateRestaurantInformation(code: string, attributes: { timezone?: string, displayStock?: boolean }): Observable<Restaurant> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}`,
+      attributes,
+    ) as Observable<Restaurant>;
+  }
+
   patchOpeningTime(
     code: string,
     openingTime: { [weekDay: number]: { startTime: string; endTime: string } }): Observable<Restaurant> {
@@ -181,15 +194,6 @@ export class AdminApiService {
     return this.http.post(
       `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/payment-information`,
       { paymentActivated, paymentRequired, publicKey, secretKey },
-    ) as Observable<Restaurant>;
-  }
-
-  patchDisplayStock(
-    code: string,
-    displayStock: boolean): Observable<Restaurant> {
-    return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/restaurants/by-code/${code}/display-stock`,
-      { displayStock },
     ) as Observable<Restaurant>;
   }
 

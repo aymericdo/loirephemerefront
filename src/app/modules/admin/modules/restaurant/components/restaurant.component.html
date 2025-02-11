@@ -10,7 +10,7 @@
           Informations
         </a>
         <div class="info-section">
-          <div class="content" nz-row nzJustify="center">
+          <form nz-form [formGroup]="validateForm" nz-row nzJustify="center">
             <div nz-col [nzLg]="20" [nzXs]="24">
               <div nz-row nzJustify="center">
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
@@ -44,7 +44,14 @@
                 <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
                   <nz-form-label i18n>Fuseau horaire</nz-form-label>
                   <nz-form-control>
-                    <input nz-input [value]="'Europe/Paris'" disabled />
+                    <nz-select
+                      formControlName="timezone"
+                      nzShowSearch nzAllowClear
+                      nzPlaceHolder="Sélectionner le fuseau horaire" i18n-nzPlaceHolder>
+                      @for (item of (timezones$ | async); track item) {
+                        <nz-option [nzLabel]="item" [nzValue]="item"></nz-option>
+                      }
+                    </nz-select>
                   </nz-form-control>
                 </nz-form-item>
 
@@ -53,15 +60,26 @@
                   <nz-form-control>
                     <nz-switch
                       [ngModel]="!!(restaurant$ | async)?.displayStock" (ngModelChange)="handleDisplayStock($event)" [nzCheckedChildren]="checkedTemplate"
-                      [nzUnCheckedChildren]="unCheckedTemplate" [nzLoading]="isDisplayStockLoading$ | async">
+                      [nzUnCheckedChildren]="unCheckedTemplate" [nzLoading]="isDisplayStockLoading$ | async" [ngModelOptions]="{ standalone: true }">
                     </nz-switch>
                     <ng-template #checkedTemplate><span nz-icon nzType="eye"></span></ng-template>
                     <ng-template #unCheckedTemplate><span nz-icon nzType="eye-invisible"></span></ng-template>
                   </nz-form-control>
                 </nz-form-item>
+
+                <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+                  <nz-form-control>
+                    <div nz-row nzJustify="end">
+                      <nz-space nzWrap>
+                        <button *nzSpaceItem nz-button (click)="submitForm()" nzType="primary"
+                          [disabled]="!validateForm.valid || !validateForm.dirty" i18n>Enregistrer</button>
+                      </nz-space>
+                    </div>
+                  </nz-form-control>
+                </nz-form-item>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </nz-tab>
       <nz-tab>

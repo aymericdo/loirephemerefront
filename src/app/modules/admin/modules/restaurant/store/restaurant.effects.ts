@@ -6,12 +6,15 @@ import { AdminApiService } from 'src/app/modules/admin/services/admin-api.servic
 import { setRestaurant } from 'src/app/auth/store/auth.actions';
 import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import {
+  fetchingTimezones,
+  setTimezones,
   stopLoading,
   updateAlwaysOpen,
   updateDisplayStock,
   updateOpeningPickupTime,
   updateOpeningTime,
   updatePaymentInformation,
+  updatingRestaurantInformation,
 } from './restaurant.actions';
 import { concatLatestFrom } from '@ngrx/operators';
 
@@ -70,7 +73,7 @@ export class RestaurantEffects {
       ),
       mergeMap(([action, restaurant]) => {
         return this.adminApiService
-          .patchDisplayStock(restaurant.code, action.displayStock)
+          .updateRestaurantInformation(restaurant.code, { displayStock: action.displayStock })
           .pipe(map((restaurant) => setRestaurant({ restaurant })));
       }),
     );
@@ -94,6 +97,31 @@ export class RestaurantEffects {
     return this.actions$.pipe(
       ofType(setRestaurant),
       map(() => stopLoading()),
+    );
+  });
+
+  fetchingTimezones$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fetchingTimezones),
+      mergeMap(() => {
+        return this.adminApiService
+          .getTimezones()
+          .pipe(map((timezones) => setTimezones({ timezones })));
+      }),
+    );
+  });
+
+  updatingRestaurantInformation$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updatingRestaurantInformation),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService
+          .updateRestaurantInformation(restaurant.code, { timezone: action.timezone })
+          .pipe(map((restaurant) => setRestaurant({ restaurant })));
+      }),
     );
   });
 
