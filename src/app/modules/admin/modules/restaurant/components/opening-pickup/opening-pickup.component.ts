@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Observable, ReplaySubject, filter, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, filter, takeUntil, withLatestFrom } from 'rxjs';
 import { hourMinuteToDate } from 'src/app/helpers/date';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { startLoading, stopLoading, updateOpeningPickupTime } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
@@ -119,22 +119,33 @@ export class OpeningPickupComponent implements OnInit, OnDestroy {
       });
 
       this.initialFormValue = JSON.stringify(this.validateForm.getRawValue());
+
+      if (restaurant.alwaysOpen) {
+        this.validateForm.disable();
+      }
+
       this.store.dispatch(stopLoading());
     });
 
     this.isLoading$
       .pipe(
+        withLatestFrom(this.restaurant$),
         takeUntil(this.destroyed$),
-      ).subscribe((loading) => {
+      ).subscribe(([loading, restaurant]) => {
         if (loading) {
           this.validateForm.disable();
         } else {
           this.validateForm.enable();
-          this.weekDayNumbers.forEach((weekDay: number) => {
-            if (this.isDayClosed(weekDay)) {
-              this.validateForm.controls[weekDay].disable();
-            }
-          });
+
+          if (restaurant?.alwaysOpen) {
+            this.validateForm.disable();
+          } else {
+            this.weekDayNumbers.forEach((weekDay: number) => {
+              if (this.isDayClosed(weekDay)) {
+                this.validateForm.controls[weekDay].disable();
+              }
+            });
+          }
         }
       });
 

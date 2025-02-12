@@ -1,0 +1,39 @@
+<div class="dashboard-section">
+  <nz-page-header>
+    <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
+    <nz-page-header-subtitle i18n>Dashboard</nz-page-header-subtitle>
+    <nz-page-header-tags><nz-tag [nzColor]="'orange'" i18n>Admin</nz-tag></nz-page-header-tags>
+  </nz-page-header>
+  <div class="container-section">
+    <div nzFlex nz-row nzJustify="center">
+      <nz-space nzDirection="vertical">
+        <div *nzSpaceItem class="progress-chart">
+          <nz-statistic [nzValue]="((usersCount$ | async) | number)!"
+            [nzTitle]="titleTemplate" i18n-nzTitle></nz-statistic>
+            <ng-template #titleTemplate>
+              Nombre d'utilisateur{{ ((usersCount$ | async)! > 1 ? 's' : '') }}
+            </ng-template>
+        </div>
+        <div *nzSpaceItem class="progress-chart">
+          <nz-space nzDirection="vertical">
+            <nz-statistic *nzSpaceItem [nzValue]="((commandsCount$ | async) | number)!"
+            [nzTitle]="titleTemplate" i18n-nzTitle></nz-statistic>
+            <ng-template #titleTemplate>
+              Nombre de commande{{ ((commandsCount$ | async)! > 1 ? 's' : '') }}
+            </ng-template>
+            <div *nzSpaceItem nz-flex [nzVertical]="true" [nzJustify]="'center'">
+              <nz-progress nz-flex [nzJustify]="'center'" [nzWidth]="200" [nzPercent]="(payedCommandsCount$ | async)! * 100 / (commandsCount$ | async)!" nzType="circle"></nz-progress>
+              <span class="dashboard-label">Pourcentage de commandes payées 💵</span>
+            </div>
+          </nz-space>
+        </div>
+        <a *nzSpaceItem [routerLink]="['/', (restaurant$ | async)?.code]" nz-flex [nzJustify]="'center'">
+          <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round" i18n>
+            <span nz-icon nzType="swap-right"></span>
+            Accéder à la page client
+          </button>
+        </a>
+      </nz-space>
+    </div>
+  </div>
+</div>

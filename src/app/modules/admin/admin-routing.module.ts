@@ -17,9 +17,12 @@ export const routes: Routes = [
       path: '',
       pathMatch: 'full',
       loadChildren: () =>
+        import('./modules/dashboard/dashboard-routing.module').then(m => m.routes),
+    }, {
+      path: 'restaurant',
+      loadChildren: () =>
         import('./modules/restaurant/restaurant-routing.module').then(m => m.routes),
-    },
-    {
+    }, {
       path: 'menu',
       data: {
         access: 'menu',

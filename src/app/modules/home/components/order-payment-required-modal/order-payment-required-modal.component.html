@@ -11,7 +11,7 @@
   <ng-container *nzModalContent>
     <div *ngIf="displayPayment; else stepOne" nz-flex nzJustify="center">
       <nz-space nzDirection="vertical">
-        <app-time-remaining *nzSpaceItem [timeRemaining]="(timeRemaining$ | async)!"></app-time-remaining>
+        <app-time-remaining *nzSpaceItem [timeRemaining]="timeRemaining" [deadline]="fiveMinutesAfterTheCommand" (countdownFinished)="timeRemaining = false"></app-time-remaining>
         <app-payment-element *nzSpaceItem></app-payment-element>
         <div *nzSpaceItem nz-flex nzJustify="center">
           <button nz-button (click)="handleCancel()" i18n>
@@ -22,9 +22,9 @@
     </div>
 
     <ng-template #stepOne>
-      <nz-result *ngIf="!displayPayment" [nzStatus]="(timeRemaining$ | async)! <= 0 ? 'error' : 'success'">
+      <nz-result *ngIf="!displayPayment" [nzStatus]="timeRemaining ? 'success' : 'error'">
         <div nz-result-title>
-          <span i18n *ngIf="(timeRemaining$ | async)! > 0; else noTime">
+          <span i18n *ngIf="timeRemaining; else noTime">
             Commande réservée !
           </span>
           <ng-template i18n #noTime>
@@ -33,11 +33,11 @@
         </div>
 
         <div nz-result-subtitle>
-          <app-time-remaining [timeRemaining]="(timeRemaining$ | async)!"></app-time-remaining>
+          <app-time-remaining [timeRemaining]="timeRemaining" [deadline]="fiveMinutesAfterTheCommand" (countdownFinished)="timeRemaining = false"></app-time-remaining>
         </div>
         <div nz-result-extra>
           <nz-space nzDirection="vertical">
-            <button nz-button nzType="primary" nzSize="large" (click)="handlePay()" i18n *nzSpaceItem [disabled]="(timeRemaining$ | async)! <= 0">
+            <button nz-button nzType="primary" nzSize="large" (click)="handlePay()" i18n *nzSpaceItem [disabled]="timeRemaining === false">
               Payer
             </button>
             <button nz-button (click)="handleCancel()" i18n *nzSpaceItem>

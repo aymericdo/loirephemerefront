@@ -23,64 +23,33 @@ export class OrderPaymentRequiredModalComponent implements OnInit, OnDestroy {
   @Input() command!: Command;
   @Input() restaurant!: RestaurantInterface;
   @Output() clickCancel = new EventEmitter<'human' | 'time'>();
-  // @HostListener('window:beforeunload', ['$event'])
-  // showMessage(event: BeforeUnloadEvent) {
-  //   event.preventDefault();
-  // }
 
   MINUTES_TO_WAIT = 5;
 
-  timeRemaining$: Observable<number> | null = null;
-
   displayPayment = false;
-  fiveMinutesAfterTheCommand: Date = new Date();
+  timeRemaining: boolean = true;
+  fiveMinutesAfterTheCommand: number = 0;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   ngOnInit(): void {
-    this.fiveMinutesAfterTheCommand = new Date(
-      new Date(this.command.createdAt).getTime() + this.MINUTES_TO_WAIT * 60000,
-    );
-    this.setTimeRemaining(this.MINUTES_TO_WAIT * 60);
-
-    document.addEventListener("visibilitychange", async () => {
-      if (document.visibilityState === 'visible') {
-        this.setTimeRemaining((this.fiveMinutesAfterTheCommand.getTime() - new Date().getTime()) / 1000);
-      }
-    });
-
-    this.timeRemaining$?.pipe(
-      filter((timeRemaining) => timeRemaining <= 0),
-      takeUntil(this.destroyed$),
-    ).subscribe(() => {
-      this.clickCancel.emit('time');
-    });
+    this.fiveMinutesAfterTheCommand = new Date(this.command.createdAt).getTime() + this.MINUTES_TO_WAIT * 60000;
   }
 
   handlePay(): void {
     this.displayPayment = true;
-    this.setTimeRemaining((this.fiveMinutesAfterTheCommand.getTime() - new Date().getTime()) / 1000);
   }
 
   handleCancel(): void {
-    this.timeRemaining$?.pipe(take(1)).subscribe((timeRemaining) => {
-      if (timeRemaining > 0) {
-        this.clickCancel.emit('human');
-      } else {
-        this.clickCancel.emit('time');
-      }
-    });
+    if (this.timeRemaining) {
+      this.clickCancel.emit('human');
+    } else {
+      this.clickCancel.emit('time');
+    }
   }
 
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-  }
-
-  private setTimeRemaining(secondsRemaining: number): void {
-    this.timeRemaining$ = timer(0, 1000).pipe(
-      map(n => (secondsRemaining - n) * 1000),
-      takeUntil(this.destroyed$),
-    );
   }
 }

@@ -90,8 +90,22 @@ export class AdminApiService {
     return this.http.get(`${this.protocolHttp}${this.baseUrl}/users/by-code/${restaurantCode}/all`) as Observable<User[]>;
   }
 
+  getUsersCount(restaurantCode: string): Observable<number> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/users/by-code/${restaurantCode}/count`) as Observable<number>;
+  }
+
   getCommandsByCode(code: string, fromDate: string, toDate: string, stats = false): Observable<Command[]> {
     return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}${stats ? '/stats' : ''}?fromDate=${fromDate}&toDate=${toDate}`) as Observable<Command[]>;;
+  }
+
+  getCommandsCount(restaurantCode: string): Observable<{
+    total: number,
+    payed: number,
+  }> {
+    return this.http.get(`${this.protocolHttp}${this.baseUrl}/commands/by-code/${restaurantCode}/count`) as Observable<{
+      total: number,
+      payed: number,
+    }>;
   }
 
   closeCommand(code: string, commandId: string): Observable<any> {

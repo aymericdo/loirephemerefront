@@ -186,11 +186,11 @@ export class NavComponent implements OnInit, OnDestroy {
   clickToggleRestaurant(restaurantCode: string, event: MouseEvent): void {
     const newCode = this.currentOpenedRestaurant === restaurantCode ? '' : restaurantCode;
 
-    if ((this.restaurantCode !== (newCode || this.currentOpenedRestaurant)) || this.routeName !== 'admin-restaurant') {
+    if ((this.restaurantCode !== (newCode || this.currentOpenedRestaurant)) || this.routeName !== 'dashboard') {
       this.router.navigate([newCode || this.currentOpenedRestaurant, 'admin']);
     }
 
-    if (!!this.currentOpenedRestaurant && !newCode.length && this.routeName !== 'admin-restaurant') {
+    if (!!this.currentOpenedRestaurant && !newCode.length && this.routeName !== 'dashboard') {
       event.stopPropagation();
     }
   }

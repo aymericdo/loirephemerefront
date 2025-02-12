@@ -14,5 +14,4 @@ import { NgZorroModule } from 'src/app/shared/ngzorro.module';
   ],
 })
 export class RestaurantComponent {
-  subtitle = "Création d'un nouveau restaurant";
 }

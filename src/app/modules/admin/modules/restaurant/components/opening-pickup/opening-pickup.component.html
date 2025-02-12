@@ -28,7 +28,7 @@
           [nzDisabledHours]="disabledHours.bind(this, weekDayNumber)" [nzDisabledMinutes]="disabledMinutes.bind(this, weekDayNumber)"
           nzPlaceHolder="Sélectionner l'heure" i18n-nzPlaceHolder></nz-time-picker>
         <button *nzSpaceItem class="action-btn" nz-button nzType="default" nzShape="circle"
-          (click)="duplicate(weekDayNumber)" [disabled]="(isLoading$ | async) || (isDayClosed(weekDayNumber))">
+          (click)="duplicate(weekDayNumber)" [disabled]="(isLoading$ | async) || (isDayClosed(weekDayNumber)) || (restaurant$ | async)?.alwaysOpen">
           <span nz-icon nzType="copy"></span>
         </button>
       </nz-space>

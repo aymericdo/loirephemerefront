@@ -67,8 +67,12 @@
     width: 100%;
   }
 
-  ::ng-deep .ant-menu-submenu-title:has(.restaurant-name-tooltip.-restaurant-title-selected) {
+  ::ng-deep .ant-menu-submenu-title:has(.restaurant-name-tooltip.-dashboard-selected) {
     background-color: var(--blue);
+  }
+
+  ::ng-deep .ant-menu-submenu-title:has(.restaurant-name-tooltip.-restaurant-title-selected) {
+    color: var(--blue);
   }
 
   ::ng-deep .restaurant-section {

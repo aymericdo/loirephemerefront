@@ -39,7 +39,8 @@
         <ng-container *ngFor="let restaurant of (userRestaurants$ | async); trackBy: trackById">
           <ng-template #titleNameTpl>
             <span (click)="clickToggleRestaurant(restaurant.code, $event)" class="restaurant-name-tooltip"
-              [class.-restaurant-title-selected]="routeName === 'admin-restaurant' && restaurant.code === (restaurant$ | async)?.code"
+              [class.-dashboard-selected]="routeName === 'dashboard' && restaurant.code === (restaurant$ | async)?.code"
+              [class.-restaurant-title-selected]="routeName !== 'dashboard' && restaurant.code === (restaurant$ | async)?.code"
               nz-tooltip [nzTooltipTitle]="restaurant.name" nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
               <span class="restaurant-name">{{ restaurant.name }}</span>
             </span>
@@ -50,6 +51,12 @@
             [ngStyle]="(demoResto$ | async)?.code === restaurant.code ? getDemoStyle() : {}"
             (nzOpenChange)="openChangeDropdownRestaurantAdmin(restaurant.code)" [attr.data-restaurant-code]="restaurant.code">
             <ul>
+              <li nz-menu-item [nzMatchRouter]="true">
+                <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'restaurant']">
+                  <i nz-icon nzType="coffee"></i>
+                  <span i18n>Restaurant</span>
+                </a>
+              </li>
               <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['menu']" nz-menu-item [nzMatchRouter]="true">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'menu']">
                   <i nz-icon nzType="shopping-cart"></i>

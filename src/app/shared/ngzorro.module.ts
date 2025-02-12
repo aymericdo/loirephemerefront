@@ -18,7 +18,6 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
@@ -27,7 +26,6 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
-import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
@@ -56,7 +54,6 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
     NzBadgeModule,
     NzButtonModule,
     NzSelectModule,
-    NzNotificationModule,
     NzPageHeaderModule,
     NzCollapseModule,
     NzSkeletonModule,
@@ -73,7 +70,6 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
     NzFormModule,
     NzTagModule,
     NzUploadModule,
-    NzMessageModule,
     NzSpinModule,
     NzStepsModule,
     NzToolTipModule,
