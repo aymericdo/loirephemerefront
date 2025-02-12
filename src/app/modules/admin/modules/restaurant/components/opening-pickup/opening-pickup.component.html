@@ -1,11 +1,20 @@
 <form nz-form [formGroup]="validateForm" nz-row nzJustify="center">
-  <div *ngIf="isDirty" class="info-dirty" nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+  <div *ngIf="isDirty" class="info-section" nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
     <nz-alert
-      nzType="info"
+      nzType="warning"
       nzMessage="Modification en cours"
       nzDescription="Cliquer sur enregistrer pour sauvegarder les informations."
       i18n-nzMessage
       i18n-nzDescription
+      nzShowIcon
+    ></nz-alert>
+  </div>
+
+  <div class="info-section" nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+    <nz-alert
+      nzType="info"
+      [nzMessage]="'Les heures de cette page sont dans le fuseau horaire du restaurant : ' + (restaurant$ | async)?.timezone + '.'"
+      i18n-nzMessage
       nzShowIcon
     ></nz-alert>
   </div>

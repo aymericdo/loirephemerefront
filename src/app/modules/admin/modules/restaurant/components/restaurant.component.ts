@@ -66,7 +66,6 @@ export class RestaurantComponent implements OnInit, OnDestroy {
     });
 
     this.restaurant$.pipe(filter(Boolean), take(1)).subscribe((restaurant) => {
-      console.log(restaurant);
       this.validateForm.controls.timezone.setValue(restaurant.timezone)
     });
   }

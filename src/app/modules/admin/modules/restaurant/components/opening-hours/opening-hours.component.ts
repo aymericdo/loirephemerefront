@@ -9,8 +9,8 @@ import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { startLoading, stopLoading, updateAlwaysOpen, updateOpeningTime } from 'src/app/modules/admin/modules/restaurant/store/restaurant.actions';
 import { selectIsAlwaysOpenLoading, selectIsLoading } from 'src/app/modules/admin/modules/restaurant/store/restaurant.selectors';
 import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
-import { InformationPopoverComponent } from '../../../../../../shared/components/information-popover/information-popover.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 
 @Component({
   selector: 'app-opening-hours',
@@ -82,10 +82,10 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
 
           if (weekdayOpeningTime.startTime && weekdayOpeningTime.endTime) {
             const openingHoursMinutes = weekdayOpeningTime.startTime.split(':');
-            startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
+            startTime = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1], 'raw');
 
             const closingHoursMinutes = weekdayOpeningTime.endTime.split(':');
-            endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
+            endTime = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1], 'raw');
           }
         }
 
@@ -146,11 +146,12 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
     const badPickupConfig = this.weekDayNumbers.filter((weekDay: number) => {
       if (this.validateForm.value[weekDay].startTime &&
         restaurant.openingPickupTime && restaurant.openingPickupTime[weekDay]?.startTime) {
-        const openingStartTime: Date = this.validateForm.value[weekDay].startTime;
+        const currentStartTime = this.validateForm.value[weekDay].startTime;
+        const openingStartTime: Date = hourMinuteToDate(currentStartTime.getHours(), currentStartTime.getMinutes(), restaurant.timezone);
         openingStartTime.setSeconds(0, 0);
 
         const openingPickupHoursMinutes = restaurant.openingPickupTime[weekDay].startTime.split(':');
-        const pickupStartTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1]);
+        const pickupStartTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1], restaurant.timezone);
         pickupStartTime.setSeconds(0, 0);
 
         return pickupStartTime > openingStartTime;

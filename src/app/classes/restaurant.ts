@@ -69,7 +69,7 @@ export class Restaurant implements RestaurantInterface {
 
     if (this.getOpeningPickupTime(cwday)) {
       const openingPickupHoursMinutes = this.getOpeningPickupTime(cwday)!.split(':');
-      const startTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1]);
+      const startTime = hourMinuteToDate(openingPickupHoursMinutes[0], openingPickupHoursMinutes[1], this.timezone);
 
       return !!(startTime && now >= startTime);
     }
@@ -104,8 +104,8 @@ export class Restaurant implements RestaurantInterface {
       const openingHoursMinutes = this.getOpeningTime(cwday)!.split(':');
       const closingHoursMinutes = this.getClosingTime(cwday)!.split(':');
 
-      const start = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
-      const end = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
+      const start = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1], this.timezone);
+      const end = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1], this.timezone);
       let isOnTwoDay = false;
 
       if (start >= end) {
@@ -126,8 +126,8 @@ export class Restaurant implements RestaurantInterface {
       const openingHoursMinutes = this.getOpeningTime(yesterday)!.split(':');
       const closingHoursMinutes = this.getClosingTime(yesterday)!.split(':');
 
-      const start = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1]);
-      const end = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1]);
+      const start = hourMinuteToDate(openingHoursMinutes[0], openingHoursMinutes[1], this.timezone);
+      const end = hourMinuteToDate(closingHoursMinutes[0], closingHoursMinutes[1], this.timezone);
 
       let isOnTwoDay = false;
 
