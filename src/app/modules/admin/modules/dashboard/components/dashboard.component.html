@@ -22,7 +22,7 @@
               Nombre de commande{{ ((commandsCount$ | async)! > 1 ? 's' : '') }}
             </ng-template>
             <div *nzSpaceItem nz-flex [nzVertical]="true" [nzJustify]="'center'">
-              <nz-progress nz-flex [nzJustify]="'center'" [nzWidth]="200" [nzPercent]="(payedCommandsCount$ | async)! * 100 / (commandsCount$ | async)!" nzType="circle"></nz-progress>
+              <nz-progress nz-flex [nzJustify]="'center'" [nzWidth]="200" [nzPercent]="((payedCommandsCount$ | async) ? ((payedCommandsCount$ | async)! * 100 / (commandsCount$ | async)!) : 0) | number: '1.0-0'" nzType="circle"></nz-progress>
               <span class="dashboard-label">Pourcentage de commandes payées 💵</span>
             </div>
           </nz-space>
