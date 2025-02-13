@@ -52,30 +52,37 @@
             (nzOpenChange)="openChangeDropdownRestaurantAdmin(restaurant.code)" [attr.data-restaurant-code]="restaurant.code">
             <ul>
               <li nz-menu-item [nzMatchRouter]="true">
-                <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'restaurant']">
-                  <i nz-icon nzType="coffee"></i>
-                  <span i18n>Restaurant</span>
+                <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'restaurant']"
+                  nz-tooltip [nzTooltipTitle]="'Configuration'" i18n-nzTooltipTitle nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
+                  <i nz-icon nzType="control"></i>
+                  <span i18n>
+                    Configuration
+                  </span>
                 </a>
               </li>
-              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['menu']" nz-menu-item [nzMatchRouter]="true">
+              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['menu']" nz-menu-item [nzMatchRouter]="true"
+                nz-tooltip [nzTooltipTitle]="'Menu'" i18n-nzTooltipTitle nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'menu']">
-                  <i nz-icon nzType="shopping-cart"></i>
+                  <i nz-icon nzType="shop"></i>
                   <span i18n>Menu</span>
                 </a>
               </li>
-              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['commands']" nz-menu-item [nzMatchRouter]="true">
+              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['commands']" nz-menu-item [nzMatchRouter]="true"
+                nz-tooltip [nzTooltipTitle]="'Commandes'" i18n-nzTooltipTitle nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'commands']">
                   <i nz-icon nzType="alert"></i>
                   <span i18n>Commandes</span>
                 </a>
               </li>
-              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['stats']" nz-menu-item [nzMatchRouter]="true">
+              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['stats']" nz-menu-item [nzMatchRouter]="true"
+                nz-tooltip [nzTooltipTitle]="'Statistiques'" i18n-nzTooltipTitle nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'stats']">
                   <i nz-icon nzType="pie-chart"></i>
                   <span i18n>Statistiques</span>
                 </a>
               </li>
-              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['users']" nz-menu-item [nzMatchRouter]="true">
+              <li *ngIf="hasAccessByRestaurantIdBySection[restaurant.id] && hasAccessByRestaurantIdBySection[restaurant.id]['users']" nz-menu-item [nzMatchRouter]="true"
+                nz-tooltip [nzTooltipTitle]="'Utilisateurs'" i18n-nzTooltipTitle nzTooltipPlacement="right" [nzTooltipMouseEnterDelay]="1">
                 <a (click)="manuallyCollapse()" [routerLink]="[restaurant.code, 'admin', 'users']">
                   <i nz-icon nzType="user"></i>
                   <span i18n>Utilisateurs</span>
