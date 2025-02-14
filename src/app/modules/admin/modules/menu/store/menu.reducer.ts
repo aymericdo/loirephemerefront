@@ -48,7 +48,7 @@ export const menuInitialState: MenuState = {
   menuModalOpened: null,
 };
 
-const menuReducer = createReducer(
+const reducer = createReducer(
   menuInitialState,
   on(startLoading, (state): MenuState => ({
     ...state,
@@ -164,6 +164,6 @@ const menuReducer = createReducer(
   }),
 );
 
-export function reducer(state: MenuState | undefined, action: Action) {
-  return menuReducer(state, action);
+export function menuReducer(state: MenuState | undefined, action: Action) {
+  return reducer(state, action);
 }

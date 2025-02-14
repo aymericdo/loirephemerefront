@@ -41,7 +41,7 @@ export const initialState: HomeState = {
 
 };
 
-const homeReducer = createReducer(
+const reducer = createReducer(
   initialState,
   on(startLoading, fetchRestaurantPastries, (state): HomeState => ({
     ...state,
@@ -138,6 +138,6 @@ const homeReducer = createReducer(
   })),
 );
 
-export function reducer(state: HomeState | undefined, action: Action) {
-  return homeReducer(state, action);
+export function homeReducer(state: HomeState | undefined, action: Action) {
+  return reducer(state, action);
 }

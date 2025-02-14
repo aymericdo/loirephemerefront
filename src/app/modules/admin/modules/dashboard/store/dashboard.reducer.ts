@@ -21,7 +21,7 @@ export const dashboardInitialState: DashboardState = {
   payedCommandsCount: 0,
 };
 
-const adminDashboardReducer = createReducer(
+const reducer = createReducer(
   dashboardInitialState,
   on(stopLoading, (state): DashboardState => ({
     ...state,
@@ -46,5 +46,5 @@ const adminDashboardReducer = createReducer(
 );
 
 export function dashboardReducer(state: DashboardState | undefined, action: Action) {
-  return adminDashboardReducer(state, action);
+  return reducer(state, action);
 }

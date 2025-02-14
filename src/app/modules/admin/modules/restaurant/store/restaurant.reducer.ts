@@ -24,7 +24,7 @@ export const restaurantInitialState: RestaurantState = {
   timezones: [],
 };
 
-const adminRestaurantReducer = createReducer(
+const reducer = createReducer(
   restaurantInitialState,
   on(updatePaymentInformation, updateOpeningPickupTime, updateOpeningTime, startLoading, (state): RestaurantState => ({
     ...state,
@@ -50,6 +50,6 @@ const adminRestaurantReducer = createReducer(
   })),
 );
 
-export function reducer(state: RestaurantState | undefined, action: Action) {
-  return adminRestaurantReducer(state, action);
+export function adminRestaurantReducer(state: RestaurantState | undefined, action: Action) {
+  return reducer(state, action);
 }

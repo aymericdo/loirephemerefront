@@ -14,7 +14,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { provideServiceWorker } from '@angular/service-worker';
 import { AuthEffects } from 'src/app/auth/store/auth.effects';
-import { reducer as AuthReducer } from 'src/app/auth/store/auth.reducer';
+import { authReducer } from 'src/app/auth/store/auth.reducer';
 
 const ngZorroConfig: NzConfig = {
   message: { nzMaxStack: 1, nzDuration: 2000 },
@@ -40,7 +40,7 @@ export const appConfig: ApplicationConfig = {
       },
     ),
     provideStore({
-      'auth': AuthReducer,
+      'auth': authReducer,
     }),
     provideEffects([
       AuthEffects,

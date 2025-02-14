@@ -9,7 +9,7 @@ export const initialState: AdminState = {
   loading: false,
 };
 
-const adminReducer = createReducer(
+const reducer = createReducer(
   initialState,
   on(stopLoading, (state): AdminState => ({
     ...state,
@@ -17,6 +17,6 @@ const adminReducer = createReducer(
   })),
 );
 
-export function reducer(state: AdminState | undefined, action: Action) {
-  return adminReducer(state, action);
+export function adminReducer(state: AdminState | undefined, action: Action) {
+  return reducer(state, action);
 }

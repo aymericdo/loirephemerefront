@@ -28,7 +28,7 @@ export const statsInitialState: StatsState = {
   timeInterval: 'day',
 };
 
-const statsReducer = createReducer(
+const reducer = createReducer(
   statsInitialState,
   on(startLoading, fetchingAllRestaurantPastries, fetchingRestaurantCommands, (state): StatsState => ({
     ...state,
@@ -64,6 +64,6 @@ const statsReducer = createReducer(
   })),
 );
 
-export function reducer(state: StatsState | undefined, action: Action) {
-  return statsReducer(state, action);
+export function statsReducer(state: StatsState | undefined, action: Action) {
+  return reducer(state, action);
 }

@@ -26,7 +26,7 @@ export const commandsInitialState: CommandsState = {
   adminSub: null,
 };
 
-const adminReducer = createReducer(
+const reducer = createReducer(
   commandsInitialState,
   on(startLoading, fetchingRestaurantCommands, (state): CommandsState => ({
     ...state,
@@ -65,6 +65,6 @@ const adminReducer = createReducer(
   })),
 );
 
-export function reducer(state: CommandsState | undefined, action: Action) {
-  return adminReducer(state, action);
+export function commandsReducer(state: CommandsState | undefined, action: Action) {
+  return reducer(state, action);
 }

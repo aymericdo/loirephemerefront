@@ -3,7 +3,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 import { CommandsComponent } from 'src/app/modules/admin/modules/commands/components/commands.component';
 import { CommandsEffects } from 'src/app/modules/admin/modules/commands/store/commands.effects';
-import { reducer } from 'src/app/modules/admin/modules/commands/store/commands.reducer';
+import { commandsReducer } from 'src/app/modules/admin/modules/commands/store/commands.reducer';
 
 export const routes: Routes = [
   {
@@ -11,7 +11,7 @@ export const routes: Routes = [
     component: CommandsComponent,
     data: { routeName: "commands" },
     providers: [
-      provideState('admin/commands', reducer),
+      provideState('admin/commands', commandsReducer),
       provideEffects([
         CommandsEffects,
       ]),

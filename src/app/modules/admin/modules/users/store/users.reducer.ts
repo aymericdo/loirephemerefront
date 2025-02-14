@@ -33,7 +33,7 @@ export const usersInitialState: UsersState = {
   isDeletingUser: false,
 };
 
-const usersReducer = createReducer(
+const reducer = createReducer(
   usersInitialState,
   on(fetchingUsers, startLoading, (state): UsersState => ({
     ...state,
@@ -90,6 +90,6 @@ const usersReducer = createReducer(
   })),
 );
 
-export function reducer(state: UsersState | undefined, action: Action) {
-  return usersReducer(state, action);
+export function usersReducer(state: UsersState | undefined, action: Action) {
+  return reducer(state, action);
 }

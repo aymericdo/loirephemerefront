@@ -3,7 +3,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 import { MenuComponent } from 'src/app/modules/admin/modules/menu/components/menu.component';
 import { MenuEffects } from 'src/app/modules/admin/modules/menu/store/menu.effects';
-import { reducer } from 'src/app/modules/admin/modules/menu/store/menu.reducer';
+import { menuReducer } from 'src/app/modules/admin/modules/menu/store/menu.reducer';
 
 export const routes: Routes = [
   {
@@ -11,7 +11,7 @@ export const routes: Routes = [
     component: MenuComponent,
     data: { routeName: "menu" },
     providers: [
-      provideState('admin/menu', reducer),
+      provideState('admin/menu', menuReducer),
       provideEffects([
         MenuEffects,
       ]),

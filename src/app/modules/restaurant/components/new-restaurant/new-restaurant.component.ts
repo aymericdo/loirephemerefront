@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, combineLatest, filter, take, takeUntil } from 'rxjs';
@@ -91,7 +91,7 @@ export class NewRestaurantComponent implements OnInit, OnDestroy {
     }
   }
 
-  private restaurantNameAsyncValidator = (control: UntypedFormControl) => {
+  private restaurantNameAsyncValidator = (control: UntypedFormControl): Observable<ValidationErrors | null> => {
     this.store.dispatch(validateRestaurantName({ name: control.value }));
 
     return this.restaurantNameError$.pipe(

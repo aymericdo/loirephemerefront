@@ -41,7 +41,7 @@ export const initialState: AuthState = {
   userToken: null,
 };
 
-const authReducer = createReducer(
+const reducer = createReducer(
   initialState,
   on(fetchingDemoResto, (state): AuthState => ({
     ...state,
@@ -136,6 +136,6 @@ const authReducer = createReducer(
   })),
 );
 
-export function reducer(state: AuthState | undefined, action: Action) {
-  return authReducer(state, action);
+export function authReducer(state: AuthState | undefined, action: Action) {
+  return reducer(state, action);
 }

@@ -3,7 +3,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 import { UsersComponent } from 'src/app/modules/admin/modules/users/components/users.component';
 import { UsersEffects } from 'src/app/modules/admin/modules/users/store/users.effects';
-import { reducer } from 'src/app/modules/admin/modules/users/store/users.reducer';
+import { usersReducer } from 'src/app/modules/admin/modules/users/store/users.reducer';
 
 export const routes: Routes = [
   {
@@ -11,7 +11,7 @@ export const routes: Routes = [
     component: UsersComponent,
     data: { routeName: "users" },
     providers: [
-      provideState('admin/users', reducer),
+      provideState('admin/users', usersReducer),
       provideEffects([
         UsersEffects,
       ]),

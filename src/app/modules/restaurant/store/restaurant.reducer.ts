@@ -25,7 +25,7 @@ export const initialState: RestaurantState = {
   newRestaurant: null,
 };
 
-const restaurantReducer = createReducer(
+const reducer = createReducer(
   initialState,
   on(createRestaurant, fetchRestaurants, validateRestaurantName, (state): RestaurantState => ({
     ...state,
@@ -57,6 +57,6 @@ const restaurantReducer = createReducer(
   })),
 );
 
-export function reducer(state: RestaurantState | undefined, action: Action) {
-  return restaurantReducer(state, action);
+export function restaurantReducer(state: RestaurantState | undefined, action: Action) {
+  return reducer(state, action);
 }

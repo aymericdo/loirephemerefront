@@ -6,7 +6,7 @@ import { AboutComponent } from 'src/app/modules/about/components/about.component
 import { AdminComponent } from 'src/app/modules/admin/components/admin.component';
 import { HomeComponent } from 'src/app/modules/home/components/home.component';
 import { HomeEffects } from 'src/app/modules/home/store/home.effects';
-import { reducer } from 'src/app/modules/home/store/home.reducer';
+import { homeReducer } from 'src/app/modules/home/store/home.reducer';
 import { FourOhFourComponent } from 'src/app/shared/components/four-oh-four/four-oh-four.component';
 
 export const appRoutes: Routes = [
@@ -55,7 +55,7 @@ export const appRoutes: Routes = [
     component: HomeComponent,
     data: { routeName: "home" },
     providers: [
-      provideState('home', reducer),
+      provideState('home', homeReducer),
       provideEffects([HomeEffects]),
     ],
   },

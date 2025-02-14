@@ -3,14 +3,14 @@ import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 import { AuthGuardService } from 'src/app/auth/auth-guard.service';
 import { AdminEffects } from 'src/app/modules/admin/store/admin.effects';
-import { reducer } from 'src/app/modules/admin/store/admin.reducer';
+import { adminReducer } from 'src/app/modules/admin/store/admin.reducer';
 
 export const routes: Routes = [
   {
     path: '',
     canActivate: [AuthGuardService],
     providers: [
-      provideState('admin', reducer),
+      provideState('admin', adminReducer),
       provideEffects([AdminEffects]),
     ],
     children: [{

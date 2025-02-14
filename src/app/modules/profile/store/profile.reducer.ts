@@ -13,7 +13,7 @@ export const initialState: ProfileState = {
   changePasswordError: undefined,
 };
 
-const profileReducer = createReducer(
+const reducer = createReducer(
   initialState,
   on(changingPassword, (state): ProfileState => ({
     ...state,
@@ -34,6 +34,6 @@ const profileReducer = createReducer(
   })),
 );
 
-export function reducer(state: ProfileState | undefined, action: Action) {
-  return profileReducer(state, action);
+export function profileReducer(state: ProfileState | undefined, action: Action) {
+  return reducer(state, action);
 }
