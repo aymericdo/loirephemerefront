@@ -11,13 +11,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NewUserModalComponent } from './new-user-modal/new-user-modal.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
-
-export interface CheckboxGroupValue {
-  label: string;
-  value: Access;
-  checked: boolean;
-  disabled: boolean;
-};
+import { NzCheckboxOption } from 'ng-zorro-antd/checkbox';
 
 @Component({
   selector: 'app-users',
@@ -39,7 +33,8 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   newUserModalOpened = false;
 
-  accessCheckOptionsByUserId: { [userId: string]: CheckboxGroupValue[] } = {};
+  accessCheckOptionsByUserId: { [userId: string]: NzCheckboxOption[] } = {};
+  accessCheckValuesByUserId: { [userId: string]: Access[] } = {};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -76,6 +71,9 @@ export class UsersComponent implements OnInit, OnDestroy {
           checked: userAccess.some(a => a === access),
           disabled: access === 'users' && user.id === authUser.id,
         }));
+        this.accessCheckValuesByUserId[user.id] = ACCESS_LIST.filter((access) =>
+          userAccess.some(a => a === access)
+        );
       });
     });
   }
@@ -85,16 +83,10 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  handleAccessChange(userId: string, value: CheckboxGroupValue[]): void {
+  handleAccessChange(userId: string, value: Access[]): void {
     this.store.dispatch(patchingUserRestaurantAccess({
       userId,
-      access: value.reduce((prev, elem) => {
-        if (elem.checked) {
-          prev.push(elem.value);
-        }
-
-        return prev;
-      }, [] as Access[]),
+      access: value,
     }));
   }
 

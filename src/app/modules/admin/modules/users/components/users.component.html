@@ -31,7 +31,8 @@
           <td>{{ user.createdAt | date: "dd/MM/YYYY HH:mm" }}</td>
           <td>{{ user.updatedAt | date: "dd/MM/YYYY HH:mm" }}</td>
           <td>
-            <nz-checkbox-group [ngModel]="accessCheckOptionsByUserId[user.id]" (ngModelChange)="handleAccessChange(user.id, $event)"></nz-checkbox-group>
+            <nz-checkbox-group [(ngModel)]="accessCheckValuesByUserId[user.id]" [nzOptions]="accessCheckOptionsByUserId[user.id]" (ngModelChange)="handleAccessChange(user.id, $event)">
+            </nz-checkbox-group>
           </td>
           <td>
             <div nzFlex nz-row nzJustify="center">
