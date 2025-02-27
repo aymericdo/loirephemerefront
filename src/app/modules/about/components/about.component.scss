@@ -18,22 +18,38 @@
     z-index: 0;
   }
 
-  .title {
+  .first-section {
     display: flex;
-    flex-direction: column;
-    max-width: 50%;
+    flex-direction: row;
     height: 100vh;
     justify-content: center;
+    align-items: center;
+
+    > * {
+      margin-left: 4rem;
+    }
   }
 
   .sub-title {
     margin-top: 1rem;
-    font-weight: bold;
-    font-size: 1.5rem;
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 1.2;
     transition: opacity ease-in 500ms;
 
     &.-has-scrolled {
       opacity: 0;
+    }
+  }
+
+  .title {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 4rem #050505;
+
+    > p {
+      font-size: 1rem;
     }
   }
 
@@ -198,7 +214,7 @@
   }
 
   h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 600;
   }
 
@@ -247,10 +263,20 @@
       align-items: center;
     }
 
-    .title {
+    .first-section {
+      flex-direction: column;
       max-width: inherit;
       height: inherit;
       justify-content: center;
+
+      > * {
+        margin-left: 0;
+      }
+    }
+
+    .title {
+      margin-top: 50%;
+      margin-bottom: 50%;
     }
 
     .timeline-section {

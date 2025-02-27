@@ -3,34 +3,36 @@
 </div>
 
 <div class="main-section">
-  <div class="title">
-    <nz-affix (nzChange)="onChange($event)">
-      <div class="affix-section" [class.-has-scrolled]="hasScrolled">
-        <img class="logo" src="assets/icons/icon-512x512.png" alt="logo">
-        <h1>Oresto</h1>
-      </div>
-    </nz-affix>
-    <h2 [class.-has-scrolled]="hasScrolled" class="sub-title" i18n>
-      Gérez votre restaurant en toute simplicité avec Oresto
-    </h2>
+  <div class="first-section">
+    <div class="title">
+      <nz-affix (nzChange)="onChange($event)">
+        <div class="affix-section" [class.-has-scrolled]="hasScrolled">
+          <img class="logo" src="assets/icons/icon-512x512.png" alt="logo">
+          <h1>Oresto</h1>
+        </div>
+      </nz-affix>
+      <h2 [class.-has-scrolled]="hasScrolled" class="sub-title" i18n>
+        Gérez votre restaurant en toute simplicité avec Oresto
+      </h2>
 
-    <div class="redirect-btn" nzFlex nz-row nzJustify="center">
-      <a [routerLink]="['/', 'page', 'login']">
-        <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
-          <span nz-icon nzType="swap-right"></span>
-          <ng-container *ngIf="!!(user$ | async); else notConnected" i18n>
-            Accéder à l'app
-          </ng-container>
-          <ng-template #notConnected i18n>
-            Se connecter
-          </ng-template>
-        </button>
-      </a>
+      <p i18n><b>Oresto</b>, c’est l’outil tout-en-un pour les restaurateurs qui veulent gagner du temps et se concentrer sur l’essentiel&nbsp;: satisfaire leurs clients.</p>
+
+      <div class="redirect-btn" nzFlex nz-row nzJustify="center">
+        <a [routerLink]="['/', 'page', 'login']">
+          <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
+            <span nz-icon nzType="swap-right"></span>
+            <ng-container *ngIf="!!(user$ | async); else notConnected" i18n>
+              Accéder à l'app
+            </ng-container>
+            <ng-template #notConnected i18n>
+              Se connecter
+            </ng-template>
+          </button>
+        </a>
+      </div>
     </div>
 
     <div class="home-section">
-      <p i18n><b>Oresto</b>, c’est l’outil tout-en-un pour les restaurateurs qui veulent gagner du temps et se concentrer sur l’essentiel&nbsp;: satisfaire leurs clients.</p>
-
       <h2 i18n>Avec Oresto, vous pouvez&nbsp;:</h2>
       <ul>
         <li i18n><b>Prendre des commandes en ligne</b> sans effort et sans intermédiaires.</li>
@@ -51,50 +53,48 @@
       <p i18n><b>Oresto</b> est simple, intuitif et prêt à l’emploi. Ne perdez plus de temps avec des systèmes compliqués ou coûteux. Rejoignez des restaurateurs qui ont déjà adopté cette solution et transformez votre façon de travailler.</p>
 
       <p i18n>👉 <b>Essayez Oresto gratuitement dès maintenant !</b></p>
+
+      <nz-space nzDirection="vertical">
+        <ng-container *ngIf="(user$ | async) === null">
+          <ng-container *nzSpaceItem>
+            <a [routerLink]="['/', 'page', 'restaurant', 'new']">
+              <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round" i18n>
+                <span nz-icon nzType="swap-right"></span>
+                Créer son resto
+              </button>
+            </a>
+          </ng-container>
+          <ng-container *nzSpaceItem>
+            <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
+              <button nz-button nzType="default" [nzSize]="'large'" nzShape="round" i18n>
+                <span nz-icon nzType="swap-right"></span>
+                Tester le restaurant démo
+              </button>
+            </a>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *nzSpaceItem>
+          <a [routerLink]="['/', 'page', 'login']">
+            <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
+              <span nz-icon nzType="swap-right"></span>
+              <ng-container *ngIf="!!(user$ | async); else notConnected" i18n>
+                Accéder à l'app
+              </ng-container>
+              <ng-template #notConnected i18n>
+                Se connecter
+              </ng-template>
+            </button>
+          </a>
+        </ng-container>
+      </nz-space>
+
+      <div class="go-down-btn">
+        <button (click)="scroll(target)" nz-button [nzSize]="'large'" nzShape="circle">
+          <span nz-icon nzType="down-circle"></span>
+        </button>
+      </div>
     </div>
-
-    <nz-space nzDirection="vertical">
-      <ng-container *ngIf="(user$ | async) === null">
-        <ng-container *nzSpaceItem>
-          <a [routerLink]="['/', 'page', 'restaurant', 'new']">
-            <button nz-button nzType="primary" [nzSize]="'large'" nzShape="round" i18n>
-              <span nz-icon nzType="swap-right"></span>
-              Créer son resto
-            </button>
-          </a>
-        </ng-container>
-        <ng-container *nzSpaceItem>
-          <a *ngIf="(demoResto$ | async)?.code" [routerLink]="['/', (demoResto$ | async)?.code]">
-            <button nz-button nzType="default" [nzSize]="'large'" nzShape="round" i18n>
-              <span nz-icon nzType="swap-right"></span>
-              Tester le restaurant démo
-            </button>
-          </a>
-        </ng-container>
-      </ng-container>
-
-      <ng-container *nzSpaceItem>
-        <a [routerLink]="['/', 'page', 'login']">
-          <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
-            <span nz-icon nzType="swap-right"></span>
-            <ng-container *ngIf="!!(user$ | async); else notConnected" i18n>
-              Accéder à l'app
-            </ng-container>
-            <ng-template #notConnected i18n>
-              Se connecter
-            </ng-template>
-          </button>
-        </a>
-      </ng-container>
-
-      <ng-container *nzSpaceItem>
-        <div class="go-down-btn">
-          <button (click)="scroll(target)" nz-button [nzSize]="'large'" nzShape="circle">
-            <span nz-icon nzType="down-circle"></span>
-          </button>
-        </div>
-      </ng-container>
-    </nz-space>
   </div>
 
   <div class="timeline-section" #target>
