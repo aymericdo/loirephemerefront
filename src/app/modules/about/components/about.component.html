@@ -3,32 +3,34 @@
 </div>
 
 <div class="main-section">
-  <div class="first-section">
+  <div class="main-section-row">
     <div class="title">
-      <nz-affix (nzChange)="onChange($event)">
-        <div class="affix-section" [class.-has-scrolled]="hasScrolled">
-          <img class="logo" src="assets/icons/icon-512x512.png" alt="logo">
-          <h1>Oresto</h1>
+      <div class="title-card">
+        <nz-affix (nzChange)="onChange($event)">
+          <div class="affix-section" [class.-has-scrolled]="hasScrolled">
+            <img class="logo" src="assets/icons/icon-512x512.png" alt="logo">
+            <h1>Oresto</h1>
+          </div>
+        </nz-affix>
+        <h2 [class.-has-scrolled]="hasScrolled" class="sub-title" i18n>
+          Gérez votre restaurant en toute simplicité avec Oresto
+        </h2>
+
+        <p i18n><b>Oresto</b>, c’est l’outil tout-en-un pour les restaurateurs qui veulent gagner du temps et se concentrer sur l’essentiel&nbsp;: satisfaire leurs clients.</p>
+
+        <div class="redirect-btn" nzFlex nz-row nzJustify="center">
+          <a [routerLink]="['/', 'page', 'login']">
+            <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
+              <span nz-icon nzType="swap-right"></span>
+              <ng-container *ngIf="!!(user$ | async); else notConnected" i18n>
+                Accéder à l'app
+              </ng-container>
+              <ng-template #notConnected i18n>
+                Se connecter
+              </ng-template>
+            </button>
+          </a>
         </div>
-      </nz-affix>
-      <h2 [class.-has-scrolled]="hasScrolled" class="sub-title" i18n>
-        Gérez votre restaurant en toute simplicité avec Oresto
-      </h2>
-
-      <p i18n><b>Oresto</b>, c’est l’outil tout-en-un pour les restaurateurs qui veulent gagner du temps et se concentrer sur l’essentiel&nbsp;: satisfaire leurs clients.</p>
-
-      <div class="redirect-btn" nzFlex nz-row nzJustify="center">
-        <a [routerLink]="['/', 'page', 'login']">
-          <button nz-button nzType="dashed" [nzSize]="'large'" nzShape="round">
-            <span nz-icon nzType="swap-right"></span>
-            <ng-container *ngIf="!!(user$ | async); else notConnected" i18n>
-              Accéder à l'app
-            </ng-container>
-            <ng-template #notConnected i18n>
-              Se connecter
-            </ng-template>
-          </button>
-        </a>
       </div>
     </div>
 

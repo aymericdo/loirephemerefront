@@ -18,7 +18,7 @@
     z-index: 0;
   }
 
-  .first-section {
+  .main-section-row {
     display: flex;
     flex-direction: row;
     height: 100vh;
@@ -42,7 +42,7 @@
     }
   }
 
-  .title {
+  .title-card {
     background-color: white;
     padding: 2rem;
     border-radius: 1rem;
@@ -263,7 +263,7 @@
       align-items: center;
     }
 
-    .first-section {
+    .main-section-row {
       flex-direction: column;
       max-width: inherit;
       height: inherit;
@@ -272,12 +272,18 @@
       > * {
         margin-left: 0;
       }
+
+      .title {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
     }
 
-    .title {
+    .title-card {
       margin-top: 50%;
       margin-bottom: 50%;
-      max-width: 90%;
     }
 
     .affix-section {
