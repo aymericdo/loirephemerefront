@@ -73,6 +73,17 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.restaurant$.pipe(
       filter(Boolean),
       switchMap(() => this.route.queryParamMap),
+      map((params: ParamMap) => params.get('payingCommandId')),
+      filter(Boolean),
+      takeUntil(this.destroyed$),
+    ).subscribe((commandId) => {
+      this.store.dispatch(fetchingPersonalCommand({ commandId }));
+      this.store.dispatch(openHomeModal({ modal: 'payment' }));
+    });
+
+    this.restaurant$.pipe(
+      filter(Boolean),
+      switchMap(() => this.route.queryParamMap),
       map((params: ParamMap) => params.get('commandId')),
       filter(Boolean),
       takeUntil(this.destroyed$),
