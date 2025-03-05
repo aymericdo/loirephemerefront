@@ -165,7 +165,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
         nzTitle: $localize`Attention`,
         nzContent: $localize`En modifiant ces horaires d'ouverture, vous allez automatiquement réinitialiser l'horaire d'accès à la prise de commande pour les jours suivant :
           <ul>${badPickupConfig.map((weekDayNumber) => `<li>${this.weekDays[weekDayNumber]}</li>`)}</ul>`,
-        nzOkText: 'OK',
+        nzOkText: $localize`OK`,
         nzOkType: 'primary',
         nzOnOk: () => {
           this.updateOpeningHours();
@@ -181,7 +181,7 @@ export class OpeningHoursComponent implements OnInit, OnDestroy {
     this.modal.confirm({
       nzTitle: $localize`Duplication`,
       nzContent: $localize`Voulez-vous dupliquer les horaires de la journée du <b>${this.weekDays[weekDayNumber]}</b> à tous les autres jours de la semaine ?`,
-      nzOkText: 'OK',
+      nzOkText: $localize`OK`,
       nzOkType: 'primary',
       nzOnOk: () => {
         this.weekDayNumbers.filter((wd) => wd !== weekDayNumber).forEach((wd) => {

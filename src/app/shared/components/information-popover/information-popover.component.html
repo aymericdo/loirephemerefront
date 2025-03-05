@@ -1,6 +1,12 @@
 
-<button class="information" nz-button nz-popover nzType="primary" nzSize="large" nzShape="circle" [nzPopoverOverlayClassName]="'information-popover'"
-  nzPopoverTitle="Information" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topRight"><span nz-icon nzType="question"></span></button>
+<nz-float-button
+  nzType="primary" class="information" nzSize="large" nzShape="circle" [nzIcon]="icon"
+  nz-popover [nzPopoverOverlayClassName]="'information-popover'"
+  nzPopoverTitle="Information" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topRight"
+></nz-float-button>
+<ng-template #icon>
+  <nz-icon nzType="question"></nz-icon>
+</ng-template>
 
 <ng-template #contentTemplate>
   <ng-content></ng-content>

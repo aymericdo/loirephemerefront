@@ -1,0 +1,16 @@
+<nz-modal [nzVisible]="true" nzCentered [nzMaskClosable]="true" (nzOnCancel)="clickOk.emit()">
+  <ng-container *nzModalTitle>
+    <span i18n>QRCode de payment de la commande #{{ command.reference }}</span>
+  </ng-container>
+
+  <ng-container *nzModalContent>
+    <div nz-flex nzJustify="center">
+      <nz-qrcode [nzValue]="'https://oresto.app/' + (restaurant$ | async)?.code + '?payingCommandId=' + command.id" i18n-nzValue
+        [nzLevel]="'H'" [nzSize]="200"></nz-qrcode>
+    </div>
+  </ng-container>
+
+  <ng-container *nzModalFooter>
+    <button nz-button nzType="primary" (click)="clickOk.emit()" i18n>OK</button>
+  </ng-container>
+</nz-modal>

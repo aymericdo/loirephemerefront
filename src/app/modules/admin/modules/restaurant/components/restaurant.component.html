@@ -106,7 +106,7 @@
           QRCode
         </a>
         <div id="download" class="qrcode-section">
-          <nz-qrcode [nzValue]="'https://oresto.app/fr/' + (restaurant$ | async)?.code" i18n-nzValue [nzLevel]="'M'" [nzSize]="200"></nz-qrcode>
+          <nz-qrcode [nzValue]="'https://oresto.app/fr/' + (restaurant$ | async)?.code" i18n-nzValue [nzLevel]="'H'" [nzSize]="200"></nz-qrcode>
           <a #download></a>
           <button nz-button class="button" nzType="primary" (click)="downloadImg()" i18n>Télécharger</button>
           <span class="url">

@@ -1,6 +1,6 @@
 <nz-ribbon [class.-is-loading]="isLoading" nzText="€" [nzColor]="isPayed ? 'green' : 'red'">
   <nz-card style="width: 300px" [class.-is-new]="isNew" [class.-is-just-updated]="isJustUpdated"
-    [nzActions]="noAction ? [] : isDone && isPayed ? [actionWizz] : isDone ? [actionWizz, actionPayed] : isPayed ? [actionWizz, actionDone] : [actionWizz, actionPayed, actionDone, actionClose]"
+    [nzActions]="currentActions"
     [nzTitle]="'Commande #' + command.reference" i18n-nzTitle>
     <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
       <p class="take-away">
@@ -60,23 +60,27 @@
   </nz-card>
 </nz-ribbon>
 <ng-template #actionWizz>
-  <i nz-icon nzType="bell" (click)="!isLoading && wizzClient()"></i>
+  <i nz-icon nzType="bell" [class.-disabled]="isLoading" (click)="!isLoading && clickWizz.emit()"></i>
 </ng-template>
 <ng-template #actionDone>
-  <ng-container>
-    <i nz-icon nzType="check" (click)="!isLoading && showValidationPopup('toDone')"></i>
-  </ng-container>
+  <i nz-icon nzType="check" [class.-disabled]="isLoading" (click)="!isLoading && showModal('toDone')"></i>
 </ng-template>
 <ng-template #actionPayed>
-  <ng-container>
-    <i nz-icon nzType="euro-circle" (click)="!isLoading && showValidationPopup('toPayed')"></i>
-  </ng-container>
+  <i nz-icon nzType="euro-circle" [class.-disabled]="isLoading" (click)="!isLoading && isPaymentModalVisible = true"></i>
+</ng-template>
+<ng-template #actionPaymentQr>
+  <i nz-icon nzType="qrcode" [class.-disabled]="isLoading" (click)="!isLoading && isPaymentQrCodeModalVisible = true"></i>
 </ng-template>
 <ng-template #actionClose>
-  <ng-container>
-    <i nz-icon nzType="close-circle" [nzTheme]="'twotone'" [nzTwotoneColor]="redColor" (click)="!isLoading && showValidationPopup('toCancelled')"></i>
-  </ng-container>
+  <i nz-icon nzType="close-circle"
+    [nzTheme]="'twotone'"
+    [nzTwotoneColor]="redColor"
+    [class.-disabled]="isLoading"
+    (click)="!isLoading && showModal('toCancelled')"
+  ></i>
 </ng-template>
 
 <app-payment-modal *ngIf="isPaymentModalVisible" (clickCancel)="isPaymentModalVisible = false;" (clickOk)="payingCommand($event);"
   [command]="command"></app-payment-modal>
+<app-payment-qr-code-modal *ngIf="isPaymentQrCodeModalVisible" (clickOk)="isPaymentQrCodeModalVisible = false;"
+  [command]="command"></app-payment-qr-code-modal>

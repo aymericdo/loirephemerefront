@@ -120,7 +120,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.modal.confirm({
         nzTitle: $localize`Avez-vous bien vérifié vos clés Stripe ?`,
         nzContent: $localize`Ces clés seront enregistrées de manière sécurisée, il ne vous sera pas possible de les changer de manière autonome.`,
-        nzOkText: 'OK',
+        nzOkText: $localize`OK`,
         nzOkType: 'primary',
         nzOnOk: () => {
           this.store.dispatch(updatePaymentInformation({

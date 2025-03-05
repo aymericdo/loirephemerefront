@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
 import { presetPalettes } from '@ant-design/colors';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -15,6 +19,7 @@ import { Command, PAYMENT_METHOD_LABEL, PaymentPossibility } from 'src/app/inter
 import { PASTRY_TYPE_LABEL, PastryType } from 'src/app/interfaces/pastry.interface';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { PaymentModalComponent } from 'src/app/modules/admin/modules/commands/components/payment-modal/payment-modal.component';
+import { PaymentQrCodeModalComponent } from 'src/app/modules/admin/modules/commands/components/payment-qr-code-modal/payment-qr-code-modal.component';
 import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
@@ -29,9 +34,10 @@ const SECONDS_HIGHLIGHT = 20;
     CommonModule,
     NgZorroModule,
     PaymentModalComponent,
+    PaymentQrCodeModalComponent,
   ],
 })
-export class CommandCardComponent implements OnInit, OnDestroy {
+export class CommandCardComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() command: Command = null!;
   @Input() isDone: boolean = false;
   @Input() isPayed: boolean = false;
@@ -43,8 +49,16 @@ export class CommandCardComponent implements OnInit, OnDestroy {
   @Output() clickPayed = new EventEmitter<{ payments: PaymentPossibility[], discount: Discount }>();
   @Output() clickWizz = new EventEmitter<string>();
 
-  pastries: [PastryType, [Pastry, number, number][]][] = [];
+  @ViewChild('actionWizz', { read: TemplateRef }) actionWizz: TemplateRef<void> | undefined;
+  @ViewChild('actionPayed', { read: TemplateRef }) actionPayed: TemplateRef<void> | undefined;
+  @ViewChild('actionPaymentQr', { read: TemplateRef }) actionPaymentQr: TemplateRef<void> | undefined;
+  @ViewChild('actionDone', { read: TemplateRef }) actionDone: TemplateRef<void> | undefined;
+  @ViewChild('actionClose', { read: TemplateRef }) actionClose: TemplateRef<void> | undefined;
 
+  pastries: [PastryType, [Pastry, number, number][]][] = [];
+  currentActions: TemplateRef<void>[] = [];
+
+  isPaymentQrCodeModalVisible = false;
   isPaymentModalVisible = false;
   isNew = false;
   isJustUpdated = false;
@@ -107,30 +121,38 @@ export class CommandCardComponent implements OnInit, OnDestroy {
     this.setIsJustUpdated();
   }
 
+  ngOnChanges(): void {
+    this.currentActions = this.computeCurrentActions().filter(t => !!t)
+    this.cd.markForCheck();
+  }
+
+  ngAfterViewInit(): void {
+    this.currentActions = this.computeCurrentActions().filter(t => !!t)
+    this.cd.markForCheck();
+  }
+
   ngOnDestroy(): void {
     clearTimeout(this.isNewTimeout!);
     clearTimeout(this.isJustUpdatedTimeout!);
   }
 
-  showValidationPopup(type: 'toDone' | 'toPayed' | 'toCancelled'): void {
+  showModal(type: 'toDone' | 'toCancelled'): void {
     if (type === 'toDone') {
       this.modal.confirm({
         nzTitle: $localize`Commande #${this.command.reference}`,
         nzContent: $localize`Cette commande a bien été livrée ? <br> (N'oubliez pas d'encaisser par la suite dans l'onglet suivant)`,
-        nzOkText: 'OK',
+        nzOkText: $localize`OK`,
         nzOkType: 'primary',
         nzOnOk: () => {
           this.clickDone.emit();
         },
         nzCancelText: $localize`Annuler`,
       });
-    } else if (type === 'toPayed') {
-      this.isPaymentModalVisible = true;
     } else if (type === 'toCancelled') {
       this.modal.confirm({
         nzTitle: $localize`Commande #${this.command.reference}`,
         nzContent: $localize`Voulez-vous vraiment annuler cette commande ?`,
-        nzOkText: 'OK',
+        nzOkText: $localize`OK`,
         nzOkType: 'primary',
         nzOnOk: () => {
           this.clickCancelled.emit();
@@ -138,10 +160,6 @@ export class CommandCardComponent implements OnInit, OnDestroy {
         nzCancelText: $localize`Annuler`,
       });
     }
-  }
-
-  wizzClient(): void {
-    this.clickWizz.emit();
   }
 
   payingCommand(event: { payments: PaymentPossibility[], discount: Discount }): void {
@@ -153,6 +171,24 @@ export class CommandCardComponent implements OnInit, OnDestroy {
     return this.command.discount?.gifts.some((pastryId) => {
       return this.command.pastries.find(p => p.id === pastryId)?.type === pastryType;
     }) || false;
+  }
+
+  private computeCurrentActions(): (TemplateRef<void> | undefined)[] {
+    if (this.noAction) return []
+
+    if (this.isDone && this.isPayed) {
+      return [this.actionWizz]
+    } else if (this.isDone) {
+      return [this.actionWizz, this.actionPayed, this.actionPaymentQr]
+    } else if (this.isPayed) {
+      return [this.actionWizz, this.actionDone]
+    } else {
+      return [
+        this.actionWizz, this.actionPayed,
+        this.actionPaymentQr, this.actionDone,
+        this.actionClose,
+      ]
+    }
   }
 
   private setIsNew(): void {

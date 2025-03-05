@@ -23,7 +23,7 @@ export class OrderFooterComponent {
     this.modal.confirm({
       nzTitle: $localize`Supprimer votre panier ?`,
       nzContent: $localize`Votre panier sera réinitialisé.`,
-      nzOkText: 'OK',
+      nzOkText: $localize`OK`,
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
