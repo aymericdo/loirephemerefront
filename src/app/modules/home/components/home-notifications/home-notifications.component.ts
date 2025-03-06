@@ -89,7 +89,6 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe((commandId) => {
       this.store.dispatch(fetchingPersonalCommand({ commandId }));
-      this.openWaitingConfirmationNotification();
     });
 
     this.restaurant$.pipe(
@@ -154,6 +153,11 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
             data: command.id,
           }),
         );
+
+        if (this.route.snapshot.queryParams.hasOwnProperty('waitingWizzCommandId')) {
+          this.openWaitingConfirmationNotification();
+          this.router.navigate(['.'], { relativeTo: this.route });
+        }
       });
 
     // if (this.swPush.isEnabled) {
