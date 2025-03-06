@@ -91,28 +91,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
         this.personalCommand = command;
 
         this.listenWizzEvent(command);
-
-        if (this.route.snapshot.queryParams.hasOwnProperty('waitingWizzCommandId')) {
-          this.openWaitingConfirmationNotification();
-          this.router.navigate(['.'], { relativeTo: this.route });
-        } else if (this.route.snapshot.queryParams.hasOwnProperty('payingCommandId')) {
-          setTimeout(() => {
-            this.store.dispatch(openHomeModal({ modal: 'payment' }));
-          }, 1000); // to avoid a huge weird freeze
-          this.router.navigate(['.'], { relativeTo: this.route });
-        } else if (this.route.snapshot.queryParams.hasOwnProperty('wizzCommandId')) {
-          this.openSentCommandNotification();
-          this.router.navigate(['.'], { relativeTo: this.route });
-        } else if (this.route.snapshot.queryParams.hasOwnProperty('payedCommandId')) {
-          if (this.personalCommand.paymentRequired) {
-            setTimeout(() => {
-              this.store.dispatch(openHomeModal({ modal: 'success' }));
-            }, 1000); // to avoid a huge weird freeze
-          } else {
-            this.openWaitingConfirmationNotification();
-          }
-          this.router.navigate(['.'], { relativeTo: this.route });
-        }
+        this.queryParamsManaging(command);
       });
 
     // if (this.swPush.isEnabled) {
@@ -168,6 +147,30 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  private queryParamsManaging(personalCommand: Command): void {
+    if (this.route.snapshot.queryParams.hasOwnProperty('waitingWizzCommandId')) {
+      this.openWaitingConfirmationNotification();
+      this.router.navigate(['.'], { relativeTo: this.route });
+    } else if (this.route.snapshot.queryParams.hasOwnProperty('payingCommandId')) {
+      setTimeout(() => {
+        this.store.dispatch(openHomeModal({ modal: 'payment' }));
+      }, 1000); // to avoid a huge weird freeze
+      this.router.navigate(['.'], { relativeTo: this.route });
+    } else if (this.route.snapshot.queryParams.hasOwnProperty('wizzCommandId')) {
+      this.openSentCommandNotification();
+      this.router.navigate(['.'], { relativeTo: this.route });
+    } else if (this.route.snapshot.queryParams.hasOwnProperty('payedCommandId')) {
+      if (personalCommand.paymentRequired) {
+        setTimeout(() => {
+          this.store.dispatch(openHomeModal({ modal: 'success' }));
+        }, 1000); // to avoid a huge weird freeze
+      } else {
+        this.openWaitingConfirmationNotification();
+      }
+      this.router.navigate(['.'], { relativeTo: this.route });
+    }
   }
 
   private openWaitingConfirmationNotification(): void {
