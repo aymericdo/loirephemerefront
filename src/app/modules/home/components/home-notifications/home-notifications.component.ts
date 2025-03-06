@@ -94,12 +94,11 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.restaurant$.pipe(
       filter(Boolean),
       switchMap(() => this.route.queryParamMap),
-      map((params: ParamMap) => params.get('commandId')),
+      map((params: ParamMap) => params.get('wizzCommandId')),
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((commandId) => {
       this.store.dispatch(fetchingPersonalCommand({ commandId }));
-      this.openSentCommandNotification(commandId);
     });
 
     combineLatest([
@@ -129,7 +128,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
-      .subscribe(async (command: Command | any) => {
+      .subscribe(async (command: Command) => {
         this.personalCommand = command;
 
         if (this.swPush.isEnabled) {
@@ -156,6 +155,9 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
 
         if (this.route.snapshot.queryParams.hasOwnProperty('waitingWizzCommandId')) {
           this.openWaitingConfirmationNotification();
+          this.router.navigate(['.'], { relativeTo: this.route });
+        } else if (this.route.snapshot.queryParams.hasOwnProperty('wizzCommandId')) {
+          this.openSentCommandNotification();
           this.router.navigate(['.'], { relativeTo: this.route });
         }
       });
@@ -247,10 +249,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
             );
           } else if (data.hasOwnProperty('wizz')) {
             const commandId = data.wizz.commandId;
-
-            this.notification.remove(this.commandNotificationIdByCommandId[commandId]);
-
-            this.openSentCommandNotification(commandId);
+            this.router.navigate(['.'], { relativeTo: this.route, queryParams: { wizzCommandId: commandId } });
           }
         },
         error: (err) => {
@@ -267,27 +266,25 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
       });
   }
 
-  private openSentCommandNotification(commandId: string): void {
-    this.store.select(selectCurrentSentCommandFromCommandList({ commandId }))
-      .pipe(filter(Boolean), take(1))
-      .subscribe((command: Command) => {
-        this.notification
-          .create(
-            'info',
-            $localize`Votre commande ${command.reference} est prête !`,
-            $localize`Bonne dégustation ! 🥰`, {
-              nzDuration: 0,
-              nzKey: commandId,
-            },
-          );
+  private openSentCommandNotification(): void {
+    this.notification.remove(this.commandNotificationIdByCommandId[this.personalCommand!.id]);
 
-        if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
+    this.notification
+      .create(
+        'info',
+        $localize`Votre commande ${this.personalCommand!.reference} est prête !`,
+        $localize`Bonne dégustation ! 🥰`, {
+          nzDuration: 0,
+          nzKey: this.personalCommand!.id,
+        },
+      );
 
-        this.audio = new Audio('assets/sounds/french.mp3');
-        this.audio.pause();
-        this.audio.currentTime = 0;
-        this.audio.play();
-      });
+    if (canVibrate()) window.navigator.vibrate([2000, 10, 2000]);
+
+    this.audio = new Audio($localize`assets/sounds/french.mp3`);
+    this.audio.pause();
+    this.audio.currentTime = 0;
+    this.audio.play();
 
     if (this.swPush.isEnabled) {
       try {
