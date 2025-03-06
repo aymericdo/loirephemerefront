@@ -4,10 +4,20 @@
   </ng-container>
 
   <ng-container *nzModalContent>
-    <div nz-flex nzJustify="center">
-      <nz-qrcode [nzValue]="'https://oresto.app/' + (restaurant$ | async)?.code + '?payingCommandId=' + command.id" i18n-nzValue
-        [nzLevel]="'H'" [nzSize]="200"></nz-qrcode>
-    </div>
+    <nz-tabset>
+      <nz-tab nzTitle="Bipeur">
+        <div nz-flex nzJustify="center">
+          <nz-qrcode [nzValue]="'https://oresto.app/' + (restaurant$ | async)?.code + '?waitingWizzCommandId=' + command.id" i18n-nzValue
+            [nzLevel]="'H'" [nzSize]="200"></nz-qrcode>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="Paiement" i18n-nzTitle>
+        <div nz-flex nzJustify="center">
+          <nz-qrcode [nzValue]="'https://oresto.app/' + (restaurant$ | async)?.code + '?payingCommandId=' + command.id" i18n-nzValue
+            [nzLevel]="'H'" [nzSize]="200"></nz-qrcode>
+        </div>
+      </nz-tab>
+    </nz-tabset>
   </ng-container>
 
   <ng-container *nzModalFooter>
