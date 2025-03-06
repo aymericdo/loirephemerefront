@@ -11,6 +11,16 @@
     padding: 1rem;
   }
 
+  .actions-btn {
+    .association-mode-btn {
+      display: block;
+    }
+
+    .more-btn {
+      display: none;
+    }
+  }
+
   .empty-section {
     min-height: 150px;
   }
@@ -30,5 +40,18 @@
   nz-tabset {
     padding-bottom: 6px;
     height: 100%;
+  }
+
+  @media screen and (max-width: 992px) {
+    .actions-btn {
+
+      .association-mode-btn {
+        display: none;
+      }
+
+      .more-btn {
+        display: block;
+      }
+    }
   }
 }

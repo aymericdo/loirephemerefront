@@ -3,8 +3,43 @@
     <nz-page-header-title>{{ (restaurant$ | async)?.name }}</nz-page-header-title>
     <nz-page-header-subtitle i18n>Commandes</nz-page-header-subtitle>
     <nz-page-header-tags><nz-tag [nzColor]="'orange'" i18n>Admin</nz-tag></nz-page-header-tags>
+    <nz-page-header-extra>
+      <div *ngIf="(isLoading$ | async) === false" class="actions-btn">
+        <nz-space nzAlign="center">
+          <ng-container *ngIf="!isInAssociationMode">
+            <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
+              nzBlock i18n>Association de commandes</button>
+
+            <button *nzSpaceItem class="more-btn" nz-button nzNoAnimation nz-dropdown [nzDropdownMenu]="menu"
+              nzPlacement="bottomRight" style="border: none; padding: 0">
+              <span nz-icon nzType="more" nzTheme="outline" style="font-size: 20px; vertical-align: top;"></span>
+            </button>
+
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item (click)="isInAssociationMode = true" i18n>
+                  Association de commandes
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </ng-container>
+          <ng-container *ngIf="isInAssociationMode">
+            <button *nzSpaceItem nz-button nzType="primary" nzBlock
+              (click)="isInAssociationMode = false" i18n>
+              <span nz-icon nzType="right"></span>
+              Retour
+            </button>
+          </ng-container>
+        </nz-space>
+      </div>
+    </nz-page-header-extra>
   </nz-page-header>
-  <div *ngIf="(isLoading$ | async) === false" class="container-section">
+
+  <div *ngIf="isInAssociationMode" class="commands-association-section">
+    app-association
+  </div>
+
+  <div *ngIf="!isInAssociationMode && (isLoading$ | async) === false" class="container-section">
     <nz-tabset nzLinkRouter>
       <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'ongoing' }" queryParamsHandling="merge" i18n>

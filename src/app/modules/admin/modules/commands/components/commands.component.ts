@@ -43,6 +43,8 @@ export class CommandsComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   restaurant$: Observable<Restaurant | null>;
 
+  isInAssociationMode = false;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(

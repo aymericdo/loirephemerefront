@@ -36,18 +36,20 @@ export class PromoModalComponent implements OnInit {
   optionsSelected: string[] = [];
   options: {
     label: string,
+    pastryId: string,
     value: string,
   }[] = [];
 
   ngOnInit(): void {
-    this.options = this.command.pastries.map((pastry) => ({
+    this.options = this.command.pastries.map((pastry, index) => ({
       label: `${pastry.name} (${pastry.price}€)`,
-      value: pastry.id,
+      pastryId: pastry.id,
+      value: `${pastry.id}_${index}`,
     }));
 
-    this.optionsSelected = this.command.pastries.reduce((prev, pastry) => {
+    this.optionsSelected = this.command.pastries.reduce((prev, pastry, index) => {
       if (!this.discount?.gifts.some((gift) => gift === pastry.id)) {
-        prev.push(pastry.id);
+        prev.push(`${pastry.id}_${index}`);
       }
       return prev;
     }, [] as string[]);
@@ -75,14 +77,14 @@ export class PromoModalComponent implements OnInit {
 
   validatingCommandPrice(): void {
     const toGive = this.giftList().reduce((prev, item) => {
-      prev[item.value] = (prev[item.value] || 0) + 1;
+      prev[item.pastryId] = (prev[item.pastryId] || 0) + 1;
       return prev;
     }, {} as { [key: string]: number });
 
-    const toGiveMessage: string = Object.keys(toGive).length ? `offrir ${Object.keys(toGive)
+    const toGiveMessage: string = Object.keys(toGive).length ? $localize`offrir ${Object.keys(toGive)
       .map((key, index) => `${Object.keys(toGive).length > 1 && index === Object.keys(toGive).length - 1 ? $localize`et ` : ''}${toGive[key]} ${this.getPastryFromCommand(key).name}${toGive[key] > 1 ? 's' : ''}`).join((', '))}` : '';
-    let toReduceMessage: string = '';
 
+    let toReduceMessage: string = '';
     if (this.percentagePromoValue) {
       if (toGiveMessage.length) {
         toReduceMessage = $localize` et ${this.percentagePromoValue}% de réduction`;
@@ -113,13 +115,10 @@ export class PromoModalComponent implements OnInit {
   }
 
   private giftReduction(): number {
-    return this.giftList().reduce((prev, item) => prev + this.getPastryFromCommand(item.value).price, 0);
+    return this.giftList().reduce((prev, item) => prev + this.getPastryFromCommand(item.pastryId).price, 0);
   }
 
-  private giftList(): {
-    label: string,
-    value: string,
-  }[] {
+  private giftList() {
     return this.options.filter((item) => !this.optionsSelected.includes(item.value));
   }
 
