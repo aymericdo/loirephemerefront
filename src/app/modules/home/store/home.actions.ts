@@ -42,6 +42,10 @@ export const markPersonalCommandAsPayed = createAction(
   '[Home page] Mark personal command as payed',
   props<{ commandId: string, sessionId: string }>(),
 );
+export const markPersonalCommandAsPayedSuccess = createAction(
+  '[Home page] Mark personal command as payed success',
+  props<{ command: Command }>(),
+);
 export const resetPersonalCommand = createAction('[Home page] Reset personal command');
 export const setPersonalCommand = createAction(
   '[Home page] Set personal command',

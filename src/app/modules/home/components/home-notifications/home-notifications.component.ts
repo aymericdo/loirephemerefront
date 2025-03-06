@@ -73,93 +73,44 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.restaurant$.pipe(
       filter(Boolean),
       switchMap(() => this.route.queryParamMap),
-      map((params: ParamMap) => params.get('payingCommandId')),
       filter(Boolean),
       takeUntil(this.destroyed$),
-    ).subscribe((commandId) => {
-      this.store.dispatch(fetchingPersonalCommand({ commandId }));
+    ).subscribe((queryParam) => {
+      const currentQueryParam = ['payingCommandId', 'waitingWizzCommandId', 'wizzCommandId', 'payedCommandId']
+        .find((actionParam) => queryParam.has(actionParam))
+
+      if (currentQueryParam) {
+        const commandId = queryParam.get(currentQueryParam)!
+        this.store.dispatch(fetchingPersonalCommand({ commandId }));
+      }
     });
-
-    this.restaurant$.pipe(
-      filter(Boolean),
-      switchMap(() => this.route.queryParamMap),
-      map((params: ParamMap) => params.get('waitingWizzCommandId')),
-      filter(Boolean),
-      takeUntil(this.destroyed$),
-    ).subscribe((commandId) => {
-      this.store.dispatch(fetchingPersonalCommand({ commandId }));
-    });
-
-    this.restaurant$.pipe(
-      filter(Boolean),
-      switchMap(() => this.route.queryParamMap),
-      map((params: ParamMap) => params.get('wizzCommandId')),
-      filter(Boolean),
-      takeUntil(this.destroyed$),
-    ).subscribe((commandId) => {
-      this.store.dispatch(fetchingPersonalCommand({ commandId }));
-    });
-
-    combineLatest([
-      this.route.queryParamMap.pipe(
-        map((params: ParamMap) => params.get('payedCommandId')),
-        filter(Boolean),
-      ),
-      this.personalCommand$.pipe(filter(Boolean)),
-      this.restaurant$.pipe(filter(Boolean)),
-    ])
-      .pipe(
-        map((data) => ({ commandId: data[0], personalCommand: data[1] })),
-        takeUntil(this.destroyed$),
-      ).subscribe(({ commandId, personalCommand }) => {
-        if (commandId === personalCommand.id) {
-          this.router.navigate(['.'], { relativeTo: this.route });
-
-          if (personalCommand.paymentRequired) {
-            setTimeout(() => {
-              this.store.dispatch(openHomeModal({ modal: 'success' }));
-            }, 1000); // to avoid a huge weird freeze
-          } else {
-            this.openWaitingConfirmationNotification();
-          }
-        }
-      });
 
     this.personalCommand$
       .pipe(filter(Boolean), takeUntil(this.destroyed$))
       .subscribe(async (command: Command) => {
         this.personalCommand = command;
 
-        if (this.swPush.isEnabled) {
-          try {
-            const sub = await this.swPush.requestSubscription({
-              serverPublicKey: VAPID_PUBLIC_KEY,
-            });
-
-            this.store.dispatch(
-              sendNotificationSub({ commandId: command.id!, sub }),
-            );
-            console.log('Subscription to notifications ok');
-          } catch (err) {
-            console.error('Could not subscribe to notifications', err);
-          }
-        }
-
-        this.wsService.sendMessage(
-          JSON.stringify({
-            event: 'addWaitingQueue',
-            data: command.id,
-          }),
-        );
+        this.listenWizzEvent(command);
 
         if (this.route.snapshot.queryParams.hasOwnProperty('waitingWizzCommandId')) {
           this.openWaitingConfirmationNotification();
           this.router.navigate(['.'], { relativeTo: this.route });
+        } else if (this.route.snapshot.queryParams.hasOwnProperty('payingCommandId')) {
+          setTimeout(() => {
+            this.store.dispatch(openHomeModal({ modal: 'payment' }));
+          }, 1000); // to avoid a huge weird freeze
+          this.router.navigate(['.'], { relativeTo: this.route });
         } else if (this.route.snapshot.queryParams.hasOwnProperty('wizzCommandId')) {
           this.openSentCommandNotification();
           this.router.navigate(['.'], { relativeTo: this.route });
-        } else if (this.route.snapshot.queryParams.hasOwnProperty('payingCommandId')) {
-          this.store.dispatch(openHomeModal({ modal: 'payment' }));
+        } else if (this.route.snapshot.queryParams.hasOwnProperty('payedCommandId')) {
+          if (this.personalCommand.paymentRequired) {
+            setTimeout(() => {
+              this.store.dispatch(openHomeModal({ modal: 'success' }));
+            }, 1000); // to avoid a huge weird freeze
+          } else {
+            this.openWaitingConfirmationNotification();
+          }
           this.router.navigate(['.'], { relativeTo: this.route });
         }
       });
@@ -230,6 +181,30 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
           nzButton: this.notificationPayedBtnTemplate,
         },
       ).messageId;
+  }
+
+  private async listenWizzEvent(command: Command): Promise<void> {
+    if (this.swPush.isEnabled) {
+      try {
+        const sub = await this.swPush.requestSubscription({
+          serverPublicKey: VAPID_PUBLIC_KEY,
+        });
+
+        this.store.dispatch(
+          sendNotificationSub({ commandId: command.id!, sub }),
+        );
+        console.log('Subscription to notifications ok');
+      } catch (err) {
+        console.error('Could not subscribe to notifications', err);
+      }
+    }
+
+    this.wsService.sendMessage(
+      JSON.stringify({
+        event: 'addWaitingQueue',
+        data: command.id,
+      }),
+    );
   }
 
   private subscribeToWS(code: string) {

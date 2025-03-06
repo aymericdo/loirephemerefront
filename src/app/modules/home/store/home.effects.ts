@@ -17,7 +17,7 @@ import {
   cancelPersonalCommand,
   closeErrorModal,
   closeHomeModal,
-  fetchRestaurantPastries, fetchingPersonalCommand, markPersonalCommandAsPayed, notificationSubSent,
+  fetchRestaurantPastries, fetchingPersonalCommand, markPersonalCommandAsPayed, markPersonalCommandAsPayedSuccess, notificationSubSent,
   openHomeModal,
   postCommandSuccess,
   resetCommand,
@@ -152,7 +152,7 @@ export class HomeEffects {
         ).pipe(
           map((command) => {
             this.router.navigate([restaurant?.code!], { queryParams: { payedCommandId: command.id }});
-            return setPersonalCommand({ command });
+            return markPersonalCommandAsPayedSuccess({ command });
           }),
           catchError((error) => [setErrorCommand({ error })]),
         );
