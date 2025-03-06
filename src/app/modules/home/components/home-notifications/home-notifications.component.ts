@@ -221,7 +221,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.commandNotificationIdByCommandId[this.personalCommand!.id] = this.notification
       .create(
         'success',
-        $localize`Votre commande ${this.personalCommand!.reference} a bien été envoyée !`,
+        $localize`Votre commande #${this.personalCommand!.reference} a bien été envoyée !`,
         $localize`Pour être averti que votre commande est prête, ne rafraichissez pas cette page. Une notification vous préviendra.`, {
           nzDuration: 0,
           nzKey: this.personalCommand!.id,
