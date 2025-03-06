@@ -29,6 +29,7 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
 import { PieChartComponent } from './charts/pie-chart/pie-chart.component';
 import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
 import { CommandCardComponent } from '../../commands/components/command-card/command-card.component';
+import { NzTableModule } from 'ng-zorro-antd/table';
 
 @Component({
   templateUrl: './stats.component.html',
@@ -61,8 +62,10 @@ import { CommandCardComponent } from '../../commands/components/command-card/com
     PieChartComponent,
     NzRowDirective,
     NzColDirective,
+    NzTableModule,
     CommandCardComponent,
     AsyncPipe,
+    DatePipe,
   ],
 })
 export class StatsComponent implements OnInit, OnDestroy {
@@ -155,6 +158,37 @@ export class StatsComponent implements OnInit, OnDestroy {
   dateRange: Date[] | null = null;
 
   currentTab = '';
+
+  listOfColumns = [
+    {
+      name: $localize`Date`,
+      sortFn: (a: Command, b: Command) => a.createdAt.localeCompare(b.createdAt),
+    },
+    {
+      name: $localize`Commande #`,
+      sortFn: (a: Command, b: Command) => a.reference.localeCompare(b.reference),
+    },
+    {
+      name: $localize`À emporter`,
+      sortFn: (a: Command, b: Command) => (a.takeAway === b.takeAway) ? 0 : a.takeAway ? -1 : 1,
+    },
+    {
+      name: $localize`Nom`,
+      sortFn: (a: Command, b: Command) => a.name.localeCompare(b.name),
+    },
+    {
+      name: $localize`Prix`,
+      sortFn: (a: Command, b: Command) => a.totalPrice - b.totalPrice,
+    },
+    {
+      name: $localize`Ristourne`,
+      sortFn: (a: Command, b: Command) => (!!a.discount === !!b.discount) ? 0 : !!a.discount ? -1 : 1,
+    },
+    {
+      name: $localize`Prix final`,
+      sortFn: (a: Command, b: Command) => a.discount && b.discount ? (a.discount?.newPrice - b.discount?.newPrice) : (a.totalPrice - b.totalPrice),
+    },
+  ];
 
   private statsAttributes = ['price', 'type'];
 
