@@ -78,7 +78,6 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyed$),
     ).subscribe((commandId) => {
       this.store.dispatch(fetchingPersonalCommand({ commandId }));
-      this.store.dispatch(openHomeModal({ modal: 'payment' }));
     });
 
     this.restaurant$.pipe(
@@ -158,6 +157,9 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
           this.router.navigate(['.'], { relativeTo: this.route });
         } else if (this.route.snapshot.queryParams.hasOwnProperty('wizzCommandId')) {
           this.openSentCommandNotification();
+          this.router.navigate(['.'], { relativeTo: this.route });
+        } else if (this.route.snapshot.queryParams.hasOwnProperty('payingCommandId')) {
+          this.store.dispatch(openHomeModal({ modal: 'payment' }));
           this.router.navigate(['.'], { relativeTo: this.route });
         }
       });
