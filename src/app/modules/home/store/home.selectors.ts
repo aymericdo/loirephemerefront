@@ -50,16 +50,6 @@ export const selectHomeModal = createSelector(
   (state: HomeState) => state.homeModal,
 );
 
-export const selectCurrentSentCommands = createSelector(
-  selectFeature,
-  (state: HomeState) => state.currentSentCommands,
-);
-
-export const selectCurrentSentCommandFromCommandList = (props: { commandId: string }) =>
-  createSelector(selectCurrentSentCommands, (commands: Command[]) => {
-    return commands.find((command) => command.id === props.commandId);
-  });
-
 export const selectErrorCommand = createSelector(
   selectFeature,
   (state: HomeState) => state.errorCommand,

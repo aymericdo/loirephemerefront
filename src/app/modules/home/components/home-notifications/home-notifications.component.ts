@@ -6,7 +6,7 @@ import { Observable, ReplaySubject, combineLatest, filter, map, switchMap, take,
 import { Command } from 'src/app/interfaces/command.interface';
 import { HomeWebSocketService, WebSocketData } from 'src/app/modules/home/services/home-socket.service';
 import { cancelPersonalCommand, closeErrorModal, closeHomeModal, fetchingPersonalCommand, openHomeModal, sendNotificationSub, setStock } from 'src/app/modules/home/store/home.actions';
-import { selectCurrentSentCommandFromCommandList, selectErrorCommand, selectHomeModal, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
+import { selectErrorCommand, selectHomeModal, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { SwPush } from '@angular/service-worker';
 import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
