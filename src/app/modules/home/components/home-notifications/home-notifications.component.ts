@@ -252,7 +252,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.notification
       .create(
         'info',
-        $localize`Votre commande ${this.personalCommand!.reference} est prête !`,
+        $localize`Votre commande #${this.personalCommand!.reference} est prête !`,
         $localize`Bonne dégustation ! 🥰`, {
           nzDuration: 0,
           nzKey: this.personalCommand!.id,
