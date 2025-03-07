@@ -9,7 +9,7 @@ import { cancelPersonalCommand, closeErrorModal, closeHomeModal, fetchingPersona
 import { selectErrorCommand, selectHomeModal, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { SwPush } from '@angular/service-worker';
-import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
+import { selectRestaurant, selectUserWaiterMode } from 'src/app/auth/store/auth.selectors';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 import { CommonModule } from '@angular/common';
@@ -39,6 +39,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   restaurant$: Observable<RestaurantInterface | null>;
   errorCommand$: Observable<Object | null>;
   homeModal$: Observable<HomeModalType | null>;
+  userWaiterMode$: Observable<boolean>;
 
   isPaymentModalBackBtn = false;
 
@@ -59,6 +60,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.personalCommand$ = this.store.select(selectPersonalCommand);
     this.errorCommand$ = this.store.select(selectErrorCommand);
     this.homeModal$ = this.store.select(selectHomeModal);
+    this.userWaiterMode$ = this.store.select(selectUserWaiterMode);
   }
 
   ngOnInit(): void {
@@ -174,6 +176,13 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   }
 
   private openWaitingConfirmationNotification(): void {
+    let waiterMode = false
+    this.userWaiterMode$.pipe(take(1)).subscribe((userWaiterMode) => {
+      waiterMode = userWaiterMode;
+    });
+
+    if (waiterMode) return;
+
     this.commandNotificationIdByCommandId[this.personalCommand!.id] = this.notification
       .create(
         'success',

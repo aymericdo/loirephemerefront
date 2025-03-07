@@ -105,8 +105,3 @@ export const setNewToken = createAction(
   '[Auth page] Set user token',
   props<{ token: string }>(),
 );
-
-export const toggleDisplayDemoResto = createAction(
-  '[Auth page] Toggle display demo resto',
-  props<{ displayDemoResto: boolean }>(),
-);

@@ -15,11 +15,34 @@
               <nz-switch
                 [ngModel]="!!(user$ | async)?.displayDemoResto"
                 (ngModelChange)="handleDisplayDemoResto($event)"
-                [nzCheckedChildren]="checkedTemplate"
-                [nzUnCheckedChildren]="unCheckedTemplate">
+                [nzCheckedChildren]="checkedDisplayDemoRestoTemplate"
+                [nzUnCheckedChildren]="unCheckedDisplayDemoRestoTemplate">
               </nz-switch>
-              <ng-template #checkedTemplate><span nz-icon nzType="eye"></span></ng-template>
-              <ng-template #unCheckedTemplate><span nz-icon nzType="eye-invisible"></span></ng-template>
+              <ng-template #checkedDisplayDemoRestoTemplate>
+                <span nz-icon nzType="eye"></span>
+              </ng-template>
+              <ng-template #unCheckedDisplayDemoRestoTemplate>
+                <span nz-icon nzType="eye-invisible"></span>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nz-col [nzLg]="14" [nzSm]="20" [nzXs]="24">
+            <nz-form-label i18n>Mode serveur</nz-form-label>
+            <nz-form-control>
+              <nz-switch
+                [ngModel]="!!(user$ | async)?.waiterMode"
+                (ngModelChange)="handleWaiterMode($event)"
+                [nzCheckedChildren]="checkedWaiterModeTemplate"
+                [nzUnCheckedChildren]="unCheckedWaiterModeTemplate">
+              </nz-switch>
+              <ng-template #checkedWaiterModeTemplate>
+                <span nz-icon nzType="smile"></span>
+              </ng-template>
+              <ng-template #unCheckedWaiterModeTemplate>
+                <nz-icon>
+                  <img src="assets/image/waiter.svg" alt="waiter">
+                </nz-icon>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>

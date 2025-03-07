@@ -11,6 +11,18 @@
       <div nz-result-extra>
         <nz-space nzDirection="vertical">
           <ng-container *ngIf="!!restaurant.paymentInformation?.paymentActivated && !command.isPayed">
+            <ng-container *ngIf="(userWaiterMode$ | async); else defaultClient">
+              <button *nzSpaceItem nz-button nzType="dashed" (click)="isPaymentQrCodeModalVisible = true" i18n>
+                Transmettre la commande
+              </button>
+            </ng-container>
+            <ng-template #defaultClient>
+              <button *nzSpaceItem nz-button nzType="dashed" (click)="clickPayment.emit()" i18n>
+                Payer votre commande
+              </button>
+            </ng-template>
+          </ng-container>
+          <ng-container *ngIf="!!restaurant.paymentInformation?.paymentActivated && !command.isPayed && !(userWaiterMode$ | async)">
             <button *nzSpaceItem nz-button nzType="dashed" (click)="clickPayment.emit()" i18n>
               Payer votre commande
             </button>
@@ -23,3 +35,6 @@
     </nz-result>
   </ng-container>
 </nz-modal>
+
+<app-payment-qr-code-modal *ngIf="isPaymentQrCodeModalVisible" (clickOk)="isPaymentQrCodeModalVisible = false;"
+  [command]="command"></app-payment-qr-code-modal>

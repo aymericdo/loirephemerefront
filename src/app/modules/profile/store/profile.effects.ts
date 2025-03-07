@@ -4,9 +4,9 @@ import { catchError, concatMap, map } from 'rxjs/operators';
 import { ProfileApiService } from 'src/app/modules/profile/services/profile-api.service';
 import {
   changingPassword, setChangePasswordError,
-  setPasswordAsChanged, stopLoading, updatingDisplayDemoResto,
+  setPasswordAsChanged, stopLoading, toggleDisplayDemoResto, toggleWaiterMode, updatingDisplayDemoResto,
+  updatingWaiterMode,
 } from './profile.actions';
-import { toggleDisplayDemoResto } from 'src/app/auth/store/auth.actions';
 
 @Injectable()
 export class ProfileEffects {
@@ -42,6 +42,17 @@ export class ProfileEffects {
         return this.profileApiService
           .patchDisplayDemoResto(action.displayDemoResto)
           .pipe(map((displayDemoResto) => toggleDisplayDemoResto({ displayDemoResto })));
+      }),
+    );
+  });
+
+  updatingWaiterMode$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(updatingWaiterMode),
+      concatMap((action) => {
+        return this.profileApiService
+          .patchWaiterMode(action.waiterMode)
+          .pipe(map((waiterMode) => toggleWaiterMode({ waiterMode })));
       }),
     );
   });

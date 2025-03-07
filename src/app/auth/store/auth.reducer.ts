@@ -8,8 +8,9 @@ import {
   setRestaurant, setRestaurantPublicKey, setUser, setUserAccess,
   setUserRestaurants, startFirstNavigation,
   stopDemoRestoFetching, stopFirstNavigation, stopLoading, stopRestaurantFetching,
-  stopUserFetching, toggleDisplayDemoResto,
+  stopUserFetching,
 } from './auth.actions';
+import { toggleDisplayDemoResto, toggleWaiterMode } from 'src/app/modules/profile/store/profile.actions';
 
 export interface AuthState {
   user: User | null;
@@ -132,6 +133,13 @@ const reducer = createReducer(
     user: {
       ...state.user,
       displayDemoResto,
+    } as User,
+  })),
+  on(toggleWaiterMode, (state, { waiterMode }): AuthState => ({
+    ...state,
+    user: {
+      ...state.user,
+      waiterMode,
     } as User,
   })),
 );

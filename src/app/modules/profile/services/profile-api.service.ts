@@ -29,4 +29,12 @@ export class ProfileApiService {
       { displayDemoResto },
     ) as Observable<boolean>;
   }
+
+  patchWaiterMode(
+    waiterMode: boolean): Observable<boolean> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/users/waiter-mode`,
+      { waiterMode },
+    ) as Observable<boolean>;
+  }
 }

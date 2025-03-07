@@ -10,6 +10,11 @@ export const selectUser = createSelector(
   (state: AuthState) => state.user,
 );
 
+export const selectUserWaiterMode = createSelector(
+  selectFeature,
+  (state: AuthState) => state.user?.waiterMode || false,
+);
+
 export const selectDemoResto = createSelector(
   selectFeature,
   (state: AuthState) => state.demoResto,
