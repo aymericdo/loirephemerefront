@@ -24,11 +24,6 @@ export const updatingDisplayDemoResto = createAction(
   props<{ displayDemoResto: boolean }>(),
 );
 
-export const updatingWaiterMode = createAction(
-  '[Profile page] Updating waiter mode',
-  props<{ waiterMode: boolean }>(),
-);
-
 export const toggleDisplayDemoResto = createAction(
   '[Profile page] Toggle display demo resto',
   props<{ displayDemoResto: boolean }>(),

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectUserWaiterMode } from 'src/app/auth/store/auth.selectors';
+import { selectCurrentWaiterMode, selectUserWaiterMode } from 'src/app/auth/store/auth.selectors';
 import { Command } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { PaymentQrCodeModalComponent } from 'src/app/modules/admin/modules/commands/components/payment-qr-code-modal/payment-qr-code-modal.component';
@@ -32,6 +32,6 @@ export class OrderSuccessModalComponent {
   constructor(
     private store: Store,
   ) {
-    this.userWaiterMode$ = this.store.select(selectUserWaiterMode);
+    this.userWaiterMode$ = this.store.pipe(select(selectCurrentWaiterMode));
   }
 }

@@ -33,7 +33,7 @@ export class PromoModalComponent implements OnInit {
   promotionPrice = 0;
   percentagePromoValue = 0;
   allChecked = true;
-  optionsSelected: string[] = [];
+  selectedOptions: string[] = [];
   options: {
     label: string,
     pastryId: string,
@@ -47,7 +47,7 @@ export class PromoModalComponent implements OnInit {
       value: `${pastry.id}_${index}`,
     }));
 
-    this.optionsSelected = this.command.pastries.reduce((prev, pastry, index) => {
+    this.selectedOptions = this.command.pastries.reduce((prev, pastry, index) => {
       if (!this.discount?.gifts.some((gift) => gift === pastry.id)) {
         prev.push(`${pastry.id}_${index}`);
       }
@@ -61,13 +61,13 @@ export class PromoModalComponent implements OnInit {
   }
 
   updateAllChecked(): void {
-    this.optionsSelected = this.allChecked ? this.options.map(item => item.value) : [];
+    this.selectedOptions = this.allChecked ? this.options.map(item => item.value) : [];
 
     this.computeReduction();
   }
 
   updateSingleChecked(): void {
-    this.allChecked = this.optionsSelected.length === this.options.length;
+    this.allChecked = this.selectedOptions.length === this.options.length;
     this.computeReduction();
   }
 
@@ -119,7 +119,7 @@ export class PromoModalComponent implements OnInit {
   }
 
   private giftList() {
-    return this.options.filter((item) => !this.optionsSelected.includes(item.value));
+    return this.options.filter((item) => !this.selectedOptions.includes(item.value));
   }
 
   private getPastryFromCommand(id: string): Pastry {

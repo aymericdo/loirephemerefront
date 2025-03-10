@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AuthState } from './auth.reducer';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
-import { User } from 'src/app/interfaces/user.interface';
+import { Access, User } from 'src/app/interfaces/user.interface';
 
 export const selectFeature = createFeatureSelector<AuthState>('auth');
 
@@ -10,9 +10,38 @@ export const selectUser = createSelector(
   (state: AuthState) => state.user,
 );
 
+export const selectRestaurant = createSelector(
+  selectFeature,
+  (state: AuthState) => state.restaurant,
+);
+
+export const selectRestaurantId = createSelector(
+  selectFeature,
+  (state: AuthState) => state.restaurant?.id,
+);
+
+export const selectUserAccess = createSelector(
+  selectFeature,
+  (state: AuthState) => state.user?.access as { [restaurantId: string]: Access[] },
+);
+
 export const selectUserWaiterMode = createSelector(
   selectFeature,
-  (state: AuthState) => state.user?.waiterMode || false,
+  (state: AuthState) => state.user?.waiterMode as { [restaurantId: string]: boolean },
+);
+
+export const selectCurrentWaiterMode = createSelector(
+  selectUserWaiterMode,
+  selectRestaurantId,
+  (waiterMode, groupId) => {
+    if (!groupId || !waiterMode) return
+
+    if (typeof waiterMode === 'boolean') {
+      return waiterMode;
+    }
+
+    return waiterMode[groupId] ?? false;
+  }
 );
 
 export const selectDemoResto = createSelector(
@@ -47,11 +76,6 @@ export const selectDemoRestoFetching = createSelector(
 export const selectRestaurantFetching = createSelector(
   selectFeature,
   (state: AuthState) => state.restaurantFetching,
-);
-
-export const selectRestaurant = createSelector(
-  selectFeature,
-  (state: AuthState) => state.restaurant,
 );
 
 export const selectRestaurantPublicKey = createSelector(

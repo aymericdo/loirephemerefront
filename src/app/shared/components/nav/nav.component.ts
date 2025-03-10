@@ -9,7 +9,7 @@ import { APP_VERSION } from 'src/app/helpers/version';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
 import { fetchingRestaurant, fetchingUser, resetUser, setIsSiderCollapsed, setUserRestaurants, startFirstNavigation, stopFirstNavigation } from 'src/app/auth/store/auth.actions';
-import { selectAllRestaurantsFetching, selectDemoResto, selectIsSiderCollapsed, selectRestaurant, selectRestaurantFetching, selectUser, selectUserFetching, selectUserRestaurants } from 'src/app/auth/store/auth.selectors';
+import { selectAllRestaurantsFetching, selectDemoResto, selectIsSiderCollapsed, selectRestaurant, selectRestaurantFetching, selectUser, selectUserAccess, selectUserFetching, selectUserRestaurants } from 'src/app/auth/store/auth.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 
 
@@ -29,6 +29,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   restaurant$: Observable<Restaurant | null>;
   user$: Observable<User | null>;
+  userAccess$: Observable<{ [restaurantId: string]: Access[] } | null>;
   userRestaurants$: Observable<Restaurant[] | null>;
   isSiderCollapsed$: Observable<boolean>;
   demoResto$: Observable<Restaurant | null>;
@@ -57,6 +58,7 @@ export class NavComponent implements OnInit, OnDestroy {
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.user$ = this.store.select(selectUser);
+    this.userAccess$ = this.store.select(selectUserAccess);
     this.userRestaurants$ = this.store.select(selectUserRestaurants);
     this.isSiderCollapsed$ = this.store.select(selectIsSiderCollapsed);
     this.demoResto$ = this.store.select(selectDemoResto);
@@ -81,14 +83,11 @@ export class NavComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.user$
+    this.userAccess$
       .pipe(
         filter(Boolean),
         takeUntil(this.destroyed$),
-      ).subscribe((user) => {
-        const userAccessByRestaurant: { [restaurantId: string]: Access[] } =
-          user.access as { [restaurantId: string]: Access[] };
-
+      ).subscribe((userAccessByRestaurant) => {
         this.hasAccessByRestaurantIdBySection = Object.keys(userAccessByRestaurant).reduce((prev, restaurantId) => {
           const hasAccessBySection = [...ACCESS_LIST].reduce((prev, access: Access) => {
             prev[access] = userAccessByRestaurant[restaurantId].includes(access);

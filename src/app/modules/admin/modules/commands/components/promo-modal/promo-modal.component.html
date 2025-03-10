@@ -15,14 +15,14 @@
               nz-checkbox
               [(ngModel)]="allChecked"
               (ngModelChange)="updateAllChecked()"
-              [nzIndeterminate]="optionsSelected.length > 0 && optionsSelected.length !== options.length"
+              [nzIndeterminate]="selectedOptions.length > 0 && selectedOptions.length !== options.length"
               i18n
             >
               Tout cocher
             </label>
           </div>
           <br />
-          <nz-checkbox-group [nzOptions]="options" [(ngModel)]="optionsSelected" (ngModelChange)="updateSingleChecked()"></nz-checkbox-group>
+          <nz-checkbox-group [nzOptions]="options" [(ngModel)]="selectedOptions" (ngModelChange)="updateSingleChecked()"></nz-checkbox-group>
         </div>
 
         <div class="percentage-section">

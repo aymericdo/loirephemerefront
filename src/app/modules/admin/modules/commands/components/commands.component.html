@@ -6,7 +6,7 @@
     <nz-page-header-extra>
       <div *ngIf="(isLoading$ | async) === false" class="actions-btn">
         <nz-space nzAlign="center">
-          <ng-container *ngIf="!isInAssociationMode">
+          <ng-container *ngIf="!isInAssociationMode && false">
             <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
               nzBlock i18n>Association de commandes</button>
 
@@ -35,11 +35,7 @@
     </nz-page-header-extra>
   </nz-page-header>
 
-  <div *ngIf="isInAssociationMode" class="commands-association-section">
-    app-association
-  </div>
-
-  <div *ngIf="!isInAssociationMode && (isLoading$ | async) === false" class="container-section">
+  <div *ngIf="(isLoading$ | async) === false" class="container-section">
     <nz-tabset nzLinkRouter>
       <nz-tab>
         <a *nzTabLink nz-tab-link [routerLink]="['.']" [queryParams]="{ tab: 'ongoing' }" queryParamsHandling="merge" i18n>
@@ -49,10 +45,11 @@
           <nz-empty class="empty-section"></nz-empty>
         </ng-container>
         <ng-container *ngIf="(onGoingCommands$ | async)?.length! > 0">
-          <div class="data-section" nz-row [nzGutter]="[0, 24]" nzJustify="center">
+          <div class="data-section" [class.-association-mode]="isInAssociationMode" nz-row [nzGutter]="[0, 24]" nzJustify="center">
             <div *ngFor="let command of onGoingCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
-              <div class="inner-box">
+              <div class="inner-box" [class.-selected]="selectedCommands.includes(command)" (click)="handleSelect(command)">
                 <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isPayed]="!!command.isPayed"
+                  [noAction]="isInAssociationMode"
                   (clickDone)="handleClickDone(command)"
                   (clickWizz)="handleClickWizz(command)"
                   (clickPayed)="handleClickPayed(command, $event)"
@@ -130,7 +127,19 @@
   </div>
 </div>
 
-<app-information-popover>
+<app-information-popover *ngIf="!isInAssociationMode">
   <div i18n>Les commandes sont celles de la journée courante.</div>
   <div i18n>Nous gardons aussi dans cette liste les commandes qui n'ont pas été livrées, ou pas encore payées.</div>
 </app-information-popover>
+
+<nz-float-button
+  *ngIf="selectedCommands.length > 1"
+  nzType="primary" class="information" [nzIcon]="icon" (click)="handleMerge()"
+  nz-popover [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topRight"
+></nz-float-button>
+<ng-template #contentTemplate i18n>
+  Fusionner
+</ng-template>
+<ng-template #icon>
+  <nz-icon nzType="merge-cells"></nz-icon>
+</ng-template>

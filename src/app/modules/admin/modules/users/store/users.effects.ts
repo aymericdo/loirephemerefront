@@ -12,7 +12,9 @@ import {
   deletingUserToRestaurant,
   fetchingUsers,
   patchUserRestaurantAccessSuccess,
+  patchUserRestaurantWaiterModeSuccess,
   patchingUserRestaurantAccess,
+  patchingUserWaiterMode,
   setUser,
   setUserEmailError,
   setUserNoEmailError,
@@ -102,9 +104,23 @@ export class UsersEffects {
     );
   });
 
+  patchingUserWaiterMode$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(patchingUserWaiterMode),
+      concatLatestFrom(() => [
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
+      ]),
+      concatMap(([action, restaurant]) => {
+        return this.adminApiService.patchUserRestaurantWaiterMode(restaurant.code, action.userId, action.waiterMode).pipe(
+          map((user: User) => patchUserRestaurantWaiterModeSuccess({ user })),
+        );
+      }),
+    );
+  });
+
   setUser$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(patchUserRestaurantAccessSuccess),
+      ofType(patchUserRestaurantAccessSuccess, patchUserRestaurantWaiterModeSuccess),
       map(({ user }) => setUser({ user })),
     );
   });

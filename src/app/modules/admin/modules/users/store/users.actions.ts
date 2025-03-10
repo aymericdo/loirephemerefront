@@ -21,6 +21,10 @@ export const patchUserRestaurantAccessSuccess = createAction(
   '[Users page] Patch user restaurant access user success',
   props<{ user: User }>(),
 );
+export const patchUserRestaurantWaiterModeSuccess = createAction(
+  '[Users page] Patch user restaurant waiter mode user success',
+  props<{ user: User }>(),
+);
 export const deleteUser = createAction(
   '[Users page] Delete users',
   props<{ userId: string }>(),
@@ -47,6 +51,10 @@ export const deletingUserToRestaurant = createAction(
 export const patchingUserRestaurantAccess = createAction(
   '[Users page] Patching user restaurant access',
   props<{ userId: string, access: Access[] }>(),
+);
+export const patchingUserWaiterMode = createAction(
+  '[Users page] Patching user waiter mode',
+  props<{ userId: string, waiterMode: boolean }>(),
 );
 export const stopLoading = createAction(
   '[Users page] Stop loading',

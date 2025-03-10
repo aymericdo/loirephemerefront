@@ -22,11 +22,6 @@
               </button>
             </ng-template>
           </ng-container>
-          <ng-container *ngIf="!!restaurant.paymentInformation?.paymentActivated && !command.isPayed && !(userWaiterMode$ | async)">
-            <button *nzSpaceItem nz-button nzType="dashed" (click)="clickPayment.emit()" i18n>
-              Payer votre commande
-            </button>
-          </ng-container>
           <button nz-button nzType="primary" *nzSpaceItem (click)="clickGo.emit()" i18n>
             Retour à la page d'accueil
           </button>

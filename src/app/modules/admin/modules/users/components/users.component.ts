@@ -4,7 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, ReplaySubject, filter, takeUntil, withLatestFrom } from 'rxjs';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { ACCESS_LIST, Access, User } from 'src/app/interfaces/user.interface';
-import { deletingUserToRestaurant, fetchingUsers, patchingUserRestaurantAccess, startLoading } from 'src/app/modules/admin/modules/users/store/users.actions';
+import { deletingUserToRestaurant, fetchingUsers, patchingUserRestaurantAccess, patchingUserWaiterMode, startLoading } from 'src/app/modules/admin/modules/users/store/users.actions';
 import { selectIsLoading, selectUsers } from 'src/app/modules/admin/modules/users/store/users.selectors';
 import { selectRestaurant, selectUser } from 'src/app/auth/store/auth.selectors';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -35,6 +35,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   accessCheckOptionsByUserId: { [userId: string]: NzCheckboxOption[] } = {};
   accessCheckValuesByUserId: { [userId: string]: Access[] } = {};
+  waiterModeCheckValuesByUserId: { [userId: string]: boolean } = {};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -74,6 +75,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         this.accessCheckValuesByUserId[user.id] = ACCESS_LIST.filter((access) =>
           userAccess.some(a => a === access)
         );
+        this.waiterModeCheckValuesByUserId[user.id] = user.waiterMode as boolean
       });
     });
   }
@@ -81,6 +83,10 @@ export class UsersComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  handleWaiterModeChange(userId: string, waiterMode: boolean): void {
+    this.store.dispatch(patchingUserWaiterMode({ userId, waiterMode }));
   }
 
   handleAccessChange(userId: string, value: Access[]): void {

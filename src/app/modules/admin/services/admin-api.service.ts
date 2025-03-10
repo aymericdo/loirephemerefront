@@ -148,8 +148,15 @@ export class AdminApiService {
 
   patchUserRestaurantAccess(code: string, id: string, access: Access[]): Observable<User> {
     return this.http.patch(
-      `${this.protocolHttp}${this.baseUrl}/users/by-code/${code}`,
+      `${this.protocolHttp}${this.baseUrl}/users/by-code/${code}/access`,
       { id, access },
+    ) as Observable<User>;
+  }
+
+  patchUserRestaurantWaiterMode(code: string, id: string, waiterMode: boolean): Observable<User> {
+    return this.http.patch(
+      `${this.protocolHttp}${this.baseUrl}/users/by-code/${code}/waiter-mode`,
+      { id, waiterMode },
     ) as Observable<User>;
   }
 

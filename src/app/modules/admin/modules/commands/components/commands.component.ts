@@ -21,6 +21,8 @@ import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { InformationPopoverComponent } from 'src/app/shared/components/information-popover/information-popover.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 import { VAPID_PUBLIC_KEY } from 'src/main';
+import { NzFloatButtonModule } from 'ng-zorro-antd/float-button';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   templateUrl: './commands.component.html',
@@ -31,6 +33,7 @@ import { VAPID_PUBLIC_KEY } from 'src/main';
     RouterModule,
     NgZorroModule,
     InformationPopoverComponent,
+    NzFloatButtonModule,
     CommandCardComponent,
   ],
 })
@@ -43,6 +46,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   restaurant$: Observable<Restaurant | null>;
 
+  selectedCommands: Command[] = []
   isInAssociationMode = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -54,6 +58,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
     private swPush: SwPush,
     private router: Router,
     private route: ActivatedRoute,
+    private modal: NzModalService,
   ) {
     this.onGoingCommands$ = this.store.select(selectOnGoingCommands);
     this.deliveredCommands$ = this.store.select(selectDeliveredCommands);
@@ -112,6 +117,32 @@ export class CommandsComponent implements OnInit, OnDestroy {
 
   handleClickCancelled(command: Command): void {
     this.store.dispatch(cancellingCommand({ command }));
+  }
+
+  handleSelect(command: Command): void {
+    if (!this.isInAssociationMode) return
+
+    if (this.selectedCommands.includes(command)) {
+      this.selectedCommands = this.selectedCommands.filter((selectedCommand) => selectedCommand.id !== command.id);
+    } else {
+      this.selectedCommands.push(command)
+    }
+  }
+
+  handleMerge(): void {
+    if (!this.isInAssociationMode) return
+
+    this.modal.confirm({
+      nzTitle: $localize`Fusionner ${this.selectedCommands.length} commandes`,
+      nzContent: $localize`Voulez-vous vraiment fusionner les commandes de <ul>${this.selectedCommands.map((commands) => `<li>${commands.name}</li>`).join('')}</ul>`,
+      nzOkText: $localize`OK`,
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        console.log(this.selectedCommands);
+        this.selectedCommands = [];
+      },
+      nzCancelText: $localize`Annuler`,
+    });
   }
 
   handleClickWizz(command: Command): void {

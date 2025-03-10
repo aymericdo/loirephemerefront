@@ -22,6 +22,7 @@
           <th i18n>Créé le</th>
           <th i18n>Modifié le</th>
           <th i18n>Accès</th>
+          <th i18n>Serveur</th>
           <th i18n>Actions</th>
         </tr>
       </thead>
@@ -33,6 +34,22 @@
           <td>
             <nz-checkbox-group [(ngModel)]="accessCheckValuesByUserId[user.id]" [nzOptions]="accessCheckOptionsByUserId[user.id]" (ngModelChange)="handleAccessChange(user.id, $event)">
             </nz-checkbox-group>
+          </td>
+          <td>
+            <nz-switch
+              [ngModel]="!!waiterModeCheckValuesByUserId[user.id]"
+              (ngModelChange)="handleWaiterModeChange(user.id, $event)"
+              [nzCheckedChildren]="checkedWaiterModeTemplate"
+              [nzUnCheckedChildren]="unCheckedWaiterModeTemplate">
+            </nz-switch>
+            <ng-template #checkedWaiterModeTemplate>
+              <span nz-icon nzType="smile"></span>
+            </ng-template>
+            <ng-template #unCheckedWaiterModeTemplate>
+              <nz-icon>
+                <img style="height: 12px;" src="assets/image/waiter.svg" alt="waiter">
+              </nz-icon>
+            </ng-template>
           </td>
           <td>
             <div nzFlex nz-row nzJustify="center">

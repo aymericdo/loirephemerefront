@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { NzNotificationComponent, NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject, combineLatest, filter, map, switchMap, take, takeUntil } from 'rxjs';
 import { Command } from 'src/app/interfaces/command.interface';
@@ -9,7 +9,7 @@ import { cancelPersonalCommand, closeErrorModal, closeHomeModal, fetchingPersona
 import { selectErrorCommand, selectHomeModal, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { SwPush } from '@angular/service-worker';
-import { selectRestaurant, selectUserWaiterMode } from 'src/app/auth/store/auth.selectors';
+import { selectCurrentWaiterMode, selectRestaurant, selectUserWaiterMode } from 'src/app/auth/store/auth.selectors';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 import { CommonModule } from '@angular/common';
@@ -39,7 +39,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   restaurant$: Observable<RestaurantInterface | null>;
   errorCommand$: Observable<Object | null>;
   homeModal$: Observable<HomeModalType | null>;
-  userWaiterMode$: Observable<boolean>;
+  userWaiterMode$: Observable<boolean | undefined>;
 
   isPaymentModalBackBtn = false;
 
@@ -60,7 +60,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.personalCommand$ = this.store.select(selectPersonalCommand);
     this.errorCommand$ = this.store.select(selectErrorCommand);
     this.homeModal$ = this.store.select(selectHomeModal);
-    this.userWaiterMode$ = this.store.select(selectUserWaiterMode);
+    this.userWaiterMode$ = this.store.pipe(select(selectCurrentWaiterMode));
   }
 
   ngOnInit(): void {
@@ -143,6 +143,17 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
 
   handleCloseSuccessModal(): void {
     this.store.dispatch(closeHomeModal());
+
+    let waiterMode = false
+    this.userWaiterMode$.pipe(
+      filter(Boolean),
+      take(1),
+    ).subscribe((userWaiterMode) => {
+      waiterMode = userWaiterMode;
+    });
+
+    if (waiterMode) return;
+
     this.openWaitingConfirmationNotification();
   }
 
@@ -176,13 +187,6 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   }
 
   private openWaitingConfirmationNotification(): void {
-    let waiterMode = false
-    this.userWaiterMode$.pipe(take(1)).subscribe((userWaiterMode) => {
-      waiterMode = userWaiterMode;
-    });
-
-    if (waiterMode) return;
-
     this.commandNotificationIdByCommandId[this.personalCommand!.id] = this.notification
       .create(
         'success',

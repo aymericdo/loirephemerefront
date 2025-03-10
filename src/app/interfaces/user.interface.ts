@@ -8,7 +8,7 @@ export interface User {
   updatedAt: string;
   access: Access[] | { [restaurantId: string]: Access[] };
   displayDemoResto: boolean;
-  waiterMode: boolean;
+  waiterMode: boolean | { [restaurantId: string]: boolean };
 }
 
 export interface CoreUser {
