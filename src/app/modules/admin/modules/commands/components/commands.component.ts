@@ -7,11 +7,11 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { canVibrate } from 'src/app/helpers/vibrate';
-import { Command, PaymentPossibility } from 'src/app/interfaces/command.interface';
+import { Command, CommandWithMerged, PaymentPossibility } from 'src/app/interfaces/command.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { CommandCardComponent } from 'src/app/modules/admin/modules/commands/components/command-card/command-card.component';
 import { Discount } from 'src/app/modules/admin/modules/commands/components/promo-modal/promo-modal.component';
-import { addCommand, cancellingCommand, closingCommand, editCommand, fetchingRestaurantCommands, payingCommand, sendNotificationSub, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
+import { addCommand, cancellingCommand, closingCommand, editCommand, fetchingRestaurantCommands, mergingCommands, payingCommand, sendNotificationSub, splittingCommands, startLoading } from 'src/app/modules/admin/modules/commands/store/commands.actions';
 import { selectCancelledCommands, selectDeliveredCommands, selectIsLoading, selectOnGoingCommands, selectPayedCommands, selectTotalPayedCommands } from 'src/app/modules/admin/modules/commands/store/commands.selectors';
 import {
   CommandWebSocketService,
@@ -38,8 +38,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   ],
 })
 export class CommandsComponent implements OnInit, OnDestroy {
-  onGoingCommands$: Observable<Command[]>;
-  deliveredCommands$: Observable<Command[]>;
+  onGoingCommands$: Observable<CommandWithMerged[]>;
+  deliveredCommands$: Observable<CommandWithMerged[]>;
   payedCommands$: Observable<Command[]>;
   cancelledCommands$: Observable<Command[]>;
   totalPayedCommands$: Observable<number>;
@@ -47,6 +47,7 @@ export class CommandsComponent implements OnInit, OnDestroy {
   restaurant$: Observable<Restaurant | null>;
 
   selectedCommands: Command[] = []
+  unSelectedCommands: Command[] = []
   isInAssociationMode = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -120,12 +121,22 @@ export class CommandsComponent implements OnInit, OnDestroy {
   }
 
   handleSelect(command: Command): void {
-    if (!this.isInAssociationMode) return
+    if (!this.isInAssociationMode || this.unSelectedCommands.length) return
 
     if (this.selectedCommands.includes(command)) {
       this.selectedCommands = this.selectedCommands.filter((selectedCommand) => selectedCommand.id !== command.id);
     } else {
       this.selectedCommands.push(command)
+    }
+  }
+
+  handleUnSelect(command: CommandWithMerged): void {
+    if (!this.isInAssociationMode || this.selectedCommands.length) return
+
+    if (this.unSelectedCommands.includes(command)) {
+      this.unSelectedCommands = [];
+    } else {
+      this.unSelectedCommands = this.unSelectedCommands.concat(command.mergedCommands!)
     }
   }
 
@@ -138,8 +149,30 @@ export class CommandsComponent implements OnInit, OnDestroy {
       nzOkText: $localize`OK`,
       nzOkType: 'primary',
       nzOnOk: () => {
-        console.log(this.selectedCommands);
+        this.store.dispatch(mergingCommands({
+          commandIds: this.selectedCommands.map((command) => command.id),
+        }));
         this.selectedCommands = [];
+        this.isInAssociationMode = false;
+      },
+      nzCancelText: $localize`Annuler`,
+    });
+  }
+
+  handleUnMerge(): void {
+    if (!this.isInAssociationMode) return
+
+    this.modal.confirm({
+      nzTitle: $localize`Séparer ${this.unSelectedCommands.length} commandes`,
+      nzContent: $localize`Voulez-vous vraiment séparer les commandes de <ul>${this.unSelectedCommands.map((commands) => `<li>${commands.name}</li>`).join('')}</ul>`,
+      nzOkText: $localize`OK`,
+      nzOkType: 'primary',
+      nzOnOk: () => {
+        this.store.dispatch(splittingCommands({
+          commandIds: this.unSelectedCommands.map((command) => command.id),
+        }));
+        this.unSelectedCommands = [];
+        this.isInAssociationMode = false;
       },
       nzCancelText: $localize`Annuler`,
     });

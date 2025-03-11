@@ -120,10 +120,22 @@ export class AdminApiService {
     );
   }
 
-  payedCommand(code: string, commandId: string, payments: PaymentPossibility[], discount: Discount): Observable<any> {
+  payedCommand(code: string, commandId: string, payments: PaymentPossibility[], discount: Discount): Observable<Command> {
     return this.http.patch(
       `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/payed/${commandId}`, { payments, discount },
-    );
+    ) as Observable<Command>;
+  }
+
+  mergeCommand(code: string, commandIds: string[]): Observable<Command[]> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/merge`, { commandIds },
+    ) as Observable<Command[]>;
+  }
+
+  splitCommand(code: string, commandIds: string[]): Observable<Command[]> {
+    return this.http.post(
+      `${this.protocolHttp}${this.baseUrl}/commands/by-code/${code}/split`, { commandIds },
+    ) as Observable<Command[]>;
   }
 
   validateUserEmail(email: string): Observable<boolean> {

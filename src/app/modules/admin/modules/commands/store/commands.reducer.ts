@@ -5,9 +5,11 @@ import {
   addCommand,
   editCommand,
   fetchingRestaurantCommands,
+  mergeCommands,
   removeNotificationSub,
   setCommands,
   setNotificationSub,
+  splitCommands,
   startLoading,
   stopLoading,
 } from './commands.actions';
@@ -36,6 +38,13 @@ const reducer = createReducer(
   on(setCommands, (state, { commands }): CommandsState => ({
     ...state,
     commands: [...commands],
+  })),
+  on(mergeCommands, splitCommands, (state, { commands }): CommandsState => ({
+    ...state,
+    commands: state.commands.map((existingCommand) => {
+      const newCommand = commands.find((cmd) => cmd.id === existingCommand.id);
+      return newCommand ?? existingCommand;
+    }),
   })),
   on(stopLoading, (state): CommandsState => ({
     ...state,

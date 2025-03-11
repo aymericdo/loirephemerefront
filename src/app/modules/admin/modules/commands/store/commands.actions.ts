@@ -34,6 +34,22 @@ export const editCommand = createAction(
   '[Commands page] Edit command',
   props<{ command: Command }>(),
 );
+export const mergeCommands = createAction(
+  '[Commands page] Merge commands',
+  props<{ commands: Command[] }>(),
+);
+export const splitCommands = createAction(
+  '[Commands page] Split commands',
+  props<{ commands: Command[] }>(),
+);
+export const mergingCommands = createAction(
+  '[Commands page] Merging commands',
+  props<{ commandIds: string[] }>(),
+);
+export const splittingCommands = createAction(
+  '[Commands page] Splitting commands',
+  props<{ commandIds: string[] }>(),
+);
 export const sendNotificationSub = createAction(
   '[Commands page] Send notification sub',
   props<{ sub: PushSubscription, code: string }>(),

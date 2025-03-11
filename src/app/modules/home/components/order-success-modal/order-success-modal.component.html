@@ -22,9 +22,17 @@
               </button>
             </ng-template>
           </ng-container>
-          <button nz-button nzType="primary" *nzSpaceItem (click)="clickGo.emit()" i18n>
-            Retour à la page d'accueil
-          </button>
+
+          <ng-container *ngIf="(userWaiterMode$ | async); else defaultClient">
+            <button nz-button nzType="primary" *nzSpaceItem (click)="clickClose.emit()" i18n>
+              Retour à la page d'accueil
+            </button>
+          </ng-container>
+          <ng-template #defaultClient>
+            <button nz-button nzType="primary" *nzSpaceItem (click)="clickGoNext.emit()" i18n>
+              Retour à la page d'accueil
+            </button>
+          </ng-template>
         </nz-space>
       </div>
     </nz-result>

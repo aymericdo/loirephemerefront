@@ -6,7 +6,7 @@
     <nz-page-header-extra>
       <div *ngIf="(isLoading$ | async) === false" class="actions-btn">
         <nz-space nzAlign="center">
-          <ng-container *ngIf="!isInAssociationMode && false">
+          <ng-container *ngIf="!isInAssociationMode">
             <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
               nzBlock i18n>Association de commandes</button>
 
@@ -25,7 +25,7 @@
           </ng-container>
           <ng-container *ngIf="isInAssociationMode">
             <button *nzSpaceItem nz-button nzType="primary" nzBlock
-              (click)="isInAssociationMode = false" i18n>
+              (click)="isInAssociationMode = false; selectedCommands = []; unSelectedCommands = [];" i18n>
               <span nz-icon nzType="right"></span>
               Retour
             </button>
@@ -47,15 +47,41 @@
         <ng-container *ngIf="(onGoingCommands$ | async)?.length! > 0">
           <div class="data-section" [class.-association-mode]="isInAssociationMode" nz-row [nzGutter]="[0, 24]" nzJustify="center">
             <div *ngFor="let command of onGoingCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
-              <div class="inner-box" [class.-selected]="selectedCommands.includes(command)" (click)="handleSelect(command)">
-                <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isPayed]="!!command.isPayed"
-                  [noAction]="isInAssociationMode"
-                  (clickDone)="handleClickDone(command)"
-                  (clickWizz)="handleClickWizz(command)"
-                  (clickPayed)="handleClickPayed(command, $event)"
-                  (clickCancelled)="handleClickCancelled(command)"
+              <ng-container *ngIf="!command.mergedCommandIds.length; else hasMergedOnGoingCommands">
+                <div class="inner-box"
+                  [class.-selected]="selectedCommands.includes(command)"
+                  [class.-disabled]="unSelectedCommands.length > 0"
+                  (click)="handleSelect(command)">
+                  <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isPayed]="!!command.isPayed"
+                    [noAction]="isInAssociationMode"
+                    (clickDone)="handleClickDone(command)"
+                    (clickWizz)="handleClickWizz(command)"
+                    (clickPayed)="handleClickPayed(command, $event)"
+                    (clickCancelled)="handleClickCancelled(command)"
                   ></app-command-card>
-              </div>
+                </div>
+              </ng-container>
+
+              <ng-template #hasMergedOnGoingCommands>
+                <nz-tabset nzCentered nzSize="small">
+                  @for (item of command.mergedCommands; track item) {
+                    <nz-tab [nzTitle]="'#'+item.reference">
+                      <div class="inner-box"
+                        [class.-unselected]="unSelectedCommands.includes(command)"
+                        [class.-disabled]="selectedCommands.length > 0"
+                        (click)="handleUnSelect(command)">
+                      <app-command-card [command]="item" [isLoading]="(isLoading$ | async)!" [isPayed]="!!item.isPayed"
+                        [noAction]="isInAssociationMode"
+                        (clickDone)="handleClickDone(item)"
+                        (clickWizz)="handleClickWizz(item)"
+                        (clickPayed)="handleClickPayed(item, $event)"
+                        (clickCancelled)="handleClickCancelled(item)"
+                        ></app-command-card>
+                      </div>
+                    </nz-tab>
+                  }
+                </nz-tabset>
+              </ng-template>
             </div>
           </div>
         </ng-container>
@@ -68,12 +94,37 @@
           <nz-empty class="empty-section"></nz-empty>
         </ng-container>
         <ng-container *ngIf="(deliveredCommands$ | async)?.length! > 0">
-          <div class="data-section" nz-row [nzGutter]="[0, 24]">
+          <div class="data-section" [class.-association-mode]="isInAssociationMode" nz-row [nzGutter]="[0, 24]">
             <div *ngFor="let command of deliveredCommands$ | async" nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="12" nzXl="8">
-              <div class="inner-box">
-                <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isDone]="true"
-                  [isPayed]="!!command.isPayed" (clickPayed)="handleClickPayed(command, $event)"
-                  (clickWizz)="handleClickWizz(command)"></app-command-card>
+              <div class="inner-box"
+                [class.-selected]="selectedCommands.includes(command)"
+                [class.-disabled]="unSelectedCommands.length > 0"
+                (click)="handleSelect(command)">
+                <ng-container *ngIf="!command.mergedCommandIds.length; else hasMergedDeliveredCommands">
+                  <app-command-card [command]="command" [isLoading]="(isLoading$ | async)!" [isDone]="true"
+                    [isPayed]="!!command.isPayed" (clickPayed)="handleClickPayed(command, $event)"
+                    (clickWizz)="handleClickWizz(command)"></app-command-card>
+                </ng-container>
+
+                <ng-template #hasMergedDeliveredCommands>
+                  <nz-tabset nzCentered nzSize="small">
+                    @for (item of command.mergedCommands; track item) {
+                      <nz-tab [nzTitle]="'#'+item.reference">
+                        <div class="inner-box"
+                          [class.-unselected]="unSelectedCommands.includes(command)"
+                          [class.-disabled]="selectedCommands.length > 0"
+                          (click)="handleUnSelect(command)">
+                          <app-command-card [command]="item" [isLoading]="(isLoading$ | async)!"
+                            [isDone]="true"
+                            [isPayed]="!!item.isPayed"
+                            (clickPayed)="handleClickPayed(item, $event)"
+                            (clickWizz)="handleClickWizz(item)">
+                          </app-command-card>
+                        </div>
+                      </nz-tab>
+                    }
+                  </nz-tabset>
+                </ng-template>
               </div>
             </div>
           </div>
@@ -134,12 +185,26 @@
 
 <nz-float-button
   *ngIf="selectedCommands.length > 1"
-  nzType="primary" class="information" [nzIcon]="icon" (click)="handleMerge()"
-  nz-popover [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topRight"
+  nzType="primary" class="information" [nzIcon]="mergeIcon" (click)="handleMerge()"
+  nz-popover [nzPopoverContent]="mergeContentTemplate" nzPopoverPlacement="topRight"
 ></nz-float-button>
-<ng-template #contentTemplate i18n>
+
+<ng-template #mergeContentTemplate i18n>
   Fusionner
 </ng-template>
-<ng-template #icon>
+<ng-template #mergeIcon>
   <nz-icon nzType="merge-cells"></nz-icon>
+</ng-template>
+
+<nz-float-button
+  *ngIf="unSelectedCommands.length > 1"
+  nzType="primary" class="information" [nzIcon]="splitIcon" (click)="handleUnMerge()"
+  nz-popover [nzPopoverContent]="splitContentTemplate" nzPopoverPlacement="topRight"
+></nz-float-button>
+
+<ng-template #splitContentTemplate i18n>
+  Séparer
+</ng-template>
+<ng-template #splitIcon>
+  <nz-icon nzType="split-cells"></nz-icon>
 </ng-template>

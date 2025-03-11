@@ -35,11 +35,16 @@ export interface PaymentPossibility {
   value: number;
 }
 
+export type CommandWithMerged = Command & {
+  mergedCommands?: Command[];
+};
+
 export interface Command extends CoreCommand {
   id: string;
   reference: string;
   createdAt: string;
   updatedAt: string;
+  mergedCommandIds: string[];
   isDone?: boolean;
   isPayed?: boolean;
   paymentRequired?: boolean;

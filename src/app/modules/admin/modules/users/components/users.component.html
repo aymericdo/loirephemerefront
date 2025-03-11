@@ -22,7 +22,15 @@
           <th i18n>Créé le</th>
           <th i18n>Modifié le</th>
           <th i18n>Accès</th>
-          <th i18n>Serveur</th>
+          <th i18n>
+            <nz-space>
+              <span *nzSpaceItem>Serveur</span>
+              <button *nzSpaceItem nz-button nzType="dashed" nzShape="circle" nzSize="small"
+                nz-tooltip [nzTooltipTitle]="'Le *mode serveur* simplifie la prise de commande par un serveur pour un client.'" i18n-nzTooltipTitle nzTooltipPlacement="bottom" [nzTooltipMouseEnterDelay]="0.5">
+                <span nz-icon nzType="info"></span>
+              </button>
+            </nz-space>
+          </th>
           <th i18n>Actions</th>
         </tr>
       </thead>

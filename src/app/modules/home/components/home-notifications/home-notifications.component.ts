@@ -9,7 +9,7 @@ import { cancelPersonalCommand, closeErrorModal, closeHomeModal, fetchingPersona
 import { selectErrorCommand, selectHomeModal, selectPersonalCommand } from 'src/app/modules/home/store/home.selectors';
 import { canVibrate } from 'src/app/helpers/vibrate';
 import { SwPush } from '@angular/service-worker';
-import { selectCurrentWaiterMode, selectRestaurant, selectUserWaiterMode } from 'src/app/auth/store/auth.selectors';
+import { selectCurrentWaiterMode, selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { Restaurant as RestaurantInterface } from 'src/app/interfaces/restaurant.interface';
 import { HomeModalType } from 'src/app/modules/home/store/home.reducer';
 import { CommonModule } from '@angular/common';
@@ -39,9 +39,10 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
   restaurant$: Observable<RestaurantInterface | null>;
   errorCommand$: Observable<Object | null>;
   homeModal$: Observable<HomeModalType | null>;
-  userWaiterMode$: Observable<boolean | undefined>;
 
   isPaymentModalBackBtn = false;
+
+  private readonly QUERY_PARAMS = ['payingCommandId', 'waitingWizzCommandId', 'wizzCommandId', 'payedCommandId']
 
   private personalCommand: Command | null = null;
   private commandNotificationIdByCommandId: { [commandId: string]: string } = {};
@@ -60,7 +61,6 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.personalCommand$ = this.store.select(selectPersonalCommand);
     this.errorCommand$ = this.store.select(selectErrorCommand);
     this.homeModal$ = this.store.select(selectHomeModal);
-    this.userWaiterMode$ = this.store.pipe(select(selectCurrentWaiterMode));
   }
 
   ngOnInit(): void {
@@ -78,7 +78,7 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
       filter(Boolean),
       takeUntil(this.destroyed$),
     ).subscribe((queryParam) => {
-      const currentQueryParam = ['payingCommandId', 'waitingWizzCommandId', 'wizzCommandId', 'payedCommandId']
+      const currentQueryParam = this.QUERY_PARAMS
         .find((actionParam) => queryParam.has(actionParam))
 
       if (currentQueryParam) {
@@ -141,20 +141,12 @@ export class HomeNotificationsComponent implements OnInit, OnDestroy {
     this.store.dispatch(closeErrorModal());
   }
 
-  handleCloseSuccessModal(): void {
+  handleCloseSuccessModal({ next } = { next: false }): void {
     this.store.dispatch(closeHomeModal());
 
-    let waiterMode = false
-    this.userWaiterMode$.pipe(
-      filter(Boolean),
-      take(1),
-    ).subscribe((userWaiterMode) => {
-      waiterMode = userWaiterMode;
-    });
-
-    if (waiterMode) return;
-
-    this.openWaitingConfirmationNotification();
+    if (next) {
+      this.openWaitingConfirmationNotification();
+    }
   }
 
   ngOnDestroy() {

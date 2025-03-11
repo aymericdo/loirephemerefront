@@ -28,17 +28,31 @@
   .data-section {
     padding: 0.875em 0;
 
+    app-command-card {
+      padding: 0.875em 0;
+    }
+
     &.-association-mode {
-      .inner-box {
+      ::ng-deep .inner-box nz-card {
         cursor: pointer;
+        border: solid 2px transparent;
       }
 
       ::ng-deep .inner-box nz-card:hover {
-        box-shadow: 0 2px 10px black;
+        border: dashed 2px black;
+      }
+
+      ::ng-deep .inner-box.-disabled nz-card {
+        cursor: not-allowed;
+        border: solid 2px transparent;
       }
 
       ::ng-deep .inner-box.-selected nz-card {
-        box-shadow: 0 0 10px var(--blue);;
+        border: dashed 2px var(--blue);
+      }
+
+      ::ng-deep .inner-box.-unselected nz-card {
+        border: dashed 2px var(--red);
       }
     }
   }

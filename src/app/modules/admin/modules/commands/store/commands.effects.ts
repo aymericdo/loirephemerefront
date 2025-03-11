@@ -13,11 +13,15 @@ import {
   editCommand,
   fetchingRestaurantCommands,
   getCommandsSuccess,
+  mergeCommands,
+  mergingCommands,
   payingCommand,
   removeNotificationSub,
   sendNotificationSub,
   setCommands,
   setNotificationSub,
+  splitCommands,
+  splittingCommands,
   stopLoading,
 } from './commands.actions';
 
@@ -86,6 +90,34 @@ export class CommandsEffects {
         return this.adminApiService
           .payedCommand(restaurant.code, action.command.id!, action.payments, action.discount)
           .pipe(map((command) => editCommand({ command })));
+      }),
+    );
+  });
+
+  mergingCommands$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(mergingCommands),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService
+          .mergeCommand(restaurant.code, action.commandIds)
+          .pipe(map((commands) => mergeCommands({ commands })));
+      }),
+    );
+  });
+
+  splittingCommands$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(splittingCommands),
+      concatLatestFrom(() =>
+        this.store.select(selectRestaurant).pipe(filter(Boolean)),
+      ),
+      mergeMap(([action, restaurant]) => {
+        return this.adminApiService
+          .splitCommand(restaurant.code, action.commandIds)
+          .pipe(map((commands) => splitCommands({ commands })));
       }),
     );
   });

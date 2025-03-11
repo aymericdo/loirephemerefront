@@ -22,7 +22,8 @@ import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 export class OrderSuccessModalComponent {
   @Input() command!: Command;
   @Input() restaurant!: Restaurant;
-  @Output() clickGo = new EventEmitter<string>();
+  @Output() clickGoNext = new EventEmitter<string>();
+  @Output() clickClose = new EventEmitter<string>();
   @Output() clickPayment = new EventEmitter<string>();
 
   userWaiterMode$: Observable<boolean | undefined>;
