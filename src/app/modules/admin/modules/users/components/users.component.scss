@@ -1,4 +1,10 @@
 :host {
+  nz-page-header-extra {
+    display: flex;
+    flex: 1;
+    justify-content: end;
+  }
+
   .users-table-section {
     padding: 1rem;
   }

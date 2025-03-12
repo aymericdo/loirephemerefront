@@ -3,6 +3,12 @@
   height: 100%;
   position: relative;
 
+  nz-page-header-extra {
+    display: flex;
+    flex: 1;
+    justify-content: end;
+  }
+
   .menu-section {
     height: 100%;
   }
