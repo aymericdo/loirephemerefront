@@ -3,7 +3,36 @@
   height: 100%;
   position: relative;
 
+  nz-affix {
+    ::ng-deep .ant-affix {
+      z-index: 4;
+    }
+  }
+
+  .affix-section {
+    display: flex;
+    background-color: transparent;
+    transition: background-color 250ms;
+    z-index: 2;
+
+    &.-has-scrolled {
+      background-color: white;
+      transition: background-color 250ms ease-in;
+    }
+  }
+
+  nz-page-header {
+    width: 100%;
+    margin-left: 36px;
+
+    ::ng-deep .ant-page-header-heading-left {
+      flex-direction: column;
+      align-items: start;
+    }
+  }
+
   .home-section {
+    margin-top: 0.875rem;
     height: 100%;
   }
 

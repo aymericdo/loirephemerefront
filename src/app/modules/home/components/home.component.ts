@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
@@ -81,6 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   orderModalOpened: 'order-summary' | 'order-name' | null = null;
 
+  hasScrolled: boolean = false;
   paymentRequired: boolean = false;
   isRestaurantOpened: boolean = false;
   pickUpTimeAvailable: boolean = false;
@@ -91,6 +93,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private store: Store,
     private route: ActivatedRoute,
     private titleService: Title,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     this.restaurant$ = this.store.select(selectRestaurant);
     this.pastries$ = this.store.select(selectPastries);
@@ -162,6 +165,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.titleService.setTitle(APP_NAME);
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  onChange(status: boolean): void {
+    this.hasScrolled = status;
+    this.changeDetectorRef.detectChanges();
   }
 
   trackById(_index: any, pastry: Pastry): string {

@@ -5,6 +5,15 @@
   nz-card {
     width: 300px;
     max-width: 100%;
+    transition: box-shadow .2s ease-in-out;
+
+    &.-limit-reached {
+      opacity: 0.6;
+    }
+
+    &:hover {
+      box-shadow: 0 22px 24px 0 rgba(0, 0, 0, .08);
+    }
   }
 
   nz-skeleton {
@@ -15,6 +24,7 @@
     width: 100%;
 
     ::ng-deep .ant-card-meta-title {
+      font-weight: bold;
       white-space: wrap;
       width: calc(100% - 3rem);
     }
@@ -115,10 +125,21 @@
     margin-bottom: -1px;
   }
 
+  ::ng-deep .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    padding: 1rem 0;
+  }
+
   .ingredients-section {
     ::ng-deep .ant-collapse-item>.ant-collapse-content>.ant-collapse-content-box {
-      padding-top: 0;
+      padding: 0rem 1.5rem;
     }
+  }
+
+  .price-section {
+    display: block;
+    margin-top: 0.625rem;
+    color: black;
+    font-weight: 500;
   }
 
   .mobile-description-section {
@@ -132,6 +153,10 @@
   ::ng-deep .ant-card-actions i.-disabled {
     cursor: not-allowed;
     opacity: 0.8;
+
+    &:hover {
+      color: rgba(0, 0, 0, .45);
+    }
   }
 
   @media screen and (max-width: 992px) {
@@ -169,10 +194,6 @@
       &.-mobile {
         display: block;
       }
-    }
-
-    ::ng-deep .ant-collapse>.ant-collapse-item>.ant-collapse-header {
-      padding: 12px 0;
     }
   }
 }
