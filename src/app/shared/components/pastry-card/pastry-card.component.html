@@ -1,5 +1,5 @@
 <nz-card [nzCover]="coverTemplate" [nzActions]="[actionCount, actionMinus, actionPlus]"
-  [class.-is-admin]="isAdmin" [class.-limit-reached]="pastry.stock <= 0">
+  [class.-is-admin]="isAdmin" [class.-limit-reached]="!isAdmin && pastry.stock <= 0">
   <nz-skeleton [nzActive]="false" [nzLoading]="isLoading">
     <nz-badge *ngIf="isStockAvailable" class="stock-badge" [class.-limit-reached]="pastry.stock <= 0"
       [class.-stock-issue]="isStockIssue" nzStandalone nzShowZero [nzCount]="pastry.stock" [nzOverflowCount]="99"
