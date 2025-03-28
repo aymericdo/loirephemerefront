@@ -348,7 +348,7 @@ export class StatsComponent implements OnInit, OnDestroy {
           }
 
           command.pastries.forEach((pastry: Pastry) => {
-            const realPastry = this.checkHistoricalPastry(pastry, command);
+            const realPastry: Pastry & { type: PastryType } = this.checkHistoricalPastry(pastry, command);
             this.setPastriesByTypeByDate(pastriesByTypeByDate, realPastry, day);
             this.setCountByTypeByPastry(countByTypeByPastry, realPastry);
           });
@@ -405,7 +405,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchingRestaurantCommands({ code: this.currentRestaurant?.code!, fromDate, toDate }));
   }
 
-  private checkHistoricalPastry(pastry: Pastry, command: Command): Pastry {
+  private checkHistoricalPastry(pastry: Pastry, command: Command): Pastry & { type: PastryType } {
     if (pastry.historical.length) {
       const commandDate = command.createdAt;
 
@@ -432,9 +432,9 @@ export class StatsComponent implements OnInit, OnDestroy {
       return {
         ...pastry,
         ...realState,
-      };
+      } as Pastry & { type: PastryType };
     } else {
-      return pastry;
+      return pastry as Pastry & { type: PastryType };
     }
   }
 
@@ -464,7 +464,7 @@ export class StatsComponent implements OnInit, OnDestroy {
     pastriesByTypeByDate: {
       [key in PastryType]: { [date: string]: { [pastryName: string]: number } };
     },
-    pastry: Pastry,
+    pastry: Pastry & { type: PastryType },
     day: string,
   ): void {
     if (pastriesByTypeByDate.hasOwnProperty(pastry.type)) {
@@ -487,7 +487,7 @@ export class StatsComponent implements OnInit, OnDestroy {
 
   private setCountByTypeByPastry(
     countByTypeByPastry: { [key in PastryType]: { [pastryName: string]: number } },
-    pastry: Pastry,
+    pastry: Pastry & { type: PastryType },
   ): void {
     if (countByTypeByPastry.hasOwnProperty(pastry.type)) {
       if (countByTypeByPastry[pastry.type].hasOwnProperty(pastry.name)) {

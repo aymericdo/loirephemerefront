@@ -13,8 +13,9 @@
           <ng-container *ngIf="!isInSequenceMode && !isInAssociationMode">
             <button class="association-mode-btn" *nzSpaceItem nz-button (click)="isInAssociationMode = true"
               nzBlock i18n>Association de stock</button>
-            <button class="sequence-mode-btn" *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock i18n>Ordre
-              d'affichage</button>
+            <button class="sequence-mode-btn" *nzSpaceItem nz-button (click)="isInSequenceMode = true" nzBlock i18n>
+              Ordre d'affichage
+            </button>
             <button *nzSpaceItem nz-button nzType="primary" nzBlock (click)="openNewPastryModal()" i18n>
               <span nz-icon nzType="plus"></span>
               Ajouter
@@ -61,16 +62,30 @@
 
     <div *ngIf="!isInSequenceMode && !isInAssociationMode && (pastries$ | async)?.length" class="pastry-list" nz-row
       [nzGutter]="[0, 24]" nzJustify="center">
-      <div *ngFor="let pastry of pastries$ | async; trackBy: trackById" class="pastry-section" nz-col nzXs="24" nzSm="24"
-        nzMd="18" nzLg="12" nzXl="8">
-        <div class="inner-box">
-          <app-pastry-card #item [isAdmin]="true" [pastry]="pastry"
-            [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!" [count]="pastry.stock"
-            (clickPlus)="handleClickPlus(pastry)" (clickMinus)="handleClickMinus(pastry)"
-            (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)"
-            (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
-        </div>
-      </div>
+      @for (pastry of pastries$ | async; track pastry.id) {
+        <ng-container *ngIf="pastry.type === 'separator'; else default">
+          <div nz-col nzXs="24">
+            <div class="inner-box">
+              <app-separator [isAdmin]="true" [separator]="pastry" [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!"
+                (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)"
+                (clickDelete)="handleDeletePastry(pastry)"
+              />
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #default>
+          <div nz-col nzXs="24" nzSm="24"
+            nzMd="18" nzLg="12" nzXl="8">
+            <div class="inner-box">
+              <app-pastry-card [isAdmin]="true" [pastry]="pastry"
+                [isLoading]="(isLoading$ | async)! || (isMoving$ | async)!" [count]="pastry.stock"
+                (clickPlus)="handleClickPlus(pastry)" (clickMinus)="handleClickMinus(pastry)"
+                (clickEdit)="openEditPastryModal(pastry)" (clickActive)="handleActivePastry(pastry)"
+                (clickDelete)="handleDeletePastry(pastry)"></app-pastry-card>
+            </div>
+          </div>
+        </ng-template>
+      }
     </div>
   </div>
 </div>

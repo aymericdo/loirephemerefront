@@ -1,6 +1,12 @@
-<nz-modal [nzVisible]="true" nzTitle="Modifier la pâtisserie" nzCentered (nzOnCancel)="clickCancel.emit()" i18n-nzTitle>
+<nz-modal [nzVisible]="true" nzTitle="Modifier" nzCentered (nzOnCancel)="clickCancel.emit()" i18n-nzTitle>
   <ng-container *nzModalContent>
-    <app-pastry-form [restaurant]="restaurant" [validateForm]="validateForm" [isEditing]="true"></app-pastry-form>
+    <app-separator-form
+      *ngIf="pastry.type === 'separator'; else default"
+      [restaurant]="restaurant"
+      [validateForm]="validateForm" [isEditing]="true" />
+    <ng-template #default>
+      <app-pastry-form [restaurant]="restaurant" [validateForm]="validateForm" [isEditing]="true"></app-pastry-form>
+    </ng-template>
   </ng-container>
   <ng-container *nzModalFooter>
     <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!validateForm.valid" [nzLoading]="isLoading$ | async" i18n>Enregistrer</button>

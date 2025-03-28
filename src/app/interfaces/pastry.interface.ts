@@ -7,22 +7,23 @@ export interface Historical {
 }
 
 export type PastryType = 'pastry' | 'drink' | 'tip' | 'other';
+export type PastryTypeCompleted = PastryType | 'separator';
 
 export const PASTRY_TYPE_LABEL = {
   pastry: {
-    label: 'Plats',
+    label: $localize`Plats`,
     sequence: 0,
   },
   drink: {
-    label: 'Boissons',
+    label: $localize`Boissons`,
     sequence: 1,
   },
   tip: {
-    label: 'Pourboires',
+    label: $localize`Pourboires`,
     sequence: 2,
   },
   other: {
-    label: 'Autres',
+    label: $localize`Autres`,
     sequence: 3,
   },
 };
@@ -45,6 +46,7 @@ export interface CorePastry {
   displaySequence?: number;
   commonStock?: string;
   ingredients: string[];
-  type: PastryType;
+  type: PastryTypeCompleted;
   hidden: boolean;
+  isSeparator?: boolean;
 }

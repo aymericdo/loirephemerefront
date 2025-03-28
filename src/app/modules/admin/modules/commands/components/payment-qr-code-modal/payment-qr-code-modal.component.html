@@ -5,7 +5,7 @@
 
   <ng-container *nzModalContent>
     <nz-tabset>
-      <nz-tab nzTitle="Bipeur">
+      <nz-tab nzTitle="Bipeur" i18n-nzTitle>
         <div nz-flex nzJustify="center">
           <nz-qrcode [nzValue]="'https://oresto.app/' + (restaurant$ | async)?.code + '?waitingWizzCommandId=' + command.id" i18n-nzValue
             [nzLevel]="'H'" [nzSize]="200"></nz-qrcode>

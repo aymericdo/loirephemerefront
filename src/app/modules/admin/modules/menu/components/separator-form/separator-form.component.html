@@ -1,0 +1,50 @@
+<form nz-form [formGroup]="validateForm">
+  <nz-form-item>
+    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired i18n>Nom</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback nzValidatingTip="En cours de validation..."
+      [nzErrorTip]="restaurantNameErrorTpl" i18n-nzValidatingTip>
+      <input nz-input formControlName="name" placeholder="Gaufre choco fraise" i18n-placeholder />
+      <ng-template #restaurantNameErrorTpl let-control>
+        <ng-container *ngIf="control.hasError('required')" i18n>Merci d'entrer un nom</ng-container>
+        <ng-container *ngIf="control.hasError('minlength')" i18n>Merci d'entrer un nom de plus de {{ SIZE.MIN }} caractères
+        </ng-container>
+        <ng-container *ngIf="control.hasError('maxlength')" i18n>Merci d'entrer un nom de moins de {{ SIZE.SMALL }}
+          caractères</ng-container>
+        <ng-container *ngIf="control.hasError('duplicated')" i18n>Le nom est déjà pris</ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired i18n>Description</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="descriptionErrorTpl">
+      <nz-textarea-count [nzMaxCharacterCount]="SIZE.LARGE">
+        <textarea rows="4" nz-input formControlName="description"
+          placeholder="Le goût puissant d'une pâte à tartiner maison + coulis de fraise" i18n-placeholder></textarea>
+      </nz-textarea-count>
+      <ng-template #descriptionErrorTpl let-control>
+        <ng-container *ngIf="control.hasError('required')">Merci d'entrer une description</ng-container>
+        <ng-container *ngIf="control.hasError('minlength')">Merci d'entrer une description de plus de {{ SIZE.MIN }}
+          caractères</ng-container>
+        <ng-container *ngIf="control.hasError('maxlength')">Merci d'entrer une description de moins de {{ SIZE.LARGE }}
+          caractères</ng-container>
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Visibilité</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-radio-group formControlName="hidden">
+        <label nz-radio-button [nzValue]="true" i18n>Caché</label>
+        <label nz-radio-button [nzValue]="false" i18n>Visible</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item *ngIf="isEditing">
+    <nz-form-label [nzSm]="8" [nzXs]="24" i18n>Ordre d'affichage</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-input-number formControlName="displaySequence" [nzStep]="1" [nzMin]="0"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+</form>

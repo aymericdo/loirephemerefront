@@ -1,7 +1,8 @@
 <nz-list *ngIf="(pastries$ | async)?.length" nzBordered cdkDropList class="pastry-sequence-list"
   (cdkDropListDropped)="drop($event)">
   <nz-list-item class="pastry-sequence-box" [class.-loading]="isMoving$ | async"
-    *ngFor="let pastry of pastries$ | async; trackBy: trackById" cdkDrag [cdkDragData]="pastry" [cdkDragStartDelay]="100">
+    *ngFor="let pastry of pastries$ | async; trackBy: trackById" cdkDrag [cdkDragData]="pastry" [cdkDragStartDelay]="100"
+    [class.-separator]="pastry.type === 'separator'">
     <div class="pastry-sequence-custom-placeholder" *cdkDragPlaceholder>
       <span>{{ pastry.name }}</span>
     </div>

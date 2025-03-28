@@ -1,6 +1,13 @@
-<nz-modal [nzVisible]="true" nzTitle="Nouvelle pâtisserie" nzCentered (nzOnCancel)="clickCancel.emit()" i18n-nzTitle>
+<nz-modal [nzVisible]="true" nzTitle="Ajouter" nzCentered (nzOnCancel)="clickCancel.emit()" i18n-nzTitle>
   <ng-container *nzModalContent>
-    <app-pastry-form [restaurant]="restaurant" [validateForm]="validateForm"></app-pastry-form>
+    <nz-tabset (nzSelectChange)="handleTabChange($event)">
+      <nz-tab nzTitle="Plat" i18n-nzTitle data-tab="pastry">
+        <app-pastry-form [restaurant]="restaurant" [validateForm]="validateForm"></app-pastry-form>
+      </nz-tab>
+      <nz-tab nzTitle="Séparateur" i18n-nzTitle data-tab="separator">
+        <app-separator-form [restaurant]="restaurant" [validateForm]="validateForm"></app-separator-form>
+      </nz-tab>
+    </nz-tabset>
   </ng-container>
   <ng-container *nzModalFooter>
     <button nz-button nzType="primary" (click)="submitForm()" [disabled]="!validateForm.valid" [nzLoading]="isLoading$ | async" i18n>Enregistrer</button>

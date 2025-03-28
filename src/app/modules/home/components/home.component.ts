@@ -4,8 +4,6 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  QueryList,
-  ViewChildren,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -48,6 +46,7 @@ import { InformationPopoverComponent } from 'src/app/shared/components/informati
 import { PastryCardComponent } from 'src/app/shared/components/pastry-card/pastry-card.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
 import { APP_NAME } from 'src/main';
+import { SeparatorComponent } from 'src/app/shared/components/separator/separator.component';
 
 @Component({
   templateUrl: './home.component.html',
@@ -59,6 +58,7 @@ import { APP_NAME } from 'src/main';
     FormsModule,
     HomeNotificationsComponent,
     PastryCardComponent,
+    SeparatorComponent,
     InformationPopoverComponent,
     OrderNameModalComponent,
     OrderFooterComponent,
@@ -67,8 +67,6 @@ import { APP_NAME } from 'src/main';
   ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  @ViewChildren('item') itemElements!: QueryList<any>;
-
   restaurant$: Observable<RestaurantInterface | null>;
   pastries$: Observable<Pastry[]>;
   selectedPastries$: Observable<{ [pastryId: string]: number }>;
@@ -170,10 +168,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   onChange(status: boolean): void {
     this.hasScrolled = status;
     this.changeDetectorRef.detectChanges();
-  }
-
-  trackById(_index: any, pastry: Pastry): string {
-    return pastry.id;
   }
 
   private watchIsOpened(): void {

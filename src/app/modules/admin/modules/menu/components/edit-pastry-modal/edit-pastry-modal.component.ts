@@ -7,6 +7,7 @@ import { SIZE } from 'src/app/helpers/sizes';
 import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { PastryFormComponent } from 'src/app/modules/admin/modules/menu/components/pastry-form/pastry-form.component';
+import { SeparatorFormComponent } from 'src/app/modules/admin/modules/menu/components/separator-form/separator-form.component';
 import { editingPastry, validatingPastryName } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectIsSavingPastry, selectPastryNameDeactivated, selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
@@ -19,6 +20,7 @@ import { NgZorroModule } from 'src/app/shared/ngzorro.module';
     CommonModule,
     NgZorroModule,
     PastryFormComponent,
+    SeparatorFormComponent,
   ],
 })
 export class EditPastryModalComponent implements OnInit, OnDestroy {
@@ -31,6 +33,8 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
   isLoading$!: Observable<boolean>;
   pastryNameDeactivated$!: Observable<boolean>;
 
+  private isSeparator = false;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store, private fb: UntypedFormBuilder) { }
@@ -39,6 +43,8 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
     this.restaurantNameError$ = this.store.select(selectPastryNameError);
     this.isLoading$ = this.store.select(selectIsSavingPastry);
     this.pastryNameDeactivated$ = this.store.select(selectPastryNameDeactivated);
+
+    this.isSeparator = this.pastry.type === 'separator';
 
     this.validateForm = this.fb.group({
       name: [
@@ -88,7 +94,7 @@ export class EditPastryModalComponent implements OnInit, OnDestroy {
         hidden: this.validateForm.value.hidden,
         displaySequence: this.validateForm.value.displaySequence,
         imageUrl: this.validateForm.value.imageUrl,
-        type: this.validateForm.value.type,
+        type: this.isSeparator ? 'separator' : this.validateForm.value.type,
       },
     }));
   }

@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { NzTabComponent } from 'ng-zorro-antd/tabs';
 import { Observable, filter, take } from 'rxjs';
 import { SIZE } from 'src/app/helpers/sizes';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { PastryFormComponent } from 'src/app/modules/admin/modules/menu/components/pastry-form/pastry-form.component';
+import { SeparatorFormComponent } from 'src/app/modules/admin/modules/menu/components/separator-form/separator-form.component';
 import { postingPastry, validatingPastryName } from 'src/app/modules/admin/modules/menu/store/menu.actions';
 import { selectIsSavingPastry, selectPastryNameError } from 'src/app/modules/admin/modules/menu/store/menu.selectors';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
@@ -18,6 +20,7 @@ import { NgZorroModule } from 'src/app/shared/ngzorro.module';
     CommonModule,
     NgZorroModule,
     PastryFormComponent,
+    SeparatorFormComponent,
   ],
 })
 export class NewPastryModalComponent implements OnInit {
@@ -27,6 +30,8 @@ export class NewPastryModalComponent implements OnInit {
   validateForm!: UntypedFormGroup;
   restaurantNameError$!: Observable<{ error: boolean, duplicated: boolean } | null | undefined>;
   isLoading$!: Observable<boolean>;
+
+  private currentTab = 'pastry';
 
   constructor(private store: Store, private fb: UntypedFormBuilder) { }
 
@@ -57,8 +62,12 @@ export class NewPastryModalComponent implements OnInit {
       hidden: this.validateForm.value.hidden,
       displaySequence: this.validateForm.value.displaySequence,
       imageUrl: this.validateForm.value.imageUrl,
-      type: this.validateForm.value.type,
+      type: this.currentTab === 'separator' ? 'separator' : this.validateForm.value.type,
     }}));
+  }
+
+  handleTabChange({ tab }: { tab: NzTabComponent }) {
+    this.currentTab = tab.content.elementRef?.nativeElement?.parentElement?.dataset?.tab ?? '';
   }
 
   pastryNameAsyncValidator = (control: UntypedFormControl) => {

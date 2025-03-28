@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, filter, map, takeUntil } from 'rxjs';
-import { CorePastry, Pastry } from 'src/app/interfaces/pastry.interface';
+import { Pastry } from 'src/app/interfaces/pastry.interface';
 import { Restaurant } from 'src/app/interfaces/restaurant.interface';
 import { AssociationComponent } from 'src/app/modules/admin/modules/menu/components/association/association.component';
 import { EditPastryModalComponent } from 'src/app/modules/admin/modules/menu/components/edit-pastry-modal/edit-pastry-modal.component';
@@ -15,6 +15,7 @@ import { MenuWebSocketService, WebSocketData } from 'src/app/modules/admin/servi
 import { selectRestaurant } from 'src/app/auth/store/auth.selectors';
 import { PastryCardComponent } from 'src/app/shared/components/pastry-card/pastry-card.component';
 import { NgZorroModule } from 'src/app/shared/ngzorro.module';
+import { SeparatorComponent } from 'src/app/shared/components/separator/separator.component';
 
 @Component({
   templateUrl: './menu.component.html',
@@ -23,6 +24,7 @@ import { NgZorroModule } from 'src/app/shared/ngzorro.module';
   imports: [
     CommonModule,
     PastryCardComponent,
+    SeparatorComponent,
     AssociationComponent,
     SequenceComponent,
     EditPastryModalComponent,
@@ -110,10 +112,6 @@ export class MenuComponent implements OnInit, OnDestroy {
       ...pastry,
       stock: (pastry.stock - 1 >= 0) ? pastry.stock - 1 : 0,
     }}));
-  }
-
-  trackById(_index: any, pastry: Pastry): string {
-    return pastry.id;
   }
 
   private subscribeToWS(code: string) {

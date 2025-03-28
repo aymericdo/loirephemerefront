@@ -1,5 +1,4 @@
 :host {
-
   .pastry-sequence-list {
     max-width: 100%;
     overflow: hidden;
@@ -9,6 +8,11 @@
   .pastry-sequence-custom-placeholder {
     cursor: move;
     background: white;
+
+    &.-separator {
+      color: white;
+      background: linear-gradient(143deg, rgba(2,0,36,1) 0%, rgba(9,40,121,0.7245491946778712) 35%, rgba(0,212,255,1) 100%);
+    }
 
     &.-loading {
       opacity: 0.6;
